@@ -1,7 +1,0 @@
-# This is a FeatureDefinitions config file
-# Define morphological feature categories and enumerate their possible values here.
-# We don't define how features are exponed or what parts of speech they belong to
-# here, we simply list the features and their values.
-kind: FeatureDefinitions
-features:
-  conjugation_class: []

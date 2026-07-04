@@ -262,29 +262,37 @@ def main():
     if os.path.exists(fd_file):
         with open(fd_file, 'r', encoding='utf-8') as f:
             fd_content = yaml.safe_load(f)
+    else:
+        fd_content = {
+            'kind': 'FeatureDefinitions',
+            'features': {
+                'conjugation_class': []
+            }
+        }
+        os.makedirs(os.path.dirname(fd_file), exist_ok=True)
             
-        if fd_content and 'features' in fd_content:
-            # Add inflectional features from verb.yaml
-            if 'features' in verb_config:
-                for feat, vals in verb_config['features'].items():
-                    fd_content['features'][feat] = vals
+    if fd_content and 'features' in fd_content:
+        # Add inflectional features from verb.yaml
+        if 'features' in verb_config:
+            for feat, vals in verb_config['features'].items():
+                fd_content['features'][feat] = vals
+        
+        # Update conjugation_class
+        if 'conjugation_class' in fd_content['features']:
+            cc_list = fd_content['features']['conjugation_class']
+            if not isinstance(cc_list, list):
+                cc_list = []
+            for cc in new_conjugation_classes:
+                if cc not in cc_list:
+                    cc_list.append(cc)
+            fd_content['features']['conjugation_class'] = cc_list
+        
+        with open(fd_file, 'w', encoding='utf-8') as f:
+            f.write("# This is a FeatureDefinitions config file\n")
+            f.write("# Generated/Updated automatically from CSV\n")
+            yaml.dump(fd_content, f, Dumper=Dumper, default_flow_style=False, allow_unicode=True, sort_keys=False)
             
-            # Update conjugation_class
-            if 'conjugation_class' in fd_content['features']:
-                cc_list = fd_content['features']['conjugation_class']
-                if not isinstance(cc_list, list):
-                    cc_list = []
-                for cc in new_conjugation_classes:
-                    if cc not in cc_list:
-                        cc_list.append(cc)
-                fd_content['features']['conjugation_class'] = cc_list
-            
-            with open(fd_file, 'w', encoding='utf-8') as f:
-                f.write("# This is a FeatureDefinitions config file\n")
-                f.write("# Generated/Updated automatically from CSV\n")
-                yaml.dump(fd_content, f, Dumper=Dumper, default_flow_style=False, allow_unicode=True, sort_keys=False)
-                
-            print(f"Updated FeatureDefinitions: {fd_file}")
+        print(f"Updated FeatureDefinitions: {fd_file}")
 
     # 4. Generate Lexicon/PartOfSpeech/verb.yaml
     pos_dir = os.path.join(output_dir, "Lexicon", "PartOfSpeech")
