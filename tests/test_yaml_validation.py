@@ -1,5 +1,6 @@
 import pytest
-from yaml_validation import validate_yaml_content
+from parc_macros.yaml_validation import validate_yaml_content
+
 
 def test_valid_feature_definitions():
     valid_data = {

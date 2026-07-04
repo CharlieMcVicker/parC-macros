@@ -21,10 +21,8 @@ features:
       - imperative
       - subjunctive
     conjugation_class:
-     - a_stem
-     - e_stem
-     - i_stem
      - diphthong
+
 
 ## HELP FOR FEATURE DEFINITIONS ##
 # Here we define inflectional and (possibly) derivational or lexical features

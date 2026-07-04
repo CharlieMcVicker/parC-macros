@@ -5,7 +5,7 @@ part_of_speech: $verb # Part of speech reference, e.g., $verb
 
 feature_markers:
   # add feature markers here! See below for examples.
-  person_number: $verb_a_stem
+  person_number: $verb_diphthong
   tense: present
   mood: indicative
   # Map features to marker file references (start with $)
@@ -22,15 +22,15 @@ feature_markers:
   # mood: indicative
 
 # Optional: ordered stages of morphological rule/marker application
-# stage_order:
-#   - stem_change
-#   - suffixation
+stage_order:
+  - vowel_alternation
+  - suffix
 # type para-ord to add order stages!
 
 # Optional: filter to select specific roots from the lexicon
 filter:
   lexical_features:
-    conjugation_class: a_stem
+    conjugation_class: diphthong
 #   pattern: "<C>+<V>+"  # Phonological filter pattern reference or shape
 # type para-flt to add filter!
 

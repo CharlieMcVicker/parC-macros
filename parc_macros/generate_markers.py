@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import csv
 import os
+import shutil
 import sys
 import yaml
 
@@ -17,7 +18,10 @@ def parse_csv_with_metadata(csv_path):
     metadata = {
         'kind': 'suffix',
         'stage': 'suffix',
-        'feature': 'person_number'
+        'feature': 'person_number',
+        'part_of_speech': '$verb',
+        'tense': 'present',
+        'mood': 'indicative'
     }
     rows = []
     
@@ -36,13 +40,19 @@ def parse_csv_with_metadata(csv_path):
                 key, val = comment_content.split(':', 1)
                 key = key.strip().lower()
                 val = val.strip()
-                # Map alternate names
+                # Map keys
                 if key in ('operation', 'kind'):
                     metadata['kind'] = val
                 elif key in ('phase', 'stage'):
                     metadata['stage'] = val
                 elif key == 'feature':
                     metadata['feature'] = val
+                elif key == 'part_of_speech':
+                    metadata['part_of_speech'] = val
+                elif key == 'tense':
+                    metadata['tense'] = val
+                elif key == 'mood':
+                    metadata['mood'] = val
         else:
             csv_lines.append(line)
             
@@ -53,18 +63,26 @@ def parse_csv_with_metadata(csv_path):
     return metadata, reader.fieldnames, rows
 
 def main():
-    if len(sys.argv) < 3:
-        print("Usage: python generate_markers.py <path_to_csv> <output_dir>")
+    if len(sys.argv) < 4:
+        print("Usage: python generate_markers.py <path_to_csv> <base_dir> <output_dir>")
         sys.exit(1)
         
     csv_path = sys.argv[1]
-    output_dir = sys.argv[2]
+    base_dir = sys.argv[2]
+    output_dir = sys.argv[3]
     
     if not os.path.exists(csv_path):
         print(f"Error: CSV file not found at {csv_path}")
         sys.exit(1)
         
-    os.makedirs(output_dir, exist_ok=True)
+    if not os.path.exists(base_dir):
+        print(f"Error: Base directory not found at {base_dir}")
+        sys.exit(1)
+        
+    # Copy base_dir to output_dir
+    if os.path.exists(output_dir):
+        shutil.rmtree(output_dir)
+    shutil.copytree(base_dir, output_dir)
     
     metadata, fieldnames, rows = parse_csv_with_metadata(csv_path)
     
@@ -72,19 +90,25 @@ def main():
     id_col = fieldnames[0]
     feature_cols = fieldnames[1:]
     
+    new_conjugation_classes = []
+    
     for row in rows:
         paradigm_name = row[id_col].strip()
         if not paradigm_name:
             continue
             
-        # Ensure it has 'verb_' prefix to match existing filenames if needed
+        new_conjugation_classes.append(paradigm_name)
+        
+        # Ensure it has 'verb_' prefix
         filename_base = paradigm_name
         if not filename_base.startswith('verb_'):
             filename_base = f"verb_{filename_base}"
             
-        output_file = os.path.join(output_dir, f"{filename_base}.yaml")
+        # 1. Generate FeatureMarker YAML
+        fm_dir = os.path.join(output_dir, "Exponence", "FeatureMarkers")
+        os.makedirs(fm_dir, exist_ok=True)
+        fm_file = os.path.join(fm_dir, f"{filename_base}.yaml")
         
-        # Build markers dictionary
         markers_dict = {}
         for col in feature_cols:
             val = row[col].strip()
@@ -99,19 +123,67 @@ def main():
             else:
                 markers_dict[col] = None
                 
-        yaml_content = {
+        fm_content = {
             'kind': 'FeatureMarkers',
             'feature': metadata['feature'],
             'markers': markers_dict
         }
         
-        with open(output_file, 'w', encoding='utf-8') as f:
+        with open(fm_file, 'w', encoding='utf-8') as f:
             f.write("# This is a FeatureMarkers config file\n")
             f.write("# Generated automatically from CSV\n")
-            # Sort keys is false by default or sorted for determinism
-            yaml.dump(yaml_content, f, Dumper=Dumper, default_flow_style=False, allow_unicode=True, sort_keys=False)
+            yaml.dump(fm_content, f, Dumper=Dumper, default_flow_style=False, allow_unicode=True, sort_keys=False)
             
-        print(f"Generated: {output_file}")
+        print(f"Generated FeatureMarkers: {fm_file}")
+        
+        # 2. Generate Paradigm YAML
+        paradigm_dir = os.path.join(output_dir, "Morphotactics", "Paradigm")
+        os.makedirs(paradigm_dir, exist_ok=True)
+        paradigm_file = os.path.join(paradigm_dir, f"{filename_base}_{metadata['tense']}.yaml")
+        
+        paradigm_content = {
+            'kind': 'Paradigm',
+            'part_of_speech': metadata['part_of_speech'],
+            'feature_markers': {
+                metadata['feature']: f"${filename_base}",
+                'tense': metadata['tense'],
+                'mood': metadata['mood']
+            },
+            'filter': {
+                'lexical_features': {
+                    'conjugation_class': paradigm_name
+                }
+            }
+        }
+        
+        with open(paradigm_file, 'w', encoding='utf-8') as f:
+            f.write("# This is a Paradigm config file\n")
+            f.write("# Generated automatically from CSV\n")
+            yaml.dump(paradigm_content, f, Dumper=Dumper, default_flow_style=False, allow_unicode=True, sort_keys=False)
+            
+        print(f"Generated Paradigm: {paradigm_file}")
+        
+    # 3. Update Exponence/FeatureDefinitions/verb_features.yaml
+    fd_file = os.path.join(output_dir, "Exponence", "FeatureDefinitions", "verb_features.yaml")
+    if os.path.exists(fd_file):
+        with open(fd_file, 'r', encoding='utf-8') as f:
+            fd_content = yaml.safe_load(f)
+            
+        if fd_content and 'features' in fd_content and 'conjugation_class' in fd_content['features']:
+            cc_list = fd_content['features']['conjugation_class']
+            if not isinstance(cc_list, list):
+                cc_list = []
+            for cc in new_conjugation_classes:
+                if cc not in cc_list:
+                    cc_list.append(cc)
+            fd_content['features']['conjugation_class'] = cc_list
+            
+            with open(fd_file, 'w', encoding='utf-8') as f:
+                f.write("# This is a FeatureDefinitions config file\n")
+                f.write("# Generated/Updated automatically from CSV\n")
+                yaml.dump(fd_content, f, Dumper=Dumper, default_flow_style=False, allow_unicode=True, sort_keys=False)
+                
+            print(f"Updated FeatureDefinitions: {fd_file}")
 
 if __name__ == '__main__':
     main()
