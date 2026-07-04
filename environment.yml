@@ -1,3 +1,11 @@
 name: parC-macros
+channels:
+  - conda-forge
+  - defaults
 dependencies:
   - python=3.11
+  - pyyaml
+  - jsonschema>=4.23.0
+  - loguru
+  - frozendict
+  - pytest>=8.3.5
