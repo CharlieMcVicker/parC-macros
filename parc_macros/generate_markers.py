@@ -86,31 +86,40 @@ def main():
         shutil.rmtree(output_dir)
     shutil.copytree(base_dir, output_dir)
 
-    # 1. Determine all CSVs and verb_spec.yaml
+    # 1. Determine all CSVs and verb.yaml
     csv_files = []
     spec_path = None
     if os.path.isdir(config_path):
         for f in os.listdir(config_path):
             if f.endswith('.csv'):
                 csv_files.append(os.path.join(config_path, f))
-            elif f == 'verb_spec.yaml':
+            elif f == 'verb.yaml':
+                spec_path = os.path.join(config_path, f)
+            elif f == 'verb_spec.yaml' and not spec_path:
                 spec_path = os.path.join(config_path, f)
     else:
         # Fallback to single csv compatibility
         csv_files.append(config_path)
-        # Try to look for verb_spec.yaml in the same directory
+        # Try to look for verb.yaml or verb_spec.yaml in the same directory
         parent_dir = os.path.dirname(config_path)
-        possible_spec = os.path.join(parent_dir, 'verb_spec.yaml')
+        possible_spec = os.path.join(parent_dir, 'verb.yaml')
         if os.path.exists(possible_spec):
             spec_path = possible_spec
+        else:
+            possible_spec = os.path.join(parent_dir, 'verb_spec.yaml')
+            if os.path.exists(possible_spec):
+                spec_path = possible_spec
 
-    # Load verb_spec.yaml if it exists
+    # Load verb.yaml / verb_spec.yaml if it exists
     stage_order = None
+    verb_config = {}
     if spec_path and os.path.exists(spec_path):
         with open(spec_path, 'r', encoding='utf-8') as f:
-            spec_data = yaml.safe_load(f)
-            if spec_data and 'order' in spec_data:
-                stage_order = spec_data['order']
+            verb_config = yaml.safe_load(f) or {}
+            if 'order' in verb_config:
+                stage_order = verb_config['order']
+            elif 'stages' in verb_config:
+                stage_order = verb_config['stages']
 
     # We will gather all paradigms, and all markers for each paradigm
     # Structure:
@@ -254,14 +263,21 @@ def main():
         with open(fd_file, 'r', encoding='utf-8') as f:
             fd_content = yaml.safe_load(f)
             
-        if fd_content and 'features' in fd_content and 'conjugation_class' in fd_content['features']:
-            cc_list = fd_content['features']['conjugation_class']
-            if not isinstance(cc_list, list):
-                cc_list = []
-            for cc in new_conjugation_classes:
-                if cc not in cc_list:
-                    cc_list.append(cc)
-            fd_content['features']['conjugation_class'] = cc_list
+        if fd_content and 'features' in fd_content:
+            # Add inflectional features from verb.yaml
+            if 'features' in verb_config:
+                for feat, vals in verb_config['features'].items():
+                    fd_content['features'][feat] = vals
+            
+            # Update conjugation_class
+            if 'conjugation_class' in fd_content['features']:
+                cc_list = fd_content['features']['conjugation_class']
+                if not isinstance(cc_list, list):
+                    cc_list = []
+                for cc in new_conjugation_classes:
+                    if cc not in cc_list:
+                        cc_list.append(cc)
+                fd_content['features']['conjugation_class'] = cc_list
             
             with open(fd_file, 'w', encoding='utf-8') as f:
                 f.write("# This is a FeatureDefinitions config file\n")
@@ -269,6 +285,25 @@ def main():
                 yaml.dump(fd_content, f, Dumper=Dumper, default_flow_style=False, allow_unicode=True, sort_keys=False)
                 
             print(f"Updated FeatureDefinitions: {fd_file}")
+
+    # 4. Generate Lexicon/PartOfSpeech/verb.yaml
+    pos_dir = os.path.join(output_dir, "Lexicon", "PartOfSpeech")
+    os.makedirs(pos_dir, exist_ok=True)
+    pos_file = os.path.join(pos_dir, "verb.yaml")
+    
+    pos_content = {
+        'kind': 'PartOfSpeech',
+        'name': 'verb',
+        'features': list(verb_config.get('features', {}).keys())
+    }
+    if 'lexical_features' in verb_config:
+        pos_content['lexical_features'] = verb_config['lexical_features']
+        
+    with open(pos_file, 'w', encoding='utf-8') as f:
+        f.write("# This is a PartOfSpeech config file\n")
+        f.write("# Generated automatically from config/verb.yaml\n")
+        yaml.dump(pos_content, f, Dumper=Dumper, default_flow_style=False, allow_unicode=True, sort_keys=False)
+    print(f"Generated PartOfSpeech: {pos_file}")
 
 if __name__ == '__main__':
     main()

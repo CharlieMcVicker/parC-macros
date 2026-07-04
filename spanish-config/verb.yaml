@@ -1,0 +1,25 @@
+stages:
+  - vowel_alternation
+  - suffix
+
+# Inflectional Features (originally from verb_features.yaml)
+features:
+  person_number:
+    - 1sg
+    - 2sg
+    - 3sg
+    - 1pl
+    - 2pl
+    - 3pl
+  tense:
+    - present
+    - past
+    - future
+  mood:
+    - indicative
+    - imperative
+    - subjunctive
+
+# Lexical features and metadata (originally from verb.yaml)
+lexical_features:
+  - conjugation_class

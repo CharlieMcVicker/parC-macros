@@ -127,3 +127,17 @@ def test_generation_exact_match():
             ref_diph_para_data = yaml.safe_load(f)
         assert gen_diph_para_data == ref_diph_para_data
 
+        # 5. Check generated Lexicon/PartOfSpeech/verb.yaml
+        gen_pos = tmpdir_path / "Lexicon" / "PartOfSpeech" / "verb.yaml"
+        ref_pos = ref_dir / "Lexicon" / "PartOfSpeech" / "verb.yaml"
+        assert gen_pos.exists()
+        assert ref_pos.exists()
+        assert validate_yaml_file(gen_pos) is True
+
+        with open(gen_pos, "r", encoding="utf-8") as f:
+            gen_pos_data = yaml.safe_load(f)
+        with open(ref_pos, "r", encoding="utf-8") as f:
+            ref_pos_data = yaml.safe_load(f)
+        assert gen_pos_data == ref_pos_data
+
+
