@@ -1,0 +1,9 @@
+# kind: rule
+# stage: vowel_alternation
+# rule: $diphthongization
+# feature: person_number
+# part_of_speech: $verb
+# tense: present
+# mood: indicative
+paradigm,1sg,2sg,3sg,1pl,2pl,3pl
+diphthong,Y,Y,Y,N,N,Y

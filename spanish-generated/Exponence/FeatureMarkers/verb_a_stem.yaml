@@ -3,27 +3,27 @@
 kind: FeatureMarkers
 feature: person_number
 markers:
-  1sg:
-  - kind: suffix
-    value: -o
-    stage: suffix
-  2sg:
-  - kind: suffix
-    value: -as
-    stage: suffix
-  3sg:
-  - kind: suffix
-    value: -a
-    stage: suffix
   1pl:
   - kind: suffix
     value: -amos
+    stage: suffix
+  1sg:
+  - kind: suffix
+    value: -o
     stage: suffix
   2pl:
   - kind: suffix
     value: -áis
     stage: suffix
+  2sg:
+  - kind: suffix
+    value: -as
+    stage: suffix
   3pl:
   - kind: suffix
     value: -an
+    stage: suffix
+  3sg:
+  - kind: suffix
+    value: -a
     stage: suffix

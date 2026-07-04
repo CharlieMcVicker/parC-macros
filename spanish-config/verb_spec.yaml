@@ -1,0 +1,6 @@
+stages:
+  - vowel_alternation
+  - suffix
+order:
+  - vowel_alternation
+  - suffix

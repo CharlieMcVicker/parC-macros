@@ -24,7 +24,7 @@ def test_generation_exact_match():
         try:
             sys.argv = [
                 "generate_markers.py",
-                str(csv_path),
+                str(csv_path.parent),
                 str(base_dir),
                 str(tmpdir_path),
             ]
@@ -101,3 +101,29 @@ def test_generation_exact_match():
         assert (
             gen_fd_data == ref_fd_data
         ), "Data in verb_features.yaml does not match reference"
+
+        # 4. Check generated diphthong FeatureMarkers and Paradigm
+        gen_diph_fm = tmpdir_path / "Exponence" / "FeatureMarkers" / "verb_diphthong.yaml"
+        ref_diph_fm = ref_dir / "Exponence" / "FeatureMarkers" / "verb_diphthong.yaml"
+        assert gen_diph_fm.exists()
+        assert ref_diph_fm.exists()
+        assert validate_yaml_file(gen_diph_fm) is True
+
+        with open(gen_diph_fm, "r", encoding="utf-8") as f:
+            gen_diph_fm_data = yaml.safe_load(f)
+        with open(ref_diph_fm, "r", encoding="utf-8") as f:
+            ref_diph_fm_data = yaml.safe_load(f)
+        assert gen_diph_fm_data == ref_diph_fm_data
+
+        gen_diph_para = tmpdir_path / "Morphotactics" / "Paradigm" / "verb_diphthong_present.yaml"
+        ref_diph_para = ref_dir / "Morphotactics" / "Paradigm" / "verb_diphthong_present.yaml"
+        assert gen_diph_para.exists()
+        assert ref_diph_para.exists()
+        assert validate_yaml_file(gen_diph_para) is True
+
+        with open(gen_diph_para, "r", encoding="utf-8") as f:
+            gen_diph_para_data = yaml.safe_load(f)
+        with open(ref_diph_para, "r", encoding="utf-8") as f:
+            ref_diph_para_data = yaml.safe_load(f)
+        assert gen_diph_para_data == ref_diph_para_data
+
