@@ -5,24 +5,22 @@
 kind: FeatureDefinitions
 features:
   # type fd-feature to add your first feature!
-    person_number:
-     - 1sg
-     - 2sg
-     - 3sg
-     - 1pl
-     - 2pl
-     - 3pl
-    tense:
-      - present
-      - past
-      - future
-    mood:
-      - indicative
-      - imperative
-      - subjunctive
-    conjugation_class:
-     - diphthong
-
+  person_number:
+    - 1sg
+    - 2sg
+    - 3sg
+    - 1pl
+    - 2pl
+    - 3pl
+  tense:
+    - present
+    - past
+    - future
+  mood:
+    - indicative
+    - imperative
+    - subjunctive
+  conjugation_class: []
 
 ## HELP FOR FEATURE DEFINITIONS ##
 # Here we define inflectional and (possibly) derivational or lexical features
@@ -37,4 +35,4 @@ features:
 
 # each feature name and value should be given as a single word with no spaces
 # underscores are allowed, e.g. person_number
-# but other punctuation should be avoided (including hyphens) 
+# but other punctuation should be avoided (including hyphens)
