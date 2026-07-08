@@ -1,0 +1,8 @@
+# kind: prefix
+# stage: pronominal
+# feature: person_number
+# part_of_speech: $verb
+# class_feature: prefix_class
+paradigm,1sg,2sg,3sg
+a_stem,k,h,a
+cons_stem,tsi,hi,ka

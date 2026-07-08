@@ -1,0 +1,22 @@
+stages:
+  - aspect_suffix
+  - a_drop
+  - pronominal
+
+# Inflectional Features (originally from verb_features.yaml)
+features:
+  person_number:
+    - 1sg
+    - 2sg
+    - 3sg
+  aspect:
+    - present
+    - immediate
+    - incompletive
+    - completive
+    - infinitive
+
+# Lexical features and metadata (originally from verb.yaml)
+lexical_features:
+  - prefix_class
+  - aspect_class

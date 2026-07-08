@@ -1,0 +1,20 @@
+# This is a FeatureDefinitions config file
+# Generated/Updated automatically from CSV
+kind: FeatureDefinitions
+features:
+  person_number:
+  - 1sg
+  - 2sg
+  - 3sg
+  aspect:
+  - present
+  - immediate
+  - incompletive
+  - completive
+  - infinitive
+  aspect_class:
+  - eh-vk
+  - ha-hi-s
+  prefix_class:
+  - a_stem
+  - cons_stem

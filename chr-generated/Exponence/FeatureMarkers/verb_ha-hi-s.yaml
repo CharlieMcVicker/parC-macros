@@ -1,0 +1,25 @@
+# This is a FeatureMarkers config file
+# Generated automatically from CSV
+kind: FeatureMarkers
+feature: aspect
+markers:
+  completive:
+  - kind: suffix
+    value: s
+    stage: aspect_suffix
+  immediate:
+  - kind: suffix
+    value: hi
+    stage: aspect_suffix
+  incompletive:
+  - kind: suffix
+    value: sk
+    stage: aspect_suffix
+  infinitive:
+  - kind: suffix
+    value: hist
+    stage: aspect_suffix
+  present:
+  - kind: suffix
+    value: ha
+    stage: aspect_suffix

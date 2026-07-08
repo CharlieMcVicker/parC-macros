@@ -1,0 +1,20 @@
+# This is a FeatureMarkers config file
+# Generated automatically from CSV
+kind: FeatureMarkers
+feature: person_number
+markers:
+  1sg:
+  - kind: prefix
+    value: k
+    stage: pronominal
+  2sg:
+  - kind: prefix
+    value: h
+    stage: pronominal
+  3sg:
+  - kind: prefix
+    value: a
+    stage: pronominal
+  - kind: rule
+    value: $drop_a
+    stage: a_drop

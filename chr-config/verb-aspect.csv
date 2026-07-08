@@ -1,0 +1,8 @@
+# kind: suffix
+# stage: aspect_suffix
+# feature: aspect
+# part_of_speech: $verb
+# class_feature: aspect_class
+paradigm,present,immediate,incompletive,completive,infinitive
+ha-hi-s,ha,hi,sk,s,hist
+eh-vk,eha,vka,eh,el,eht

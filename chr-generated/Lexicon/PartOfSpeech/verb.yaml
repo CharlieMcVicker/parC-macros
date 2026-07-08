@@ -1,0 +1,10 @@
+# This is a PartOfSpeech config file
+# Generated automatically from config/verb.yaml
+kind: PartOfSpeech
+name: verb
+features:
+- person_number
+- aspect
+lexical_features:
+- prefix_class
+- aspect_class
