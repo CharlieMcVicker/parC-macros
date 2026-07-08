@@ -14,10 +14,7 @@ def test_generation_exact_match():
     base_dir = root_dir / "spanish-base"
     ref_dir = root_dir / "spanish-reference"
 
-    config_yaml_path = root_dir / "spanish-config/verb.yaml"
-    with open(config_yaml_path, "r", encoding="utf-8") as f:
-        verb_config = yaml.safe_load(f)
-    class_feature = verb_config["class_feature"]
+    class_feature = "conjugation_class"
 
     with tempfile.TemporaryDirectory() as tmpdir:
         tmpdir_path = Path(tmpdir)
@@ -144,5 +141,65 @@ def test_generation_exact_match():
         with open(ref_pos, "r", encoding="utf-8") as f:
             ref_pos_data = yaml.safe_load(f)
         assert gen_pos_data == ref_pos_data
+
+
+def test_generation_cherokee():
+    root_dir = Path(__file__).parent.parent
+    config_dir = root_dir / "chr-config"
+    base_dir = root_dir / "chr-base"
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir_path = Path(tmpdir)
+
+        # Run generation via main function
+        import sys
+        orig_argv = sys.argv
+        try:
+            sys.argv = [
+                "generate_markers.py",
+                str(config_dir),
+                str(base_dir),
+                str(tmpdir_path),
+            ]
+            generate_markers_main()
+        finally:
+            sys.argv = orig_argv
+
+        # Check generated FeatureMarkers files
+        fm_names = ["verb_ha-hi-s.yaml", "verb_eh-vk.yaml", "verb_a_stem.yaml", "verb_cons_stem.yaml"]
+        for name in fm_names:
+            gen_file = tmpdir_path / "Exponence" / "FeatureMarkers" / name
+            assert gen_file.exists(), f"Generated FeatureMarkers file {name} does not exist"
+            assert validate_yaml_file(gen_file) is True
+
+        # Check generated Paradigm files
+        para_names = ["verb_ha-hi-s.yaml", "verb_eh-vk.yaml", "verb_a_stem.yaml", "verb_cons_stem.yaml"]
+        for name in para_names:
+            gen_file = tmpdir_path / "Morphotactics" / "Paradigm" / name
+            assert gen_file.exists(), f"Generated Paradigm file {name} does not exist"
+            assert validate_yaml_file(gen_file) is True
+
+        # Check updated FeatureDefinitions
+        gen_fd = tmpdir_path / "Exponence" / "FeatureDefinitions" / "verb_features.yaml"
+        assert gen_fd.exists()
+        assert validate_yaml_file(gen_fd) is True
+
+        with open(gen_fd, "r", encoding="utf-8") as f:
+            gen_fd_data = yaml.safe_load(f)
+
+        assert "aspect_class" in gen_fd_data["features"]
+        assert "prefix_class" in gen_fd_data["features"]
+        assert set(gen_fd_data["features"]["aspect_class"]) == {"ha-hi-s", "eh-vk"}
+        assert set(gen_fd_data["features"]["prefix_class"]) == {"a_stem", "cons_stem"}
+
+        # Check generated Lexicon/PartOfSpeech/verb.yaml
+        gen_pos = tmpdir_path / "Lexicon" / "PartOfSpeech" / "verb.yaml"
+        assert gen_pos.exists()
+        assert validate_yaml_file(gen_pos) is True
+
+        with open(gen_pos, "r", encoding="utf-8") as f:
+            gen_pos_data = yaml.safe_load(f)
+        assert set(gen_pos_data["lexical_features"]) == {"prefix_class", "aspect_class"}
+
 
 

@@ -50,10 +50,10 @@ def parse_csv_with_metadata(csv_path, default_metadata=None):
                     metadata["rule"] = val
                 elif key == "part_of_speech":
                     metadata["part_of_speech"] = val
-                elif key == "tense":
-                    metadata["tense"] = val
-                elif key == "mood":
-                    metadata["mood"] = val
+                elif key == "class_feature":
+                    metadata["class_feature"] = val
+                else:
+                    metadata[key] = val
         else:
             csv_lines.append(line)
 
@@ -121,7 +121,6 @@ def main():
     # Load verb.yaml / verb_spec.yaml if it exists
     stage_order = None
     verb_config = {}
-    class_feature = None
     csv_defaults = {}
     if spec_path and os.path.exists(spec_path):
         with open(spec_path, "r", encoding="utf-8") as f:
@@ -130,17 +129,13 @@ def main():
                 stage_order = verb_config["order"]
             elif "stages" in verb_config:
                 stage_order = verb_config["stages"]
-
-            if "class_feature" not in verb_config:
-                raise ValueError(
-                    "Required 'class_feature' key is missing from configuration"
-                )
-            class_feature = verb_config["class_feature"]
             csv_defaults = verb_config.get("defaults", {})
     else:
-        raise ValueError(
-            "Configuration file containing 'class_feature' is required but not found."
-        )
+        raise ValueError("Configuration file is required but not found.")
+
+    paradigm_config = verb_config.get("paradigm", {})
+    feature_markers_keys = paradigm_config.get("feature_markers_keys", [])
+    filename_suffix_keys = paradigm_config.get("filename_suffix_keys", [])
 
     if "part_of_speech" not in csv_defaults:
         csv_defaults["part_of_speech"] = f"${pos_name}"
@@ -151,9 +146,20 @@ def main():
     # paradigms_markers = { paradigm_name: { feature_value: [ {kind, value, stage}, ... ] } }
     paradigms_metadata = {}
     paradigms_markers = {}
+    class_features_paradigms = {}
 
     for csv_file in csv_files:
         metadata, fieldnames, rows = parse_csv_with_metadata(csv_file, csv_defaults)
+
+        csv_class_feature = metadata.get("class_feature")
+        if not csv_class_feature:
+            raise ValueError(
+                f"Required 'class_feature' metadata is missing in CSV file: {csv_file}"
+            )
+
+        if csv_class_feature not in class_features_paradigms:
+            class_features_paradigms[csv_class_feature] = set()
+
         id_col = fieldnames[0]
         feature_cols = fieldnames[1:]
 
@@ -162,14 +168,10 @@ def main():
             if not paradigm_name:
                 continue
 
+            class_features_paradigms[csv_class_feature].add(paradigm_name)
+
             if paradigm_name not in paradigms_metadata:
                 paradigms_metadata[paradigm_name] = metadata.copy()
-                # {
-                #     "part_of_speech": metadata["part_of_speech"],
-                #     "tense": metadata["tense"],
-                #     "mood": metadata["mood"],
-                #     "feature": metadata["feature"],
-                # }
 
             if paradigm_name not in paradigms_markers:
                 paradigms_markers[paradigm_name] = {}
@@ -222,10 +224,7 @@ def main():
         # For simplicity, we can use the keys from paradigms_markers[paradigm_name].
         # But to be safe, let's output null for any of the standard feature values if they don't exist.
         # Standard values for person_number are 1sg, 2sg, 3sg, 1pl, 2pl, 3pl.
-        standard_cols = ["1sg", "2sg", "3sg", "1pl", "2pl", "3pl"]
-        all_cols = sorted(
-            list(set(standard_cols + list(paradigms_markers[paradigm_name].keys())))
-        )
+        all_cols = sorted(list(set(paradigms_markers[paradigm_name].keys())))
 
         for col in all_cols:
             entries = paradigms_markers[paradigm_name].get(col, [])
@@ -257,8 +256,10 @@ def main():
         # 2. Generate Paradigm YAML
         paradigm_dir = os.path.join(output_dir, "Morphotactics", "Paradigm")
         os.makedirs(paradigm_dir, exist_ok=True)
+        suffixes = [meta[k] for k in filename_suffix_keys if k in meta]
+        suffix_str = f"_{'_'.join(suffixes)}" if suffixes else ""
         paradigm_file = os.path.join(
-            paradigm_dir, f"{filename_base}_{meta['tense']}.yaml"
+            paradigm_dir, f"{filename_base}{suffix_str}.yaml"
         )
 
         paradigm_content = {
@@ -266,10 +267,11 @@ def main():
             "part_of_speech": meta["part_of_speech"],
             "feature_markers": {
                 meta["feature"]: f"${filename_base}",
-                "tense": meta["tense"],
-                "mood": meta["mood"],
             },
         }
+        for key in feature_markers_keys:
+            if key in meta:
+                paradigm_content["feature_markers"][key] = meta[key]
 
         # Add stage_order if defined and this paradigm has markers in multiple stages
         # Or should we only add it if the paradigm has markers spanning multiple stages?
@@ -286,7 +288,7 @@ def main():
 
         # Add filter
         paradigm_content["filter"] = {
-            "lexical_features": {class_feature: paradigm_name}
+            "lexical_features": {meta["class_feature"]: paradigm_name}
         }
 
         with open(paradigm_file, "w", encoding="utf-8") as f:
@@ -311,7 +313,7 @@ def main():
         with open(fd_file, "r", encoding="utf-8") as f:
             fd_content = yaml.safe_load(f)
     else:
-        fd_content = {"kind": "FeatureDefinitions", "features": {class_feature: []}}
+        fd_content = {"kind": "FeatureDefinitions", "features": {}}
         os.makedirs(os.path.dirname(fd_file), exist_ok=True)
 
     if fd_content and "features" in fd_content:
@@ -320,15 +322,17 @@ def main():
             for feat, vals in verb_config["features"].items():
                 fd_content["features"][feat] = vals
 
-        # Update class_feature
-        if class_feature in fd_content["features"]:
-            cc_list = fd_content["features"][class_feature]
+        # Update all class features found
+        for cf, new_vals in class_features_paradigms.items():
+            if cf not in fd_content["features"]:
+                fd_content["features"][cf] = []
+            cc_list = fd_content["features"][cf]
             if not isinstance(cc_list, list):
                 cc_list = []
-            for cc in new_class_values:
+            for cc in sorted(list(new_vals)):
                 if cc not in cc_list:
                     cc_list.append(cc)
-            fd_content["features"][class_feature] = cc_list
+            fd_content["features"][cf] = cc_list
 
         with open(fd_file, "w", encoding="utf-8") as f:
             f.write("# This is a FeatureDefinitions config file\n")

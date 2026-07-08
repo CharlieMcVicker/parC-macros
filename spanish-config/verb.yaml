@@ -24,4 +24,10 @@ features:
 lexical_features:
   - conjugation_class
 
-class_feature: conjugation_class
+paradigm:
+  feature_markers_keys:
+    - tense
+    - mood
+  filename_suffix_keys:
+    - tense
+
