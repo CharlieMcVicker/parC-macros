@@ -5,3 +5,4 @@ __pycache__/
 *.pyd
 .venv/
 .DS_Store
+.ember
