@@ -23,3 +23,5 @@ features:
 # Lexical features and metadata (originally from verb.yaml)
 lexical_features:
   - conjugation_class
+
+class_feature: conjugation_class

@@ -14,6 +14,11 @@ def test_generation_exact_match():
     base_dir = root_dir / "spanish-base"
     ref_dir = root_dir / "spanish-reference"
 
+    config_yaml_path = root_dir / "spanish-config/verb.yaml"
+    with open(config_yaml_path, "r", encoding="utf-8") as f:
+        verb_config = yaml.safe_load(f)
+    class_feature = verb_config["class_feature"]
+
     with tempfile.TemporaryDirectory() as tmpdir:
         tmpdir_path = Path(tmpdir)
 
@@ -91,13 +96,13 @@ def test_generation_exact_match():
         with open(ref_fd, "r", encoding="utf-8") as f:
             ref_fd_data = yaml.safe_load(f)
 
-        # Compare conjugation_class list as sets since ordering does not affect correctness
-        gen_cc = gen_fd_data["features"].get("conjugation_class", [])
-        ref_cc = ref_fd_data["features"].get("conjugation_class", [])
-        assert set(gen_cc) == set(ref_cc), "conjugation_class values do not match"
+        # Compare class_feature list as sets since ordering does not affect correctness
+        gen_cc = gen_fd_data["features"].get(class_feature, [])
+        ref_cc = ref_fd_data["features"].get(class_feature, [])
+        assert set(gen_cc) == set(ref_cc), f"{class_feature} values do not match"
 
-        del gen_fd_data["features"]["conjugation_class"]
-        del ref_fd_data["features"]["conjugation_class"]
+        del gen_fd_data["features"][class_feature]
+        del ref_fd_data["features"][class_feature]
         assert (
             gen_fd_data == ref_fd_data
         ), "Data in verb_features.yaml does not match reference"
