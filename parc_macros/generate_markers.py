@@ -18,10 +18,8 @@ def dict_representer(dumper, data):
 Dumper.add_representer(dict, dict_representer)
 
 
-def parse_csv_with_metadata(csv_path, default_metadata=None):
+def parse_csv_with_metadata(csv_path):
     metadata = {}
-    if default_metadata:
-        metadata.update(default_metadata)
     rows = []
 
     with open(csv_path, "r", encoding="utf-8") as f:
@@ -121,7 +119,6 @@ def main():
     # Load verb.yaml / verb_spec.yaml if it exists
     stage_order = None
     verb_config = {}
-    csv_defaults = {}
     if spec_path and os.path.exists(spec_path):
         with open(spec_path, "r", encoding="utf-8") as f:
             verb_config = yaml.safe_load(f) or {}
@@ -129,16 +126,12 @@ def main():
                 stage_order = verb_config["order"]
             elif "stages" in verb_config:
                 stage_order = verb_config["stages"]
-            csv_defaults = verb_config.get("defaults", {})
     else:
         raise ValueError("Configuration file is required but not found.")
 
     paradigm_config = verb_config.get("paradigm", {})
     feature_markers_keys = paradigm_config.get("feature_markers_keys", [])
     filename_suffix_keys = paradigm_config.get("filename_suffix_keys", [])
-
-    if "part_of_speech" not in csv_defaults:
-        csv_defaults["part_of_speech"] = f"${pos_name}"
 
     # We will gather all paradigms, and all markers for each paradigm
     # Structure:
@@ -149,7 +142,7 @@ def main():
     class_features_paradigms = {}
 
     for csv_file in csv_files:
-        metadata, fieldnames, rows = parse_csv_with_metadata(csv_file, csv_defaults)
+        metadata, fieldnames, rows = parse_csv_with_metadata(csv_file)
 
         csv_class_feature = metadata.get("class_feature")
         if not csv_class_feature:
