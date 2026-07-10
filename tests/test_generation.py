@@ -142,6 +142,18 @@ def test_generation_exact_match():
             ref_pos_data = yaml.safe_load(f)
         assert gen_pos_data == ref_pos_data
 
+        # 6. Check that wordlists were copied correctly
+        gen_wl = tmpdir_path / "Lexicon" / "Wordlists" / "verb.csv"
+        ref_wl = ref_dir / "Lexicon" / "Wordlists" / "verb.csv"
+        assert gen_wl.exists(), "Generated wordlist verb.csv does not exist"
+        assert ref_wl.exists(), "Reference wordlist verb.csv does not exist"
+        with open(gen_wl, "r", encoding="utf-8") as f:
+            gen_wl_data = f.read()
+        with open(ref_wl, "r", encoding="utf-8") as f:
+            ref_wl_data = f.read()
+        assert gen_wl_data == ref_wl_data, "Generated wordlist verb.csv content does not match reference"
+
+
 
 def test_generation_cherokee():
     root_dir = Path(__file__).parent.parent
@@ -200,6 +212,17 @@ def test_generation_cherokee():
         with open(gen_pos, "r", encoding="utf-8") as f:
             gen_pos_data = yaml.safe_load(f)
         assert set(gen_pos_data["lexical_features"]) == {"prefix_class", "aspect_class"}
+
+        # Check that wordlists were copied correctly
+        gen_wl = tmpdir_path / "Lexicon" / "Wordlists" / "verb.csv"
+        assert gen_wl.exists(), "Generated Cherokee wordlist verb.csv does not exist"
+        with open(gen_wl, "r", encoding="utf-8") as f:
+            gen_wl_data = f.read()
+        # Verify content matches what we moved to config/wordlists/verb.csv
+        with open(config_dir / "wordlists" / "verb.csv", "r", encoding="utf-8") as f:
+            expected_wl_data = f.read()
+        assert gen_wl_data == expected_wl_data, "Generated Cherokee wordlist content does not match config"
+
 
 
 

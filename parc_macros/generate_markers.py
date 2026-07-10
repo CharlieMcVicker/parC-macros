@@ -551,6 +551,22 @@ def main():
     for d in standard_dirs:
         os.makedirs(d, exist_ok=True)
 
+    # Copy wordlists from config/wordlists to output_dir/Lexicon/Wordlists if present
+    if os.path.isdir(config_path):
+        wordlists_dir = os.path.join(config_path, "wordlists")
+        if os.path.exists(wordlists_dir) and os.path.isdir(wordlists_dir):
+            dest_wl_dir = os.path.join(output_dir, "Lexicon", "Wordlists")
+            for item in os.listdir(wordlists_dir):
+                s = os.path.join(wordlists_dir, item)
+                d = os.path.join(dest_wl_dir, item)
+                if os.path.isdir(s):
+                    if os.path.exists(d):
+                        shutil.rmtree(d)
+                    shutil.copytree(s, d)
+                else:
+                    shutil.copy2(s, d)
+
+
 
     # 1. Determine all CSVs and verb.yaml
     csv_files = []
