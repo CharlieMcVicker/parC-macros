@@ -31,6 +31,7 @@ features:
   - infinitive
   aspect_class:
   - be-at
+  - e-a
   - eh-vk
   - ha-hi-s
   prefix_class:

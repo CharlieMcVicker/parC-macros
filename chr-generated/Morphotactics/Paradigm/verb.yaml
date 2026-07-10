@@ -10,5 +10,5 @@ contingent_markers:
 - $verb_pronominal_contingent
 stage_order:
 - aspect_suffix
-- a_drop
+- drop_stem_initial_vowel
 - pronominal

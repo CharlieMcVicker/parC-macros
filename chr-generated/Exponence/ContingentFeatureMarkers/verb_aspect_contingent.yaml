@@ -26,6 +26,27 @@ markers:
     - kind: suffix
       value: oha
       stage: aspect_suffix
+  e-a:
+    completive:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: esk
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: e'
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: et
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: e'a
+      stage: aspect_suffix
   eh-vk:
     completive:
     - kind: suffix

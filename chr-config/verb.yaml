@@ -1,6 +1,6 @@
 stages:
   - aspect_suffix
-  - a_drop
+  - drop_stem_initial_vowel
   - pronominal
 
 # Inflectional Features (originally from verb_features.yaml)
