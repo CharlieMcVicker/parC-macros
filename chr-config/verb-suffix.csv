@@ -1,8 +1,0 @@
-# kind: prefix
-# stage: pronominal
-# feature: pronominal
-# part_of_speech: $verb
-# class_feature: prefix_class
-paradigm,1sg.A,2sg.A,3sg.A
-a_stem,k,h,a
-cons_stem,tsi,hi,ka

@@ -5,6 +5,27 @@ features:
 - aspect_class
 - aspect
 markers:
+  be-at:
+    completive:
+    - kind: suffix
+      value: ol
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: oh
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ahst
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: oha
+      stage: aspect_suffix
   eh-vk:
     completive:
     - kind: suffix

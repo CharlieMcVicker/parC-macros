@@ -4,11 +4,12 @@ kind: Rules
 rules:
   # type rule-simple, rule-map or rule-seq to add more rules
   # note left and right contexts are optional
-  - name: drop_a
+  - name: drop_stem_initial_vowel
     description: >
-      drop a at start of stem
+      drop a/v at start of stem
     string_map:
       - [a, ""]
+      - [v, ""]
     left_context: "#"
 
 ### HELP FOR RULES ###

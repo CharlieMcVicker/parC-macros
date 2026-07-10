@@ -194,11 +194,18 @@ def test_generation_cherokee():
 
 
         # Check generated ContingentFeatureMarkers files
-        fm_names = ["verb_aspect_contingent.yaml", "verb_person_number_contingent.yaml"]
+        fm_names = ["verb_aspect_contingent.yaml", "verb_pronominal_contingent.yaml"]
         for name in fm_names:
             gen_file = tmpdir_path / "Exponence" / "ContingentFeatureMarkers" / name
             assert gen_file.exists(), f"Generated ContingentFeatureMarkers file {name} does not exist"
             assert validate_yaml_file(gen_file) is True
+
+        # Verify blank pronominal entry for e_stem 3sg.A
+        with open(tmpdir_path / "Exponence" / "ContingentFeatureMarkers" / "verb_pronominal_contingent.yaml", "r", encoding="utf-8") as f:
+            pronominal_data = yaml.safe_load(f)
+        assert pronominal_data["markers"]["e_stem"]["3sg.A"] == [
+            {"kind": "prefix", "value": "", "stage": "pronominal"}
+        ]
 
         # Check generated Paradigm files
         para_names = ["verb.yaml"]
@@ -217,8 +224,8 @@ def test_generation_cherokee():
 
         assert "aspect_class" in gen_fd_data["features"]
         assert "prefix_class" in gen_fd_data["features"]
-        assert set(gen_fd_data["features"]["aspect_class"]) == {"ha-hi-s", "eh-vk"}
-        assert set(gen_fd_data["features"]["prefix_class"]) == {"a_stem", "cons_stem"}
+        assert set(gen_fd_data["features"]["aspect_class"]) == {"ha-hi-s", "eh-vk", "be-at"}
+        assert set(gen_fd_data["features"]["prefix_class"]) == {"a_stem", "v_stem", "e_stem", "vowel_stem", "cons_stem", "r_stem"}
 
         # Check generated Lexicon/PartOfSpeech/verb.yaml
         gen_pos = tmpdir_path / "Lexicon" / "PartOfSpeech" / "verb.yaml"

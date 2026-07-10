@@ -114,7 +114,7 @@ def map_csv_to_markers(csv_file):
                 raise KeyError(
                     f"Column '{col}' not found in CSV file {csv_file}. Available columns: {fieldnames}"
                 ) from e
-            if val:
+            if val or (val == "" and metadata.get("kind") != "rule"):
                 # If kind is rule and a rule name is specified in metadata:
                 # Y means we use the rule name from metadata. N or empty means no entry.
                 if metadata.get("kind") == "rule" and "rule" in metadata:
