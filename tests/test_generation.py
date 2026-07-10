@@ -224,8 +224,8 @@ def test_generation_cherokee():
 
         assert "aspect_class" in gen_fd_data["features"]
         assert "prefix_class" in gen_fd_data["features"]
-        assert set(gen_fd_data["features"]["aspect_class"]) == {"ha-hi-s", "eh-vk", "be-at"}
-        assert set(gen_fd_data["features"]["prefix_class"]) == {"a_stem", "v_stem", "e_stem", "vowel_stem", "cons_stem", "r_stem"}
+        assert set(gen_fd_data["features"]["aspect_class"]) == {"ha-hi-s", "eh-vk", "be-at", "e-a"}
+        assert set(gen_fd_data["features"]["prefix_class"]) == {"a_stem", "v_stem", "e_stem", "vowel_stem", "cons_stem", "r_stem", "k_a_stem"}
 
         # Check generated Lexicon/PartOfSpeech/verb.yaml
         gen_pos = tmpdir_path / "Lexicon" / "PartOfSpeech" / "verb.yaml"
