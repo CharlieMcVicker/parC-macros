@@ -3,11 +3,7 @@
   "title": "ContingentFeatureMarkers",
   "description": "Schema for morphological realizations contingent on multiple features.",
   "type": "object",
-  "required": [
-    "kind",
-    "features",
-    "markers"
-  ],
+  "required": ["kind", "markers"],
   "additionalProperties": false,
   "properties": {
     "source_path": {
@@ -16,9 +12,7 @@
     },
     "kind": {
       "type": "string",
-      "enum": [
-        "ContingentFeatureMarkers"
-      ]
+      "enum": ["ContingentFeatureMarkers"]
     },
     "features": {
       "type": "array",
@@ -26,6 +20,14 @@
         "type": "string"
       },
       "description": "List of inflectional features this set expones."
+    },
+    "class_name": {
+      "type": "string",
+      "description": "The name of the lexical class feature (e.g. conjugation_class)."
+    },
+    "feature": {
+      "type": "string",
+      "description": "The name of the morphological feature."
     },
     "global_stage": {
       "type": "string",
@@ -39,30 +41,59 @@
       "description": "A marker or list of markers applied to all forms in this paradigm."
     },
     "markers": {
-      "type": "array",
-      "description": "An array over feature vectors and their realizations.",
-      "items": {
-        "type": "object",
-        "required": [
-          "features",
-          "realization"
-        ],
-        "properties": {
-          "features": {
+      "oneOf": [
+        {
+          "type": "array",
+          "description": "An array over feature vectors and their realizations.",
+          "items": {
+            "type": "object",
+            "required": ["features", "realization"],
+            "properties": {
+              "features": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "The feature value vector specified for this marker group."
+              },
+              "realization": {
+                "type": "array",
+                "items": {
+                  "$ref": "./FeatureMarkers.json#/definitions/marker"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "description": "Map of class names to their feature realizations.",
+          "additionalProperties": {
             "type": "object",
             "additionalProperties": {
-              "type": "string"
-            },
-            "description": "The feature value vector specified for this marker group."
-          },
-          "realization": {
-            "type": "array",
-            "items": {
-              "$ref": "./FeatureMarkers.json#/definitions/marker"
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "./FeatureMarkers.json#/definitions/marker"
+                  }
+                }
+              ]
             }
           }
         }
-      }
+      ]
     }
-  }
+  },
+  "anyOf": [
+    {
+      "required": ["features"]
+    },
+    {
+      "required": ["class_name", "feature"]
+    }
+  ]
 }
