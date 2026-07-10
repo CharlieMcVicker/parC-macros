@@ -2,10 +2,10 @@
 # Generated/Updated automatically from CSV
 kind: FeatureDefinitions
 features:
-  person_number:
-  - 1sg
-  - 2sg
-  - 3sg
+  pronominal:
+  - 1sg.A
+  - 2sg.A
+  - 3sg.A
   aspect:
   - present
   - immediate

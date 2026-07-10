@@ -1,0 +1,32 @@
+# This is a ContingentFeatureMarkers config file
+# Generated automatically from CSVs
+kind: ContingentFeatureMarkers
+class_name: prefix_class
+feature: pronominal
+markers:
+  a_stem:
+    1sg.A:
+    - kind: prefix
+      value: k
+      stage: pronominal
+    2sg.A:
+    - kind: prefix
+      value: h
+      stage: pronominal
+    3sg.A:
+    - kind: prefix
+      value: a
+      stage: pronominal
+  cons_stem:
+    1sg.A:
+    - kind: prefix
+      value: tsi
+      stage: pronominal
+    2sg.A:
+    - kind: prefix
+      value: hi
+      stage: pronominal
+    3sg.A:
+    - kind: prefix
+      value: ka
+      stage: pronominal

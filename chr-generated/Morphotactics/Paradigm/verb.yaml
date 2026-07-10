@@ -5,9 +5,11 @@ part_of_speech: $verb
 feature_markers:
   aspect: null
   person_number: null
+  pronominal: null
 contingent_markers:
 - $verb_aspect_contingent
 - $verb_person_number_contingent
+- $verb_pronominal_contingent
 stage_order:
 - aspect_suffix
 - a_drop

@@ -3,7 +3,7 @@
 kind: PartOfSpeech
 name: verb
 features:
-- person_number
+- pronominal
 - aspect
 lexical_features:
 - prefix_class
