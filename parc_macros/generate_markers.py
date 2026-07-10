@@ -536,6 +536,22 @@ def main():
         shutil.rmtree(output_dir)
     shutil.copytree(base_dir, output_dir)
 
+    # Ensure full standard directory structure exists under output_dir
+    standard_dirs = [
+        os.path.join(output_dir, "Phonology", "Inventory"),
+        os.path.join(output_dir, "Phonology", "Patterns"),
+        os.path.join(output_dir, "Phonology", "Rules"),
+        os.path.join(output_dir, "Exponence", "FeatureDefinitions"),
+        os.path.join(output_dir, "Exponence", "FeatureMarkers"),
+        os.path.join(output_dir, "Exponence", "ContingentFeatureMarkers"),
+        os.path.join(output_dir, "Lexicon", "PartOfSpeech"),
+        os.path.join(output_dir, "Lexicon", "Wordlists"),
+        os.path.join(output_dir, "Morphotactics", "Paradigm"),
+    ]
+    for d in standard_dirs:
+        os.makedirs(d, exist_ok=True)
+
+
     # 1. Determine all CSVs and verb.yaml
     csv_files = []
     spec_path = None
