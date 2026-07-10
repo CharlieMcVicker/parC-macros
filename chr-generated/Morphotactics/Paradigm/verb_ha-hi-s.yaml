@@ -1,9 +1,0 @@
-# This is a Paradigm config file
-# Generated automatically from CSV
-kind: Paradigm
-part_of_speech: $verb
-feature_markers:
-  aspect: $verb_ha-hi-s
-filter:
-  lexical_features:
-    aspect_class: ha-hi-s

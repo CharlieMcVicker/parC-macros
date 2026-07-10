@@ -18,7 +18,7 @@ features:
   - imperative
   - subjunctive
   conjugation_class:
-  - diphthong
   - a_stem
+  - diphthong
   - e_stem
   - i_stem

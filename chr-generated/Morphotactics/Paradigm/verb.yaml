@@ -1,0 +1,14 @@
+# This is a Paradigm config file
+# Generated automatically from CSVs
+kind: Paradigm
+part_of_speech: $verb
+feature_markers:
+  aspect: null
+  person_number: null
+contingent_markers:
+- $verb_aspect_contingent
+- $verb_person_number_contingent
+stage_order:
+- aspect_suffix
+- a_drop
+- pronominal

@@ -1,9 +1,0 @@
-# This is a Paradigm config file
-# Generated automatically from CSV
-kind: Paradigm
-part_of_speech: $verb
-feature_markers:
-  person_number: $verb_cons_stem
-filter:
-  lexical_features:
-    prefix_class: cons_stem

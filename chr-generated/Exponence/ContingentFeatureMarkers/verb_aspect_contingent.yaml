@@ -1,0 +1,48 @@
+# This is a ContingentFeatureMarkers config file
+# Generated automatically from CSVs
+kind: ContingentFeatureMarkers
+class_name: aspect_class
+feature: aspect
+markers:
+  eh-vk:
+    completive:
+    - kind: suffix
+      value: el
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: vka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: eh
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: eht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: eha
+      stage: aspect_suffix
+  ha-hi-s:
+    completive:
+    - kind: suffix
+      value: s
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: hi
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: hist
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ha
+      stage: aspect_suffix
