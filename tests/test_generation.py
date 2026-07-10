@@ -11,7 +11,6 @@ def test_generation_exact_match():
     # Paths to source files and directories
     root_dir = Path(__file__).parent.parent
     csv_path = root_dir / "spanish-config/verb-suffix.csv"
-    base_dir = root_dir / "spanish-base"
     ref_dir = root_dir / "spanish-reference"
 
     class_feature = "conjugation_class"
@@ -27,12 +26,12 @@ def test_generation_exact_match():
             sys.argv = [
                 "generate_markers.py",
                 str(csv_path.parent),
-                str(base_dir),
                 str(tmpdir_path),
             ]
             generate_markers_main()
         finally:
             sys.argv = orig_argv
+
 
         # 1. Check generated FeatureMarkers files
         fm_names = ["verb_a_stem.yaml", "verb_e_stem.yaml", "verb_i_stem.yaml"]
@@ -153,12 +152,29 @@ def test_generation_exact_match():
             ref_wl_data = f.read()
         assert gen_wl_data == ref_wl_data, "Generated wordlist verb.csv content does not match reference"
 
+        # 7. Check that Phonology was copied correctly
+        gen_phon = tmpdir_path / "Phonology"
+        ref_phon = ref_dir / "Phonology"
+        assert gen_phon.exists(), "Generated Phonology directory does not exist"
+        assert ref_phon.exists(), "Reference Phonology directory does not exist"
+        for root, dirs, files in os.walk(ref_phon):
+            for file in files:
+                rel_path = Path(root).relative_to(ref_phon) / file
+                gen_file = gen_phon / rel_path
+                ref_file = ref_phon / rel_path
+                assert gen_file.exists(), f"Generated Phonology file {rel_path} does not exist"
+                with open(gen_file, "r", encoding="utf-8") as f:
+                    gen_content = f.read()
+                with open(ref_file, "r", encoding="utf-8") as f:
+                    ref_content = f.read()
+                assert gen_content == ref_content, f"Content of Phonology file {rel_path} does not match reference"
+
+
 
 
 def test_generation_cherokee():
     root_dir = Path(__file__).parent.parent
     config_dir = root_dir / "chr-config"
-    base_dir = root_dir / "chr-base"
 
     with tempfile.TemporaryDirectory() as tmpdir:
         tmpdir_path = Path(tmpdir)
@@ -170,12 +186,12 @@ def test_generation_cherokee():
             sys.argv = [
                 "generate_markers.py",
                 str(config_dir),
-                str(base_dir),
                 str(tmpdir_path),
             ]
             generate_markers_main()
         finally:
             sys.argv = orig_argv
+
 
         # Check generated ContingentFeatureMarkers files
         fm_names = ["verb_aspect_contingent.yaml", "verb_person_number_contingent.yaml"]
@@ -222,6 +238,12 @@ def test_generation_cherokee():
         with open(config_dir / "wordlists" / "verb.csv", "r", encoding="utf-8") as f:
             expected_wl_data = f.read()
         assert gen_wl_data == expected_wl_data, "Generated Cherokee wordlist content does not match config"
+
+        # Check that Phonology was copied correctly
+        gen_phon = tmpdir_path / "Phonology"
+        assert gen_phon.exists(), "Generated Cherokee Phonology directory does not exist"
+        assert (gen_phon / "Inventory").exists(), "Generated Cherokee Phonology/Inventory does not exist"
+
 
 
 

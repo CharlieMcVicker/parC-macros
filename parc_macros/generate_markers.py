@@ -513,28 +513,24 @@ def main():
     mapping CSV files to individual paradigm metadata/markers, reducing those mapping results,
     generating FeatureMarkers and Paradigm configs, and writing global definitions.
     """
-    if len(sys.argv) < 4:
+    if len(sys.argv) < 3:
         print(
-            "Usage: python generate_markers.py <path_to_config_dir_or_csv> <base_dir> <output_dir>"
+            "Usage: python generate_markers.py <path_to_config_dir_or_csv> <output_dir>"
         )
         sys.exit(1)
 
     config_path = sys.argv[1]
-    base_dir = sys.argv[2]
-    output_dir = sys.argv[3]
+    output_dir = sys.argv[2]
 
     if not os.path.exists(config_path):
         print(f"Error: Config path not found at {config_path}")
         sys.exit(1)
 
-    if not os.path.exists(base_dir):
-        print(f"Error: Base directory not found at {base_dir}")
-        sys.exit(1)
-
-    # Copy base_dir to output_dir
+    # Clean output_dir
     if os.path.exists(output_dir):
         shutil.rmtree(output_dir)
-    shutil.copytree(base_dir, output_dir)
+    os.makedirs(output_dir, exist_ok=True)
+
 
     # Ensure full standard directory structure exists under output_dir
     standard_dirs = [
@@ -565,6 +561,16 @@ def main():
                     shutil.copytree(s, d)
                 else:
                     shutil.copy2(s, d)
+
+    # Copy Phonology from config/Phonology to output_dir/Phonology if present
+    if os.path.isdir(config_path):
+        phonology_dir = os.path.join(config_path, "Phonology")
+        if os.path.exists(phonology_dir) and os.path.isdir(phonology_dir):
+            dest_phonology = os.path.join(output_dir, "Phonology")
+            if os.path.exists(dest_phonology):
+                shutil.rmtree(dest_phonology)
+            shutil.copytree(phonology_dir, dest_phonology)
+
 
 
 
