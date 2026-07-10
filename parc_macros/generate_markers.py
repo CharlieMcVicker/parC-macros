@@ -316,6 +316,98 @@ def generate_paradigm_configs(
     print(f"Generated Paradigm: {paradigm_file}")
 
 
+def generate_contingent_configs(
+    mapped_results,
+    pos_name,
+    output_dir,
+    stage_order,
+):
+    """
+    Generates ContingentFeatureMarkers and a single unified Paradigm config
+    when use_contingent_features is enabled.
+    """
+    contingent_groups = {}
+    for res in mapped_results:
+        cf = res["class_feature"]
+        feat = res["metadata"]["feature"]
+        key = (cf, feat)
+        if key not in contingent_groups:
+            contingent_groups[key] = {}
+        for paradigm_name, feature_markers in res["paradigms_markers"].items():
+            if paradigm_name not in contingent_groups[key]:
+                contingent_groups[key][paradigm_name] = {}
+            for col, entries in feature_markers.items():
+                if col not in contingent_groups[key][paradigm_name]:
+                    contingent_groups[key][paradigm_name][col] = []
+                contingent_groups[key][paradigm_name][col].extend(entries)
+
+    contingent_files = []
+    cfm_dir = os.path.join(output_dir, "Exponence", "ContingentFeatureMarkers")
+    os.makedirs(cfm_dir, exist_ok=True)
+
+    for (cf, feat), class_mappings in sorted(contingent_groups.items()):
+        filename = f"{pos_name}_{feat}_contingent.yaml"
+        cfm_file = os.path.join(cfm_dir, filename)
+
+        # Sort class names and feature values to ensure deterministic output
+        sorted_mappings = {}
+        for c_name in sorted(class_mappings.keys()):
+            sorted_mappings[c_name] = {}
+            for f_val in sorted(class_mappings[c_name].keys()):
+                sorted_mappings[c_name][f_val] = class_mappings[c_name][f_val]
+
+        cfm_content = {
+            "kind": "ContingentFeatureMarkers",
+            "class_name": cf,
+            "feature": feat,
+            "markers": sorted_mappings,
+        }
+
+        with open(cfm_file, "w", encoding="utf-8") as f:
+            f.write("# This is a ContingentFeatureMarkers config file\n")
+            f.write("# Generated automatically from CSVs\n")
+            yaml.dump(
+                cfm_content,
+                f,
+                Dumper=Dumper,
+                default_flow_style=False,
+                allow_unicode=True,
+                sort_keys=False,
+            )
+        print(f"Generated ContingentFeatureMarkers: {cfm_file}")
+        contingent_files.append(f"${pos_name}_{feat}_contingent")
+
+    # Generate a single unified Paradigm config at Morphotactics/Paradigm/{pos_name}.yaml
+    paradigm_dir = os.path.join(output_dir, "Morphotactics", "Paradigm")
+    os.makedirs(paradigm_dir, exist_ok=True)
+    paradigm_file = os.path.join(paradigm_dir, f"{pos_name}.yaml")
+
+    features_in_contingent = sorted(list(set(feat for (cf, feat) in contingent_groups.keys())))
+    feature_markers = {feat: None for feat in features_in_contingent}
+
+    paradigm_content = {
+        "kind": "Paradigm",
+        "part_of_speech": f"${pos_name}",
+        "feature_markers": feature_markers,
+        "contingent_markers": sorted(contingent_files),
+    }
+    if stage_order:
+        paradigm_content["stage_order"] = stage_order
+
+    with open(paradigm_file, "w", encoding="utf-8") as f:
+        f.write("# This is a Paradigm config file\n")
+        f.write("# Generated automatically from CSVs\n")
+        yaml.dump(
+            paradigm_content,
+            f,
+            Dumper=Dumper,
+            default_flow_style=False,
+            allow_unicode=True,
+            sort_keys=False,
+        )
+    print(f"Generated Paradigm: {paradigm_file}")
+
+
 def update_feature_definitions(
     output_dir, pos_name, verb_config, class_features_paradigms
 ):
@@ -497,19 +589,33 @@ def main():
     # Reduce Step: Aggregate paradigm metadata, markers, and class associations
     paradigms_metadata, paradigms_markers, class_features_paradigms = reduce_csv_mappings(mapped_results)
 
+    # Always ensure Exponence/FeatureMarkers directory exists for parC compatibility
+    os.makedirs(os.path.join(output_dir, "Exponence", "FeatureMarkers"), exist_ok=True)
+
+    use_contingent_features = paradigm_config.get("generate_contingent_markers", False) or paradigm_config.get("use_contingent_features", False)
+
     # Output paradigm files
-    for paradigm_name, meta in paradigms_metadata.items():
-        markers = paradigms_markers.get(paradigm_name, {})
-        generate_paradigm_configs(
-            paradigm_name=paradigm_name,
-            meta=meta,
-            markers=markers,
+    if use_contingent_features:
+        generate_contingent_configs(
+            mapped_results=mapped_results,
             pos_name=pos_name,
             output_dir=output_dir,
-            feature_markers_keys=feature_markers_keys,
-            filename_suffix_keys=filename_suffix_keys,
             stage_order=stage_order,
         )
+
+    else:
+        for paradigm_name, meta in paradigms_metadata.items():
+            markers = paradigms_markers.get(paradigm_name, {})
+            generate_paradigm_configs(
+                paradigm_name=paradigm_name,
+                meta=meta,
+                markers=markers,
+                pos_name=pos_name,
+                output_dir=output_dir,
+                feature_markers_keys=feature_markers_keys,
+                filename_suffix_keys=filename_suffix_keys,
+                stage_order=stage_order,
+            )
 
     # Update global FeatureDefinitions configuration
     update_feature_definitions(
