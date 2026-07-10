@@ -30,4 +30,5 @@ paradigm:
     - mood
   filename_suffix_keys:
     - tense
+  generate_contingent_markers: false
 

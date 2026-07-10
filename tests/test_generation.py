@@ -165,15 +165,15 @@ def test_generation_cherokee():
         finally:
             sys.argv = orig_argv
 
-        # Check generated FeatureMarkers files
-        fm_names = ["verb_ha-hi-s.yaml", "verb_eh-vk.yaml", "verb_a_stem.yaml", "verb_cons_stem.yaml"]
+        # Check generated ContingentFeatureMarkers files
+        fm_names = ["verb_aspect_contingent.yaml", "verb_person_number_contingent.yaml"]
         for name in fm_names:
-            gen_file = tmpdir_path / "Exponence" / "FeatureMarkers" / name
-            assert gen_file.exists(), f"Generated FeatureMarkers file {name} does not exist"
+            gen_file = tmpdir_path / "Exponence" / "ContingentFeatureMarkers" / name
+            assert gen_file.exists(), f"Generated ContingentFeatureMarkers file {name} does not exist"
             assert validate_yaml_file(gen_file) is True
 
         # Check generated Paradigm files
-        para_names = ["verb_ha-hi-s.yaml", "verb_eh-vk.yaml", "verb_a_stem.yaml", "verb_cons_stem.yaml"]
+        para_names = ["verb.yaml"]
         for name in para_names:
             gen_file = tmpdir_path / "Morphotactics" / "Paradigm" / name
             assert gen_file.exists(), f"Generated Paradigm file {name} does not exist"

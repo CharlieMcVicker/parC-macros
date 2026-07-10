@@ -20,3 +20,7 @@ features:
 lexical_features:
   - prefix_class
   - aspect_class
+
+paradigm:
+  generate_contingent_markers: true
+
