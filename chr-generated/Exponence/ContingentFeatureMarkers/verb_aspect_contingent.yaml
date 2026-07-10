@@ -1,8 +1,9 @@
 # This is a ContingentFeatureMarkers config file
 # Generated automatically from CSVs
 kind: ContingentFeatureMarkers
-class_name: aspect_class
-feature: aspect
+features:
+- aspect_class
+- aspect
 markers:
   eh-vk:
     completive:

@@ -1,8 +1,9 @@
 # This is a ContingentFeatureMarkers config file
 # Generated automatically from CSVs
 kind: ContingentFeatureMarkers
-class_name: prefix_class
-feature: pronominal
+features:
+- prefix_class
+- pronominal
 markers:
   a_stem:
     1sg.A:
@@ -17,6 +18,9 @@ markers:
     - kind: prefix
       value: a
       stage: pronominal
+    - kind: rule
+      value: $drop_a
+      stage: a_drop
   cons_stem:
     1sg.A:
     - kind: prefix

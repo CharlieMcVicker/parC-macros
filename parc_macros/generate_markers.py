@@ -358,8 +358,7 @@ def generate_contingent_configs(
 
         cfm_content = {
             "kind": "ContingentFeatureMarkers",
-            "class_name": cf,
-            "feature": feat,
+            "features": [cf, feat],
             "markers": sorted_mappings,
         }
 
