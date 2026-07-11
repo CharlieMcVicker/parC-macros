@@ -6,7 +6,7 @@ data:
   # type inv-phones, inv-tags or inv-nested to add more nodes!
   - name: Stops
     ref: <Stops>
-    phones: [t, k]
+    phones: [t, k, "'"]
   - name: Nasals
     ref: <N>
     phones: [m, n]
