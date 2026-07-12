@@ -408,7 +408,7 @@ def generate_contingent_configs(
 
 
 def update_feature_definitions(
-    output_dir, pos_name, verb_config, class_features_paradigms
+    output_dir, pos_name, verb_config, class_features_paradigms, config_path=None
 ):
     """
     Updates the global FeatureDefinitions configuration file with the dynamically
@@ -423,6 +423,7 @@ def update_feature_definitions(
         pos_name (str): The part of speech name.
         verb_config (dict): Global configuration dictionary.
         class_features_paradigms (dict): Map of class features to set of paradigm values.
+        config_path (str, optional): Path to the config directory.
     """
     fd_file = os.path.join(
         output_dir, "Exponence", "FeatureDefinitions", f"{pos_name}_features.yaml"
@@ -435,22 +436,81 @@ def update_feature_definitions(
         os.makedirs(os.path.dirname(fd_file), exist_ok=True)
 
     if fd_content and "features" in fd_content:
+        # Load feature acceptors if feature_acceptors subfolder exists in config_path
+        feature_acceptors = {}
+        if config_path and os.path.isdir(config_path):
+            fa_dir = os.path.join(config_path, "feature_acceptors")
+            if os.path.exists(fa_dir) and os.path.isdir(fa_dir):
+                for filename in os.listdir(fa_dir):
+                    if filename.endswith(".csv"):
+                        fa_file = os.path.join(fa_dir, filename)
+                        metadata, fieldnames, rows = parse_csv_with_metadata(fa_file)
+                        
+                        feature_name = metadata.get("feature") or (fieldnames[0] if fieldnames else None)
+                        fa_pos = metadata.get("part_of_speech")
+                        if fa_pos:
+                            fa_pos = fa_pos.lstrip("$")
+                        
+                        # Only apply acceptors for the current POS
+                        if fa_pos and fa_pos != pos_name:
+                            continue
+                        
+                        if not feature_name or len(fieldnames) < 2:
+                            continue
+                        
+                        val_col = fieldnames[0]
+                        acc_col = fieldnames[1]
+                        
+                        if feature_name not in feature_acceptors:
+                            feature_acceptors[feature_name] = {}
+                        
+                        for row in rows:
+                            val = row.get(val_col, "").strip()
+                            acc = row.get(acc_col, "").strip()
+                            if val and acc:
+                                feature_acceptors[feature_name][val] = acc
+
         # Add inflectional features from verb.yaml
         if "features" in verb_config:
             for feat, vals in verb_config["features"].items():
                 fd_content["features"][feat] = vals
 
-        # Update all class features found
-        for cf, new_vals in class_features_paradigms.items():
+        # Combine only features that are dynamically updated (class features or feature acceptors)
+        update_targets = set(class_features_paradigms.keys()) | set(feature_acceptors.keys())
+
+        for cf in update_targets:
             if cf not in fd_content["features"]:
                 fd_content["features"][cf] = []
             cc_list = fd_content["features"][cf]
             if not isinstance(cc_list, list):
                 cc_list = []
-            for cc in sorted(list(new_vals)):
-                if cc not in cc_list:
-                    cc_list.append(cc)
-            fd_content["features"][cf] = cc_list
+
+            # Build map of existing values: name -> item (string or dict)
+            existing_map = {}
+            for item in cc_list:
+                if isinstance(item, dict) and "name" in item:
+                    existing_map[item["name"]] = item
+                elif isinstance(item, str):
+                    existing_map[item] = item
+
+            # Add new dynamically discovered class feature values
+            if cf in class_features_paradigms:
+                for cc in class_features_paradigms[cf]:
+                    if cc not in existing_map:
+                        existing_map[cc] = cc
+
+            # Apply/merge feature acceptors
+            if cf in feature_acceptors:
+                for name, acc in feature_acceptors[cf].items():
+                    existing_map[name] = {"name": name, "acceptor": acc}
+
+            # Reconstruct list sorted by name/string value
+            sorted_names = sorted(list(existing_map.keys()))
+            new_cc_list = []
+            for name in sorted_names:
+                new_cc_list.append(existing_map[name])
+
+            fd_content["features"][cf] = new_cc_list
 
         with open(fd_file, "w", encoding="utf-8") as f:
             f.write("# This is a FeatureDefinitions config file\n")
@@ -660,6 +720,7 @@ def main():
         pos_name=pos_name,
         verb_config=verb_config,
         class_features_paradigms=class_features_paradigms,
+        config_path=config_path,
     )
 
     # Generate PartOfSpeech configuration

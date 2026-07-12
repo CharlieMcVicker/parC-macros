@@ -286,3 +286,84 @@ def test_generation_cherokee():
         assert (
             gen_phon / "Inventory"
         ).exists(), "Generated Cherokee Phonology/Inventory does not exist"
+
+
+def test_generation_with_feature_acceptors():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp_path = Path(tmpdir)
+        config_dir = tmp_path / "config"
+        output_dir = tmp_path / "output"
+        os.makedirs(config_dir)
+        
+        # 1. Create a minimal verb.yaml
+        verb_yaml_content = {
+            "kind": "PartOfSpeech",
+            "name": "verb",
+            "features": {
+                "tense": ["present", "past"],
+                "mood": ["indicative"]
+            },
+            "paradigm": {
+                "feature_markers_keys": ["tense", "mood"],
+                "filename_suffix_keys": ["tense", "mood"],
+            }
+        }
+        with open(config_dir / "verb.yaml", "w", encoding="utf-8") as f:
+            yaml.dump(verb_yaml_content, f)
+
+        # 2. Create a minimal CSV file for paradigm definition
+        csv_content = """# class_feature: prefix_class
+# kind: prefix
+# stage: prefix
+# feature: tense
+# part_of_speech: $verb
+# tense: present
+# mood: indicative
+prefix_class,present,past
+e_stem,e,ed
+normal,n,nd
+"""
+        with open(config_dir / "verb-present.csv", "w", encoding="utf-8") as f:
+            f.write(csv_content)
+
+        # 3. Create the feature_acceptors subfolder and CSV
+        fa_dir = config_dir / "feature_acceptors"
+        os.makedirs(fa_dir)
+        
+        fa_csv_content = """# feature: prefix_class
+# part_of_speech: $verb
+prefix_class,acceptor
+e_stem,e<Phone>*
+"""
+        with open(fa_dir / "prefix_class.csv", "w", encoding="utf-8") as f:
+            f.write(fa_csv_content)
+
+        # Run generation
+        import sys
+        orig_argv = sys.argv
+        try:
+            sys.argv = [
+                "generate_markers.py",
+                str(config_dir),
+                str(output_dir),
+            ]
+            generate_markers_main()
+        finally:
+            sys.argv = orig_argv
+
+        # Check updated FeatureDefinitions
+        gen_fd = output_dir / "Exponence" / "FeatureDefinitions" / "verb_features.yaml"
+        assert gen_fd.exists()
+        assert validate_yaml_file(gen_fd) is True
+
+        with open(gen_fd, "r", encoding="utf-8") as f:
+            gen_fd_data = yaml.safe_load(f)
+
+        assert "prefix_class" in gen_fd_data["features"]
+        prefix_class_vals = gen_fd_data["features"]["prefix_class"]
+        
+        # Should contain "normal" (as string) and {"name": "e_stem", "acceptor": "e<Phone>*"} (as dict)
+        assert len(prefix_class_vals) == 2
+        # Verify ordering is sorted by name
+        assert prefix_class_vals[0] == {"name": "e_stem", "acceptor": "e<Phone>*"}
+        assert prefix_class_vals[1] == "normal"

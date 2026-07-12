@@ -12,6 +12,21 @@ def test_valid_feature_definitions():
     }
     assert validate_yaml_content(valid_data) is True
 
+def test_valid_feature_definitions_with_acceptor():
+    valid_data = {
+        "kind": "FeatureDefinitions",
+        "features": {
+            "prefix_class": [
+                "normal",
+                {
+                    "name": "e_stem",
+                    "acceptor": "e<Phone>*"
+                }
+            ]
+        }
+    }
+    assert validate_yaml_content(valid_data) is True
+
 def test_invalid_feature_definitions_missing_fields():
     invalid_data = {
         "kind": "FeatureDefinitions"
