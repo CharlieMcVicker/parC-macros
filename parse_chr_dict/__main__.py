@@ -1,8 +1,7 @@
 import os
 
 from parC.grammar.paradigm_compilation import (
-    build_inflect_graph_for_root_regex,
-    build_parse_graph,
+    get_open_parse_graph,
     word_fsa,
     fsa,
 )
@@ -12,9 +11,9 @@ from parC.grammar.acceptor_compilation import fsm_strings
 import pynini
 
 
-def parse_word(wildcard_parse_graph, surface):
+def parse_word(surface):
     form_fsa = word_fsa(surface)
-    parse_lattice = (form_fsa @ wildcard_parse_graph).optimize()
+    parse_lattice = (form_fsa @ get_open_parse_graph("verb")).optimize()
     output_projected = pynini.project(parse_lattice, "output").optimize()
 
     return output_projected
@@ -41,42 +40,30 @@ def assert_parse_matches_target(output_projected, target_pattern):
     )
 
 
-def wildcard_parse_graph():
-    # check if the graph already exists on disk
-    if os.path.exists("wildcard_parse_graph.fst"):
-        parse_graph = pynini.Fst.read("wildcard_parse_graph.fst")
-        return parse_graph
-    # Build the inflection graph with open ended "<Phone>*" root and infer_lexical_features=True
-    inflect_graph = build_inflect_graph_for_root_regex(
-        "verb", "<Phone>*", infer_lexical_features=True
-    )
-    # Invert to build the parse graph
-    parse_graph = build_parse_graph(inflect_graph)
-    # save to disk
-    parse_graph.write("wildcard_parse_graph.fst")
-
-    return parse_graph
-
-
 def main():
     # Example usage of the wildcard_parse_graph function
-    parse_graph = wildcard_parse_graph()
     print("Wildcard parse graph constructed successfully.")
 
     for surface in ["atvneha", "uwatiyet"]:
         print(f"\nParsing surface form: {surface}")
-        forms = parse_word(parse_graph, surface)
+        forms = parse_word(surface)
 
         strings = fsm_strings(forms, nshortest=1000)
 
         for i, string in enumerate(strings):
             print(i, string)
 
-    all_forms = ["kawoniha", "tsiwoniha", "kawonisk", "uwonis", "uwonihist"]
+    all_forms = [
+        "kawoniha<aspect.discharged=present>",
+        "tsiwoniha<aspect.discharged=present>",
+        "kawonisk<aspect.discharged=incompletive>",
+        "uwonis<aspect.discharged=completive>",
+        "uwonihist<aspect.discharged=infinitive>",
+    ]
     root_and_lexical_by_form = {}
     expected = "[BOW]woni[EOW][prefix_class=r_stem][aspect_class=ha-hi-s]"
     for surface in all_forms:
-        forms = parse_word(parse_graph, surface)
+        forms = parse_word(surface)
         strings = fsm_strings(forms, nshortest=1000)
         lexicals = set(s.split("[aspect=")[0] for s in strings)
         root_and_lexical_by_form[surface] = lexicals
@@ -85,6 +72,7 @@ def main():
         # )
         if expected not in lexicals:
             print(f"Expected parse {expected} not found for surface {surface}.")
+            print(lexicals)
 
     possible_lexical_roots = None
     for form in root_and_lexical_by_form.values():
