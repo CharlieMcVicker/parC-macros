@@ -12,11 +12,11 @@ markers:
       stage: aspect_suffix
     immediate:
     - kind: suffix
-      value: oh
+      value: a
       stage: aspect_suffix
     incompletive:
     - kind: suffix
-      value: a
+      value: oh
       stage: aspect_suffix
     infinitive:
     - kind: suffix
@@ -29,15 +29,15 @@ markers:
   e-a:
     completive:
     - kind: suffix
-      value: a
+      value: e'
       stage: aspect_suffix
     immediate:
     - kind: suffix
-      value: esk
+      value: a
       stage: aspect_suffix
     incompletive:
     - kind: suffix
-      value: e'
+      value: esk
       stage: aspect_suffix
     infinitive:
     - kind: suffix
@@ -46,27 +46,6 @@ markers:
     present:
     - kind: suffix
       value: e'a
-      stage: aspect_suffix
-  eh-vk:
-    completive:
-    - kind: suffix
-      value: el
-      stage: aspect_suffix
-    immediate:
-    - kind: suffix
-      value: vka
-      stage: aspect_suffix
-    incompletive:
-    - kind: suffix
-      value: eh
-      stage: aspect_suffix
-    infinitive:
-    - kind: suffix
-      value: eht
-      stage: aspect_suffix
-    present:
-    - kind: suffix
-      value: eha
       stage: aspect_suffix
   ha-hi-s:
     completive:

@@ -47,19 +47,19 @@ markers:
       value: un
       stage: pronominal
     3sg.A:
-    - kind: rule
-      value: $drop_stem_initial_vowel
-      stage: drop_stem_initial_vowel
     - kind: prefix
       value: a
       stage: pronominal
-    3sg.B:
     - kind: rule
-      value: $drop_stem_initial_vowel
+      value: $drop_stem_initial_a
       stage: drop_stem_initial_vowel
+    3sg.B:
     - kind: prefix
       value: u
       stage: pronominal
+    - kind: rule
+      value: $drop_stem_initial_a
+      stage: drop_stem_initial_vowel
     Edl.A:
     - kind: prefix
       value: ost
@@ -462,12 +462,12 @@ markers:
       value: k
       stage: pronominal
     3sg.B:
-    - kind: rule
-      value: $drop_stem_initial_vowel
-      stage: drop_stem_initial_vowel
     - kind: prefix
       value: uwa
       stage: pronominal
+    - kind: rule
+      value: $drop_stem_initial_v
+      stage: drop_stem_initial_vowel
     Edl.A:
     - kind: prefix
       value: ost

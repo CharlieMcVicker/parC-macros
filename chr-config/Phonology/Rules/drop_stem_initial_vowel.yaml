@@ -4,13 +4,39 @@ kind: Rules
 rules:
   # type rule-simple, rule-map or rule-seq to add more rules
   # note left and right contexts are optional
-  - name: drop_stem_initial_vowel
+  - name: mark_stem_initial_a
     description: >
-      drop a/v at start of stem
+      mark the first a with [TEMP] at start of stem
     string_map:
-      - [a, ""]
-      - [v, ""]
+      - [a, "[TEMP]"]
     left_context: "#"
+
+  - name: mark_stem_initial_v
+    description: >
+      mark the first v with [TEMP] at start of stem
+    string_map:
+      - [v, "[TEMP]"]
+    left_context: "#"
+
+  - name: delete_temp_marker
+    description: >
+      delete the temporary marker [TEMP]
+    input_pattern: "[TEMP]"
+    output_pattern: ""
+
+  - name: drop_stem_initial_a
+    description: >
+      drop only the first a at start of stem
+    rule_sequence:
+      - $mark_stem_initial_a
+      - $delete_temp_marker
+
+  - name: drop_stem_initial_v
+    description: >
+      drop only the first v at start of stem
+    rule_sequence:
+      - $mark_stem_initial_v
+      - $delete_temp_marker
 
 ### HELP FOR RULES ###
 # Here we define context-sensitive phonological rules

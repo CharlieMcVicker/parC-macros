@@ -32,7 +32,6 @@ def test_generation_exact_match():
         finally:
             sys.argv = orig_argv
 
-
         # 1. Check generated FeatureMarkers files
         fm_names = ["verb_a_stem.yaml", "verb_e_stem.yaml", "verb_i_stem.yaml"]
         for name in fm_names:
@@ -104,7 +103,9 @@ def test_generation_exact_match():
         ), "Data in verb_features.yaml does not match reference"
 
         # 4. Check generated diphthong FeatureMarkers and Paradigm
-        gen_diph_fm = tmpdir_path / "Exponence" / "FeatureMarkers" / "verb_diphthong.yaml"
+        gen_diph_fm = (
+            tmpdir_path / "Exponence" / "FeatureMarkers" / "verb_diphthong.yaml"
+        )
         ref_diph_fm = ref_dir / "Exponence" / "FeatureMarkers" / "verb_diphthong.yaml"
         assert gen_diph_fm.exists()
         assert ref_diph_fm.exists()
@@ -116,8 +117,12 @@ def test_generation_exact_match():
             ref_diph_fm_data = yaml.safe_load(f)
         assert gen_diph_fm_data == ref_diph_fm_data
 
-        gen_diph_para = tmpdir_path / "Morphotactics" / "Paradigm" / "verb_diphthong_present.yaml"
-        ref_diph_para = ref_dir / "Morphotactics" / "Paradigm" / "verb_diphthong_present.yaml"
+        gen_diph_para = (
+            tmpdir_path / "Morphotactics" / "Paradigm" / "verb_diphthong_present.yaml"
+        )
+        ref_diph_para = (
+            ref_dir / "Morphotactics" / "Paradigm" / "verb_diphthong_present.yaml"
+        )
         assert gen_diph_para.exists()
         assert ref_diph_para.exists()
         assert validate_yaml_file(gen_diph_para) is True
@@ -150,7 +155,9 @@ def test_generation_exact_match():
             gen_wl_data = f.read()
         with open(ref_wl, "r", encoding="utf-8") as f:
             ref_wl_data = f.read()
-        assert gen_wl_data == ref_wl_data, "Generated wordlist verb.csv content does not match reference"
+        assert (
+            gen_wl_data == ref_wl_data
+        ), "Generated wordlist verb.csv content does not match reference"
 
         # 7. Check that Phonology was copied correctly
         gen_phon = tmpdir_path / "Phonology"
@@ -162,14 +169,16 @@ def test_generation_exact_match():
                 rel_path = Path(root).relative_to(ref_phon) / file
                 gen_file = gen_phon / rel_path
                 ref_file = ref_phon / rel_path
-                assert gen_file.exists(), f"Generated Phonology file {rel_path} does not exist"
+                assert (
+                    gen_file.exists()
+                ), f"Generated Phonology file {rel_path} does not exist"
                 with open(gen_file, "r", encoding="utf-8") as f:
                     gen_content = f.read()
                 with open(ref_file, "r", encoding="utf-8") as f:
                     ref_content = f.read()
-                assert gen_content == ref_content, f"Content of Phonology file {rel_path} does not match reference"
-
-
+                assert (
+                    gen_content == ref_content
+                ), f"Content of Phonology file {rel_path} does not match reference"
 
 
 def test_generation_cherokee():
@@ -181,6 +190,7 @@ def test_generation_cherokee():
 
         # Run generation via main function
         import sys
+
         orig_argv = sys.argv
         try:
             sys.argv = [
@@ -192,16 +202,24 @@ def test_generation_cherokee():
         finally:
             sys.argv = orig_argv
 
-
         # Check generated ContingentFeatureMarkers files
         fm_names = ["verb_aspect_contingent.yaml", "verb_pronominal_contingent.yaml"]
         for name in fm_names:
             gen_file = tmpdir_path / "Exponence" / "ContingentFeatureMarkers" / name
-            assert gen_file.exists(), f"Generated ContingentFeatureMarkers file {name} does not exist"
+            assert (
+                gen_file.exists()
+            ), f"Generated ContingentFeatureMarkers file {name} does not exist"
             assert validate_yaml_file(gen_file) is True
 
         # Verify blank pronominal entry for e_stem 3sg.A
-        with open(tmpdir_path / "Exponence" / "ContingentFeatureMarkers" / "verb_pronominal_contingent.yaml", "r", encoding="utf-8") as f:
+        with open(
+            tmpdir_path
+            / "Exponence"
+            / "ContingentFeatureMarkers"
+            / "verb_pronominal_contingent.yaml",
+            "r",
+            encoding="utf-8",
+        ) as f:
             pronominal_data = yaml.safe_load(f)
         assert pronominal_data["markers"]["e_stem"]["3sg.A"] == [
             {"kind": "prefix", "value": "", "stage": "pronominal"}
@@ -224,8 +242,20 @@ def test_generation_cherokee():
 
         assert "aspect_class" in gen_fd_data["features"]
         assert "prefix_class" in gen_fd_data["features"]
-        assert set(gen_fd_data["features"]["aspect_class"]) == {"ha-hi-s", "eh-vk", "be-at", "e-a"}
-        assert set(gen_fd_data["features"]["prefix_class"]) == {"a_stem", "v_stem", "e_stem", "vowel_stem", "cons_stem", "r_stem", "k_a_stem"}
+        assert set(gen_fd_data["features"]["aspect_class"]) == {
+            "ha-hi-s",
+            "be-at",
+            "e-a",
+        }
+        assert set(gen_fd_data["features"]["prefix_class"]) == {
+            "a_stem",
+            "v_stem",
+            "e_stem",
+            "vowel_stem",
+            "cons_stem",
+            "r_stem",
+            "k_a_stem",
+        }
 
         # Check generated Lexicon/PartOfSpeech/verb.yaml
         gen_pos = tmpdir_path / "Lexicon" / "PartOfSpeech" / "verb.yaml"
@@ -244,14 +274,15 @@ def test_generation_cherokee():
         # Verify content matches what we moved to config/wordlists/verb.csv
         with open(config_dir / "wordlists" / "verb.csv", "r", encoding="utf-8") as f:
             expected_wl_data = f.read()
-        assert gen_wl_data == expected_wl_data, "Generated Cherokee wordlist content does not match config"
+        assert (
+            gen_wl_data == expected_wl_data
+        ), "Generated Cherokee wordlist content does not match config"
 
         # Check that Phonology was copied correctly
         gen_phon = tmpdir_path / "Phonology"
-        assert gen_phon.exists(), "Generated Cherokee Phonology directory does not exist"
-        assert (gen_phon / "Inventory").exists(), "Generated Cherokee Phonology/Inventory does not exist"
-
-
-
-
-
+        assert (
+            gen_phon.exists()
+        ), "Generated Cherokee Phonology directory does not exist"
+        assert (
+            gen_phon / "Inventory"
+        ).exists(), "Generated Cherokee Phonology/Inventory does not exist"

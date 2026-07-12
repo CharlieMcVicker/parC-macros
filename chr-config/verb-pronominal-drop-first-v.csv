@@ -1,0 +1,8 @@
+# kind: rule
+# stage: drop_stem_initial_vowel
+# rule: $drop_stem_initial_v
+# feature: pronominal
+# part_of_speech: $verb
+# class_feature: prefix_class
+paradigm,1sg.A,Edl.A,Epl.A,Idl.A,Ipl.A,2sg.A,2dl.A,2pl.A,3sg.A,3ns.A,1sg.B,Edl.B,Epl.B,Idl.B,Ipl.B,2sg.B,2dl.B,2pl.B,3sg.B,3ns.B
+v_stem,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,Y,N

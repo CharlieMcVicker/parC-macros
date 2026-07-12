@@ -19,6 +19,9 @@ data:
   - name: Vowels
     ref: <V>
     phones: [a, e, i, o, u, v]
+  - name: Temp Tags
+    ref: <TempTags>
+    tags: ["[TEMP]"]
 
 ## HELP FOR INVENTORY ##
 # The inventory is built as a nested tree

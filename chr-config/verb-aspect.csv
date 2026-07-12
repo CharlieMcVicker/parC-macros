@@ -3,8 +3,7 @@
 # feature: aspect
 # part_of_speech: $verb
 # class_feature: aspect_class
-paradigm,present,immediate,incompletive,completive,infinitive
-ha-hi-s,ha,hi,sk,s,hist
-eh-vk,eha,vka,eh,el,eht
-be-at,oha,oh,a,ol,ahst
+paradigm,present,incompletive,completive,immediate,infinitive
+ha-hi-s,ha,sk,s,hi,hist
+be-at,oha,oh,ol,a,ahst
 e-a,e'a,esk,e',a,et
