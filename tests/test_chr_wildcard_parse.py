@@ -15,27 +15,32 @@ from parC.grammar.paradigm_compilation import (
 if "YAML_DIR" not in os.environ:
     os.environ["YAML_DIR"] = str(Path(__file__).parent.parent / "chr-generated")
 
-# Path to the CSV file with test cases
+# Path to the CSV files with test cases
 CSV_PATH = Path(__file__).parent / "test_chr_parse.csv"
+WILDCARD_CSV_PATH = Path(__file__).parent / "test_chr_wildcard_parse.csv"
 
 
 def load_test_cases():
     cases = []
-    if not CSV_PATH.exists():
-        return cases
-    with open(CSV_PATH, mode="r", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            cases.append(
-                (
-                    row["surface"],
-                    row["root"],
-                    row["pronominal"],
-                    row["prefix_class"],
-                    row["aspect"],
-                    row["aspect_class"],
+    for path in [CSV_PATH, WILDCARD_CSV_PATH]:
+        if not path.exists():
+            continue
+        with open(path, mode="r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                # Skip empty rows
+                if not row.get("surface"):
+                    continue
+                cases.append(
+                    (
+                        row["surface"],
+                        row["root"],
+                        row["pronominal"],
+                        row["prefix_class"],
+                        row["aspect"],
+                        row["aspect_class"],
+                    )
                 )
-            )
     return cases
 
 
