@@ -29,15 +29,22 @@ features:
   - incompletive
   - completive
   - infinitive
+  prefix_class:
+  - name: a_stem
+    acceptor: a<Phone>*
+  - name: cons_stem
+    acceptor: <C><Phone>*
+  - name: e_stem
+    acceptor: e<Phone>*
+  - name: k_a_stem
+    acceptor: a<Phone>*
+  - name: r_stem
+    acceptor: (<Son>|<N>)<Phone>*
+  - name: v_stem
+    acceptor: v<Phone>*
+  - name: vowel_stem
+    acceptor: <V><Phone>*
   aspect_class:
   - be-at
   - e-a
   - ha-hi-s
-  prefix_class:
-  - a_stem
-  - cons_stem
-  - e_stem
-  - k_a_stem
-  - r_stem
-  - v_stem
-  - vowel_stem

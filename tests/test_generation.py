@@ -247,7 +247,11 @@ def test_generation_cherokee():
             "be-at",
             "e-a",
         }
-        assert set(gen_fd_data["features"]["prefix_class"]) == {
+        features_names = set(
+            f if isinstance(f, str) else f["name"]
+            for f in gen_fd_data["features"]["prefix_class"]
+        )
+        assert set(features_names) == {
             "a_stem",
             "v_stem",
             "e_stem",
@@ -294,19 +298,16 @@ def test_generation_with_feature_acceptors():
         config_dir = tmp_path / "config"
         output_dir = tmp_path / "output"
         os.makedirs(config_dir)
-        
+
         # 1. Create a minimal verb.yaml
         verb_yaml_content = {
             "kind": "PartOfSpeech",
             "name": "verb",
-            "features": {
-                "tense": ["present", "past"],
-                "mood": ["indicative"]
-            },
+            "features": {"tense": ["present", "past"], "mood": ["indicative"]},
             "paradigm": {
                 "feature_markers_keys": ["tense", "mood"],
                 "filename_suffix_keys": ["tense", "mood"],
-            }
+            },
         }
         with open(config_dir / "verb.yaml", "w", encoding="utf-8") as f:
             yaml.dump(verb_yaml_content, f)
@@ -329,7 +330,7 @@ normal,n,nd
         # 3. Create the feature_acceptors subfolder and CSV
         fa_dir = config_dir / "feature_acceptors"
         os.makedirs(fa_dir)
-        
+
         fa_csv_content = """# feature: prefix_class
 # part_of_speech: $verb
 prefix_class,acceptor
@@ -340,6 +341,7 @@ e_stem,e<Phone>*
 
         # Run generation
         import sys
+
         orig_argv = sys.argv
         try:
             sys.argv = [
@@ -361,7 +363,7 @@ e_stem,e<Phone>*
 
         assert "prefix_class" in gen_fd_data["features"]
         prefix_class_vals = gen_fd_data["features"]["prefix_class"]
-        
+
         # Should contain "normal" (as string) and {"name": "e_stem", "acceptor": "e<Phone>*"} (as dict)
         assert len(prefix_class_vals) == 2
         # Verify ordering is sorted by name
