@@ -1,0 +1,11 @@
+# kind: rule
+# stage: final_dropping
+# rule: $drop_final
+# feature: aspect
+# part_of_speech: $verb
+# class_feature: aspect_class
+paradigm,present,incompletive,completive,immediate,infinitive
+hvsk-nh[inf2],N,N,N,N,Y
+hvsk-nh[inf4],N,N,N,N,Y
+hvsk-n,N,N,N,N,Y
+apl,N,N,N,Y,N

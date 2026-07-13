@@ -1,4 +1,5 @@
 stages:
+  - final_dropping
   - aspect_suffix
   - drop_stem_initial_vowel
   - pronominal

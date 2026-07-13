@@ -5,6 +5,201 @@ features:
 - aspect_class
 - aspect
 markers:
+  a:
+    completive:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: ask
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ast
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: a'
+      stage: aspect_suffix
+  apl:
+    completive:
+    - kind: suffix
+      value: el
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: si
+      stage: aspect_suffix
+    - kind: rule
+      value: $drop_final
+      stage: final_dropping
+    incompletive:
+    - kind: suffix
+      value: eh
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: eht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: eh
+      stage: aspect_suffix
+  apl-active:
+    completive:
+    - kind: suffix
+      value: eh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: vla
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: esk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: eht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: eh
+      stage: aspect_suffix
+  apl-active-':
+    completive:
+    - kind: suffix
+      value: elh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: vla
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: esk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: eht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: eh
+      stage: aspect_suffix
+  apl-active-a:
+    completive:
+    - kind: suffix
+      value: eh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: esk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: eh
+      stage: aspect_suffix
+  apl-active-h:
+    completive:
+    - kind: suffix
+      value: helh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: hvla
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: hesk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: heht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: heh
+      stage: aspect_suffix
+  apl[imp2]:
+    completive:
+    - kind: suffix
+      value: el
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: si
+      stage: aspect_suffix
+    - kind: rule
+      value: $drop_final
+      stage: final_dropping
+    incompletive:
+    - kind: suffix
+      value: eh
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: eht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: eh
+      stage: aspect_suffix
+  apl[imp3]:
+    completive:
+    - kind: suffix
+      value: el
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: isi
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: eh
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: eht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: eh
+      stage: aspect_suffix
+  apl[imp4]:
+    completive:
+    - kind: suffix
+      value: el
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: vla
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: eh
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: eht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: eh
+      stage: aspect_suffix
   be-at:
     completive:
     - kind: suffix
@@ -20,11 +215,221 @@ markers:
       stage: aspect_suffix
     infinitive:
     - kind: suffix
-      value: ahst
+      value: ast
       stage: aspect_suffix
     present:
     - kind: suffix
-      value: oha
+      value: oh
+      stage: aspect_suffix
+  become:
+    completive:
+    - kind: suffix
+      value: ts
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ki
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: k
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: st
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: k
+      stage: aspect_suffix
+  become[inf2]:
+    completive:
+    - kind: suffix
+      value: ts
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ki
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: k
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: '''ist'
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: k
+      stage: aspect_suffix
+  become[inf3]:
+    completive:
+    - kind: suffix
+      value: ts
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ki
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: k
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: yhst
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: k
+      stage: aspect_suffix
+  become[inf4]:
+    completive:
+    - kind: suffix
+      value: ts
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ki
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: k
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ist
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: k
+      stage: aspect_suffix
+  cause:
+    completive:
+    - kind: suffix
+      value: han
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: oht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ih
+      stage: aspect_suffix
+  cause[perf2]:
+    completive:
+    - kind: suffix
+      value: anh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: oht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ih
+      stage: aspect_suffix
+  cause[perf3]:
+    completive:
+    - kind: suffix
+      value: an
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: oht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ih
+      stage: aspect_suffix
+  cause[pres2-perf2]:
+    completive:
+    - kind: suffix
+      value: anh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: oht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+  cause[pres2-perf3]:
+    completive:
+    - kind: suffix
+      value: an
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: oht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+  cause[pres2]:
+    completive:
+    - kind: suffix
+      value: han
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: oht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ''
       stage: aspect_suffix
   e-a:
     completive:
@@ -45,9 +450,1026 @@ markers:
       stage: aspect_suffix
     present:
     - kind: suffix
-      value: e'a
+      value: e'
       stage: aspect_suffix
-  ha-hi-s:
+  e-aka:
+    completive:
+    - kind: suffix
+      value: a'
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: aka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: esk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: est
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: e'
+      stage: aspect_suffix
+  episodic:
+    completive:
+    - kind: suffix
+      value: vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: vhvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: vhvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: vhvsk
+      stage: aspect_suffix
+  episodic[imp2-inf2]:
+    completive:
+    - kind: suffix
+      value: vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: vna
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: vhvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: vhvst
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: vhvsk
+      stage: aspect_suffix
+  episodic[imp2]:
+    completive:
+    - kind: suffix
+      value: vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: vna
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: vhvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: vhvsk
+      stage: aspect_suffix
+  episodic[inf2]:
+    completive:
+    - kind: suffix
+      value: vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: vhvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: vhvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: vhvst
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: vhvsk
+      stage: aspect_suffix
+  go:
+    completive:
+    - kind: suffix
+      value: vs
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: uka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: ek
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: vst
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ek
+      stage: aspect_suffix
+  go-in:
+    completive:
+    - kind: suffix
+      value: invs
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: uka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: ek
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: invt
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ek
+      stage: aspect_suffix
+  go-in[perf2]:
+    completive:
+    - kind: suffix
+      value: es
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: uka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: ek
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: invt
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ek
+      stage: aspect_suffix
+  go[pres2]:
+    completive:
+    - kind: suffix
+      value: vs
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: uka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: ek
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: vst
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+  hih-hil:
+    completive:
+    - kind: suffix
+      value: hil
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: hka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: hih
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: st
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: hih
+      stage: aspect_suffix
+  hih-hil[imp2]:
+    completive:
+    - kind: suffix
+      value: hil
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: hika
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: hih
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: st
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: hih
+      stage: aspect_suffix
+  hih-hilh:
+    completive:
+    - kind: suffix
+      value: hilh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: hika
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: hih
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: hist
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: hih
+      stage: aspect_suffix
+  hih-lh:
+    completive:
+    - kind: suffix
+      value: lh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: hih
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: st
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: hih
+      stage: aspect_suffix
+  hih-lh[imp2]:
+    completive:
+    - kind: suffix
+      value: lh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ha
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: hih
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: st
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: hih
+      stage: aspect_suffix
+  husk:
+    completive:
+    - kind: suffix
+      value: hun
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: huka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: husk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: hust
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: husk
+      stage: aspect_suffix
+  hvsk-han:
+    completive:
+    - kind: suffix
+      value: han
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: hvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: hvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: hvsk
+      stage: aspect_suffix
+  hvsk-han[inf2]:
+    completive:
+    - kind: suffix
+      value: han
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: hvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: hvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: hvst
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: hvsk
+      stage: aspect_suffix
+  hvsk-n:
+    completive:
+    - kind: suffix
+      value: n
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: hvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: hvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: oht
+      stage: aspect_suffix
+    - kind: rule
+      value: $drop_final
+      stage: final_dropping
+    present:
+    - kind: suffix
+      value: hvsk
+      stage: aspect_suffix
+  hvsk-nh:
+    completive:
+    - kind: suffix
+      value: nh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: hvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: hvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: hvsk
+      stage: aspect_suffix
+  hvsk-nh[inf2]:
+    completive:
+    - kind: suffix
+      value: nh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: hvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: hvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ht
+      stage: aspect_suffix
+    - kind: rule
+      value: $drop_final
+      stage: final_dropping
+    present:
+    - kind: suffix
+      value: hvsk
+      stage: aspect_suffix
+  hvsk-nh[inf3]:
+    completive:
+    - kind: suffix
+      value: nh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: hvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: hvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: hvst
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: hvsk
+      stage: aspect_suffix
+  hvsk-nh[inf4]:
+    completive:
+    - kind: suffix
+      value: nh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: hvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: hvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: oht
+      stage: aspect_suffix
+    - kind: rule
+      value: $drop_final
+      stage: final_dropping
+    present:
+    - kind: suffix
+      value: hvsk
+      stage: aspect_suffix
+  i-a-i:
+    completive:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ist
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: i'
+      stage: aspect_suffix
+  i-a-i[perf2]:
+    completive:
+    - kind: suffix
+      value: is
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ist
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: i'
+      stage: aspect_suffix
+  i-a-ihsk:
+    completive:
+    - kind: suffix
+      value: is
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ist
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: isk
+      stage: aspect_suffix
+  i-vka:
+    completive:
+    - kind: suffix
+      value: an
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: vka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ot
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: i'
+      stage: aspect_suffix
+  ih-ihi:
+    completive:
+    - kind: suffix
+      value: is
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ihi
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ihist
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ih
+      stage: aspect_suffix
+  ih-il:
+    completive:
+    - kind: suffix
+      value: il
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ika
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: ih
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ist
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ih
+      stage: aspect_suffix
+  ih-vh:
+    completive:
+    - kind: suffix
+      value: vh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ih
+      stage: aspect_suffix
+  ih-vh[imperf2-inf2]:
+    completive:
+    - kind: suffix
+      value: vh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: ih
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: vht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ih
+      stage: aspect_suffix
+  ih-vh[imperf2]:
+    completive:
+    - kind: suffix
+      value: vh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: ih
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ih
+      stage: aspect_suffix
+  ih-vh[inf2]:
+    completive:
+    - kind: suffix
+      value: vh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: vht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ih
+      stage: aspect_suffix
+  ko-kots:
+    completive:
+    - kind: suffix
+      value: kots
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ko'i
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: kok
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: kost
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: kok
+      stage: aspect_suffix
+  o:
+    completive:
+    - kind: suffix
+      value: o'
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: otsa
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: osk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ost
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: o'
+      stage: aspect_suffix
+  oh-al:
+    completive:
+    - kind: suffix
+      value: hal
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: hka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: hoh
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: st
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: hoh
+      stage: aspect_suffix
+  oh-al[imp2]:
+    completive:
+    - kind: suffix
+      value: hal
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: aka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: hoh
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: st
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: hoh
+      stage: aspect_suffix
+  oh-ol:
+    completive:
+    - kind: suffix
+      value: ol
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: aka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: oh
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ot
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: oh
+      stage: aspect_suffix
+  oh-ol[inf2]:
+    completive:
+    - kind: suffix
+      value: ol
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: aka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: oh
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: st
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: oh
+      stage: aspect_suffix
+  oh-ol[inf3]:
+    completive:
+    - kind: suffix
+      value: ol
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: aka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: oh
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ast
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: oh
+      stage: aspect_suffix
+  rev-'i:
+    completive:
+    - kind: suffix
+      value: '''is'
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: '''i'
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: '''isk'
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: '''ist'
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: '''i'''
+      stage: aspect_suffix
+  rev-e:
+    completive:
+    - kind: suffix
+      value: es
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: aki
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: esk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: est
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: e'
+      stage: aspect_suffix
+  rev-gi:
+    completive:
+    - kind: suffix
+      value: kis
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ki
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: kisk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: kist
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ki'
+      stage: aspect_suffix
+  rev-i:
+    completive:
+    - kind: suffix
+      value: is
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: i
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ist
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: i'
+      stage: aspect_suffix
+  sk-h:
+    completive:
+    - kind: suffix
+      value: h
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ha
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: st
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: sk
+      stage: aspect_suffix
+  sk-h-yh:
+    completive:
+    - kind: suffix
+      value: yh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: yha
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: st
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: sk
+      stage: aspect_suffix
+  sk-h[imp2]:
+    completive:
+    - kind: suffix
+      value: h
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: st
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: sk
+      stage: aspect_suffix
+  sk-s-a:
+    completive:
+    - kind: suffix
+      value: s
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: hist
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: sk
+      stage: aspect_suffix
+  sk-s-a[inf2]:
+    completive:
+    - kind: suffix
+      value: s
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: st
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: sk
+      stage: aspect_suffix
+  sk-s-hi-hihst:
     completive:
     - kind: suffix
       value: s
@@ -66,5 +1488,467 @@ markers:
       stage: aspect_suffix
     present:
     - kind: suffix
-      value: ha
+      value: sk
+      stage: aspect_suffix
+  sk-s-hst:
+    completive:
+    - kind: suffix
+      value: s
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: st
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: sk
+      stage: aspect_suffix
+  sk-s-hst[imp2]:
+    completive:
+    - kind: suffix
+      value: s
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: hi
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: st
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: sk
+      stage: aspect_suffix
+  sk-s-la:
+    completive:
+    - kind: suffix
+      value: s
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: la
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: st
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: sk
+      stage: aspect_suffix
+  stative:
+    completive:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+  stative-a':
+    completive:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: a'
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: a'
+      stage: aspect_suffix
+  stative-eh:
+    completive:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: eh
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: eh
+      stage: aspect_suffix
+  stative-h:
+    completive:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: h
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: h
+      stage: aspect_suffix
+  stative-k:
+    completive:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: k
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: k
+      stage: aspect_suffix
+  stative-s:
+    completive:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: s
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ''
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: h
+      stage: aspect_suffix
+  terminative:
+    completive:
+    - kind: suffix
+      value: onh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: onha
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: ohvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ohvst
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ohvsk
+      stage: aspect_suffix
+  terminative-no-o:
+    completive:
+    - kind: suffix
+      value: nh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: nha
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: hvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: hvst
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: hvsk
+      stage: aspect_suffix
+  v-vhs:
+    completive:
+    - kind: suffix
+      value: vs
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: vna
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: vst
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: v'
+      stage: aspect_suffix
+  vnh-ih-a:
+    completive:
+    - kind: suffix
+      value: vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: a
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: ih
+      stage: aspect_suffix
+  vnh-vsk:
+    completive:
+    - kind: suffix
+      value: vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: vna
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: ht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: vsk
+      stage: aspect_suffix
+  vnh-vsk[inf2]:
+    completive:
+    - kind: suffix
+      value: vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: vna
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: vht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: vsk
+      stage: aspect_suffix
+  vnh-vsk[inf3]:
+    completive:
+    - kind: suffix
+      value: vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: vna
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: vnht
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: vsk
+      stage: aspect_suffix
+  vnh-vsk[inf4]:
+    completive:
+    - kind: suffix
+      value: vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: vna
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: vst
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: vsk
+      stage: aspect_suffix
+  vsk:
+    completive:
+    - kind: suffix
+      value: vn
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: vka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: vt
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: vsk
+      stage: aspect_suffix
+  vsk-long:
+    completive:
+    - kind: suffix
+      value: vn
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: vka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: v'vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: vt
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: v'vsk
+      stage: aspect_suffix
+  vsk-long[imp2]:
+    completive:
+    - kind: suffix
+      value: vn
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: v'vka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: v'vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: vt
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: v'vsk
+      stage: aspect_suffix
+  vsk-post-v:
+    completive:
+    - kind: suffix
+      value: n
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: '''vka'
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: '''vsk'
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: t
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: '''vsk'
+      stage: aspect_suffix
+  vsk[imp2]:
+    completive:
+    - kind: suffix
+      value: vn
+      stage: aspect_suffix
+    immediate:
+    - kind: suffix
+      value: v'vka
+      stage: aspect_suffix
+    incompletive:
+    - kind: suffix
+      value: vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: suffix
+      value: vt
+      stage: aspect_suffix
+    present:
+    - kind: suffix
+      value: vsk
       stage: aspect_suffix

@@ -29,6 +29,127 @@ features:
   - incompletive
   - completive
   - infinitive
+  aspect_class:
+  - a
+  - apl
+  - apl-active
+  - name: apl-active-'
+    acceptor: (<Phone>*')
+  - apl-active-a
+  - apl-active-h
+  - apl[imp2]
+  - apl[imp3]
+  - apl[imp4]
+  - be-at
+  - become
+  - become[inf2]
+  - become[inf3]
+  - become[inf4]
+  - cause
+  - cause[perf2]
+  - cause[perf3]
+  - cause[pres2-perf2]
+  - cause[pres2-perf3]
+  - cause[pres2]
+  - e-a
+  - e-aka
+  - episodic
+  - episodic[imp2-inf2]
+  - episodic[imp2]
+  - episodic[inf2]
+  - go
+  - go-in
+  - go-in[perf2]
+  - go[pres2]
+  - name: hih-hil
+    acceptor: (<Phone>*<C>)
+  - name: hih-hil[imp2]
+    acceptor: (<Phone>*<C>)
+  - name: hih-hilh
+    acceptor: (<Phone>*<C>)
+  - name: hih-lh
+    acceptor: (<Phone>*<V>)
+  - name: hih-lh[imp2]
+    acceptor: (<Phone>*<V>)
+  - husk
+  - name: hvsk-han
+    acceptor: (<Phone>*<C>)
+  - name: hvsk-han[inf2]
+    acceptor: (<Phone>*<C>)
+  - name: hvsk-n
+    acceptor: (<Phone>*h)|(<Phone>*<V>)
+  - name: hvsk-nh
+    acceptor: (<Phone>*<V>)
+  - name: hvsk-nh[inf2]
+    acceptor: (<Phone>*<V>)
+  - name: hvsk-nh[inf3]
+    acceptor: (<Phone>*<V>)
+  - name: hvsk-nh[inf4]
+    acceptor: (<Phone>*<V>)
+  - i-a-i
+  - i-a-i[perf2]
+  - i-a-ihsk
+  - i-vka
+  - ih-ihi
+  - ih-il
+  - ih-vh
+  - ih-vh[imperf2-inf2]
+  - ih-vh[imperf2]
+  - ih-vh[inf2]
+  - ko-kots
+  - name: o
+    acceptor: (<Phone>*<C>)
+  - oh-al
+  - oh-al[imp2]
+  - oh-ol
+  - oh-ol[inf2]
+  - oh-ol[inf3]
+  - rev-'i
+  - rev-e
+  - rev-gi
+  - rev-i
+  - sk-h
+  - name: sk-h-yh
+    acceptor: (<Phone>*<V>)
+  - sk-h[imp2]
+  - name: sk-s-a
+    acceptor: (<Phone>*<C>)
+  - name: sk-s-a[inf2]
+    acceptor: (<Phone>*<C>)
+  - sk-s-hi-hihst
+  - name: sk-s-hst
+    acceptor: (<Phone>*<V>)
+  - name: sk-s-hst[imp2]
+    acceptor: (<Phone>*<V>)
+  - name: sk-s-la
+    acceptor: (<Phone>*<V>)
+  - stative
+  - stative-a'
+  - stative-eh
+  - stative-h
+  - stative-k
+  - stative-s
+  - name: terminative
+    acceptor: (<Phone>*<C>)
+  - name: terminative-no-o
+    acceptor: (<Phone>*<V>)
+  - name: v-vhs
+    acceptor: (<Phone>*<C>)
+  - vnh-ih-a
+  - vnh-vsk
+  - vnh-vsk[inf2]
+  - vnh-vsk[inf3]
+  - vnh-vsk[inf4]
+  - name: vsk
+    acceptor: (<Phone>*<C>)
+  - name: vsk-long
+    acceptor: (<Phone>*<C>)
+  - name: vsk-long[imp2]
+    acceptor: (<Phone>*<C>)
+  - name: vsk-post-v
+    acceptor: (<Phone>*<V>)
+  - name: vsk[imp2]
+    acceptor: (<Phone>*<C>)
   prefix_class:
   - name: a_stem
     acceptor: a<Phone>*
@@ -44,7 +165,3 @@ features:
     acceptor: v<Phone>*
   - name: vowel_stem
     acceptor: <V><Phone>*
-  aspect_class:
-  - be-at
-  - e-a
-  - ha-hi-s
