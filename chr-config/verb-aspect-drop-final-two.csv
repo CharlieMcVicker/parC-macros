@@ -1,6 +1,6 @@
 # kind: rule
 # stage: final_dropping
-# rule: $drop_final
+# rule: $drop_final_two
 # feature: aspect
 # part_of_speech: $verb
 # class_feature: aspect_class

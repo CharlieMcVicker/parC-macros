@@ -144,7 +144,7 @@ markers:
       value: si
       stage: aspect_suffix
     - kind: rule
-      value: $drop_final
+      value: $drop_final_two
       stage: final_dropping
     incompletive:
     - kind: suffix

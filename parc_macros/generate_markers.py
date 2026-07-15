@@ -67,7 +67,7 @@ def map_csv_to_markers(csv_file):
     Parses a single CSV file containing marker/rule mapping definitions, extracts metadata,
     and maps each row to paradigm-specific features.
 
-    This function represents the 'map' step in a map-reduce style processing of the 
+    This function represents the 'map' step in a map-reduce style processing of the
     configuration files. It parses the CSV file, validates the presence of critical
     metadata like 'class_feature', and constructs a localized representation of the
     paradigms, markers, and class values defined within that single file.
@@ -79,7 +79,7 @@ def map_csv_to_markers(csv_file):
         dict: A dictionary containing:
             - "metadata": The parsed metadata from comments.
             - "class_feature": The category identifier (e.g., 'conjugation_class').
-            - "paradigms_markers": A dictionary mapping paradigm_name to a dictionary of 
+            - "paradigms_markers": A dictionary mapping paradigm_name to a dictionary of
               feature-to-marker lists.
             - "paradigm_names": A set of all paradigm names encountered.
     """
@@ -146,7 +146,7 @@ def reduce_csv_mappings(mapped_results):
     Reduces and aggregates individual CSV mapping results into global maps of
     paradigm metadata, combined markers, and class-feature associations.
 
-    This function represents the 'reduce' step. It takes the output list from the 
+    This function represents the 'reduce' step. It takes the output list from the
     map stage and merges them, ensuring that if a paradigm is defined across multiple
     CSV files (e.g. suffix definitions and phonological/diphthong rules), their
     markers are correctly accumulated under the same paradigm entry.
@@ -208,7 +208,7 @@ def generate_paradigm_configs(
     for a specific paradigm.
 
     This function creates:
-    1. A FeatureMarkers YAML file (located in Exponence/FeatureMarkers) containing the 
+    1. A FeatureMarkers YAML file (located in Exponence/FeatureMarkers) containing the
        mappings of abstract features (like person/number) to concrete morphotactic markers.
     2. A Paradigm YAML file (located in Morphotactics/Paradigm) containing references
        to the FeatureMarkers, part of speech, lexical/class filters, and optional
@@ -270,9 +270,7 @@ def generate_paradigm_configs(
     os.makedirs(paradigm_dir, exist_ok=True)
     suffixes = [meta[k] for k in filename_suffix_keys if k in meta]
     suffix_str = f"_{'_'.join(suffixes)}" if suffixes else ""
-    paradigm_file = os.path.join(
-        paradigm_dir, f"{filename_base}{suffix_str}.yaml"
-    )
+    paradigm_file = os.path.join(paradigm_dir, f"{filename_base}{suffix_str}.yaml")
 
     paradigm_content = {
         "kind": "Paradigm",
@@ -381,7 +379,9 @@ def generate_contingent_configs(
     os.makedirs(paradigm_dir, exist_ok=True)
     paradigm_file = os.path.join(paradigm_dir, f"{pos_name}.yaml")
 
-    features_in_contingent = sorted(list(set(feat for (cf, feat) in contingent_groups.keys())))
+    features_in_contingent = sorted(
+        list(set(feat for (cf, feat) in contingent_groups.keys()))
+    )
     feature_markers = {feat: None for feat in features_in_contingent}
 
     paradigm_content = {
@@ -414,7 +414,7 @@ def update_feature_definitions(
     Updates the global FeatureDefinitions configuration file with the dynamically
     discovered class feature values (paradigms) and configured inflectional features.
 
-    This ensures that the YAML configurations match schema specifications and that the 
+    This ensures that the YAML configurations match schema specifications and that the
     underlying parser has a full index of valid inflectional categories and lexical
     class feature values.
 
@@ -445,25 +445,27 @@ def update_feature_definitions(
                     if filename.endswith(".csv"):
                         fa_file = os.path.join(fa_dir, filename)
                         metadata, fieldnames, rows = parse_csv_with_metadata(fa_file)
-                        
-                        feature_name = metadata.get("feature") or (fieldnames[0] if fieldnames else None)
+
+                        feature_name = metadata.get("feature") or (
+                            fieldnames[0] if fieldnames else None
+                        )
                         fa_pos = metadata.get("part_of_speech")
                         if fa_pos:
                             fa_pos = fa_pos.lstrip("$")
-                        
+
                         # Only apply acceptors for the current POS
                         if fa_pos and fa_pos != pos_name:
                             continue
-                        
+
                         if not feature_name or len(fieldnames) < 2:
                             continue
-                        
+
                         val_col = fieldnames[0]
                         acc_col = fieldnames[1]
-                        
+
                         if feature_name not in feature_acceptors:
                             feature_acceptors[feature_name] = {}
-                        
+
                         for row in rows:
                             val = row.get(val_col, "").strip()
                             acc = row.get(acc_col, "").strip()
@@ -476,7 +478,9 @@ def update_feature_definitions(
                 fd_content["features"][feat] = vals
 
         # Combine only features that are dynamically updated (class features or feature acceptors)
-        update_targets = set(class_features_paradigms.keys()) | set(feature_acceptors.keys())
+        update_targets = set(class_features_paradigms.keys()) | set(
+            feature_acceptors.keys()
+        )
 
         for cf in update_targets:
             if cf not in fd_content["features"]:
@@ -587,9 +591,10 @@ def main():
 
     # Clean output_dir
     if os.path.exists(output_dir):
-        shutil.rmtree(output_dir)
+        for subdir in os.listdir(output_dir):
+            if not subdir == ".cache":
+                shutil.rmtree(output_dir + "/" + subdir)
     os.makedirs(output_dir, exist_ok=True)
-
 
     # Ensure full standard directory structure exists under output_dir
     standard_dirs = [
@@ -629,9 +634,6 @@ def main():
             if os.path.exists(dest_phonology):
                 shutil.rmtree(dest_phonology)
             shutil.copytree(phonology_dir, dest_phonology)
-
-
-
 
     # 1. Determine all CSVs and verb.yaml
     csv_files = []
@@ -684,12 +686,16 @@ def main():
     mapped_results = [map_csv_to_markers(csv_file) for csv_file in csv_files]
 
     # Reduce Step: Aggregate paradigm metadata, markers, and class associations
-    paradigms_metadata, paradigms_markers, class_features_paradigms = reduce_csv_mappings(mapped_results)
+    paradigms_metadata, paradigms_markers, class_features_paradigms = (
+        reduce_csv_mappings(mapped_results)
+    )
 
     # Always ensure Exponence/FeatureMarkers directory exists for parC compatibility
     os.makedirs(os.path.join(output_dir, "Exponence", "FeatureMarkers"), exist_ok=True)
 
-    use_contingent_features = paradigm_config.get("generate_contingent_markers", False) or paradigm_config.get("use_contingent_features", False)
+    use_contingent_features = paradigm_config.get(
+        "generate_contingent_markers", False
+    ) or paradigm_config.get("use_contingent_features", False)
 
     # Output paradigm files
     if use_contingent_features:
