@@ -1,70 +1,59 @@
 import os
 
 from parC.grammar.paradigm_compilation import (
-    get_open_parse_graph,
+    build_inflect_graph_for_root_regex,
     word_fsa,
-    fsa,
 )
 
 from parC.grammar.acceptor_compilation import fsm_strings
 
 import pynini
 
-
-def parse_word(surface):
-    form_fsa = word_fsa(surface)
-    parse_lattice = (form_fsa @ get_open_parse_graph("verb")).optimize()
-    output_projected = pynini.project(parse_lattice, "output").optimize()
-
-    return output_projected
+PARSE_GRAPH = None
 
 
-def construct_target_pattern(root, pronominal, prefix_class, aspect, aspect_class):
-    # Construct the expected tag sequence
-    target_pattern = (
-        f"[BOW]{root}[EOW]"
-        f"[prefix_class={prefix_class}]"
-        f"[aspect_class={aspect_class}]"
-        f"[aspect={aspect}]"
-        f"[pronominal={pronominal}]"
+def get_parse_graph():
+    # Build using root regex AND infer_lexical_features=True
+    inflect_graph = build_inflect_graph_for_root_regex(
+        "verb", "<Phone>*", infer_lexical_features=True
     )
-    return target_pattern
+    assert isinstance(inflect_graph, pynini.Fst)
+
+    # Invert to build a parse graph
+    return pynini.invert(inflect_graph).optimize()
 
 
-def assert_parse_matches_target(output_projected, target_pattern):
-    target_fsa = fsa(target_pattern)
-    assert pynini.equivalent(output_projected, target_fsa), (
-        f"Parse output does not match expected target pattern.\n"
-        f"Output: {output_projected}\n"
-        f"Target: {target_fsa}"
-    )
+def parse(surface: str):
+    global PARSE_GRAPH
+    if PARSE_GRAPH is None:
+        PARSE_GRAPH = get_parse_graph()
+
+    # Let's parse the surface form cant-o_a
+    surface_fsa = word_fsa(surface)
+    parse_lattice = pynini.compose(surface_fsa, PARSE_GRAPH).optimize()
+    return fsm_strings(parse_lattice)
 
 
 def main():
-    # Example usage of the wildcard_parse_graph function
-    print("Wildcard parse graph constructed successfully.")
 
     for surface in ["atvneha", "uwatiyet"]:
         print(f"\nParsing surface form: {surface}")
-        forms = parse_word(surface)
-
-        strings = fsm_strings(forms, nshortest=1000)
+        strings = parse(surface)
 
         for i, string in enumerate(strings):
             print(i, string)
 
     all_forms = [
-        "kawoniha<aspect.discharged=present>",
-        "tsiwoniha<aspect.discharged=present>",
-        "kawonisk<aspect.discharged=incompletive>",
-        "uwonis<aspect.discharged=completive>",
-        "uwonihist<aspect.discharged=infinitive>",
+        "kawonih",
+        "tsiwonih",
+        "kawonisk",
+        "uwonis",
+        "uwonihist",
     ]
     root_and_lexical_by_form = {}
-    expected = "[BOW]woni[EOW][prefix_class=r_stem][aspect_class=ha-hi-s]"
+    expected = "[BOW]won[EOW][prefix_class=r_stem][aspect_class=ih-ihi]"
     for surface in all_forms:
-        forms = parse_word(surface)
-        strings = fsm_strings(forms, nshortest=1000)
+        strings = parse(surface)
         lexicals = set(s.split("[aspect=")[0] for s in strings)
         root_and_lexical_by_form[surface] = lexicals
         # print(
