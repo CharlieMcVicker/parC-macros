@@ -29,6 +29,14 @@ features:
   - incompletive
   - completive
   - infinitive
+  tense:
+  - present
+  - immediate
+  - habitual
+  - future_prog
+  - assertive
+  - reported
+  - infinitive
   aspect_class:
   - a
   - apl
@@ -150,6 +158,9 @@ features:
     acceptor: (<Phone>*<V>)
   - name: vsk[imp2]
     acceptor: (<Phone>*<C>)
+  tense_present_class:
+  - a_present
+  - i_present
   prefix_class:
   - name: a_stem
     acceptor: a<Phone>*

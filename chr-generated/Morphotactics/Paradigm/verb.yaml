@@ -5,11 +5,14 @@ part_of_speech: $verb
 feature_markers:
   aspect: null
   pronominal: null
+  tense: null
 contingent_markers:
 - $verb_aspect_contingent
 - $verb_pronominal_contingent
+- $verb_tense_contingent
 stage_order:
 - final_dropping
 - aspect_suffix
+- tense
 - drop_stem_initial_vowel
 - pronominal

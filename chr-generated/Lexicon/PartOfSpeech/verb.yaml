@@ -5,6 +5,8 @@ name: verb
 features:
 - pronominal
 - aspect
+- tense
 lexical_features:
 - prefix_class
 - aspect_class
+- tense_present_class

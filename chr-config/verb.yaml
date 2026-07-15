@@ -1,6 +1,7 @@
 stages:
   - final_dropping
   - aspect_suffix
+  - tense
   - drop_stem_initial_vowel
   - pronominal
 
@@ -33,11 +34,20 @@ features:
     - incompletive
     - completive
     - infinitive
+  tense:
+    - present
+    - immediate
+    - habitual
+    - future_prog
+    - assertive
+    - reported
+    - infinitive
 
 # Lexical features and metadata (originally from verb.yaml)
 lexical_features:
   - prefix_class
   - aspect_class
+  - tense_present_class
 
 paradigm:
   generate_contingent_markers: true
