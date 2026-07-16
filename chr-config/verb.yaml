@@ -4,8 +4,12 @@ stages:
   - tense
   - drop_stem_initial_vowel
   - pronominal
-  - distributive
-  - trl
+  - add_dist
+  - add_part
+  - add_wi
+  - resolve_dist
+  - resolve_part
+  - resolve_wi
 
 # Inflectional Features (originally from verb_features.yaml)
 features:
@@ -50,6 +54,9 @@ features:
     values: [+]
     optional: true
   distributive:
+    values: [+]
+    optional: true
+  partitive:
     values: [+]
     optional: true
 

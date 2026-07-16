@@ -5,12 +5,14 @@ part_of_speech: $verb
 feature_markers:
   aspect: null
   distributive: null
+  partitive: null
   pronominal: null
   tense: null
   translocutive: $verb_translocutive
 contingent_markers:
 - verb_aspect_aspect_class_contingent
 - verb_distributive_tense_contingent
+- verb_partitive_tense_contingent
 - verb_pronominal_prefix_class_contingent
 - verb_tense_tense_present_class_contingent
 stage_order:
@@ -20,4 +22,5 @@ stage_order:
 - drop_stem_initial_vowel
 - pronominal
 - distributive
+- partitive
 - trl

@@ -228,6 +228,7 @@ def generate_paradigm_configs(
     feature_markers_keys,
     filename_suffix_keys,
     stage_order,
+    optional_features=None,
 ):
     """
     Generates and saves the FeatureMarkers and Paradigm YAML configuration files
@@ -250,6 +251,7 @@ def generate_paradigm_configs(
           be propagated as additional feature_markers.
         filename_suffix_keys (list): Configuration keys to extract suffixes for filenames.
         stage_order (list or None): Explicit execution order for morphological/phonological stages.
+        optional_features (list, optional): List of optional features.
     """
     # Ensure it has correct prefix
     filename_base = paradigm_name
@@ -270,6 +272,18 @@ def generate_paradigm_configs(
             markers_dict[col] = entries
         else:
             markers_dict[col] = None
+
+
+    if optional_features and meta.get("feature") in optional_features:
+        stage_name = meta.get("stage", meta["feature"])
+        if "UNMARKED" not in markers_dict:
+            markers_dict["UNMARKED"] = [{
+                "kind": "rule",
+                "value": "$no_op",
+                "stage": stage_name
+            }]
+
+    markers_dict = {k: markers_dict[k] for k in sorted(markers_dict.keys())}
 
     fm_content = {
         "kind": "FeatureMarkers",
@@ -340,16 +354,28 @@ def generate_paradigm_configs(
     print(f"Generated Paradigm: {paradigm_file}")
 
 
-def generate_standard_feature_markers(feature_name, pos_name, markers, output_dir):
+def generate_standard_feature_markers(feature_name, pos_name, markers, output_dir, optional_features=None):
     filename_base = f"{pos_name}_{feature_name}"
     fm_dir = os.path.join(output_dir, "Exponence", "FeatureMarkers")
     os.makedirs(fm_dir, exist_ok=True)
     fm_file = os.path.join(fm_dir, f"{filename_base}.yaml")
 
+    markers_dict = dict(markers)
+
+    if optional_features and feature_name in optional_features:
+        if "UNMARKED" not in markers_dict:
+            markers_dict["UNMARKED"] = [{
+                "kind": "rule",
+                "value": "$no_op",
+                "stage": feature_name
+            }]
+
+    markers_dict = {k: markers_dict[k] for k in sorted(markers_dict.keys())}
+
     fm_content = {
         "kind": "FeatureMarkers",
         "feature": feature_name,
-        "markers": markers,
+        "markers": markers_dict,
     }
 
     with open(fm_file, "w", encoding="utf-8") as f:
@@ -372,6 +398,7 @@ def generate_contingent_configs(
     pos_name,
     output_dir,
     stage_order,
+    optional_features=None,
 ):
     """
     Generates ContingentFeatureMarkers and standard FeatureMarkers,
@@ -412,6 +439,17 @@ def generate_contingent_configs(
             for f_val in sorted(class_mappings[c_name].keys()):
                 sorted_mappings[c_name][f_val] = class_mappings[c_name][f_val]
 
+
+            if optional_features and feat in optional_features:
+                if "UNMARKED" not in sorted_mappings[c_name]:
+                    sorted_mappings[c_name]["UNMARKED"] = [{
+                        "kind": "rule",
+                        "value": "$no_op",
+                        "stage": feat
+                    }]
+
+            sorted_mappings[c_name] = {k: sorted_mappings[c_name][k] for k in sorted(sorted_mappings[c_name].keys())}
+
         cfm_content = {
             "kind": "ContingentFeatureMarkers",
             "features": [cf, feat],
@@ -444,7 +482,7 @@ def generate_contingent_configs(
             sorted_markers[f_val] = markers[f_val]
 
         ref = generate_standard_feature_markers(
-            feat, pos_name, sorted_markers, output_dir
+            feat, pos_name, sorted_markers, output_dir, optional_features
         )
         standard_feature_refs[feat] = ref
 
@@ -553,7 +591,10 @@ def update_feature_definitions(
         # Add inflectional features from verb.yaml
         if "features" in verb_config:
             for feat, vals in verb_config["features"].items():
-                fd_content["features"][feat] = vals
+                if isinstance(vals, dict) and "values" in vals:
+                    fd_content["features"][feat] = vals["values"]
+                else:
+                    fd_content["features"][feat] = vals
 
         # Add lexical features with definitions from verb.yaml
         if "lexical_features" in verb_config:
@@ -715,6 +756,7 @@ def main():
 
     # Ensure full standard directory structure exists under output_dir
     standard_dirs = [
+        os.path.join(output_dir, ".cache"),
         os.path.join(output_dir, "Phonology", "Inventory"),
         os.path.join(output_dir, "Phonology", "Patterns"),
         os.path.join(output_dir, "Phonology", "Rules"),
@@ -799,6 +841,17 @@ def main():
     feature_markers_keys = paradigm_config.get("feature_markers_keys", [])
     filename_suffix_keys = paradigm_config.get("filename_suffix_keys", [])
 
+    # Identify optional features and modify verb_config['features'] in-place
+    optional_features = []
+    if "features" in verb_config:
+        for feat_name, feat_def in verb_config["features"].items():
+            if isinstance(feat_def, dict) and feat_def.get("optional") is True:
+                optional_features.append(feat_name)
+                if "values" in feat_def:
+                    if "UNMARKED" not in feat_def["values"]:
+                        feat_def["values"].append("UNMARKED")
+
+
     # Map Step: Parse each CSV file and extract paradigm markers
     mapped_results = [map_csv_to_markers(csv_file) for csv_file in csv_files]
 
@@ -821,6 +874,7 @@ def main():
             pos_name=pos_name,
             output_dir=output_dir,
             stage_order=stage_order,
+            optional_features=optional_features,
         )
 
     else:
@@ -835,6 +889,7 @@ def main():
                 feature_markers_keys=feature_markers_keys,
                 filename_suffix_keys=filename_suffix_keys,
                 stage_order=stage_order,
+                optional_features=optional_features,
             )
 
     # Update global FeatureDefinitions configuration

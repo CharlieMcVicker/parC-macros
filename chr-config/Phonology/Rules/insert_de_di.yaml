@@ -6,28 +6,31 @@ rules:
     description: >
       add DI de token where it will be inserted
     string_map:
-      - ["", "[DI]"]
+      - ["", "[TEMP]"]
     left_context: "#"
-    right_context: "{^[DI]}"
+    right_context: "{^[TEMP]}"
 
   - name: insert_DIST1_pre_i
     description: >
       insert t before most vowels
     string_map:
-      - ["[DI]i", "te"]
+      - ["[TEMP]i", "te"]
+    left_context: "#"
 
   - name: insert_DIST1_pre_v
     description: >
       insert t before most vowels
     string_map:
-      - ["[DI]", "t"]
+      - ["[TEMP]", "t"]
+    left_context: "#"
     right_context: "<V>"
 
   - name: insert_DIST1_default
     description: >
       insert te material before other sounds
     string_map:
-      - ["[DI]", "te"]
+      - ["[TEMP]", "te"]
+    left_context: "#"
 
   - name: insert_DIST1
     description: >
@@ -42,28 +45,31 @@ rules:
     description: >
       insert ti before i/a (eats vowel)
     string_map:
-      - ["[DI]i", "ti"]
-      - ["[DI]a", "ti"]
+      - ["[TEMP]i", "ti"]
+      - ["[TEMP]a", "ti"]
 
   - name: insert_DIST2_pre_v
     description: >
       insert ts before most vowels
     string_map:
-      - ["[DI]", "ts"]
+      - ["[TEMP]", "ts"]
+    left_context: "#"
     right_context: "<V>"
 
   - name: insert_DIST2_pre_h
     description: >
       insert t before h
     string_map:
-      - ["[DI]", "t"]
+      - ["[TEMP]", "t"]
+    left_context: "#"
     right_context: "h"
 
   - name: insert_DIST2_default
     description: >
       insert ti material before other sounds
     string_map:
-      - ["[DI]", "ti"]
+      - ["[TEMP]", "ti"]
+    left_context: "#"
 
   - name: insert_DIST2
     description: >

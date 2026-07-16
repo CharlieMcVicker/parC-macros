@@ -8,6 +8,7 @@ features:
 - tense
 - translocutive
 - distributive
+- partitive
 lexical_features:
 - prefix_class
 - aspect_class

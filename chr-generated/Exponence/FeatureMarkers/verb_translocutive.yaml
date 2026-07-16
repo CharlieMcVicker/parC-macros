@@ -7,3 +7,7 @@ markers:
   - kind: rule
     value: $insert_wi
     stage: trl
+  UNMARKED:
+  - kind: rule
+    value: $no_op
+    stage: translocutive

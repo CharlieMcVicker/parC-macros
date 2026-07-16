@@ -1,0 +1,7 @@
+# kind: rule
+# stage: add_ni
+# rule: $add_NI
+# feature: partitive
+# part_of_speech: $verb
++,-
+Y,Y

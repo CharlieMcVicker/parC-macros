@@ -3,68 +3,68 @@
 kind: ContingentFeatureMarkers
 features:
 - tense
-- distributive
+- partitive
 markers:
   assertive:
     +:
     - kind: rule
-      value: $insert_DIST1
-      stage: distributive
+      value: $insert_NI
+      stage: partitive
     UNMARKED:
     - kind: rule
       value: $no_op
-      stage: distributive
+      stage: partitive
   future_prog:
     +:
     - kind: rule
-      value: $insert_DIST1
-      stage: distributive
+      value: $insert_NI
+      stage: partitive
     UNMARKED:
     - kind: rule
       value: $no_op
-      stage: distributive
+      stage: partitive
   habitual:
     +:
     - kind: rule
-      value: $insert_DIST1
-      stage: distributive
+      value: $insert_NI
+      stage: partitive
     UNMARKED:
     - kind: rule
       value: $no_op
-      stage: distributive
+      stage: partitive
   immediate:
     +:
     - kind: rule
-      value: $insert_DIST2
-      stage: distributive
+      value: $insert_NI
+      stage: partitive
     UNMARKED:
     - kind: rule
       value: $no_op
-      stage: distributive
+      stage: partitive
   infinitive:
     +:
     - kind: rule
-      value: $insert_DIST2
-      stage: distributive
+      value: $insert_NI2
+      stage: partitive
     UNMARKED:
     - kind: rule
       value: $no_op
-      stage: distributive
+      stage: partitive
   present:
     +:
     - kind: rule
-      value: $insert_DIST1
-      stage: distributive
+      value: $insert_NI
+      stage: partitive
     UNMARKED:
     - kind: rule
       value: $no_op
-      stage: distributive
+      stage: partitive
   reported:
     +:
     - kind: rule
-      value: $insert_DIST1
-      stage: distributive
+      value: $insert_NI
+      stage: partitive
     UNMARKED:
     - kind: rule
       value: $no_op
-      stage: distributive
+      stage: partitive

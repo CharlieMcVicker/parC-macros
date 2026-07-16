@@ -153,21 +153,23 @@ def get_roots_for_forms(
 def main():
     import readline
 
-    # root = "atat"
-    # lexical = [
-    #     ("aspect_class", "go"),
-    #     ("prefix_class", "a_stem"),
-    #     ("tense_present_class", "a_present"),
-    # ]
-    # inflectional = [
-    #     ("pronominal", "3sg.A"),
-    #     ("aspect", "present"),
-    #     ("tense", "present"),
-    #     ("translocutive", "+"),
-    # ]
+    root = "atat"
+    lexical = [
+        ("aspect_class", "go"),
+        ("prefix_class", "a_stem"),
+        ("tense_present_class", "a_present"),
+    ]
+    inflectional = [
+        ("pronominal", "3sg.A"),
+        ("aspect", "present"),
+        ("tense", "present"),
+        ("translocutive", "UNMARKED"),
+        ("distributive", "UNMARKED"),
+        ("partitive", "UNMARKED"),
+    ]
 
-    # words = inflect(root, lexical, inflectional)
-    # print(words)
+    words = inflect(root, lexical, inflectional)
+    print(words)
 
     print("interactive parsing - newline to quit, . to flip modes")
     MODE = "PARSE"

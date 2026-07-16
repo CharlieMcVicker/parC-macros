@@ -6,22 +6,24 @@ rules:
     description: >
       add WI wi token where it will be inserted
     string_map:
-      - ["", "[WI]"]
+      - ["", "[TEMP]"]
     left_context: "#"
-    right_context: "{^[WI]}"
+    right_context: "{^[TEMP]}"
 
   - name: insert_wi_v_h
     description: >
       insert wi material before h/<V>
     string_map:
-      - ["[WI]", "w"]
+      - ["[TEMP]", "w"]
+    left_context: "#"
     right_context: "<V>|h"
 
   - name: insert_wi_default
     description: >
       insert wi material before other sounds
     string_map:
-      - ["[WI]", "wi"]
+      - ["[TEMP]", "wi"]
+    left_context: "#"
 
   - name: insert_wi
     description: >
