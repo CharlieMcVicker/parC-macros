@@ -22,7 +22,6 @@ def main():
         "corpus_id",
         "entry_no",
         "definition",
-        "prediction",
         "present",
         "present_1sg",
         "imperfective",
