@@ -1,0 +1,9 @@
+# This is a FeatureMarkers config file
+# Generated automatically from CSV
+kind: FeatureMarkers
+feature: translocutive
+markers:
+  +:
+  - kind: rule
+    value: $insert_wi
+    stage: trl

@@ -654,10 +654,7 @@ corpus_id,entry_no,definition,prediction,present,present_1sg,imperfective,perfec
 1745,1811,he/she is hungry,FullEventful,uyohsiha,akiyohsiha,uyohsihsko'i,uyohsihskv'i,tsayohsihsa,uyohsihsohti
 1745,1811,he/she is hungry,StativeNoImp,uyohsiha,akiyohsiha,uyohsihsko'i,uyohsihskv'i,tsayohsihsa,uyohsihsohti
 1745,1811,he/she is hungry,ImpInfEventful,uyohsiha,akiyohsiha,uyohsihsko'i,uyohsihskv'i,tsayohsihsa,uyohsihsohti
-1754,1823,he/she is sending on object (refers to a long object),FullEventful,wati'a,witsiti'a,watihsko'i,wutv'i,whita,wutihsti
 1761,1830,he/she is sending it,FullEventful,wahvhska,witsi'vhska,wahvhsko'i,wunhv'i,whihvka,wuhti
 1765,1834,he/she is heading in the direction of,FullStative,wakhthi,witsikathi,wakhtho'i,wakhthv'i,whikhthehsti,
 1774,1845,he/she is sending it,FullEventful,wikakhahvhska,witsiyakhahvhska,wikakhahvhsko'i,wuwakhanv'i,whiyakhahvka,wuwakhohti
 1775,1846,he/she is sending it (refers to something liquid),FullEventful,wikanehvhska,witsine'vhska,wikanehvhsko'i,wunenhv'i,whinehvka,wunehti
-1776,1847,he/she is sending it (refers to a flexible object),FullEventful,wikanv'vhska,witsinv'vhska,wikanv'vhsko'i,wunvnv'i,whinv'vka,wunvti
-1778,1849,he/she is going out of sight,FullEventful,wutelika,wakwatelika,wuteliko'i,wutelitsv'i,witsateliki,wutelihsti

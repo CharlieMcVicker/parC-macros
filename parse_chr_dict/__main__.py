@@ -1,66 +1,15 @@
 import csv
-import os
-import re
-
-from parC.grammar.paradigm_compilation import get_open_parse_graph, word_fsa, fsa
-
-from parC.grammar.acceptor_compilation import fsm_strings
-
-import pynini
 from tqdm import tqdm
 
 from parse_chr_dict.create_aspect_class_csv import respell_consonants
+from parse_chr_dict.parse import get_roots_for_forms
 
-PARSE_GRAPH = None
-
-
-def get_parse_graph():
-    return get_open_parse_graph(
-        "verb", infer_lexical_features=True, non_deterministic_cleanup=True
-    )
-
-
-def parse(surface: str, labels: list[tuple[str, str]] = None):
-    global PARSE_GRAPH
-    if PARSE_GRAPH is None:
-        PARSE_GRAPH = get_parse_graph()
-
-    # Let's parse the surface form cant-o_a
-    if labels is None:
-        labels = []
-    surface_fsa = word_fsa(surface)
-    for feat, value in sorted(labels, key=lambda l: l[0]):
-        surface_fsa = pynini.concat(surface_fsa, fsa(feature_tag(feat, value)))
-
-    output_lattice_with_tag = pynini.compose(surface_fsa, PARSE_GRAPH).optimize()
-    output_lattice_with_tag = pynini.project(
-        output_lattice_with_tag, project_type="output"
-    )
-    return fsm_strings(output_lattice_with_tag, strip_all_tags=False)
-
-
-def feature_tag(feature, value):
-    return f"[{feature}={value}]"
-
-
-def parses_by_form(forms: list[tuple[str, list[tuple[str, str]]]]):
-    for surface, constraints in forms:
-        if not surface:
-            continue
-        strings = parse(surface, labels=constraints)
-        lexicals = set(s.split("[aspect=")[0] for s in strings)
-        yield surface, lexicals
-
-
-def get_roots_for_forms(forms: list[tuple[str, list[tuple[str, str]]]]):
-    possible_lexical_roots = None
-    for _surface, lexicals in parses_by_form(forms):
-        if possible_lexical_roots is None:
-            possible_lexical_roots = lexicals
-        else:
-            possible_lexical_roots = possible_lexical_roots.intersection(lexicals)
-
-    return possible_lexical_roots if possible_lexical_roots else set()
+LEXICAL_FEATURES = {
+    "aspect_class",
+    "prefix_class",
+    "tense_present_class",
+    "translocutive",
+}
 
 
 def main():
@@ -120,11 +69,16 @@ def main():
         reader = csv.DictReader(f, fieldnames=fieldnames)
         error_writer = csv.DictWriter(error_f, fieldnames=fieldnames)
         error_writer.writeheader()
-        roots_writer = csv.DictWriter(roots_f, fieldnames=fieldnames + ["lexical"])
+        roots_writer = csv.DictWriter(
+            roots_f, fieldnames=fieldnames + ["root"] + sorted(LEXICAL_FEATURES)
+        )
         roots_writer.writeheader()
         next(reader)
         rows = list(reader)
+        # rows = rows[:10]
         for row in tqdm(rows):
+            # if not row["corpus_id"] == "1754":
+            #     continue
             # print()
             # input(row["definition"])
             forms = [
@@ -138,12 +92,16 @@ def main():
             #     print(surface)
             #     for l in lexicals:
             #         print("\t" + l)
-            roots = get_roots_for_forms(forms)
+            roots = get_roots_for_forms(forms, LEXICAL_FEATURES)
             # print(roots)
             if len(roots):
-                for r in roots:
+                for r, label_values in roots:
                     data = {**row}
-                    data["lexical"] = r
+                    data["root"] = r
+
+                    for k, v in label_values:
+                        data[k] = v
+
                     roots_writer.writerow(data)
             else:
                 error_writer.writerow(row)

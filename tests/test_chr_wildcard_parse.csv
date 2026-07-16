@@ -1,4 +1,5 @@
-surface,root,pronominal,prefix_class,aspect,aspect_class
-atawhahthvhitoha,atawhahthvhit,3sg.A,a_stem,present,be-at
-atawhahthvhitoha,tawhahthvhit,3sg.A,cons_stem,present,be-at
-atawhahthvhitoha,atawhahthvhito,3sg.A,a_stem,present,ha-hi-s
+surface,root,pronominal,prefix_class,aspect,aspect_class,tense_present_class,tense,translocutive
+atawhahthvhitoha,atawhahthvhit,3sg.A,a_stem,present,be-at,a_present,present,
+atawhahthvhitoha,tawhahthvhit,3sg.A,cons_stem,present,be-at,a_present,present,
+atateka,atat,3sg.A,a_stem,present,go,a_present,present,
+watateka,atat,3sg.A,a_stem,present,go,a_present,present,+

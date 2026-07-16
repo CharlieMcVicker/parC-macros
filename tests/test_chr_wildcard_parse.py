@@ -4,12 +4,7 @@ from pathlib import Path
 import pytest
 import pynini
 
-from parC.grammar.paradigm_compilation import (
-    build_inflect_graph_for_root_regex,
-    build_parse_graph,
-    word_fsa,
-    fsa,
-)
+from parse_chr_dict.parse import parse, feature_tag
 
 # Ensure environment variable YAML_DIR is set
 if "YAML_DIR" not in os.environ:
@@ -18,6 +13,9 @@ if "YAML_DIR" not in os.environ:
 # Path to the CSV files with test cases
 CSV_PATH = Path(__file__).parent / "test_chr_parse.csv"
 WILDCARD_CSV_PATH = Path(__file__).parent / "test_chr_wildcard_parse.csv"
+
+LEXICAL_FEATURES = ["aspect_class", "prefix_class", "tense_present_class"]
+INFL_FEATURES = ["aspect", "pronominal", "tense", "translocutive"]
 
 
 def load_test_cases():
@@ -35,48 +33,35 @@ def load_test_cases():
                     (
                         row["surface"],
                         row["root"],
-                        row["pronominal"],
-                        row["prefix_class"],
-                        row["aspect"],
-                        row["aspect_class"],
+                        {f: row[f] for f in LEXICAL_FEATURES},
+                        {f: row[f] for f in INFL_FEATURES if f in row},
                     )
                 )
     return cases
 
 
-@pytest.fixture(scope="module")
-def wildcard_parse_graph():
-    # Build the inflection graph with open ended "<Phone>*" root and infer_lexical_features=True
-    inflect_graph = build_inflect_graph_for_root_regex(
-        "verb", "<Phone>*", infer_lexical_features=True
-    )
-    # Invert to build the parse graph
-    parse_graph = build_parse_graph(inflect_graph)
-    return parse_graph
-
-
 @pytest.mark.parametrize(
-    "surface,root,pronominal,prefix_class,aspect,aspect_class",
+    "surface,root,lexical,infl",
     load_test_cases(),
 )
-def test_cherokee_wildcard_parsing(
-    wildcard_parse_graph, surface, root, pronominal, prefix_class, aspect, aspect_class
-):
-    form_fsa = word_fsa(surface)
-    parse_lattice = (form_fsa @ wildcard_parse_graph).optimize()
-    output_projected = pynini.project(parse_lattice, "output").optimize()
-
+def test_cherokee_wildcard_parsing(surface, root, lexical, infl):
+    parses = parse(surface)
     # Construct the expected tag sequence
-    target_pattern = (
-        f"[BOW]{root}[EOW]"
-        f"[prefix_class={prefix_class}]"
-        f"[aspect_class={aspect_class}]"
-        f"[aspect={aspect}]"
-        f"[pronominal={pronominal}]"
+    word_parts = ["[BOW]", root, "[EOW]"]
+    word_parts.extend(
+        [
+            feature_tag(f, v)
+            for f, v in sorted(lexical.items(), key=lambda kv: kv[0])
+            if v
+        ]
     )
-    target_fsa = fsa(target_pattern)
-
-    intersected = pynini.intersect(output_projected, target_fsa).optimize()
-    assert intersected.num_states() > 0, (
-        f"Expected parse string '{target_pattern}' was not accepted by the parse lattice for surface form '{surface}'"
+    word_parts.extend(
+        [feature_tag(f, v) for f, v in sorted(infl.items(), key=lambda kv: kv[0]) if v]
     )
+    target_pattern = "".join(word_parts)
+    for p in parses:
+        if "be-at" in p and "present" in p and "completive" not in p:
+            print(p)
+    assert (
+        target_pattern in parses
+    ), f"Expected parse string '{target_pattern}' was not accepted by the parse lattice for surface form '{surface}' - num parses {len(parses)} \n {(parses[:10])}"

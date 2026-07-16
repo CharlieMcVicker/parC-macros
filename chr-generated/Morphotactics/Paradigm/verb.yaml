@@ -6,6 +6,7 @@ feature_markers:
   aspect: null
   pronominal: null
   tense: null
+  translocutive: $verb_translocutive
 contingent_markers:
 - $verb_aspect_contingent
 - $verb_pronominal_contingent
@@ -16,3 +17,4 @@ stage_order:
 - tense
 - drop_stem_initial_vowel
 - pronominal
+- trl

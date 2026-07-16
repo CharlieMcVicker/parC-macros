@@ -37,6 +37,10 @@ features:
   - assertive
   - reported
   - infinitive
+  translocutive:
+    values:
+    - +
+    optional: true
   aspect_class:
   - a
   - apl

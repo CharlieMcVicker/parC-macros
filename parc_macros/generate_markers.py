@@ -86,52 +86,77 @@ def map_csv_to_markers(csv_file):
     metadata, fieldnames, rows = parse_csv_with_metadata(csv_file)
 
     csv_class_feature = metadata.get("class_feature")
-    if not csv_class_feature:
-        raise ValueError(
-            f"Required 'class_feature' metadata is missing in CSV file: {csv_file}"
-        )
-
-    id_col = fieldnames[0]
-    feature_cols = fieldnames[1:]
 
     paradigms_markers = {}
     paradigm_names = set()
 
-    for row in rows:
-        paradigm_name = row[id_col].strip()
-        if not paradigm_name:
-            continue
-
-        paradigm_names.add(paradigm_name)
-
-        if paradigm_name not in paradigms_markers:
-            paradigms_markers[paradigm_name] = {}
-
+    if not csv_class_feature:
+        # Non-contingent (general) FeatureMarkers: columns are feature values directly.
+        # There is no paradigm column.
+        feature_cols = fieldnames
+        dummy_paradigm = ""
+        paradigms_markers[dummy_paradigm] = {}
         for col in feature_cols:
-            try:
-                val = row[col].strip()
-            except Exception as e:
-                raise KeyError(
-                    f"Column '{col}' not found in CSV file {csv_file}. Available columns: {fieldnames}"
-                ) from e
-            if val or (val == "" and metadata.get("kind") != "rule"):
-                # If kind is rule and a rule name is specified in metadata:
-                # Y means we use the rule name from metadata. N or empty means no entry.
-                if metadata.get("kind") == "rule" and "rule" in metadata:
-                    if val.upper() == "Y":
-                        val = metadata["rule"]
-                    else:
-                        # Skip N or empty
-                        continue
+            for row in rows:
+                try:
+                    val = row[col].strip()
+                except Exception as e:
+                    raise KeyError(
+                        f"Column '{col}' not found in CSV file {csv_file}. Available columns: {fieldnames}"
+                    ) from e
+                if val or (val == "" and metadata.get("kind") != "rule"):
+                    if metadata.get("kind") == "rule" and "rule" in metadata:
+                        if val.upper() == "Y":
+                            val = metadata["rule"]
+                        else:
+                            continue
+                    marker_entry = {
+                        "kind": metadata["kind"],
+                        "value": val,
+                        "stage": metadata["stage"],
+                    }
+                    if col not in paradigms_markers[dummy_paradigm]:
+                        paradigms_markers[dummy_paradigm][col] = []
+                    paradigms_markers[dummy_paradigm][col].append(marker_entry)
+    else:
+        id_col = fieldnames[0]
+        feature_cols = fieldnames[1:]
 
-                marker_entry = {
-                    "kind": metadata["kind"],
-                    "value": val,
-                    "stage": metadata["stage"],
-                }
-                if col not in paradigms_markers[paradigm_name]:
-                    paradigms_markers[paradigm_name][col] = []
-                paradigms_markers[paradigm_name][col].append(marker_entry)
+        for row in rows:
+            paradigm_name = row[id_col].strip()
+            if not paradigm_name:
+                continue
+
+            paradigm_names.add(paradigm_name)
+
+            if paradigm_name not in paradigms_markers:
+                paradigms_markers[paradigm_name] = {}
+
+            for col in feature_cols:
+                try:
+                    val = row[col].strip()
+                except Exception as e:
+                    raise KeyError(
+                        f"Column '{col}' not found in CSV file {csv_file}. Available columns: {fieldnames}"
+                    ) from e
+                if val or (val == "" and metadata.get("kind") != "rule"):
+                    # If kind is rule and a rule name is specified in metadata:
+                    # Y means we use the rule name from metadata. N or empty means no entry.
+                    if metadata.get("kind") == "rule" and "rule" in metadata:
+                        if val.upper() == "Y":
+                            val = metadata["rule"]
+                        else:
+                            # Skip N or empty
+                            continue
+
+                    marker_entry = {
+                        "kind": metadata["kind"],
+                        "value": val,
+                        "stage": metadata["stage"],
+                    }
+                    if col not in paradigms_markers[paradigm_name]:
+                        paradigms_markers[paradigm_name][col] = []
+                    paradigms_markers[paradigm_name][col].append(marker_entry)
 
     return {
         "metadata": metadata,
@@ -171,24 +196,25 @@ def reduce_csv_mappings(mapped_results):
         file_paradigms_markers = res["paradigms_markers"]
         paradigm_names = res["paradigm_names"]
 
-        if csv_class_feature not in class_features_paradigms:
-            class_features_paradigms[csv_class_feature] = set()
+        if csv_class_feature:
+            if csv_class_feature not in class_features_paradigms:
+                class_features_paradigms[csv_class_feature] = set()
 
-        for paradigm_name in paradigm_names:
-            class_features_paradigms[csv_class_feature].add(paradigm_name)
+            for paradigm_name in paradigm_names:
+                class_features_paradigms[csv_class_feature].add(paradigm_name)
 
-            if paradigm_name not in paradigms_metadata:
-                paradigms_metadata[paradigm_name] = metadata.copy()
+                if paradigm_name not in paradigms_metadata:
+                    paradigms_metadata[paradigm_name] = metadata.copy()
 
-            if paradigm_name not in paradigms_markers:
-                paradigms_markers[paradigm_name] = {}
+                if paradigm_name not in paradigms_markers:
+                    paradigms_markers[paradigm_name] = {}
 
-            # Merge markers for this paradigm from this file
-            file_markers = file_paradigms_markers.get(paradigm_name, {})
-            for col, entries in file_markers.items():
-                if col not in paradigms_markers[paradigm_name]:
-                    paradigms_markers[paradigm_name][col] = []
-                paradigms_markers[paradigm_name][col].extend(entries)
+                # Merge markers for this paradigm from this file
+                file_markers = file_paradigms_markers.get(paradigm_name, {})
+                for col, entries in file_markers.items():
+                    if col not in paradigms_markers[paradigm_name]:
+                        paradigms_markers[paradigm_name][col] = []
+                    paradigms_markers[paradigm_name][col].extend(entries)
 
     return paradigms_metadata, paradigms_markers, class_features_paradigms
 
@@ -314,6 +340,33 @@ def generate_paradigm_configs(
     print(f"Generated Paradigm: {paradigm_file}")
 
 
+def generate_standard_feature_markers(feature_name, pos_name, markers, output_dir):
+    filename_base = f"{pos_name}_{feature_name}"
+    fm_dir = os.path.join(output_dir, "Exponence", "FeatureMarkers")
+    os.makedirs(fm_dir, exist_ok=True)
+    fm_file = os.path.join(fm_dir, f"{filename_base}.yaml")
+
+    fm_content = {
+        "kind": "FeatureMarkers",
+        "feature": feature_name,
+        "markers": markers,
+    }
+
+    with open(fm_file, "w", encoding="utf-8") as f:
+        f.write("# This is a FeatureMarkers config file\n")
+        f.write("# Generated automatically from CSV\n")
+        yaml.dump(
+            fm_content,
+            f,
+            Dumper=Dumper,
+            default_flow_style=False,
+            allow_unicode=True,
+            sort_keys=False,
+        )
+    print(f"Generated FeatureMarkers: {fm_file}")
+    return f"${filename_base}"
+
+
 def generate_contingent_configs(
     mapped_results,
     pos_name,
@@ -321,11 +374,14 @@ def generate_contingent_configs(
     stage_order,
 ):
     """
-    Generates ContingentFeatureMarkers and a single unified Paradigm config
-    when use_contingent_features is enabled.
+    Generates ContingentFeatureMarkers and standard FeatureMarkers,
+    and a single unified Paradigm config when use_contingent_features is enabled.
     """
+    contingent_results = [r for r in mapped_results if r["class_feature"] is not None]
+    non_contingent_results = [r for r in mapped_results if r["class_feature"] is None]
+
     contingent_groups = {}
-    for res in mapped_results:
+    for res in contingent_results:
         cf = res["class_feature"]
         feat = res["metadata"]["feature"]
         key = (cf, feat)
@@ -374,6 +430,20 @@ def generate_contingent_configs(
         print(f"Generated ContingentFeatureMarkers: {cfm_file}")
         contingent_files.append(f"${pos_name}_{feat}_contingent")
 
+    # Generate standard FeatureMarkers for non-contingent features
+    standard_feature_refs = {}
+    for res in non_contingent_results:
+        feat = res["metadata"]["feature"]
+        markers = res["paradigms_markers"].get("", {})
+        
+        # Sort marker entries for determinism
+        sorted_markers = {}
+        for f_val in sorted(markers.keys()):
+            sorted_markers[f_val] = markers[f_val]
+            
+        ref = generate_standard_feature_markers(feat, pos_name, sorted_markers, output_dir)
+        standard_feature_refs[feat] = ref
+
     # Generate a single unified Paradigm config at Morphotactics/Paradigm/{pos_name}.yaml
     paradigm_dir = os.path.join(output_dir, "Morphotactics", "Paradigm")
     os.makedirs(paradigm_dir, exist_ok=True)
@@ -383,6 +453,10 @@ def generate_contingent_configs(
         list(set(feat for (cf, feat) in contingent_groups.keys()))
     )
     feature_markers = {feat: None for feat in features_in_contingent}
+    
+    # Merge standard non-contingent feature markers references
+    for feat, ref in standard_feature_refs.items():
+        feature_markers[feat] = ref
 
     paradigm_content = {
         "kind": "Paradigm",
@@ -477,6 +551,22 @@ def update_feature_definitions(
             for feat, vals in verb_config["features"].items():
                 fd_content["features"][feat] = vals
 
+        # Add lexical features with definitions from verb.yaml
+        if "lexical_features" in verb_config:
+            for item in verb_config["lexical_features"]:
+                if isinstance(item, dict):
+                    if len(item) == 1:
+                        feat = list(item.keys())[0]
+                        definition = item[feat]
+                        fd_content["features"][feat] = definition
+                    else:
+                        none_keys = [k for k, v in item.items() if v is None]
+                        if none_keys:
+                            feat = none_keys[0]
+                            definition = {k: v for k, v in item.items() if k != feat}
+                            fd_content["features"][feat] = definition
+
+
         # Combine only features that are dynamically updated (class features or feature acceptors)
         update_targets = set(class_features_paradigms.keys()) | set(
             feature_acceptors.keys()
@@ -485,9 +575,14 @@ def update_feature_definitions(
         for cf in update_targets:
             if cf not in fd_content["features"]:
                 fd_content["features"][cf] = []
-            cc_list = fd_content["features"][cf]
-            if not isinstance(cc_list, list):
-                cc_list = []
+            
+            is_dict = isinstance(fd_content["features"][cf], dict) and "values" in fd_content["features"][cf]
+            if is_dict:
+                cc_list = fd_content["features"][cf]["values"]
+            else:
+                cc_list = fd_content["features"][cf]
+                if not isinstance(cc_list, list):
+                    cc_list = []
 
             # Build map of existing values: name -> item (string or dict)
             existing_map = {}
@@ -514,7 +609,10 @@ def update_feature_definitions(
             for name in sorted_names:
                 new_cc_list.append(existing_map[name])
 
-            fd_content["features"][cf] = new_cc_list
+            if is_dict:
+                fd_content["features"][cf]["values"] = new_cc_list
+            else:
+                fd_content["features"][cf] = new_cc_list
 
         with open(fd_file, "w", encoding="utf-8") as f:
             f.write("# This is a FeatureDefinitions config file\n")
@@ -554,7 +652,21 @@ def generate_part_of_speech_config(output_dir, pos_name, verb_config):
         "features": list(verb_config.get("features", {}).keys()),
     }
     if "lexical_features" in verb_config:
-        pos_content["lexical_features"] = verb_config["lexical_features"]
+        simplified_lexical_features = []
+        for item in verb_config["lexical_features"]:
+            if isinstance(item, dict):
+                if len(item) == 1:
+                    simplified_lexical_features.append(list(item.keys())[0])
+                else:
+                    none_keys = [k for k, v in item.items() if v is None]
+                    if none_keys:
+                        simplified_lexical_features.append(none_keys[0])
+                    else:
+                        simplified_lexical_features.append(list(item.keys())[0])
+            else:
+                simplified_lexical_features.append(item)
+        pos_content["lexical_features"] = simplified_lexical_features
+
 
     with open(pos_file, "w", encoding="utf-8") as f:
         f.write("# This is a PartOfSpeech config file\n")

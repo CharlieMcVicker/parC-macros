@@ -6,6 +6,7 @@ features:
 - pronominal
 - aspect
 - tense
+- translocutive
 lexical_features:
 - prefix_class
 - aspect_class
