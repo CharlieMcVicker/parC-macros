@@ -23,6 +23,8 @@ features:
   - 2pl.B
   - 3sg.B
   - 3ns.B
+  - 1sg>3sg
+  - 2sg>3sg
   aspect:
   - present
   - immediate
@@ -45,9 +47,6 @@ features:
     values:
     - +
     optional: true
-  tense_present_class:
-  - a_present
-  - i_present
   prefix_class:
   - name: a_stem
     acceptor: a<Phone>*
@@ -63,6 +62,9 @@ features:
     acceptor: v<Phone>*
   - name: vowel_stem
     acceptor: <V><Phone>*
+  tense_present_class:
+  - a_present
+  - i_present
   aspect_class:
   - a
   - apl

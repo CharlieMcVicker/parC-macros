@@ -14,6 +14,10 @@ markers:
     - kind: prefix
       value: akw
       stage: pronominal
+    1sg>3sg:
+    - kind: prefix
+      value: tsiy
+      stage: pronominal
     2dl.A:
     - kind: prefix
       value: st
@@ -37,6 +41,10 @@ markers:
     2sg.B:
     - kind: prefix
       value: ts
+      stage: pronominal
+    2sg>3sg:
+    - kind: prefix
+      value: hiy
       stage: pronominal
     3ns.A:
     - kind: prefix
@@ -101,6 +109,10 @@ markers:
     - kind: prefix
       value: aki
       stage: pronominal
+    1sg>3sg:
+    - kind: prefix
+      value: tsi
+      stage: pronominal
     2dl.A:
     - kind: prefix
       value: sti
@@ -124,6 +136,10 @@ markers:
     2sg.B:
     - kind: prefix
       value: tsa
+      stage: pronominal
+    2sg>3sg:
+    - kind: prefix
+      value: hi
       stage: pronominal
     3ns.A:
     - kind: prefix
@@ -182,6 +198,10 @@ markers:
     - kind: prefix
       value: akw
       stage: pronominal
+    1sg>3sg:
+    - kind: prefix
+      value: tsiy
+      stage: pronominal
     2dl.A:
     - kind: prefix
       value: st
@@ -205,6 +225,10 @@ markers:
     2sg.B:
     - kind: prefix
       value: ts
+      stage: pronominal
+    2sg>3sg:
+    - kind: prefix
+      value: hiy
       stage: pronominal
     3ns.A:
     - kind: prefix
@@ -263,6 +287,10 @@ markers:
     - kind: prefix
       value: akw
       stage: pronominal
+    1sg>3sg:
+    - kind: prefix
+      value: tsiy
+      stage: pronominal
     2dl.A:
     - kind: prefix
       value: st
@@ -286,6 +314,10 @@ markers:
     2sg.B:
     - kind: prefix
       value: ts
+      stage: pronominal
+    2sg>3sg:
+    - kind: prefix
+      value: hiy
       stage: pronominal
     3ns.A:
     - kind: prefix
@@ -344,6 +376,10 @@ markers:
     - kind: prefix
       value: aki
       stage: pronominal
+    1sg>3sg:
+    - kind: prefix
+      value: tsi
+      stage: pronominal
     2dl.A:
     - kind: prefix
       value: sti
@@ -367,6 +403,10 @@ markers:
     2sg.B:
     - kind: prefix
       value: tsa
+      stage: pronominal
+    2sg>3sg:
+    - kind: prefix
+      value: hi
       stage: pronominal
     3ns.A:
     - kind: prefix
@@ -425,6 +465,10 @@ markers:
     - kind: prefix
       value: akw
       stage: pronominal
+    1sg>3sg:
+    - kind: prefix
+      value: tsiy
+      stage: pronominal
     2dl.A:
     - kind: prefix
       value: st
@@ -448,6 +492,10 @@ markers:
     2sg.B:
     - kind: prefix
       value: ts
+      stage: pronominal
+    2sg>3sg:
+    - kind: prefix
+      value: hiy
       stage: pronominal
     3ns.A:
     - kind: prefix
@@ -509,6 +557,10 @@ markers:
     - kind: prefix
       value: akw
       stage: pronominal
+    1sg>3sg:
+    - kind: prefix
+      value: tsiy
+      stage: pronominal
     2dl.A:
     - kind: prefix
       value: st
@@ -532,6 +584,10 @@ markers:
     2sg.B:
     - kind: prefix
       value: ts
+      stage: pronominal
+    2sg>3sg:
+    - kind: prefix
+      value: hiy
       stage: pronominal
     3ns.A:
     - kind: prefix

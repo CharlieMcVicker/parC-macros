@@ -30,6 +30,8 @@ features:
     - 2pl.B
     - 3sg.B
     - 3ns.B
+    - 1sg>3sg
+    - 2sg>3sg
   aspect:
     - present
     - immediate

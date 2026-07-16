@@ -3,11 +3,11 @@
 # feature: pronominal
 # part_of_speech: $verb
 # class_feature: prefix_class
-paradigm,1sg.A,Edl.A,Epl.A,Idl.A,Ipl.A,2sg.A,2dl.A,2pl.A,3sg.A,3ns.A,1sg.B,Edl.B,Epl.B,Idl.B,Ipl.B,2sg.B,2dl.B,2pl.B,3sg.B,3ns.B
-a_stem,k,ost,ots,in,it,h,st,its,a,an,akw,okin,ok,kin,ik,ts,st,its,u,un
-v_stem,k,ost,ots,in,it,h,st,its,k,an,akw,okin,ok,kin,ik,ts,st,its,uwa,un
-e_stem,k,ost,ots,in,it,h,st,its,"",an,akw,okin,ok,kin,ik,ts,st,its,uw,un
-k_a_stem,k,ost,ots,in,it,h,st,its,k,an,akw,okin,ok,kin,ik,ts,st,its,u,un
-vowel_stem,k,ost,ots,in,it,h,st,its,k,an,akw,okin,ok,kin,ik,ts,st,its,uw,un
-cons_stem,tsi,osti,otsi,ini,iti,hi,sti,itsi,a,ani,aki,okini,oki,kini,iki,tsa,sti,itsi,u,uni
-r_stem,tsi,osti,otsi,ini,iti,hi,sti,itsi,ka,ani,aki,okini,oki,kini,iki,tsa,sti,itsi,u,uni
+paradigm,1sg.A,Edl.A,Epl.A,Idl.A,Ipl.A,2sg.A,2dl.A,2pl.A,3sg.A,3ns.A,1sg.B,Edl.B,Epl.B,Idl.B,Ipl.B,2sg.B,2dl.B,2pl.B,3sg.B,3ns.B,1sg>3sg,2sg>3sg
+a_stem,k,ost,ots,in,it,h,st,its,a,an,akw,okin,ok,kin,ik,ts,st,its,u,un,tsiy,hiy
+v_stem,k,ost,ots,in,it,h,st,its,k,an,akw,okin,ok,kin,ik,ts,st,its,uwa,un,tsiy,hiy
+e_stem,k,ost,ots,in,it,h,st,its,"",an,akw,okin,ok,kin,ik,ts,st,its,uw,un,tsiy,hiy
+k_a_stem,k,ost,ots,in,it,h,st,its,k,an,akw,okin,ok,kin,ik,ts,st,its,u,un,tsiy,hiy
+vowel_stem,k,ost,ots,in,it,h,st,its,k,an,akw,okin,ok,kin,ik,ts,st,its,uw,un,tsiy,hiy
+cons_stem,tsi,osti,otsi,ini,iti,hi,sti,itsi,a,ani,aki,okini,oki,kini,iki,tsa,sti,itsi,u,uni,tsi,hi
+r_stem,tsi,osti,otsi,ini,iti,hi,sti,itsi,ka,ani,aki,okini,oki,kini,iki,tsa,sti,itsi,u,uni,tsi,hi
