@@ -4,5 +4,5 @@
 # feature: aspect
 # part_of_speech: $verb
 # class_feature: aspect_class
-paradigm,present,incompletive,completive,immediate,infinitive
-apl[imp2],N,N,N,Y,N
+paradigm,immediate
+apl[imp2],Y

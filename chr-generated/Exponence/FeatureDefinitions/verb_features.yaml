@@ -47,24 +47,6 @@ features:
     values:
     - +
     optional: true
-  prefix_class:
-  - name: a_stem
-    acceptor: a<Phone>*
-  - name: cons_stem
-    acceptor: <C><Phone>*
-  - name: e_stem
-    acceptor: e<Phone>*
-  - name: k_a_stem
-    acceptor: a<Phone>*
-  - name: r_stem
-    acceptor: (<Son>|<N>)<Phone>*
-  - name: v_stem
-    acceptor: v<Phone>*
-  - name: vowel_stem
-    acceptor: <V><Phone>*
-  tense_present_class:
-  - a_present
-  - i_present
   aspect_class:
   - a
   - apl
@@ -186,3 +168,21 @@ features:
     acceptor: (<Phone>*<V>)
   - name: vsk[imp2]
     acceptor: (<Phone>*<C>)
+  prefix_class:
+  - name: a_stem
+    acceptor: a<Phone>*
+  - name: cons_stem
+    acceptor: <C><Phone>*
+  - name: e_stem
+    acceptor: e<Phone>*
+  - name: k_a_stem
+    acceptor: a<Phone>*
+  - name: r_stem
+    acceptor: (<Son>|<N>)<Phone>*
+  - name: v_stem
+    acceptor: v<Phone>*
+  - name: vowel_stem
+    acceptor: <V><Phone>*
+  tense_present_class:
+  - a_present
+  - i_present

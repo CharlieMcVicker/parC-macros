@@ -84,9 +84,30 @@ def read_labels(s: str):
     labels_str = match.group(2)
 
     labels_dict = {}
-    for label_match in re.finditer(r"\[([^=]+)=([^\]]+)\]", labels_str):
-        key, value = label_match.groups()
-        labels_dict[key] = value
+    pos = 0
+    while pos < len(labels_str):
+        if labels_str[pos] != "[":
+            pos += 1
+            continue
+
+        depth = 1
+        i = pos + 1
+        while i < len(labels_str) and depth > 0:
+            if labels_str[i] == "[":
+                depth += 1
+            elif labels_str[i] == "]":
+                depth -= 1
+            i += 1
+
+        if depth != 0:
+            break
+
+        label_content = labels_str[pos + 1 : i - 1]
+        if "=" in label_content:
+            key, value = label_content.split("=", 1)
+            labels_dict[key] = value
+
+        pos = i
 
     return form, labels_dict
 

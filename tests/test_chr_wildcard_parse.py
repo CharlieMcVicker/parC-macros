@@ -60,8 +60,8 @@ def test_cherokee_wildcard_parsing(surface, root, lexical, infl):
     )
     target_pattern = "".join(word_parts)
     for p in parses:
-        if "be-at" in p and "present" in p and "completive" not in p:
-            print(p)
+        if "episodic" in p:
+            print("LOG", p)
     assert (
         target_pattern in parses
     ), f"Expected parse string '{target_pattern}' was not accepted by the parse lattice for surface form '{surface}' - num parses {len(parses)} \n {(parses[:10])}"
