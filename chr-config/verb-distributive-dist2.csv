@@ -1,0 +1,9 @@
+# kind: rule
+# rule: $insert_DIST2
+# stage: distributive
+# feature: distributive
+# part_of_speech: $verb
+# class_feature: tense
+paradigm,+
+immediate,Y
+infinitive,Y

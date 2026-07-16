@@ -400,7 +400,9 @@ def generate_contingent_configs(
     os.makedirs(cfm_dir, exist_ok=True)
 
     for (cf, feat), class_mappings in sorted(contingent_groups.items()):
-        filename = f"{pos_name}_{feat}_contingent.yaml"
+        # maybe not...
+        basename = f"{pos_name}_{feat}_{cf}_contingent"
+        filename = f"{basename}.yaml"
         cfm_file = os.path.join(cfm_dir, filename)
 
         # Sort class names and feature values to ensure deterministic output
@@ -428,20 +430,22 @@ def generate_contingent_configs(
                 sort_keys=False,
             )
         print(f"Generated ContingentFeatureMarkers: {cfm_file}")
-        contingent_files.append(f"${pos_name}_{feat}_contingent")
+        contingent_files.append(basename)
 
     # Generate standard FeatureMarkers for non-contingent features
     standard_feature_refs = {}
     for res in non_contingent_results:
         feat = res["metadata"]["feature"]
         markers = res["paradigms_markers"].get("", {})
-        
+
         # Sort marker entries for determinism
         sorted_markers = {}
         for f_val in sorted(markers.keys()):
             sorted_markers[f_val] = markers[f_val]
-            
-        ref = generate_standard_feature_markers(feat, pos_name, sorted_markers, output_dir)
+
+        ref = generate_standard_feature_markers(
+            feat, pos_name, sorted_markers, output_dir
+        )
         standard_feature_refs[feat] = ref
 
     # Generate a single unified Paradigm config at Morphotactics/Paradigm/{pos_name}.yaml
@@ -453,7 +457,7 @@ def generate_contingent_configs(
         list(set(feat for (cf, feat) in contingent_groups.keys()))
     )
     feature_markers = {feat: None for feat in features_in_contingent}
-    
+
     # Merge standard non-contingent feature markers references
     for feat, ref in standard_feature_refs.items():
         feature_markers[feat] = ref
@@ -566,7 +570,6 @@ def update_feature_definitions(
                             definition = {k: v for k, v in item.items() if k != feat}
                             fd_content["features"][feat] = definition
 
-
         # Combine only features that are dynamically updated (class features or feature acceptors)
         update_targets = set(class_features_paradigms.keys()) | set(
             feature_acceptors.keys()
@@ -575,8 +578,11 @@ def update_feature_definitions(
         for cf in update_targets:
             if cf not in fd_content["features"]:
                 fd_content["features"][cf] = []
-            
-            is_dict = isinstance(fd_content["features"][cf], dict) and "values" in fd_content["features"][cf]
+
+            is_dict = (
+                isinstance(fd_content["features"][cf], dict)
+                and "values" in fd_content["features"][cf]
+            )
             if is_dict:
                 cc_list = fd_content["features"][cf]["values"]
             else:
@@ -666,7 +672,6 @@ def generate_part_of_speech_config(output_dir, pos_name, verb_config):
             else:
                 simplified_lexical_features.append(item)
         pos_content["lexical_features"] = simplified_lexical_features
-
 
     with open(pos_file, "w", encoding="utf-8") as f:
         f.write("# This is a PartOfSpeech config file\n")

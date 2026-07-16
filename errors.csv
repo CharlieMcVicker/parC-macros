@@ -200,9 +200,6 @@ corpus_id,entry_no,definition,prediction,present,present_1sg,imperfective,perfec
 539,549,he/she is making an X,FullEventful,tatanhawhstiha,tekatanawhstiha,tatanhawhstihsko'i,tutanhawhsthanv'i,thatanhawhsta,tsutanhawhstohti
 541,551,he/she is conjuring,FullEventful,tatanhehse'a,tekatanehse'a,tatanhehsehsko'i,tutanhehsa'v'i,thatanhehsaka,tsutanhehsehsti
 542,552,he/she is accepting him/her,FullEventful,tatanilvka,tetsiyatanilvka,tatanilvko'i,tutanilvtsv'i,thiyatanilvki,tsutanilvhsti
-543,553,he/she is dodging,FullEventful,tatanvtihstiha,tekatanvtihstiha,tatanvtihstihsko'i,tutanvtihsthanv'i,thatanvtihsta,tsutanvtihstohti
-544,554,he/she is performing baptism,FullEventful,tatawo'a,tekatawo'a,tatawohsko'i,tutawo'v'i,thatawotsa,tsutawohsti
-545,555,he/she is giving up,FullEventful,tatayohska,tekatayohska,tatayohsko'i,tutayohsv'i,thatayohi,tsutayohihsti
 546,556,he/she is teaching,FullEventful,tateyhohvhska,tekateyohvhska,tateyhohvhsko'i,tuteyonhv'i,thateyhohvka,tsuteyhohti
 547,557,he/she is weeping,FullEventful,tatloyhiha,tekatloyiha,tatloyhiho'i,tutloyhilv'i,thatloyhka,tsutloyhsti
 548,558,he/she is being married,FullEventful,takatshvhstiha,tvkwatshvhstiha,takatshvhstihsko'i,takatshvhsthanv'i,witetsatshvhsta,tsakatshvhstohti
@@ -228,60 +225,29 @@ corpus_id,entry_no,definition,prediction,present,present_1sg,imperfective,perfec
 575,585,he/she is taking off his/her glasses,FullEventful,takhthinvte'a,tekakathinvte'a,takhthinvtehsko'i,tukhthinvtehsv'i,thakhthinvtaki,tsukhthinvtehsti
 576,586,he/she is putting on glasses,FullEventful,takhthinvthvhska,tekakathinvthvhska,takhthinvthvhsko'i,tukhthinvthanv'i,thakhthinvthvka,tsukhthinvthti
 577,587,he/she is shelling corn,FullEventful,takhtlhiha,tetsikatlhiha,takhtlhihsko'i,tukhtlhvhv'i,thikhtlha,tsukhtlhvhti
-578,588,he/she is snoring,FullEventful,takwhalaki'a,tetsikwhalaki'a,takwhalakihsko'i,tukwhalakihsv'i,thikwhalaki,tsukwhalakihsti
 579,589,he/she is sprinkling it (with a liquid‚ powder‚ salt‚ etc.),FullEventful,takwhayo'vhska,tetsikwhayo'vhska,takwhayo'vhsko'i,tukwhayonv'i,thikwhayo'vka,tsukwhakoti
-582,592,he/she is putting on shoes,FullEventful,talahsulhvhska,tekalahsulhvhska,talahsulhvhsko'i,tulahsulhanv'i,thalahsulhvka,tsulahsulhti
-583,593,he/she is changing shoes,FullEventful,talahsula'iyv'a,tekalahsula'iyv'a,talahsula'iyvhsko'i,tulahsula'iyvhsv'i,thalahsula'iyvna,tsulahsula'iyvhsti
-584,594,he/she is taking off his/her shoes,FullEventful,talahsule'a,tekalahsule'a,talahsulehsko'i,tulahsulehsv'i,thalahsulaki,tsulahsulehsti
 585,595,he/she is helping him/her up,FullEventful,talehtiha,tetsiyaletiha,talehtihsko'i,tulehthanv'i,thiyaleta,tsulehtohti
 586,596,he/she is recuperating,FullEventful,talehihsiha,tekale'ihsiha,talehihsihsko'i,tulehihsanhv'i,thalehihsa,tsulehihsohti
 587,597,he/she is getting up (from sitting or from involuntarily assumed prone position),FullEventful,talehvhska,tekale'vhska,talehvhsko'i,tulenhv'i,thalehvka,tsulehti
-589,599,he/she is taking off his/her gloves,FullEventful,taliyehsule'a,tekaliyehsule'a,taliyehsulehsko'i,tuliyehsulehsv'i,thaliyehsulaki,tsuliyehsulehsti
-590,600,he/she is putting on his/her gloves,FullEventful,taliyehsuli'a,tekaliyehsuli'a,taliyehsulihsko'i,tuliyehsulanv'i,thaliyehsulvka,tsuliyehsuloti
-591,601,he/she is taking off his/her socks,FullEventful,taliyoki'a,tekaliyoki'a,taliyokihsko'i,tuliyokihsv'i,thaliyoki,tsuliyokihsti
 592,602,he/she is putting on his/her socks,FullEventful,taliyohiha,tekaliyo'iha,taliyohiho'i,tuliyolhv'i,thaliyoka,tsuliyohsti
-593,603,he/she is changing his/her socks,FullEventful,taliyohsiha,tekaliyohsiha,taliyohsiho'i,tuliyohsvhv'i,thaliyohsa,tsuliyohsvhti
 594,604,he/she is aiming at him/her,FullEventful,talhsohstiha,tetsiyalihsohstiha,talhsohstihsko'i,tulhsohsthanv'i,thiyalihsohsta,tsulhsohstohti
-596,606,they are having a trial,FullEventful,tanatahi'litoha,totsatahi'litoha,tanatahi'litoho'i,tunatahi'litolv'i,titsatahi'lita,tsunatahi'litahsti
-597,607,they are meeting,FullEventful,tanatlohska,totsatlohska,tanatlohsko'i,tunatlohsv'i,titsatlohi,tsunatlohihsti
-598,608,they are separating,FullEventful,tanakaleniha,tohstakaleniha,tanakalenihsko'i,tunakalenvhv'i,tihstakalena,tsunakalenhti
 599,609,he/she is playing with him/her,FullEventful,tanelhtiha,tetsiyanelhtiha,tanelhtihsko'i,tunelhthanv'i,thiyanelhta,tsunelhtohti
 600,610,he/she is playing,FullEventful,tanelohvhska,tekanelohvhska,tanelohvhsko'i,tunelonhv'i,thanelohvka,tsunelhti
-601,611,they’re having church services,FullEventful,tanilawika,totsilawika,tanilawiko'i,tunilawitsv'i,titsilawiki,tsunilawihsti
-603,613,they are adjourning,FullEventful,taniyelihska,totsiyelihska,taniyelihsko'i,tuniyelihsv'i,titsiyelihi,tsuniyelihihsti
-604,614,he/she is shooting at him/her,FullEventful,tahstayohiha,tetsihstayohiha,tahstayohiho'i,tuhstayolhv'i,thihstayoha,tsuhstayohsti
-605,615,he/she is splitting it,FullEventful,tahstluhska,tetsihstluhska,tahstluhsko'i,tuhstluyhv'i,thihstluyha,tsuhstluhsti
-606,616,he/she is sprinkling it (with liquid),FullEventful,tahstutli'a,tetsihstutli'a,tahstutlihsko'i,tuhstutlv'i,thihstutla,tsuhstutlihsti
-607,617,he/she is counting it,FullEventful,tahsehiha,tekahsehiha,tahsehiho'i,tuhselhv'i,thahseka,tsuhsehsti
-608,618,he/she is cursing him/her,FullEventful,tahskinati'a,tetsihskinati'a,tahskinatihsko'i,tuhskinatv'i,thihskinata,tsuhskinatihsti
-609,619,he/she is clapping his/her hands,FullEventful,tahsihthvniha,tekahsihthvniha,tahsihthvniho'i,tuhsihthvnilv'i,thahsihthvnika,tsuhsihthvnihsti
-610,620,he/she is getting exhausted,FullEventful,tahsthayehska,tekahsthayehska,tahsthayehsko'i,tuhsthayehsv'i,thahsthayehi,tsuhsthayehihsti
-611,621,it’s barking,FullEventful,tahsuwhihska,tekahsuwhihska,tahsuwhihsko'i,tuhsuwhihsv'i,thahsuwha,tsuhsuwhihsti
-612,622,he/she is scheduling a time,FullEventful,tahsvhstiha,tetsihsvhstiha,tahsvhstihsko'i,tuhsvhsthanv'i,thihsvhsta,tsuhsvhstohti
 613,623,he/she is ironing,FullEventful,tathehska,tetsithehska,tathehsko'i,tuthehsv'i,thithvla,tsuthehsti
-618,628,he/she is releasing him/her,FullEventful,tayohska,tetsiyohska,tayohsko'i,tuyohsv'i,thiyohi,tsuyohihsti
-620,631,he/she is slamming him/her,FullEventful,tekalvtvnihstiha,tetsilvtvnihstiha,tekalvtvnihstihsko'i,tulvtvnihsthanv'i,thilvtvnihsta,tsulvtvnihstohti
 621,632,he/she is crossing (refers to a road‚ bridge‚ etc.),FullEventful,tekanatiwhska,tetsinatiwhska,tekanatiwhsko'i,tunatiwhsv'i,thinatiwhi,tsunatiwhihsti
 622,633,he/she is advertising it,FullEventful,tekanotsalhvhska,tetsinotsa'lvhska,tekanotsalhvhsko'i,tunotsalhanv'i,thinotsalhvka,tsunotsalhti
 623,634,he/she is crossing it (refers to a body of water),FullEventful,tekahsohka,tetsihsohka,tekahsohko'i,tuwahsohtsv'i,thihsohki,tsuwahsohihsti
 624,635,he/she is enduring it (idiom),FullEventful,tekethvhska,teke'tvhska,tekethvhsko'i,tuwethinv'i,thethvka,tsuwethti
-625,636,he/she is explaining it (refers to a Biblical text),FullEventful,tekohsihsiha,tekohsihsiha,tekohsihsihsko'i,tuwohsihsanhv'i,thohsihsa,tsuwohsihsohti
 626,637,he/she is deciding,FullEventful,tekukhtiha,tekukotiha,tekukhtihsko'i,tuwukhthanv'i,thukhta,tsuwukhtohti
-627,638,he/she is washing (refers to dishes),FullEventful,tekvtiye'a,tekvtiye'a,tekvtiyehsko'i,tuwatiye'v'i,thvtiya,tsuwatiyeti
-628,639,he/she is shelling (refers to peas‚ nut meats‚ etc),FullEventful,tekvthohi'a,tekvthohi'a,tekvthohihsko'i,tuwvthohihsv'i,thvthohi,tsuwvthohihsti
 630,641,he/she is turning him/her over,FullEventful,tekhalihkwateka,tetsilihkwateka,tekhalihkwateko'i,tulhihkwatinvhsv'i,thilihkwatuka,tsulhihkwatinvti
 631,642,he/she is singing,FullEventful,tekhanoki'a,tetsinoki'a,tekhanokihsko'i,tunhokihsv'i,thinhoki,tsunhokihsti
 632,643,he/she is clawing him/her,FullEventful,tekhanukohska,tetsinukohska,tekhanukohsko'i,tunhukohsv'i,thinukola,tsunhukohsti
 634,645,he/she is washing (refers to flexible objects including clothes),FullEventful,tekhkilo'a,tekvkilo'a,tekhkilohsko'i,tuhkilo'v'i,thvhkilotsa,tsuhkilohsti
-722,740,he/she is confronted with it,FullEventful,tutlohska,takwatlohska,tutlohsko'i,tutlohsv'i,titsatlohi,tsutlohihsti
 723,741,he/she is called,FullEventful,tuto'a,takwato'a,tuto'o'i,tuto'v'i,tetsato'ehsti,tsutohsti
 723,741,he/she is called,FullStative,tuto'a,takwato'a,tuto'o'i,tuto'v'i,tetsato'ehsti,tsutohsti
 723,741,he/she is called,InfEventful,tuto'a,takwato'a,tuto'o'i,tuto'v'i,tetsato'ehsti,tsutohsti
-724,742,he/she is staggering,FullEventful,tutokhtiha,takwatokhtiha,tutokhtihsko'i,tutokhthanv'i,titsatokhta,tsutokhtohti
-725,743,he/she is getting a rash,FullEventful,tukwenothihska,takikwenothihska,tukwenothihsko'i,tukwenothihsv'i,titsakwenothihi,tsukwenothihsti
 726,744,he/she has horns,FullStative,tulhka,takilhka,tulhko'i,tulhkv'i,tetsalhkehsti,
 727,745,he/she is sneezing,FullEventful,tuyhvhstoyhska,takhiyvhstoyhska,tuyhvhstoyhsko'i,tuyhvhstoyhv'i,titshayvhstoyha,tsuyhvhstoyhsti
-728,746,he/she is vomiting,FullEventful,tukhstiha,takikhstiha,tukhstihsko'i,tukhsthanv'i,titsakhsta,tsukhstohti
 729,747,he/she is wearing glasses,FullStative,tukhthinvtha,takwakhthinvtha,tukhthinvtho'i,tukhthinvthv'i,tetsakhthinvthehsti,tsukhthinvthti
 729,747,he/she is wearing glasses,InfEventful,tukhthinvtha,takwakhthinvtha,tukhthinvtho'i,tukhthinvthv'i,tetsakhthinvthehsti,tsukhthinvthti
 730,748,he/she is wearing shoes,FullStative,tulahsulha,takwalahsulha,tulahsulho'i,tulahsulhv'i,tetsalahsulhehsti,
@@ -289,9 +255,6 @@ corpus_id,entry_no,definition,prediction,present,present_1sg,imperfective,perfec
 733,751,he/she is wearing socks,FullStative,tuliyoha,takwaliyoha,tuliyoho'i,tuliyohv'i,tetsaliyohehsti,
 735,753,he/she is working,FullEventful,tulvwhihstaneha,takilvwhihstaneha,tulvwhihstaneho'i,tulvwhihstanelv'i,titsalvwhihstahsi,tsulvwhihstanehti
 737,755,he/she is making footsteps,FullEventful,tuhstanoyhvhka,takwahstanoyhvhka,tuhstanoyhvhko'i,tuhstanoyhvhkv'i,titsahstanoyhvla,tsuhstanoyhvlhihsti
-738,756,he/she is releasing it (refers to involuntarily releasing),FullEventful,tuhskalehstiha,takwahskalehstiha,tuhskalehstihsko'i,tuhskalehsthanv'i,titsahskalehsta,tsuhskalehstohti
-739,757,he/she is tired,FullEventful,tuyaweka,takiyaweka,tuyaweko'i,tuyawetsv'i,titsayaweki,tsuyawehsti
-740,758,he/she is releasing it (refers to voluntarily releasing),FullEventful,tuyohska,takiyohska,tuyohsko'i,tuyohsv'i,titsayohi,tsuyohihsti
 743,766,he/she is going,FullEventful,eka,keka,eko'i,uwenvhsv'i,hena,uwenvhsti
 746,769,he/she lives,FullEventful,eha,ke'a,eho'i,,hehehsti,
 746,769,he/she lives,FullStative,eha,ke'a,eho'i,,hehehsti,

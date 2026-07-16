@@ -8,7 +8,8 @@ LEXICAL_FEATURES = {
     "aspect_class",
     "prefix_class",
     "tense_present_class",
-    "translocutive",
+    "translocutive",  # for dictionary purposes
+    "distributive",  # for dictionary purposes
 }
 
 

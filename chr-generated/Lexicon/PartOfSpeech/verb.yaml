@@ -7,6 +7,7 @@ features:
 - aspect
 - tense
 - translocutive
+- distributive
 lexical_features:
 - prefix_class
 - aspect_class

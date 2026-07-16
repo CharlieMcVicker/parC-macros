@@ -4,6 +4,7 @@ stages:
   - tense
   - drop_stem_initial_vowel
   - pronominal
+  - distributive
   - trl
 
 # Inflectional Features (originally from verb_features.yaml)
@@ -44,6 +45,9 @@ features:
     - reported
     - infinitive
   translocutive:
+    values: [+]
+    optional: true
+  distributive:
     values: [+]
     optional: true
 

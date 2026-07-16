@@ -2,34 +2,78 @@
 # Define context-sensitive phonological rules.
 kind: Rules
 rules:
-  - name: add_wi_WI
+  - name: add_DI
     description: >
-      add WI wi token where it will be inserted
+      add DI de token where it will be inserted
     string_map:
-      - ["", "[WI]"]
+      - ["", "[DI]"]
     left_context: "#"
-    right_context: "{^[WI]}"
+    right_context: "{^[DI]}"
 
-  - name: insert_wi_v_h
+  - name: insert_DIST1_pre_i
     description: >
-      insert wi material before h/<V>
+      insert t before most vowels
     string_map:
-      - ["[WI]", "w"]
-    right_context: "<V>|h"
+      - ["[DI]i", "te"]
 
-  - name: insert_wi_default
+  - name: insert_DIST1_pre_v
     description: >
-      insert wi material before other sounds
+      insert t before most vowels
     string_map:
-      - ["[WI]", "wi"]
+      - ["[DI]", "t"]
+    right_context: "<V>"
 
-  - name: insert_wi
+  - name: insert_DIST1_default
+    description: >
+      insert te material before other sounds
+    string_map:
+      - ["[DI]", "te"]
+
+  - name: insert_DIST1
     description: >
       fix wi before h and vowels
     rule_sequence:
-      - $add_wi_WI
-      - $insert_wi_v_h
-      - $insert_wi_default
+      - $add_DI
+      - $insert_DIST1_pre_i
+      - $insert_DIST1_pre_v
+      - $insert_DIST1_default
+
+  - name: insert_DIST2_pre_a_i
+    description: >
+      insert ti before i/a (eats vowel)
+    string_map:
+      - ["[DI]i", "ti"]
+      - ["[DI]a", "ti"]
+
+  - name: insert_DIST2_pre_v
+    description: >
+      insert ts before most vowels
+    string_map:
+      - ["[DI]", "ts"]
+    right_context: "<V>"
+
+  - name: insert_DIST2_pre_h
+    description: >
+      insert t before h
+    string_map:
+      - ["[DI]", "t"]
+    right_context: "h"
+
+  - name: insert_DIST2_default
+    description: >
+      insert ti material before other sounds
+    string_map:
+      - ["[DI]", "ti"]
+
+  - name: insert_DIST2
+    description: >
+      fix wi before h and vowels
+    rule_sequence:
+      - $add_DI
+      - $insert_DIST2_pre_a_i
+      - $insert_DIST2_pre_v
+      - $insert_DIST2_pre_h
+      - $insert_DIST2_default
 
 ### HELP FOR RULES ###
 # Here we define context-sensitive phonological rules

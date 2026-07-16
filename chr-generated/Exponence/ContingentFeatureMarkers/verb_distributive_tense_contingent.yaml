@@ -1,0 +1,42 @@
+# This is a ContingentFeatureMarkers config file
+# Generated automatically from CSVs
+kind: ContingentFeatureMarkers
+features:
+- tense
+- distributive
+markers:
+  assertive:
+    +:
+    - kind: rule
+      value: $insert_DIST1
+      stage: distributive
+  future_prog:
+    +:
+    - kind: rule
+      value: $insert_DIST1
+      stage: distributive
+  habitual:
+    +:
+    - kind: rule
+      value: $insert_DIST1
+      stage: distributive
+  immediate:
+    +:
+    - kind: rule
+      value: $insert_DIST2
+      stage: distributive
+  infinitive:
+    +:
+    - kind: rule
+      value: $insert_DIST2
+      stage: distributive
+  present:
+    +:
+    - kind: rule
+      value: $insert_DIST1
+      stage: distributive
+  reported:
+    +:
+    - kind: rule
+      value: $insert_DIST1
+      stage: distributive

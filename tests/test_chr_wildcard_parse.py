@@ -15,7 +15,7 @@ CSV_PATH = Path(__file__).parent / "test_chr_parse.csv"
 WILDCARD_CSV_PATH = Path(__file__).parent / "test_chr_wildcard_parse.csv"
 
 LEXICAL_FEATURES = ["aspect_class", "prefix_class", "tense_present_class"]
-INFL_FEATURES = ["aspect", "pronominal", "tense", "translocutive"]
+INFL_FEATURES = ["aspect", "pronominal", "tense", "translocutive", "distributive"]
 
 
 def load_test_cases():
