@@ -6,7 +6,7 @@ markers:
   +:
   - kind: rule
     value: $insert_DIST
-    stage: insert_dist
+    stage: insert_DIST
   - kind: rule
     value: $insert_WI
     stage: insert_wi

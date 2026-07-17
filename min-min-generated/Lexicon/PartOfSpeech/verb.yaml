@@ -3,9 +3,7 @@
 kind: PartOfSpeech
 name: verb
 features:
-- pronominal
 - tense
 - rules
 lexical_features:
-- prefix_class
 - tense_present_class
