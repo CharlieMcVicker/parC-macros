@@ -41,9 +41,6 @@ features:
   - incompletive
   - completive
   - infinitive
-  tense_present_class:
-  - a_present
-  - i_present
   prefix_class:
   - name: a_stem
     acceptor: <Morpheme>*a<Phone>*<Morpheme>*
@@ -59,6 +56,9 @@ features:
     acceptor: <Morpheme>*v<Phone>*<Morpheme>*
   - name: vowel_stem
     acceptor: <Morpheme>*<V><Phone>*<Morpheme>*
+  tense_present_class:
+  - a_present
+  - i_present
   aspect_class:
   - a
   - apl

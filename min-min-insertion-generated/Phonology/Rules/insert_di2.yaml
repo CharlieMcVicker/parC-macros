@@ -6,11 +6,20 @@ rules:
   string_map:
   - - '[DIST]a'
     - ti
-- name: insert_dist2_v_h
+- name: insert_dist2_i
+  string_map:
+  - - '[DIST]i'
+    - ti
+- name: insert_dist2_h
   string_map:
   - - '[DIST]'
     - t
-  right_context: <V>|h
+  right_context: h
+- name: insert_dist2_v
+  string_map:
+  - - '[DIST]'
+    - ts
+  right_context: <V>
 - name: insert_dist2_default
   string_map:
   - - '[DIST]'
@@ -18,5 +27,7 @@ rules:
 - name: insert_DIST2
   rule_sequence:
   - $insert_dist2_a
-  - $insert_dist2_v_h
+  - $insert_dist2_i
+  - $insert_dist2_h
+  - $insert_dist2_v
   - $insert_dist2_default

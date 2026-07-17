@@ -166,10 +166,6 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 531,538,he/she is taking it somewhere (refers to a long object),ayvwhitiha,tsiyvwitiha,ayvwhitisko'i,uyvwhitvhv'i,hiyvwhita,uyvwhithti
 539,549,he/she is making an X,tatanhawhstiha,tekatanawhstiha,tatanhawhstisko'i,tutanhawhsthanv'i,thatanhawhsta,tsutanhawhstohti
 541,551,he/she is conjuring,tatanhese'a,tekatanese'a,tatanhesesko'i,tutanhesa'v'i,thatanhesaka,tsutanhesesti
-542,552,he/she is accepting him/her,tatanilvka,tetsiyatanilvka,tatanilvko'i,tutanilvtsv'i,thiyatanilvki,tsutanilvsti
-543,553,he/she is dodging,tatanvtistiha,tekatanvtistiha,tatanvtistisko'i,tutanvtisthanv'i,thatanvtista,tsutanvtistohti
-544,554,he/she is performing baptism,tatawo'a,tekatawo'a,tatawosko'i,tutawo'v'i,thatawotsa,tsutawosti
-545,555,he/she is giving up,tatayoska,tekatayoska,tatayosko'i,tutayosv'i,thatayohi,tsutayohisti
 546,556,he/she is teaching,tateyhohvska,tekateyohvska,tateyhohvsko'i,tuteyonhv'i,thateyhohvka,tsuteyhohti
 547,557,he/she is weeping,tatloyhiha,tekatloyiha,tatloyhiho'i,tutloyhilv'i,thatloyhka,tsutloyhsti
 548,558,he/she is being married,takatshvstiha,tvkwatshvstiha,takatshvstisko'i,takatshvsthanv'i,witetsatshvsta,tsakatshvstohti
@@ -195,67 +191,30 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 575,585,he/she is taking off his/her glasses,takhthinvte'a,tekakathinvte'a,takhthinvtesko'i,tukhthinvtesv'i,thakhthinvtaki,tsukhthinvtesti
 576,586,he/she is putting on glasses,takhthinvthvska,tekakathinvthvska,takhthinvthvsko'i,tukhthinvthanv'i,thakhthinvthvka,tsukhthinvthti
 577,587,he/she is shelling corn,takhtlhiha,tetsikatlhiha,takhtlhisko'i,tukhtlhvhv'i,thikhtlha,tsukhtlhvhti
-578,588,he/she is snoring,takwhalaki'a,tetsikwhalaki'a,takwhalakisko'i,tukwhalakisv'i,thikwhalaki,tsukwhalakisti
 579,589,he/she is sprinkling it (with a liquid‚ powder‚ salt‚ etc.),takwhayo'vska,tetsikwhayo'vska,takwhayo'vsko'i,tukwhayonv'i,thikwhayo'vka,tsukwhakoti
-582,592,he/she is putting on shoes,talasulhvska,tekalasulhvska,talasulhvsko'i,tulasulhanv'i,thalasulhvka,tsulasulhti
-583,593,he/she is changing shoes,talasula'iyv'a,tekalasula'iyv'a,talasula'iyvsko'i,tulasula'iyvsv'i,thalasula'iyvna,tsulasula'iyvsti
-584,594,he/she is taking off his/her shoes,talasule'a,tekalasule'a,talasulesko'i,tulasulesv'i,thalasulaki,tsulasulesti
 585,595,he/she is helping him/her up,talehtiha,tetsiyaletiha,talehtisko'i,tulehthanv'i,thiyaleta,tsulehtohti
 586,596,he/she is recuperating,talehisiha,tekale'isiha,talehisisko'i,tulehisanhv'i,thalehisa,tsulehisohti
 587,597,he/she is getting up (from sitting or from involuntarily assumed prone position),talehvska,tekale'vska,talehvsko'i,tulenhv'i,thalehvka,tsulehti
-589,599,he/she is taking off his/her gloves,taliyesule'a,tekaliyesule'a,taliyesulesko'i,tuliyesulesv'i,thaliyesulaki,tsuliyesulesti
-590,600,he/she is putting on his/her gloves,taliyesuli'a,tekaliyesuli'a,taliyesulisko'i,tuliyesulanv'i,thaliyesulvka,tsuliyesuloti
-591,601,he/she is taking off his/her socks,taliyoki'a,tekaliyoki'a,taliyokisko'i,tuliyokisv'i,thaliyoki,tsuliyokisti
 592,602,he/she is putting on his/her socks,taliyohiha,tekaliyo'iha,taliyohiho'i,tuliyolhv'i,thaliyoka,tsuliyosti
-593,603,he/she is changing his/her socks,taliyosiha,tekaliyosiha,taliyosiho'i,tuliyosvhv'i,thaliyosa,tsuliyosvhti
 594,604,he/she is aiming at him/her,talhsostiha,tetsiyalisostiha,talhsostisko'i,tulhsosthanv'i,thiyalisosta,tsulhsostohti
-596,606,they are having a trial,tanatahi'litoha,totsatahi'litoha,tanatahi'litoho'i,tunatahi'litolv'i,titsatahi'lita,tsunatahi'litasti
-597,607,they are meeting,tanatloska,totsatloska,tanatlosko'i,tunatlosv'i,titsatlohi,tsunatlohisti
-598,608,they are separating,tanakaleniha,tostakaleniha,tanakalenisko'i,tunakalenvhv'i,tistakalena,tsunakalenhti
-599,609,he/she is playing with him/her,tanelhtiha,tetsiyanelhtiha,tanelhtisko'i,tunelhthanv'i,thiyanelhta,tsunelhtohti
-600,610,he/she is playing,tanelohvska,tekanelohvska,tanelohvsko'i,tunelonhv'i,thanelohvka,tsunelhti
-601,611,they’re having church services,tanilawika,totsilawika,tanilawiko'i,tunilawitsv'i,titsilawiki,tsunilawisti
-603,613,they are adjourning,taniyeliska,totsiyeliska,taniyelisko'i,tuniyelisv'i,titsiyelihi,tsuniyelihisti
-604,614,he/she is shooting at him/her,tastayohiha,tetsistayohiha,tastayohiho'i,tustayolhv'i,thistayoha,tsustayosti
-605,615,he/she is splitting it,tastluska,tetsistluska,tastlusko'i,tustluyhv'i,thistluyha,tsustlusti
-606,616,he/she is sprinkling it (with liquid),tastutli'a,tetsistutli'a,tastutlisko'i,tustutlv'i,thistutla,tsustutlisti
-607,617,he/she is counting it,tasehiha,tekasehiha,tasehiho'i,tuselhv'i,thaseka,tsusesti
-608,618,he/she is cursing him/her,taskinati'a,tetsiskinati'a,taskinatisko'i,tuskinatv'i,thiskinata,tsuskinatisti
-609,619,he/she is clapping his/her hands,tasihthvniha,tekasihthvniha,tasihthvniho'i,tusihthvnilv'i,thasihthvnika,tsusihthvnisti
-610,620,he/she is getting exhausted,tasthayeska,tekasthayeska,tasthayesko'i,tusthayesv'i,thasthayehi,tsusthayehisti
-611,621,it’s barking,tasuwhiska,tekasuwhiska,tasuwhisko'i,tusuwhisv'i,thasuwha,tsusuwhisti
-612,622,he/she is scheduling a time,tasvstiha,tetsisvstiha,tasvstisko'i,tusvsthanv'i,thisvsta,tsusvstohti
 613,623,he/she is ironing,tatheska,tetsitheska,tathesko'i,tuthesv'i,thithvla,tsuthesti
-618,628,he/she is releasing him/her,tayoska,tetsiyoska,tayosko'i,tuyosv'i,thiyohi,tsuyohisti
-620,631,he/she is slamming him/her,tekalvtvnistiha,tetsilvtvnistiha,tekalvtvnistisko'i,tulvtvnisthanv'i,thilvtvnista,tsulvtvnistohti
 621,632,he/she is crossing (refers to a road‚ bridge‚ etc.),tekanatiwhska,tetsinatiwhska,tekanatiwhsko'i,tunatiwhsv'i,thinatiwhi,tsunatiwhisti
 622,633,he/she is advertising it,tekanotsalhvska,tetsinotsa'lvska,tekanotsalhvsko'i,tunotsalhanv'i,thinotsalhvka,tsunotsalhti
 623,634,he/she is crossing it (refers to a body of water),tekasohka,tetsisohka,tekasohko'i,tuwasohtsv'i,thisohki,tsuwasohisti
 624,635,he/she is enduring it (idiom),tekethvska,teke'tvska,tekethvsko'i,tuwethinv'i,thethvka,tsuwethti
-625,636,he/she is explaining it (refers to a Biblical text),tekosisiha,tekosisiha,tekosisisko'i,tuwosisanhv'i,thosisa,tsuwosisohti
 626,637,he/she is deciding,tekukhtiha,tekukotiha,tekukhtisko'i,tuwukhthanv'i,thukhta,tsuwukhtohti
-627,638,he/she is washing (refers to dishes),tekvtiye'a,tekvtiye'a,tekvtiyesko'i,tuwatiye'v'i,thvtiya,tsuwatiyeti
-628,639,he/she is shelling (refers to peas‚ nut meats‚ etc),tekvthohi'a,tekvthohi'a,tekvthohisko'i,tuwvthohisv'i,thvthohi,tsuwvthohisti
 630,641,he/she is turning him/her over,tekhalihkwateka,tetsilihkwateka,tekhalihkwateko'i,tulhihkwatinvsv'i,thilihkwatuka,tsulhihkwatinvti
 631,642,he/she is singing,tekhanoki'a,tetsinoki'a,tekhanokisko'i,tunhokisv'i,thinhoki,tsunhokisti
 632,643,he/she is clawing him/her,tekhanukoska,tetsinukoska,tekhanukosko'i,tunhukosv'i,thinukola,tsunhukosti
 634,645,he/she is washing (refers to flexible objects including clothes),tekhkilo'a,tekvkilo'a,tekhkilosko'i,tuhkilo'v'i,thvhkilotsa,tsuhkilosti
-722,740,he/she is confronted with it,tutloska,takwatloska,tutlosko'i,tutlosv'i,titsatlohi,tsutlohisti
 723,741,he/she is called,tuto'a,takwato'a,tuto'o'i,tuto'v'i,tetsato'esti,tsutosti
-724,742,he/she is staggering,tutokhtiha,takwatokhtiha,tutokhtisko'i,tutokhthanv'i,titsatokhta,tsutokhtohti
-725,743,he/she is getting a rash,tukwenothiska,takikwenothiska,tukwenothisko'i,tukwenothisv'i,titsakwenothihi,tsukwenothisti
 726,744,he/she has horns,tulhka,takilhka,tulhko'i,tulhkv'i,tetsalhkesti,
 727,745,he/she is sneezing,tuyhvstoyhska,takhiyvstoyhska,tuyhvstoyhsko'i,tuyhvstoyhv'i,titshayvstoyha,tsuyhvstoyhsti
-728,746,he/she is vomiting,tukhstiha,takikhstiha,tukhstisko'i,tukhsthanv'i,titsakhsta,tsukhstohti
 729,747,he/she is wearing glasses,tukhthinvtha,takwakhthinvtha,tukhthinvtho'i,tukhthinvthv'i,tetsakhthinvthesti,tsukhthinvthti
 730,748,he/she is wearing shoes,tulasulha,takwalasulha,tulasulho'i,tulasulhv'i,tetsalasulhesti,
 732,750,he/she is wearing gloves,tuliyesula,takwaliyesula,tuliyesulo'i,tuliyesulv'i,thaliyesulvka,tsuliyesuloti
 733,751,he/she is wearing socks,tuliyoha,takwaliyoha,tuliyoho'i,tuliyohv'i,tetsaliyohesti,
-735,753,he/she is working,tulvwhistaneha,takilvwhistaneha,tulvwhistaneho'i,tulvwhistanelv'i,titsalvwhistasi,tsulvwhistanehti
 737,755,he/she is making footsteps,tustanoyhvhka,takwastanoyhvhka,tustanoyhvhko'i,tustanoyhvhkv'i,titsastanoyhvla,tsustanoyhvlhisti
-738,756,he/she is releasing it (refers to involuntarily releasing),tuskalestiha,takwaskalestiha,tuskalestisko'i,tuskalesthanv'i,titsaskalesta,tsuskalestohti
-739,757,he/she is tired,tuyaweka,takiyaweka,tuyaweko'i,tuyawetsv'i,titsayaweki,tsuyawesti
-740,758,he/she is releasing it (refers to voluntarily releasing),tuyoska,takiyoska,tuyosko'i,tuyosv'i,titsayohi,tsuyohisti
 743,766,he/she is going,eka,keka,eko'i,uwenvsv'i,hena,uwenvsti
 746,769,he/she lives,eha,ke'a,eho'i,,hehesti,
 757,787,he/she is straightening it,katshinosiha,tsitshinosiha,katshinosisko'i,uwatshinosanhv'i,hitshinosa,uwatshinosohti

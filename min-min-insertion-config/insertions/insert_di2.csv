@@ -2,5 +2,7 @@
 # rule: insert_DIST2
 tag,rule_name,l_context,r_context,content
 [DIST]a,insert_dist2_a,,,ti
-[DIST],insert_dist2_v_h,,"<V>|h",t
+[DIST]i,insert_dist2_i,,,ti
+[DIST],insert_dist2_h,,"h",t
+[DIST],insert_dist2_v,,"<V>",ts
 [DIST],insert_dist2_default,,,ti
