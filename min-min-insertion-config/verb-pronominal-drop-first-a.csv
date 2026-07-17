@@ -1,0 +1,8 @@
+# kind: rule
+# stage: drop_stem_initial_vowel
+# rule: $drop_stem_initial_a
+# feature: pronominal
+# part_of_speech: $verb
+# class_feature: prefix_class
+paradigm,3sg.A,3sg.B
+a_stem,Y,Y

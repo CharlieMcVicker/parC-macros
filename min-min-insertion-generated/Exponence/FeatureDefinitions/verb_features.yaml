@@ -35,6 +35,9 @@ features:
   - 2sg>3sg
   rules:
   - +
+  tense_present_class:
+  - a_present
+  - i_present
   prefix_class:
   - name: a_stem
     acceptor: <Morpheme>*a<Phone>*
@@ -50,6 +53,3 @@ features:
     acceptor: <Morpheme>*v<Phone>*
   - name: vowel_stem
     acceptor: <Morpheme>*<V><Phone>*
-  tense_present_class:
-  - a_present
-  - i_present

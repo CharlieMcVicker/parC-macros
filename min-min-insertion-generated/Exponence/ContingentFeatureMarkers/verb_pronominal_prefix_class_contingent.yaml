@@ -58,10 +58,16 @@ markers:
     - kind: rule
       value: $pro_a
       stage: pronominal
+    - kind: rule
+      value: $drop_stem_initial_a
+      stage: drop_stem_initial_vowel
     3sg.B:
     - kind: rule
       value: $pro_u
       stage: pronominal
+    - kind: rule
+      value: $drop_stem_initial_a
+      stage: drop_stem_initial_vowel
     Edl.A:
     - kind: rule
       value: $pro_ost
@@ -507,6 +513,9 @@ markers:
     - kind: rule
       value: $pro_uwa
       stage: pronominal
+    - kind: rule
+      value: $drop_stem_initial_v
+      stage: drop_stem_initial_vowel
     Edl.A:
     - kind: rule
       value: $pro_ost
