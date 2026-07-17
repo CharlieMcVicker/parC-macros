@@ -6,6 +6,8 @@ features:
 - tense
 - pronominal
 - rules
+- aspect
 lexical_features:
 - tense_present_class
 - prefix_class
+- aspect_class

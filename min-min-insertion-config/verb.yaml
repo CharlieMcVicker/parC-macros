@@ -1,4 +1,6 @@
 stages:
+  - final_dropping
+  - aspect_suffix
   - drop_stem_initial_vowel
   - pronominal
   - tense
@@ -39,6 +41,12 @@ features:
     - 1sg>3sg
     - 2sg>3sg
   rules: [+]
+  aspect:
+    - present
+    - immediate
+    - incompletive
+    - completive
+    - infinitive
   # distributive: [+, -]
   # partitive: [+, -]
 
@@ -46,7 +54,8 @@ features:
 lexical_features:
   - tense_present_class
   - prefix_class
+  - aspect_class
 
 paradigm:
   generate_contingent_markers: true
-  open_root_template: "[WI]?[DIST]?[Pro]<V>?(<C>+<V>)*<C>*[Tense]"
+  open_root_template: "[WI]?[DIST]?[Pro]<V>?(<C>+<V>)*<C>*[Aspect][Tense]"

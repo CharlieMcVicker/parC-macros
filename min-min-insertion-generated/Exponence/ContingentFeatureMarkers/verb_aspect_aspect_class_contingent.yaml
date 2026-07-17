@@ -1,0 +1,1954 @@
+# This is a ContingentFeatureMarkers config file
+# Generated automatically from CSVs
+kind: ContingentFeatureMarkers
+features:
+- aspect_class
+- aspect
+markers:
+  a:
+    completive:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_ask
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ast
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_a_
+      stage: aspect_suffix
+  apl:
+    completive:
+    - kind: rule
+      value: $aspect_el
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_si
+      stage: aspect_suffix
+    - kind: rule
+      value: $drop_final
+      stage: final_dropping
+    incompletive:
+    - kind: rule
+      value: $aspect_eh
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_eht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_eh
+      stage: aspect_suffix
+  apl-active:
+    completive:
+    - kind: rule
+      value: $aspect_eh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_vla
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_esk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_eht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_eh
+      stage: aspect_suffix
+  apl-active-':
+    completive:
+    - kind: rule
+      value: $aspect_elh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_vla
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_esk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_eht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_eh
+      stage: aspect_suffix
+  apl-active-a:
+    completive:
+    - kind: rule
+      value: $aspect_eh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_esk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_eh
+      stage: aspect_suffix
+  apl-active-h:
+    completive:
+    - kind: rule
+      value: $aspect_helh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_hvla
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_hesk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_heht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_heh
+      stage: aspect_suffix
+  apl[imp2]:
+    completive:
+    - kind: rule
+      value: $aspect_el
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_si
+      stage: aspect_suffix
+    - kind: rule
+      value: $drop_final_two
+      stage: final_dropping
+    incompletive:
+    - kind: rule
+      value: $aspect_eh
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_eht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_eh
+      stage: aspect_suffix
+  apl[imp3]:
+    completive:
+    - kind: rule
+      value: $aspect_el
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_isi
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_eh
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_eht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_eh
+      stage: aspect_suffix
+  apl[imp4]:
+    completive:
+    - kind: rule
+      value: $aspect_el
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_vla
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_eh
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_eht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_eh
+      stage: aspect_suffix
+  be-at:
+    completive:
+    - kind: rule
+      value: $aspect_ol
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_oh
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ast
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_oh
+      stage: aspect_suffix
+  become:
+    completive:
+    - kind: rule
+      value: $aspect_ts
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_ki
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_k
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_st
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_k
+      stage: aspect_suffix
+  become[inf2]:
+    completive:
+    - kind: rule
+      value: $aspect_ts
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_ki
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_k
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect__ist
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_k
+      stage: aspect_suffix
+  become[inf3]:
+    completive:
+    - kind: rule
+      value: $aspect_ts
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_ki
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_k
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_yhst
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_k
+      stage: aspect_suffix
+  become[inf4]:
+    completive:
+    - kind: rule
+      value: $aspect_ts
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_ki
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_k
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ist
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_k
+      stage: aspect_suffix
+  cause:
+    completive:
+    - kind: rule
+      value: $aspect_han
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_oht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_ih
+      stage: aspect_suffix
+  cause[perf2]:
+    completive:
+    - kind: rule
+      value: $aspect_anh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_oht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_ih
+      stage: aspect_suffix
+  cause[perf3]:
+    completive:
+    - kind: rule
+      value: $aspect_an
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_oht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_ih
+      stage: aspect_suffix
+  cause[pres2-perf2]:
+    completive:
+    - kind: rule
+      value: $aspect_anh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_oht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+  cause[pres2-perf3]:
+    completive:
+    - kind: rule
+      value: $aspect_an
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_oht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+  cause[pres2]:
+    completive:
+    - kind: rule
+      value: $aspect_han
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_oht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+  e-a:
+    completive:
+    - kind: rule
+      value: $aspect_e_
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_esk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_et
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_e_
+      stage: aspect_suffix
+  e-aka:
+    completive:
+    - kind: rule
+      value: $aspect_a_
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_aka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_esk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_est
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_e_
+      stage: aspect_suffix
+  episodic:
+    completive:
+    - kind: rule
+      value: $aspect_vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_vhvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_vhvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_vhvsk
+      stage: aspect_suffix
+  episodic[imp2-inf2]:
+    completive:
+    - kind: rule
+      value: $aspect_vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_vna
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_vhvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_vhvst
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_vhvsk
+      stage: aspect_suffix
+  episodic[imp2]:
+    completive:
+    - kind: rule
+      value: $aspect_vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_vna
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_vhvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_vhvsk
+      stage: aspect_suffix
+  episodic[inf2]:
+    completive:
+    - kind: rule
+      value: $aspect_vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_vhvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_vhvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_vhvst
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_vhvsk
+      stage: aspect_suffix
+  go:
+    completive:
+    - kind: rule
+      value: $aspect_vs
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_uka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_ek
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_vst
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_ek
+      stage: aspect_suffix
+  go-in:
+    completive:
+    - kind: rule
+      value: $aspect_invs
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_uka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_ek
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_invt
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_ek
+      stage: aspect_suffix
+  go-in[perf2]:
+    completive:
+    - kind: rule
+      value: $aspect_es
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_uka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_ek
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_invt
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_ek
+      stage: aspect_suffix
+  go[pres2]:
+    completive:
+    - kind: rule
+      value: $aspect_vs
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_uka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_ek
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_vst
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+  hih-hil:
+    completive:
+    - kind: rule
+      value: $aspect_hil
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_hka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_hih
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_st
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_hih
+      stage: aspect_suffix
+  hih-hil[imp2]:
+    completive:
+    - kind: rule
+      value: $aspect_hil
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_hika
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_hih
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_st
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_hih
+      stage: aspect_suffix
+  hih-hilh:
+    completive:
+    - kind: rule
+      value: $aspect_hilh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_hika
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_hih
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_hist
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_hih
+      stage: aspect_suffix
+  hih-lh:
+    completive:
+    - kind: rule
+      value: $aspect_lh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_ka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_hih
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_st
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_hih
+      stage: aspect_suffix
+  hih-lh[imp2]:
+    completive:
+    - kind: rule
+      value: $aspect_lh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_ha
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_hih
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_st
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_hih
+      stage: aspect_suffix
+  husk:
+    completive:
+    - kind: rule
+      value: $aspect_hun
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_huka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_husk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_hust
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_husk
+      stage: aspect_suffix
+  hvsk-han:
+    completive:
+    - kind: rule
+      value: $aspect_han
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_hvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_hvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_hvsk
+      stage: aspect_suffix
+  hvsk-han[inf2]:
+    completive:
+    - kind: rule
+      value: $aspect_han
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_hvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_hvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_hvst
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_hvsk
+      stage: aspect_suffix
+  hvsk-n:
+    completive:
+    - kind: rule
+      value: $aspect_n
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_hvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_hvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_oht
+      stage: aspect_suffix
+    - kind: rule
+      value: $drop_final
+      stage: final_dropping
+    present:
+    - kind: rule
+      value: $aspect_hvsk
+      stage: aspect_suffix
+  hvsk-nh:
+    completive:
+    - kind: rule
+      value: $aspect_nh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_hvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_hvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_hvsk
+      stage: aspect_suffix
+  hvsk-nh[inf2]:
+    completive:
+    - kind: rule
+      value: $aspect_nh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_hvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_hvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ht
+      stage: aspect_suffix
+    - kind: rule
+      value: $drop_final
+      stage: final_dropping
+    present:
+    - kind: rule
+      value: $aspect_hvsk
+      stage: aspect_suffix
+  hvsk-nh[inf3]:
+    completive:
+    - kind: rule
+      value: $aspect_nh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_hvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_hvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_hvst
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_hvsk
+      stage: aspect_suffix
+  hvsk-nh[inf4]:
+    completive:
+    - kind: rule
+      value: $aspect_nh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_hvka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_hvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_oht
+      stage: aspect_suffix
+    - kind: rule
+      value: $drop_final
+      stage: final_dropping
+    present:
+    - kind: rule
+      value: $aspect_hvsk
+      stage: aspect_suffix
+  i-a-i:
+    completive:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ist
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_i_
+      stage: aspect_suffix
+  i-a-i[perf2]:
+    completive:
+    - kind: rule
+      value: $aspect_is
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ist
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_i_
+      stage: aspect_suffix
+  i-a-ihsk:
+    completive:
+    - kind: rule
+      value: $aspect_is
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ist
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_isk
+      stage: aspect_suffix
+  i-vka:
+    completive:
+    - kind: rule
+      value: $aspect_an
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_vka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ot
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_i_
+      stage: aspect_suffix
+  ih-ihi:
+    completive:
+    - kind: rule
+      value: $aspect_is
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_ihi
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ihist
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_ih
+      stage: aspect_suffix
+  ih-il:
+    completive:
+    - kind: rule
+      value: $aspect_il
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_ika
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_ih
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ist
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_ih
+      stage: aspect_suffix
+  ih-vh:
+    completive:
+    - kind: rule
+      value: $aspect_vh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_ih
+      stage: aspect_suffix
+  ih-vh[imperf2-inf2]:
+    completive:
+    - kind: rule
+      value: $aspect_vh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_ih
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_vht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_ih
+      stage: aspect_suffix
+  ih-vh[imperf2]:
+    completive:
+    - kind: rule
+      value: $aspect_vh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_ih
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_ih
+      stage: aspect_suffix
+  ih-vh[inf2]:
+    completive:
+    - kind: rule
+      value: $aspect_vh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_vht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_ih
+      stage: aspect_suffix
+  ko-kots:
+    completive:
+    - kind: rule
+      value: $aspect_kots
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_ko_i
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_kok
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_kost
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_kok
+      stage: aspect_suffix
+  o:
+    completive:
+    - kind: rule
+      value: $aspect_o_
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_otsa
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_osk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ost
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_o_
+      stage: aspect_suffix
+  oh-al:
+    completive:
+    - kind: rule
+      value: $aspect_hal
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_hka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_hoh
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_st
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_hoh
+      stage: aspect_suffix
+  oh-al[imp2]:
+    completive:
+    - kind: rule
+      value: $aspect_hal
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_aka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_hoh
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_st
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_hoh
+      stage: aspect_suffix
+  oh-ol:
+    completive:
+    - kind: rule
+      value: $aspect_ol
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_aka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_oh
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ot
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_oh
+      stage: aspect_suffix
+  oh-ol[inf2]:
+    completive:
+    - kind: rule
+      value: $aspect_ol
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_aka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_oh
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_st
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_oh
+      stage: aspect_suffix
+  oh-ol[inf3]:
+    completive:
+    - kind: rule
+      value: $aspect_ol
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_aka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_oh
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ast
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_oh
+      stage: aspect_suffix
+  rev-'i:
+    completive:
+    - kind: rule
+      value: $aspect__is
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect__i
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect__isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect__ist
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect__i_
+      stage: aspect_suffix
+  rev-e:
+    completive:
+    - kind: rule
+      value: $aspect_es
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_aki
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_esk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_est
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_e_
+      stage: aspect_suffix
+  rev-gi:
+    completive:
+    - kind: rule
+      value: $aspect_kis
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_ki
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_kisk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_kist
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_ki_
+      stage: aspect_suffix
+  rev-i:
+    completive:
+    - kind: rule
+      value: $aspect_is
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_i
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ist
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_i_
+      stage: aspect_suffix
+  sk-h:
+    completive:
+    - kind: rule
+      value: $aspect_h
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_ha
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_st
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+  sk-h-yh:
+    completive:
+    - kind: rule
+      value: $aspect_yh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_yha
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_st
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+  sk-h[imp2]:
+    completive:
+    - kind: rule
+      value: $aspect_h
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_st
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+  sk-s-a:
+    completive:
+    - kind: rule
+      value: $aspect_s
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_hist
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+  sk-s-a[inf2]:
+    completive:
+    - kind: rule
+      value: $aspect_s
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_st
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+  sk-s-hi-hihst:
+    completive:
+    - kind: rule
+      value: $aspect_s
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_hi
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_hist
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+  sk-s-hst:
+    completive:
+    - kind: rule
+      value: $aspect_s
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_st
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+  sk-s-hst[imp2]:
+    completive:
+    - kind: rule
+      value: $aspect_s
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_hi
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_st
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+  sk-s-la:
+    completive:
+    - kind: rule
+      value: $aspect_s
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_la
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_st
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_sk
+      stage: aspect_suffix
+  stative:
+    completive:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+  stative-a':
+    completive:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_a_
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_a_
+      stage: aspect_suffix
+  stative-eh:
+    completive:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_eh
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_eh
+      stage: aspect_suffix
+  stative-h:
+    completive:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_h
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_h
+      stage: aspect_suffix
+  stative-k:
+    completive:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_k
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_k
+      stage: aspect_suffix
+  stative-s:
+    completive:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_s
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_empty
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_h
+      stage: aspect_suffix
+  terminative:
+    completive:
+    - kind: rule
+      value: $aspect_onh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_onha
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_ohvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ohvst
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_ohvsk
+      stage: aspect_suffix
+  terminative-no-o:
+    completive:
+    - kind: rule
+      value: $aspect_nh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_nha
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_hvsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_hvst
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_hvsk
+      stage: aspect_suffix
+  v-vhs:
+    completive:
+    - kind: rule
+      value: $aspect_vs
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_vna
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_vst
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_v_
+      stage: aspect_suffix
+  vnh-ih-a:
+    completive:
+    - kind: rule
+      value: $aspect_vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_a
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_isk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_ih
+      stage: aspect_suffix
+  vnh-vsk:
+    completive:
+    - kind: rule
+      value: $aspect_vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_vna
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_ht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_vsk
+      stage: aspect_suffix
+  vnh-vsk[inf2]:
+    completive:
+    - kind: rule
+      value: $aspect_vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_vna
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_vht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_vsk
+      stage: aspect_suffix
+  vnh-vsk[inf3]:
+    completive:
+    - kind: rule
+      value: $aspect_vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_vna
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_vnht
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_vsk
+      stage: aspect_suffix
+  vnh-vsk[inf4]:
+    completive:
+    - kind: rule
+      value: $aspect_vnh
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_vna
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_vst
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_vsk
+      stage: aspect_suffix
+  vsk:
+    completive:
+    - kind: rule
+      value: $aspect_vn
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_vka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_vt
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_vsk
+      stage: aspect_suffix
+  vsk-long:
+    completive:
+    - kind: rule
+      value: $aspect_vn
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_vka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_v_vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_vt
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_v_vsk
+      stage: aspect_suffix
+  vsk-long[imp2]:
+    completive:
+    - kind: rule
+      value: $aspect_vn
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_v_vka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_v_vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_vt
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_v_vsk
+      stage: aspect_suffix
+  vsk-post-v:
+    completive:
+    - kind: rule
+      value: $aspect_n
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect__vka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect__vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_t
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect__vsk
+      stage: aspect_suffix
+  vsk[imp2]:
+    completive:
+    - kind: rule
+      value: $aspect_vn
+      stage: aspect_suffix
+    immediate:
+    - kind: rule
+      value: $aspect_v_vka
+      stage: aspect_suffix
+    incompletive:
+    - kind: rule
+      value: $aspect_vsk
+      stage: aspect_suffix
+    infinitive:
+    - kind: rule
+      value: $aspect_vt
+      stage: aspect_suffix
+    present:
+    - kind: rule
+      value: $aspect_vsk
+      stage: aspect_suffix

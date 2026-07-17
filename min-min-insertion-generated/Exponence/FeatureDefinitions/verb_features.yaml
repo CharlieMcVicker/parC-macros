@@ -35,6 +35,15 @@ features:
   - 2sg>3sg
   rules:
   - +
+  aspect:
+  - present
+  - immediate
+  - incompletive
+  - completive
+  - infinitive
+  tense_present_class:
+  - a_present
+  - i_present
   prefix_class:
   - name: a_stem
     acceptor: <Morpheme>*a<Phone>*<Morpheme>*
@@ -50,6 +59,96 @@ features:
     acceptor: <Morpheme>*v<Phone>*<Morpheme>*
   - name: vowel_stem
     acceptor: <Morpheme>*<V><Phone>*<Morpheme>*
-  tense_present_class:
-  - a_present
-  - i_present
+  aspect_class:
+  - a
+  - apl
+  - apl-active
+  - apl-active-'
+  - apl-active-a
+  - apl-active-h
+  - apl[imp2]
+  - apl[imp3]
+  - apl[imp4]
+  - be-at
+  - become
+  - become[inf2]
+  - become[inf3]
+  - become[inf4]
+  - cause
+  - cause[perf2]
+  - cause[perf3]
+  - cause[pres2-perf2]
+  - cause[pres2-perf3]
+  - cause[pres2]
+  - e-a
+  - e-aka
+  - episodic
+  - episodic[imp2-inf2]
+  - episodic[imp2]
+  - episodic[inf2]
+  - go
+  - go-in
+  - go-in[perf2]
+  - go[pres2]
+  - hih-hil
+  - hih-hil[imp2]
+  - hih-hilh
+  - hih-lh
+  - hih-lh[imp2]
+  - husk
+  - hvsk-han
+  - hvsk-han[inf2]
+  - hvsk-n
+  - hvsk-nh
+  - hvsk-nh[inf2]
+  - hvsk-nh[inf3]
+  - hvsk-nh[inf4]
+  - i-a-i
+  - i-a-i[perf2]
+  - i-a-ihsk
+  - i-vka
+  - ih-ihi
+  - ih-il
+  - ih-vh
+  - ih-vh[imperf2-inf2]
+  - ih-vh[imperf2]
+  - ih-vh[inf2]
+  - ko-kots
+  - o
+  - oh-al
+  - oh-al[imp2]
+  - oh-ol
+  - oh-ol[inf2]
+  - oh-ol[inf3]
+  - rev-'i
+  - rev-e
+  - rev-gi
+  - rev-i
+  - sk-h
+  - sk-h-yh
+  - sk-h[imp2]
+  - sk-s-a
+  - sk-s-a[inf2]
+  - sk-s-hi-hihst
+  - sk-s-hst
+  - sk-s-hst[imp2]
+  - sk-s-la
+  - stative
+  - stative-a'
+  - stative-eh
+  - stative-h
+  - stative-k
+  - stative-s
+  - terminative
+  - terminative-no-o
+  - v-vhs
+  - vnh-ih-a
+  - vnh-vsk
+  - vnh-vsk[inf2]
+  - vnh-vsk[inf3]
+  - vnh-vsk[inf4]
+  - vsk
+  - vsk-long
+  - vsk-long[imp2]
+  - vsk-post-v
+  - vsk[imp2]

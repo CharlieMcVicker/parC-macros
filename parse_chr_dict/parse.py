@@ -48,19 +48,19 @@ def get_inflect_graph():
 
 def inflect(
     root: str,
-    lexical_features: list[tuple[str, str]],
-    inflectional_features: list[tuple[str, str]],
+    # lexical_features: list[tuple[str, str]],
+    # inflectional_features: list[tuple[str, str]],
 ) -> list[str]:
     global INFLECT_GRAPH
     if INFLECT_GRAPH is None:
         INFLECT_GRAPH = get_inflect_graph()
 
-    surface_fsa = word_fsa(root)
-    for feat, value in sorted(lexical_features, key=lambda l: l[0]):
-        surface_fsa = pynini.concat(surface_fsa, fsa(feature_tag(feat, value)))
+    surface_fsa = fsa(root)
+    # for feat, value in sorted(lexical_features, key=lambda l: l[0]):
+    #     surface_fsa = pynini.concat(surface_fsa, fsa(feature_tag(feat, value)))
 
-    for feat, value in sorted(inflectional_features, key=lambda l: l[0]):
-        surface_fsa = pynini.concat(surface_fsa, fsa(feature_tag(feat, value)))
+    # for feat, value in sorted(inflectional_features, key=lambda l: l[0]):
+    #     surface_fsa = pynini.concat(surface_fsa, fsa(feature_tag(feat, value)))
 
     output_lattice_with_tag = pynini.compose(surface_fsa, INFLECT_GRAPH).optimize()
     output_lattice_with_tag = pynini.project(
@@ -168,7 +168,9 @@ def main():
         # ("partitive", "+"),
     ]
 
-    words = inflect(root, lexical, inflectional)
+    words = inflect(
+        "[BOW][Pro]atat[Aspect][Tense][EOW][aspect_class=go][prefix_class=a_stem][tense_present_class=a_present][aspect=present][pronominal=3sg.A][rules=+][tense=present]"
+    )
     print(words)
 
     print("interactive parsing - newline to quit, . to flip modes")

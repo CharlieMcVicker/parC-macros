@@ -1,0 +1,484 @@
+# This is a Rules config file
+# Generated automatically by generate_morpheme_replace_rules.py
+kind: Rules
+rules:
+- name: aspect_empty
+  string_map:
+  - - '[Aspect]'
+    - ''
+- name: aspect__i
+  string_map:
+  - - '[Aspect]'
+    - '''i'
+- name: aspect__i_
+  string_map:
+  - - '[Aspect]'
+    - '''i'''
+- name: aspect__is
+  string_map:
+  - - '[Aspect]'
+    - '''is'
+- name: aspect__isk
+  string_map:
+  - - '[Aspect]'
+    - '''isk'
+- name: aspect__ist
+  string_map:
+  - - '[Aspect]'
+    - '''ist'
+- name: aspect__vka
+  string_map:
+  - - '[Aspect]'
+    - '''vka'
+- name: aspect__vsk
+  string_map:
+  - - '[Aspect]'
+    - '''vsk'
+- name: aspect_a
+  string_map:
+  - - '[Aspect]'
+    - a
+- name: aspect_a_
+  string_map:
+  - - '[Aspect]'
+    - a'
+- name: aspect_aka
+  string_map:
+  - - '[Aspect]'
+    - aka
+- name: aspect_aki
+  string_map:
+  - - '[Aspect]'
+    - aki
+- name: aspect_an
+  string_map:
+  - - '[Aspect]'
+    - an
+- name: aspect_anh
+  string_map:
+  - - '[Aspect]'
+    - anh
+- name: aspect_ask
+  string_map:
+  - - '[Aspect]'
+    - ask
+- name: aspect_ast
+  string_map:
+  - - '[Aspect]'
+    - ast
+- name: aspect_e_
+  string_map:
+  - - '[Aspect]'
+    - e'
+- name: aspect_eh
+  string_map:
+  - - '[Aspect]'
+    - eh
+- name: aspect_eht
+  string_map:
+  - - '[Aspect]'
+    - eht
+- name: aspect_ek
+  string_map:
+  - - '[Aspect]'
+    - ek
+- name: aspect_el
+  string_map:
+  - - '[Aspect]'
+    - el
+- name: aspect_elh
+  string_map:
+  - - '[Aspect]'
+    - elh
+- name: aspect_es
+  string_map:
+  - - '[Aspect]'
+    - es
+- name: aspect_esk
+  string_map:
+  - - '[Aspect]'
+    - esk
+- name: aspect_est
+  string_map:
+  - - '[Aspect]'
+    - est
+- name: aspect_et
+  string_map:
+  - - '[Aspect]'
+    - et
+- name: aspect_h
+  string_map:
+  - - '[Aspect]'
+    - h
+- name: aspect_ha
+  string_map:
+  - - '[Aspect]'
+    - ha
+- name: aspect_hal
+  string_map:
+  - - '[Aspect]'
+    - hal
+- name: aspect_han
+  string_map:
+  - - '[Aspect]'
+    - han
+- name: aspect_heh
+  string_map:
+  - - '[Aspect]'
+    - heh
+- name: aspect_heht
+  string_map:
+  - - '[Aspect]'
+    - heht
+- name: aspect_helh
+  string_map:
+  - - '[Aspect]'
+    - helh
+- name: aspect_hesk
+  string_map:
+  - - '[Aspect]'
+    - hesk
+- name: aspect_hi
+  string_map:
+  - - '[Aspect]'
+    - hi
+- name: aspect_hih
+  string_map:
+  - - '[Aspect]'
+    - hih
+- name: aspect_hika
+  string_map:
+  - - '[Aspect]'
+    - hika
+- name: aspect_hil
+  string_map:
+  - - '[Aspect]'
+    - hil
+- name: aspect_hilh
+  string_map:
+  - - '[Aspect]'
+    - hilh
+- name: aspect_hist
+  string_map:
+  - - '[Aspect]'
+    - hist
+- name: aspect_hka
+  string_map:
+  - - '[Aspect]'
+    - hka
+- name: aspect_hoh
+  string_map:
+  - - '[Aspect]'
+    - hoh
+- name: aspect_ht
+  string_map:
+  - - '[Aspect]'
+    - ht
+- name: aspect_huka
+  string_map:
+  - - '[Aspect]'
+    - huka
+- name: aspect_hun
+  string_map:
+  - - '[Aspect]'
+    - hun
+- name: aspect_husk
+  string_map:
+  - - '[Aspect]'
+    - husk
+- name: aspect_hust
+  string_map:
+  - - '[Aspect]'
+    - hust
+- name: aspect_hvka
+  string_map:
+  - - '[Aspect]'
+    - hvka
+- name: aspect_hvla
+  string_map:
+  - - '[Aspect]'
+    - hvla
+- name: aspect_hvsk
+  string_map:
+  - - '[Aspect]'
+    - hvsk
+- name: aspect_hvst
+  string_map:
+  - - '[Aspect]'
+    - hvst
+- name: aspect_i
+  string_map:
+  - - '[Aspect]'
+    - i
+- name: aspect_i_
+  string_map:
+  - - '[Aspect]'
+    - i'
+- name: aspect_ih
+  string_map:
+  - - '[Aspect]'
+    - ih
+- name: aspect_ihi
+  string_map:
+  - - '[Aspect]'
+    - ihi
+- name: aspect_ihist
+  string_map:
+  - - '[Aspect]'
+    - ihist
+- name: aspect_ika
+  string_map:
+  - - '[Aspect]'
+    - ika
+- name: aspect_il
+  string_map:
+  - - '[Aspect]'
+    - il
+- name: aspect_invs
+  string_map:
+  - - '[Aspect]'
+    - invs
+- name: aspect_invt
+  string_map:
+  - - '[Aspect]'
+    - invt
+- name: aspect_is
+  string_map:
+  - - '[Aspect]'
+    - is
+- name: aspect_isi
+  string_map:
+  - - '[Aspect]'
+    - isi
+- name: aspect_isk
+  string_map:
+  - - '[Aspect]'
+    - isk
+- name: aspect_ist
+  string_map:
+  - - '[Aspect]'
+    - ist
+- name: aspect_k
+  string_map:
+  - - '[Aspect]'
+    - k
+- name: aspect_ka
+  string_map:
+  - - '[Aspect]'
+    - ka
+- name: aspect_ki
+  string_map:
+  - - '[Aspect]'
+    - ki
+- name: aspect_ki_
+  string_map:
+  - - '[Aspect]'
+    - ki'
+- name: aspect_kis
+  string_map:
+  - - '[Aspect]'
+    - kis
+- name: aspect_kisk
+  string_map:
+  - - '[Aspect]'
+    - kisk
+- name: aspect_kist
+  string_map:
+  - - '[Aspect]'
+    - kist
+- name: aspect_ko_i
+  string_map:
+  - - '[Aspect]'
+    - ko'i
+- name: aspect_kok
+  string_map:
+  - - '[Aspect]'
+    - kok
+- name: aspect_kost
+  string_map:
+  - - '[Aspect]'
+    - kost
+- name: aspect_kots
+  string_map:
+  - - '[Aspect]'
+    - kots
+- name: aspect_la
+  string_map:
+  - - '[Aspect]'
+    - la
+- name: aspect_lh
+  string_map:
+  - - '[Aspect]'
+    - lh
+- name: aspect_n
+  string_map:
+  - - '[Aspect]'
+    - n
+- name: aspect_nh
+  string_map:
+  - - '[Aspect]'
+    - nh
+- name: aspect_nha
+  string_map:
+  - - '[Aspect]'
+    - nha
+- name: aspect_o_
+  string_map:
+  - - '[Aspect]'
+    - o'
+- name: aspect_oh
+  string_map:
+  - - '[Aspect]'
+    - oh
+- name: aspect_oht
+  string_map:
+  - - '[Aspect]'
+    - oht
+- name: aspect_ohvsk
+  string_map:
+  - - '[Aspect]'
+    - ohvsk
+- name: aspect_ohvst
+  string_map:
+  - - '[Aspect]'
+    - ohvst
+- name: aspect_ol
+  string_map:
+  - - '[Aspect]'
+    - ol
+- name: aspect_onh
+  string_map:
+  - - '[Aspect]'
+    - onh
+- name: aspect_onha
+  string_map:
+  - - '[Aspect]'
+    - onha
+- name: aspect_osk
+  string_map:
+  - - '[Aspect]'
+    - osk
+- name: aspect_ost
+  string_map:
+  - - '[Aspect]'
+    - ost
+- name: aspect_ot
+  string_map:
+  - - '[Aspect]'
+    - ot
+- name: aspect_otsa
+  string_map:
+  - - '[Aspect]'
+    - otsa
+- name: aspect_s
+  string_map:
+  - - '[Aspect]'
+    - s
+- name: aspect_si
+  string_map:
+  - - '[Aspect]'
+    - si
+- name: aspect_sk
+  string_map:
+  - - '[Aspect]'
+    - sk
+- name: aspect_st
+  string_map:
+  - - '[Aspect]'
+    - st
+- name: aspect_t
+  string_map:
+  - - '[Aspect]'
+    - t
+- name: aspect_ts
+  string_map:
+  - - '[Aspect]'
+    - ts
+- name: aspect_uka
+  string_map:
+  - - '[Aspect]'
+    - uka
+- name: aspect_v_
+  string_map:
+  - - '[Aspect]'
+    - v'
+- name: aspect_v_vka
+  string_map:
+  - - '[Aspect]'
+    - v'vka
+- name: aspect_v_vsk
+  string_map:
+  - - '[Aspect]'
+    - v'vsk
+- name: aspect_vh
+  string_map:
+  - - '[Aspect]'
+    - vh
+- name: aspect_vht
+  string_map:
+  - - '[Aspect]'
+    - vht
+- name: aspect_vhvka
+  string_map:
+  - - '[Aspect]'
+    - vhvka
+- name: aspect_vhvsk
+  string_map:
+  - - '[Aspect]'
+    - vhvsk
+- name: aspect_vhvst
+  string_map:
+  - - '[Aspect]'
+    - vhvst
+- name: aspect_vka
+  string_map:
+  - - '[Aspect]'
+    - vka
+- name: aspect_vla
+  string_map:
+  - - '[Aspect]'
+    - vla
+- name: aspect_vn
+  string_map:
+  - - '[Aspect]'
+    - vn
+- name: aspect_vna
+  string_map:
+  - - '[Aspect]'
+    - vna
+- name: aspect_vnh
+  string_map:
+  - - '[Aspect]'
+    - vnh
+- name: aspect_vnht
+  string_map:
+  - - '[Aspect]'
+    - vnht
+- name: aspect_vs
+  string_map:
+  - - '[Aspect]'
+    - vs
+- name: aspect_vsk
+  string_map:
+  - - '[Aspect]'
+    - vsk
+- name: aspect_vst
+  string_map:
+  - - '[Aspect]'
+    - vst
+- name: aspect_vt
+  string_map:
+  - - '[Aspect]'
+    - vt
+- name: aspect_yh
+  string_map:
+  - - '[Aspect]'
+    - yh
+- name: aspect_yha
+  string_map:
+  - - '[Aspect]'
+    - yha
+- name: aspect_yhst
+  string_map:
+  - - '[Aspect]'
+    - yhst

@@ -74,10 +74,7 @@ def generate_morpheme_replace_rules(config_path: str, output_dir: str) -> None:
         if metadata.get("kind") != "morpheme_replace":
             continue
 
-        morpheme_tag = metadata.get("morpheme_tag")
-        if not morpheme_tag:
-            # Fallback/Default tag if not specified
-            morpheme_tag = "[Pro]"
+        morpheme_tag = metadata["morpheme_tag"]
 
         if morpheme_tag not in tag_to_values:
             tag_to_values[morpheme_tag] = set()
@@ -120,19 +117,15 @@ def generate_morpheme_replace_rules(config_path: str, output_dir: str) -> None:
         rules = []
         for val in sorted(values):
             rule_name = f"{tag_slug}_{sanitize_rule_name(val)}"
-            rules.append({
-                "name": rule_name,
-                "string_map": [[morpheme_tag, val]]
-            })
+            rules.append({"name": rule_name, "string_map": [[morpheme_tag, val]]})
 
-        doc = {
-            "kind": "Rules",
-            "rules": rules
-        }
+        doc = {"kind": "Rules", "rules": rules}
 
         with open(out_path, "w", encoding="utf-8") as fh:
             fh.write("# This is a Rules config file\n")
-            fh.write("# Generated automatically by generate_morpheme_replace_rules.py\n")
+            fh.write(
+                "# Generated automatically by generate_morpheme_replace_rules.py\n"
+            )
             yaml.dump(
                 doc,
                 fh,

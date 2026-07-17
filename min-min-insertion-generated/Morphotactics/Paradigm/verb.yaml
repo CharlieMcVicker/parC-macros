@@ -3,16 +3,20 @@
 kind: Paradigm
 part_of_speech: $verb
 feature_markers:
+  aspect: null
   pronominal: null
   tense: $verb_tense
   rules: $verb_rules
 contingent_markers:
+- verb_aspect_aspect_class_contingent
 - verb_pronominal_prefix_class_contingent
 - verb_tense_tense_present_class_contingent
 stage_order:
+- final_dropping
+- aspect_suffix
 - drop_stem_initial_vowel
 - pronominal
 - tense
 - insert_dist
 - insert_wi
-open_root_template: '[WI]?[DIST]?[Pro]<V>?(<C>+<V>)*<C>*[Tense]'
+open_root_template: '[WI]?[DIST]?[Pro]<V>?(<C>+<V>)*<C>*[Aspect][Tense]'

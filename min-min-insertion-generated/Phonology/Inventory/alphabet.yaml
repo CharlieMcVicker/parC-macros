@@ -31,7 +31,9 @@ data:
   - name: Tense
     ref: <Tense>
     tags: ["[Tense]"]
-
+  - name: Aspect
+    ref: <Aspect>
+    tags: ["[Aspect]"]
 ## HELP FOR INVENTORY ##
 # The inventory is built as a nested tree
 # Each node of the tree contains either phones, tags, or other nodes

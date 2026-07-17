@@ -8,7 +8,7 @@ patterns:
     pattern: <Stops>|<Frc>|<Son>|<N>
     ref: <C>
   - name: Morpheme
-    pattern: <Pro>|<PPP>|<Tense>
+    pattern: <Pro>|<PPP>|<Aspect>|<Tense>
     ref: <Morpheme>
 
 ## HELP FOR PATTERNS ##
