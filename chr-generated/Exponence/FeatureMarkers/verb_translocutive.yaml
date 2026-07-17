@@ -5,9 +5,15 @@ feature: translocutive
 markers:
   +:
   - kind: rule
-    value: $insert_wi
-    stage: trl
-  UNMARKED:
+    value: $insert_WI
+    stage: insert_wi
+  - kind: prefix
+    value: '[WI]'
+    stage: add_wi
+  '-':
   - kind: rule
-    value: $no_op
-    stage: translocutive
+    value: $drop_WI
+    stage: insert_wi
+  - kind: prefix
+    value: '[WI]'
+    stage: add_wi

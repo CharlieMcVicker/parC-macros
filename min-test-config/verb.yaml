@@ -1,0 +1,52 @@
+stages:
+  - tense
+  - drop_stem_initial_vowel
+  - pronominal
+  - insert_dist
+  - insert_wi
+
+# Inflectional Features (originally from verb_features.yaml)
+features:
+  pronominal:
+    - 1sg.A
+    - Edl.A
+    - Epl.A
+    - Idl.A
+    - Ipl.A
+    - 2sg.A
+    - 2dl.A
+    - 2pl.A
+    - 3sg.A
+    - 3ns.A
+    - 1sg.B
+    - Edl.B
+    - Epl.B
+    - Idl.B
+    - Ipl.B
+    - 2sg.B
+    - 2dl.B
+    - 2pl.B
+    - 3sg.B
+    - 3ns.B
+    - 1sg>3sg
+    - 2sg>3sg
+  tense:
+    - present
+    - immediate
+    - habitual
+    - future_prog
+    - assertive
+    - reported
+    - infinitive
+  rules: [+]
+  # distributive: [+, -]
+  # partitive: [+, -]
+
+# Lexical features and metadata (originally from verb.yaml)
+lexical_features:
+  - prefix_class
+  - tense_present_class
+
+paradigm:
+  generate_contingent_markers: true
+  open_root_template: "[WI]?[DIST]?<Phone>*"

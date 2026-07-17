@@ -333,8 +333,9 @@ translocutive,marker
         with open(gen_fm, "r", encoding="utf-8") as f:
             gen_fm_data = yaml.safe_load(f)
 
-        assert "UNMARKED" in gen_fm_data["markers"]
-        assert gen_fm_data["markers"]["UNMARKED"] == []
+        assert gen_fm_data["markers"]["UNMARKED"] == [
+            {"kind": "rule", "value": "$no_op", "stage": "translocutive"}
+        ]
 
 
 def test_generation_with_contingent_optional_features():
@@ -398,8 +399,8 @@ present,$insert_DIST1
             gen_cfm_data = yaml.safe_load(f)
 
         # Present class value should map distributive values + and UNMARKED
-        assert "present" in gen_cfm_data["markers"]
-        assert "UNMARKED" in gen_cfm_data["markers"]["present"]
-        assert gen_cfm_data["markers"]["present"]["UNMARKED"] == []
+        assert gen_cfm_data["markers"]["present"]["UNMARKED"] == [
+            {"kind": "rule", "value": "$no_op", "stage": "distributive"}
+        ]
 
 

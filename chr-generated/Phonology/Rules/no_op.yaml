@@ -1,9 +1,0 @@
-# This is a Rules config file
-kind: Rules
-rules:
-  - name: no_op
-    description: >
-      No-op rule that does nothing
-    string_map:
-      - ["v", "v"]
-    left_context: "##"

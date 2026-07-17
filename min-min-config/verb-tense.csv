@@ -1,0 +1,8 @@
+# kind: suffix
+# stage: tense
+# feature: tense
+# part_of_speech: $verb
+# class_feature: tense_present_class
+paradigm,present,immediate,habitual,future_prog,assertive,reported,infinitive
+a_present,a,,o'i,esti,v'i,e'i,i
+i_present,i,,o'i,esti,v'i,e'i,i

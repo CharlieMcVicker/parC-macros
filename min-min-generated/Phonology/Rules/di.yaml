@@ -2,68 +2,25 @@
 # Define context-sensitive phonological rules.
 kind: Rules
 rules:
-  - name: add_NI
+  - name: insert_dist_v_h
     description: >
-      add temp ni token where it will be inserted
+      insert wi material before h/<V>
     string_map:
-      - ["", "[TEMP]"]
-    left_context: "#"
-    right_context: "{^[TEMP]}"
+      - ["[DIST]", "t"]
+    right_context: "<PPP>*<V>|h"
 
-  - name: insert_NI_pre_v_h
+  - name: insert_dist_default
     description: >
-      insert n before vowels
+      insert wi material before other sounds
     string_map:
-      - ["[TEMP]", "n"]
-    left_context: "#"
-    right_context: "<V>|h"
+      - ["[DIST]", "ti"]
 
-  - name: insert_NI_default
-    description: >
-      insert ni material before other sounds
-    string_map:
-      - ["[TEMP]", "ni"]
-    left_context: "#"
-
-  - name: insert_NI
-    description: >
-      insert NI
-    rule_sequence:
-      - $add_NI
-      - $insert_NI_pre_v_h
-      - $insert_NI_default
-
-  - name: insert_NI2_pre_i
-    description: >
-      insert null before i
-    string_map:
-      - ["[TEMP]", ""]
-    left_context: "#"
-    right_context: "i"
-
-  - name: insert_NI2_pre_v
-    description: >
-      insert iy before <V>
-    string_map:
-      - ["[TEMP]", "iy"]
-    left_context: "#"
-    right_context: "<V>"
-
-  - name: insert_NI2_default
-    description: >
-      insert i before anything else
-    string_map:
-      - ["[TEMP]", "i"]
-    left_context: "#"
-
-  - name: insert_NI2
+  - name: insert_DIST
     description: >
       fix wi before h and vowels
     rule_sequence:
-      - $add_NI
-      - $insert_NI2_pre_i
-      - $insert_NI2_pre_v
-      - $insert_NI2_default
+      - $insert_dist_v_h
+      - $insert_dist_default
 
 ### HELP FOR RULES ###
 # Here we define context-sensitive phonological rules

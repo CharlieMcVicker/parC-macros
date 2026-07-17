@@ -1,0 +1,7 @@
+# kind: rule
+# stage: insert_dist
+# rule: $drop_DIST
+# feature: distributive
+# part_of_speech: $verb
+-
+Y

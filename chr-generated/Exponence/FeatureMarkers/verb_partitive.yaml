@@ -1,0 +1,16 @@
+# This is a FeatureMarkers config file
+# Generated automatically from CSV
+kind: FeatureMarkers
+feature: partitive
+markers:
+  +:
+  - kind: prefix
+    value: '[NI]'
+    stage: add_ni
+  '-':
+  - kind: prefix
+    value: '[NI]'
+    stage: add_ni
+  - kind: rule
+    value: $drop_NI
+    stage: insert_ni

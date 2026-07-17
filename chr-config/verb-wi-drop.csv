@@ -1,0 +1,7 @@
+# kind: rule
+# stage: insert_wi
+# rule: $drop_WI
+# feature: translocutive
+# part_of_speech: $verb
+-
+Y

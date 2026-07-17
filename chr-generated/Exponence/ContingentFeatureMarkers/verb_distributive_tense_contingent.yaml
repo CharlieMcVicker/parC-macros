@@ -9,62 +9,34 @@ markers:
     +:
     - kind: rule
       value: $insert_DIST1
-      stage: distributive
-    UNMARKED:
-    - kind: rule
-      value: $no_op
-      stage: distributive
+      stage: insert_dist
   future_prog:
     +:
     - kind: rule
       value: $insert_DIST1
-      stage: distributive
-    UNMARKED:
-    - kind: rule
-      value: $no_op
-      stage: distributive
+      stage: insert_dist
   habitual:
     +:
     - kind: rule
       value: $insert_DIST1
-      stage: distributive
-    UNMARKED:
-    - kind: rule
-      value: $no_op
-      stage: distributive
+      stage: insert_dist
   immediate:
     +:
     - kind: rule
       value: $insert_DIST2
-      stage: distributive
-    UNMARKED:
-    - kind: rule
-      value: $no_op
-      stage: distributive
+      stage: insert_dist
   infinitive:
     +:
     - kind: rule
       value: $insert_DIST2
-      stage: distributive
-    UNMARKED:
-    - kind: rule
-      value: $no_op
-      stage: distributive
+      stage: insert_dist
   present:
     +:
     - kind: rule
       value: $insert_DIST1
-      stage: distributive
-    UNMARKED:
-    - kind: rule
-      value: $no_op
-      stage: distributive
+      stage: insert_dist
   reported:
     +:
     - kind: rule
       value: $insert_DIST1
-      stage: distributive
-    UNMARKED:
-    - kind: rule
-      value: $no_op
-      stage: distributive
+      stage: insert_dist

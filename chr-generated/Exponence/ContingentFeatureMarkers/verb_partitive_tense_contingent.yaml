@@ -9,62 +9,34 @@ markers:
     +:
     - kind: rule
       value: $insert_NI
-      stage: partitive
-    UNMARKED:
-    - kind: rule
-      value: $no_op
-      stage: partitive
+      stage: insert_ni
   future_prog:
     +:
     - kind: rule
       value: $insert_NI
-      stage: partitive
-    UNMARKED:
-    - kind: rule
-      value: $no_op
-      stage: partitive
+      stage: insert_ni
   habitual:
     +:
     - kind: rule
       value: $insert_NI
-      stage: partitive
-    UNMARKED:
-    - kind: rule
-      value: $no_op
-      stage: partitive
+      stage: insert_ni
   immediate:
     +:
     - kind: rule
       value: $insert_NI
-      stage: partitive
-    UNMARKED:
-    - kind: rule
-      value: $no_op
-      stage: partitive
+      stage: insert_ni
   infinitive:
     +:
     - kind: rule
       value: $insert_NI2
-      stage: partitive
-    UNMARKED:
-    - kind: rule
-      value: $no_op
-      stage: partitive
+      stage: insert_ni
   present:
     +:
     - kind: rule
       value: $insert_NI
-      stage: partitive
-    UNMARKED:
-    - kind: rule
-      value: $no_op
-      stage: partitive
+      stage: insert_ni
   reported:
     +:
     - kind: rule
       value: $insert_NI
-      stage: partitive
-    UNMARKED:
-    - kind: rule
-      value: $no_op
-      stage: partitive
+      stage: insert_ni

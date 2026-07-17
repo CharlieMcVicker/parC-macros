@@ -5,11 +5,11 @@ stages:
   - drop_stem_initial_vowel
   - pronominal
   - add_dist
-  - add_part
+  - add_ni
   - add_wi
-  - resolve_dist
-  - resolve_part
-  - resolve_wi
+  - insert_dist
+  - insert_ni
+  - insert_wi
 
 # Inflectional Features (originally from verb_features.yaml)
 features:
@@ -50,15 +50,9 @@ features:
     - assertive
     - reported
     - infinitive
-  translocutive:
-    values: [+]
-    optional: true
-  distributive:
-    values: [+]
-    optional: true
-  partitive:
-    values: [+]
-    optional: true
+  translocutive: [+, -]
+  distributive: [+, -]
+  partitive: [+, -]
 
 # Lexical features and metadata (originally from verb.yaml)
 lexical_features:

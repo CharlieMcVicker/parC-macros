@@ -4,8 +4,8 @@ kind: Paradigm
 part_of_speech: $verb
 feature_markers:
   aspect: null
-  distributive: null
-  partitive: null
+  distributive: $verb_distributive
+  partitive: $verb_partitive
   pronominal: null
   tense: null
   translocutive: $verb_translocutive
@@ -21,6 +21,9 @@ stage_order:
 - tense
 - drop_stem_initial_vowel
 - pronominal
-- distributive
-- partitive
-- trl
+- add_dist
+- add_ni
+- add_wi
+- insert_dist
+- insert_ni
+- insert_wi

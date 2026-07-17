@@ -1,0 +1,16 @@
+# This is a FeatureMarkers config file
+# Generated automatically from CSV
+kind: FeatureMarkers
+feature: distributive
+markers:
+  +:
+  - kind: prefix
+    value: '[DIST]'
+    stage: add_dist
+  '-':
+  - kind: prefix
+    value: '[DIST]'
+    stage: add_dist
+  - kind: rule
+    value: $drop_DIST
+    stage: insert_dist

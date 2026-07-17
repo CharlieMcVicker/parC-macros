@@ -1,0 +1,65 @@
+# This is a ContingentFeatureMarkers config file
+# Generated automatically from CSVs
+kind: ContingentFeatureMarkers
+features:
+- tense_present_class
+- tense
+markers:
+  a_present:
+    assertive:
+    - kind: suffix
+      value: v'i
+      stage: tense
+    future_prog:
+    - kind: suffix
+      value: esti
+      stage: tense
+    habitual:
+    - kind: suffix
+      value: o'i
+      stage: tense
+    immediate:
+    - kind: suffix
+      value: ''
+      stage: tense
+    infinitive:
+    - kind: suffix
+      value: i
+      stage: tense
+    present:
+    - kind: suffix
+      value: a
+      stage: tense
+    reported:
+    - kind: suffix
+      value: e'i
+      stage: tense
+  i_present:
+    assertive:
+    - kind: suffix
+      value: v'i
+      stage: tense
+    future_prog:
+    - kind: suffix
+      value: esti
+      stage: tense
+    habitual:
+    - kind: suffix
+      value: o'i
+      stage: tense
+    immediate:
+    - kind: suffix
+      value: ''
+      stage: tense
+    infinitive:
+    - kind: suffix
+      value: i
+      stage: tense
+    present:
+    - kind: suffix
+      value: i
+      stage: tense
+    reported:
+    - kind: suffix
+      value: e'i
+      stage: tense

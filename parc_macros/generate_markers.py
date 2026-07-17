@@ -273,15 +273,12 @@ def generate_paradigm_configs(
         else:
             markers_dict[col] = None
 
-
     if optional_features and meta.get("feature") in optional_features:
         stage_name = meta.get("stage", meta["feature"])
         if "UNMARKED" not in markers_dict:
-            markers_dict["UNMARKED"] = [{
-                "kind": "rule",
-                "value": "$no_op",
-                "stage": stage_name
-            }]
+            markers_dict["UNMARKED"] = [
+                {"kind": "rule", "value": "$no_op", "stage": stage_name}
+            ]
 
     markers_dict = {k: markers_dict[k] for k in sorted(markers_dict.keys())}
 
@@ -354,7 +351,9 @@ def generate_paradigm_configs(
     print(f"Generated Paradigm: {paradigm_file}")
 
 
-def generate_standard_feature_markers(feature_name, pos_name, markers, output_dir, optional_features=None):
+def generate_standard_feature_markers(
+    feature_name, pos_name, markers, output_dir, optional_features=None
+):
     filename_base = f"{pos_name}_{feature_name}"
     fm_dir = os.path.join(output_dir, "Exponence", "FeatureMarkers")
     os.makedirs(fm_dir, exist_ok=True)
@@ -364,11 +363,9 @@ def generate_standard_feature_markers(feature_name, pos_name, markers, output_di
 
     if optional_features and feature_name in optional_features:
         if "UNMARKED" not in markers_dict:
-            markers_dict["UNMARKED"] = [{
-                "kind": "rule",
-                "value": "$no_op",
-                "stage": feature_name
-            }]
+            markers_dict["UNMARKED"] = [
+                {"kind": "rule", "value": "$no_op", "stage": feature_name}
+            ]
 
     markers_dict = {k: markers_dict[k] for k in sorted(markers_dict.keys())}
 
@@ -398,6 +395,7 @@ def generate_contingent_configs(
     pos_name,
     output_dir,
     stage_order,
+    open_root_template,
     optional_features=None,
 ):
     """
@@ -439,16 +437,16 @@ def generate_contingent_configs(
             for f_val in sorted(class_mappings[c_name].keys()):
                 sorted_mappings[c_name][f_val] = class_mappings[c_name][f_val]
 
-
             if optional_features and feat in optional_features:
                 if "UNMARKED" not in sorted_mappings[c_name]:
-                    sorted_mappings[c_name]["UNMARKED"] = [{
-                        "kind": "rule",
-                        "value": "$no_op",
-                        "stage": feat
-                    }]
+                    sorted_mappings[c_name]["UNMARKED"] = [
+                        {"kind": "rule", "value": "$no_op", "stage": feat}
+                    ]
 
-            sorted_mappings[c_name] = {k: sorted_mappings[c_name][k] for k in sorted(sorted_mappings[c_name].keys())}
+            sorted_mappings[c_name] = {
+                k: sorted_mappings[c_name][k]
+                for k in sorted(sorted_mappings[c_name].keys())
+            }
 
         cfm_content = {
             "kind": "ContingentFeatureMarkers",
@@ -470,12 +468,21 @@ def generate_contingent_configs(
         print(f"Generated ContingentFeatureMarkers: {cfm_file}")
         contingent_files.append(basename)
 
-    # Generate standard FeatureMarkers for non-contingent features
-    standard_feature_refs = {}
+    # Group standard FeatureMarkers for non-contingent features by feature
+    non_contingent_groups = {}
     for res in non_contingent_results:
         feat = res["metadata"]["feature"]
         markers = res["paradigms_markers"].get("", {})
+        if feat not in non_contingent_groups:
+            non_contingent_groups[feat] = {}
+        for col, entries in markers.items():
+            if col not in non_contingent_groups[feat]:
+                non_contingent_groups[feat][col] = []
+            non_contingent_groups[feat][col].extend(entries)
 
+    # Generate standard FeatureMarkers for non-contingent features
+    standard_feature_refs = {}
+    for feat, markers in sorted(non_contingent_groups.items()):
         # Sort marker entries for determinism
         sorted_markers = {}
         for f_val in sorted(markers.keys()):
@@ -506,8 +513,12 @@ def generate_contingent_configs(
         "feature_markers": feature_markers,
         "contingent_markers": sorted(contingent_files),
     }
+
     if stage_order:
         paradigm_content["stage_order"] = stage_order
+
+    if open_root_template:
+        paradigm_content["open_root_template"] = open_root_template
 
     with open(paradigm_file, "w", encoding="utf-8") as f:
         f.write("# This is a Paradigm config file\n")
@@ -851,9 +862,12 @@ def main():
                     if "UNMARKED" not in feat_def["values"]:
                         feat_def["values"].append("UNMARKED")
 
-
     # Map Step: Parse each CSV file and extract paradigm markers
     mapped_results = [map_csv_to_markers(csv_file) for csv_file in csv_files]
+    mapped_results = [
+        r for r in mapped_results if not r["metadata"].get("inactive", False)
+    ]
+    print(len(mapped_results))
 
     # Reduce Step: Aggregate paradigm metadata, markers, and class associations
     paradigms_metadata, paradigms_markers, class_features_paradigms = (
@@ -867,6 +881,8 @@ def main():
         "generate_contingent_markers", False
     ) or paradigm_config.get("use_contingent_features", False)
 
+    open_root_template = paradigm_config.get("open_root_template", None)
+
     # Output paradigm files
     if use_contingent_features:
         generate_contingent_configs(
@@ -874,6 +890,7 @@ def main():
             pos_name=pos_name,
             output_dir=output_dir,
             stage_order=stage_order,
+            open_root_template=open_root_template,
             optional_features=optional_features,
         )
 

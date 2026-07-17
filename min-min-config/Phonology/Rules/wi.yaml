@@ -2,20 +2,12 @@
 # Define context-sensitive phonological rules.
 kind: Rules
 rules:
-  - name: add_WI_token
-    description: >
-      add WI wi token where it will be inserted
-    string_map:
-      - ["", "[WI]"]
-    left_context: "#"
-    right_context: "{^[WI]}"
-
   - name: insert_wi_v_h
     description: >
       insert wi material before h/<V>
     string_map:
       - ["[WI]", "w"]
-    right_context: "<V>|h"
+    right_context: "<TempTags>*<V>|h"
 
   - name: insert_wi_default
     description: >
@@ -23,18 +15,12 @@ rules:
     string_map:
       - ["[WI]", "wi"]
 
-  - name: insert_wi
+  - name: insert_WI
     description: >
       fix wi before h and vowels
     rule_sequence:
       - $insert_wi_v_h
       - $insert_wi_default
-
-  - name: drop_wi
-    description: >
-      drop wi
-    string_map:
-      - ["[WI]", ""]
 
 ### HELP FOR RULES ###
 # Here we define context-sensitive phonological rules

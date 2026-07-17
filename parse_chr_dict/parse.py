@@ -155,17 +155,17 @@ def main():
 
     root = "atat"
     lexical = [
-        ("aspect_class", "go"),
+        # ("aspect_class", "go"),
         ("prefix_class", "a_stem"),
         ("tense_present_class", "a_present"),
     ]
     inflectional = [
         ("pronominal", "3sg.A"),
-        ("aspect", "present"),
+        # ("aspect", "present"),
         ("tense", "present"),
-        ("translocutive", "UNMARKED"),
-        ("distributive", "UNMARKED"),
-        ("partitive", "UNMARKED"),
+        # ("translocutive", "+"),
+        # ("distributive", "-"),
+        # ("partitive", "+"),
     ]
 
     words = inflect(root, lexical, inflectional)

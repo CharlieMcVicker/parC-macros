@@ -1,0 +1,9 @@
+# part_of_speech: $verb
+prefix_class,acceptor
+a_stem,a<Phone>*
+v_stem,v<Phone>*
+e_stem,e<Phone>*
+k_a_stem,a<Phone>*
+vowel_stem,<V><Phone>*
+cons_stem,<C><Phone>*
+r_stem,(<Son>|<N>)<Phone>*

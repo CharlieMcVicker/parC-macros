@@ -1,5 +1,5 @@
 # kind: rule
-# stage: add_ni
+# stage: insert_ni
 # rule: $drop_NI
 # feature: partitive
 # part_of_speech: $verb
