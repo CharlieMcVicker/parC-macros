@@ -7,7 +7,7 @@ rules:
       insert wi material before h/<V>
     string_map:
       - ["[DIST]", "t"]
-    right_context: "<TempTags>*<V>|h"
+    right_context: "<V>|h"
 
   - name: insert_dist_default
     description: >

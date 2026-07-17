@@ -156,11 +156,11 @@ def main():
     root = "atat"
     lexical = [
         # ("aspect_class", "go"),
-        ("prefix_class", "a_stem"),
+        # ("prefix_class", "a_stem"),
         ("tense_present_class", "a_present"),
     ]
     inflectional = [
-        ("pronominal", "3sg.A"),
+        # ("pronominal", "3sg.A"),
         # ("aspect", "present"),
         ("tense", "present"),
         # ("translocutive", "+"),
