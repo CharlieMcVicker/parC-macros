@@ -35,21 +35,21 @@ features:
   - 2sg>3sg
   rules:
   - +
+  prefix_class:
+  - name: a_stem
+    acceptor: <Morpheme>*a<Phone>*<Morpheme>*
+  - name: cons_stem
+    acceptor: <Morpheme>*<C><Phone>*<Morpheme>*
+  - name: e_stem
+    acceptor: <Morpheme>*e<Phone>*<Morpheme>*
+  - name: k_a_stem
+    acceptor: <Morpheme>*a<Phone>*<Morpheme>*
+  - name: r_stem
+    acceptor: <Morpheme>*(<Son>|<N>)<Phone>*<Morpheme>*
+  - name: v_stem
+    acceptor: <Morpheme>*v<Phone>*<Morpheme>*
+  - name: vowel_stem
+    acceptor: <Morpheme>*<V><Phone>*<Morpheme>*
   tense_present_class:
   - a_present
   - i_present
-  prefix_class:
-  - name: a_stem
-    acceptor: <Morpheme>*a<Phone>*
-  - name: cons_stem
-    acceptor: <Morpheme>*<C><Phone>*
-  - name: e_stem
-    acceptor: <Morpheme>*e<Phone>*
-  - name: k_a_stem
-    acceptor: <Morpheme>*a<Phone>*
-  - name: r_stem
-    acceptor: <Morpheme>*(<Son>|<N>)<Phone>*
-  - name: v_stem
-    acceptor: <Morpheme>*v<Phone>*
-  - name: vowel_stem
-    acceptor: <Morpheme>*<V><Phone>*

@@ -1,0 +1,32 @@
+# This is a Rules config file
+# Generated automatically by generate_morpheme_replace_rules.py
+kind: Rules
+rules:
+- name: tense_empty
+  string_map:
+  - - '[Tense]'
+    - ''
+- name: tense_a
+  string_map:
+  - - '[Tense]'
+    - a
+- name: tense_e_i
+  string_map:
+  - - '[Tense]'
+    - e'i
+- name: tense_esti
+  string_map:
+  - - '[Tense]'
+    - esti
+- name: tense_i
+  string_map:
+  - - '[Tense]'
+    - i
+- name: tense_o_i
+  string_map:
+  - - '[Tense]'
+    - o'i
+- name: tense_v_i
+  string_map:
+  - - '[Tense]'
+    - v'i

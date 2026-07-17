@@ -28,6 +28,9 @@ data:
   - name: Pro
     ref: <Pro>
     tags: ["[Pro]"]
+  - name: Tense
+    ref: <Tense>
+    tags: ["[Tense]"]
 
 ## HELP FOR INVENTORY ##
 # The inventory is built as a nested tree

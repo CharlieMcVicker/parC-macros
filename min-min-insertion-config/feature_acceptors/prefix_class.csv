@@ -1,9 +1,9 @@
 # part_of_speech: $verb
 prefix_class,acceptor
-a_stem,<Morpheme>*a<Phone>*
-v_stem,<Morpheme>*v<Phone>*
-e_stem,<Morpheme>*e<Phone>*
-k_a_stem,<Morpheme>*a<Phone>*
-vowel_stem,<Morpheme>*<V><Phone>*
-cons_stem,<Morpheme>*<C><Phone>*
-r_stem,<Morpheme>*(<Son>|<N>)<Phone>*
+a_stem,<Morpheme>*a<Phone>*<Morpheme>*
+v_stem,<Morpheme>*v<Phone>*<Morpheme>*
+e_stem,<Morpheme>*e<Phone>*<Morpheme>*
+k_a_stem,<Morpheme>*a<Phone>*<Morpheme>*
+vowel_stem,<Morpheme>*<V><Phone>*<Morpheme>*
+cons_stem,<Morpheme>*<C><Phone>*<Morpheme>*
+r_stem,<Morpheme>*(<Son>|<N>)<Phone>*<Morpheme>*

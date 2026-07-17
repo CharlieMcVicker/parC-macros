@@ -10,8 +10,9 @@ contingent_markers:
 - verb_pronominal_prefix_class_contingent
 - verb_tense_tense_present_class_contingent
 stage_order:
+- drop_stem_initial_vowel
 - pronominal
 - tense
 - insert_dist
 - insert_wi
-open_root_template: '[WI]?[DIST]?[Pro]<V>?(<C>+<V>)*<C>*'
+open_root_template: '[WI]?[DIST]?[Pro]<V>?(<C>+<V>)*<C>*[Tense]'
