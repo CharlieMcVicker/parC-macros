@@ -1,0 +1,6 @@
+# kind: insertion
+# rule: insert_DIST2
+tag,rule_name,l_context,r_context,content
+[DIST]a,insert_dist2_a,,,ti
+[DIST],insert_dist2_v_h,,"<V>|h",t
+[DIST],insert_dist2_default,,,ti

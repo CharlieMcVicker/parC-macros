@@ -3,7 +3,7 @@
 kind: Paradigm
 part_of_speech: $verb
 feature_markers:
-  tense: null
+  tense: $verb_tense
   rules: $verb_rules
 contingent_markers:
 - verb_tense_tense_present_class_contingent

@@ -1,0 +1,7 @@
+# kind: rule
+# stage: insert_DIST
+# rule: $insert_DIST2
+# feature: tense
+# part_of_speech: $verb
+immediate,infinitive
+Y,Y

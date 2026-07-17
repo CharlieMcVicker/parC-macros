@@ -2,16 +2,21 @@
 # Generated automatically by generate_insertion_rules.py
 kind: Rules
 rules:
-- name: insert_dist_v_h
+- name: insert_dist2_a
+  string_map:
+  - - '[DIST]a'
+    - ti
+- name: insert_dist2_v_h
   string_map:
   - - '[DIST]'
     - t
   right_context: <V>|h
-- name: insert_dist_default
+- name: insert_dist2_default
   string_map:
   - - '[DIST]'
     - ti
-- name: insert_DIST
+- name: insert_DIST2
   rule_sequence:
-  - $insert_dist_v_h
-  - $insert_dist_default
+  - $insert_dist2_a
+  - $insert_dist2_v_h
+  - $insert_dist2_default

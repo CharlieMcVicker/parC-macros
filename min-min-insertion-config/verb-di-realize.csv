@@ -1,7 +1,0 @@
-# kind: rule
-# stage: insert_DIST
-# rule: $insert_DIST
-# feature: rules
-# part_of_speech: $verb
-+
-Y

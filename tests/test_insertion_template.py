@@ -15,7 +15,12 @@ def test_optional_feature_combinations_insertion():
     """Same surface/tag assertions as test_prefix_template but for
     min-min-insertion-generated/, which is produced by the CSV-based
     insertion macro system instead of hand-coded YAML rules."""
-    tests = [("watata", "[WI]"), ("tatata", "[DIST]"), ("witata", "[WI][DIST]")]
+    tests = [
+        ("watata", "[WI]"),
+        ("tatata", "[DIST]"),
+        ("witata", "[WI][DIST]"),
+        ("titata", "[DIST]a"),
+    ]
 
     for surface, tag_seq in tests:
         parses = parse(surface)
