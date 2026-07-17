@@ -10,8 +10,46 @@ features:
   - assertive
   - reported
   - infinitive
+  pronominal:
+  - 1sg.A
+  - Edl.A
+  - Epl.A
+  - Idl.A
+  - Ipl.A
+  - 2sg.A
+  - 2dl.A
+  - 2pl.A
+  - 3sg.A
+  - 3ns.A
+  - 1sg.B
+  - Edl.B
+  - Epl.B
+  - Idl.B
+  - Ipl.B
+  - 2sg.B
+  - 2dl.B
+  - 2pl.B
+  - 3sg.B
+  - 3ns.B
+  - 1sg>3sg
+  - 2sg>3sg
   rules:
   - +
+  prefix_class:
+  - name: a_stem
+    acceptor: <Morpheme>*a<Phone>*
+  - name: cons_stem
+    acceptor: <Morpheme>*<C><Phone>*
+  - name: e_stem
+    acceptor: <Morpheme>*e<Phone>*
+  - name: k_a_stem
+    acceptor: <Morpheme>*a<Phone>*
+  - name: r_stem
+    acceptor: <Morpheme>*(<Son>|<N>)<Phone>*
+  - name: v_stem
+    acceptor: <Morpheme>*v<Phone>*
+  - name: vowel_stem
+    acceptor: <Morpheme>*<V><Phone>*
   tense_present_class:
   - a_present
   - i_present

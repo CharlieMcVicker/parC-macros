@@ -3,11 +3,13 @@
 # or natural classes relevant for your language.
 kind: Patterns
 patterns:
-
-# type pat-item to add more patterns!
-- name: Consonants
-  pattern: <Stops>|<Frc>|<Son>|<N>
-  ref: <C>
+  # type pat-item to add more patterns!
+  - name: Consonants
+    pattern: <Stops>|<Frc>|<Son>|<N>
+    ref: <C>
+  - name: Morpheme
+    pattern: <Pro>|<PPP>
+    ref: <Morpheme>
 
 ## HELP FOR PATTERNS ##
 # List of pattern definitions.
@@ -30,7 +32,7 @@ patterns:
 # - | (pipe):           Union between two expressions, e.g. a|e matches "a" or "e"
 #                       foo|bar matches "foo" or "bar"
 #                       and bugs?|fl(y|ies) matches "bug", "bugs", "fly", or "flies"
-# - * (asterisk):       Zero or more of the preceding element, e.g. a* matches "a", "aa", "aaa", etc.           
+# - * (asterisk):       Zero or more of the preceding element, e.g. a* matches "a", "aa", "aaa", etc.
 # - ? (question mark):  Zero or one of the preceding element, e.g. a? matches "a" or ""
 # - + (plus):           One or more of the preceding element, e.g. a+ matches "a", "aa", "aaa", etc.
 # - {^...} (caret):     Negation, i.e. matches any symbol except those inside the braces

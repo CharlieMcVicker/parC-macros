@@ -5,6 +5,8 @@ import shutil
 import sys
 import yaml
 from parc_macros.generate_insertion_rules import generate_insertion_rules
+from parc_macros.generate_morpheme_replace_rules import generate_morpheme_replace_rules, sanitize_rule_name
+
 
 
 # To ensure beautiful YAML output
@@ -105,17 +107,28 @@ def map_csv_to_markers(csv_file):
                     raise KeyError(
                         f"Column '{col}' not found in CSV file {csv_file}. Available columns: {fieldnames}"
                     ) from e
-                if val or (val == "" and metadata.get("kind") != "rule"):
+                if val or (val == "" and metadata.get("kind") not in ("rule",)):
                     if metadata.get("kind") == "rule" and "rule" in metadata:
                         if val.upper() == "Y":
                             val = metadata["rule"]
                         else:
                             continue
-                    marker_entry = {
-                        "kind": metadata["kind"],
-                        "value": val,
-                        "stage": metadata["stage"],
-                    }
+                    
+                    if metadata.get("kind") == "morpheme_replace":
+                        morpheme_tag = metadata.get("morpheme_tag", "[Pro]")
+                        tag_slug = morpheme_tag.replace("[", "").replace("]", "").lower()
+                        rule_name = f"{tag_slug}_{sanitize_rule_name(val)}"
+                        marker_entry = {
+                            "kind": "rule",
+                            "value": f"${rule_name}",
+                            "stage": metadata["stage"],
+                        }
+                    else:
+                        marker_entry = {
+                            "kind": metadata["kind"],
+                            "value": val,
+                            "stage": metadata["stage"],
+                        }
                     if col not in paradigms_markers[dummy_paradigm]:
                         paradigms_markers[dummy_paradigm][col] = []
                     paradigms_markers[dummy_paradigm][col].append(marker_entry)
@@ -138,9 +151,9 @@ def map_csv_to_markers(csv_file):
                     val = row[col].strip()
                 except Exception as e:
                     raise KeyError(
-                        f"Column '{col}' not found in CSV file {csv_file}. Available columns: {fieldnames}"
+                         f"Column '{col}' not found in CSV file {csv_file}. Available columns: {fieldnames}"
                     ) from e
-                if val or (val == "" and metadata.get("kind") != "rule"):
+                if val or (val == "" and metadata.get("kind") not in ("rule",)):
                     # If kind is rule and a rule name is specified in metadata:
                     # Y means we use the rule name from metadata. N or empty means no entry.
                     if metadata.get("kind") == "rule" and "rule" in metadata:
@@ -150,11 +163,21 @@ def map_csv_to_markers(csv_file):
                             # Skip N or empty
                             continue
 
-                    marker_entry = {
-                        "kind": metadata["kind"],
-                        "value": val,
-                        "stage": metadata["stage"],
-                    }
+                    if metadata.get("kind") == "morpheme_replace":
+                        morpheme_tag = metadata.get("morpheme_tag", "[Pro]")
+                        tag_slug = morpheme_tag.replace("[", "").replace("]", "").lower()
+                        rule_name = f"{tag_slug}_{sanitize_rule_name(val)}"
+                        marker_entry = {
+                            "kind": "rule",
+                            "value": f"${rule_name}",
+                            "stage": metadata["stage"],
+                        }
+                    else:
+                        marker_entry = {
+                            "kind": metadata["kind"],
+                            "value": val,
+                            "stage": metadata["stage"],
+                        }
                     if col not in paradigms_markers[paradigm_name]:
                         paradigms_markers[paradigm_name][col] = []
                     paradigms_markers[paradigm_name][col].append(marker_entry)
@@ -809,6 +832,8 @@ def main():
     # Generate insertion rules from insertions/*.csv into Phonology/Rules/
     if os.path.isdir(config_path):
         generate_insertion_rules(config_path, output_dir)
+        generate_morpheme_replace_rules(config_path, output_dir)
+
 
     # 1. Determine all CSVs and verb.yaml
     csv_files = []

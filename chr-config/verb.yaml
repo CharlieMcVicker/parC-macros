@@ -62,3 +62,4 @@ lexical_features:
 
 paradigm:
   generate_contingent_markers: true
+  open_root_template: "[Pro]?[WI]?[DIST]?[NI]?<Phone>*"

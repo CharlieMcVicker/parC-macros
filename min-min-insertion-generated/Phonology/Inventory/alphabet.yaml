@@ -25,6 +25,9 @@ data:
   - name: PPP
     ref: <PPP>
     tags: ["[WI]", "[DIST]"]
+  - name: Pro
+    ref: <Pro>
+    tags: ["[Pro]"]
 
 ## HELP FOR INVENTORY ##
 # The inventory is built as a nested tree

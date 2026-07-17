@@ -1,0 +1,630 @@
+# This is a ContingentFeatureMarkers config file
+# Generated automatically from CSVs
+kind: ContingentFeatureMarkers
+features:
+- prefix_class
+- pronominal
+markers:
+  a_stem:
+    1sg.A:
+    - kind: rule
+      value: $pro_k
+      stage: pronominal
+    1sg.B:
+    - kind: rule
+      value: $pro_akw
+      stage: pronominal
+    1sg>3sg:
+    - kind: rule
+      value: $pro_tsiy
+      stage: pronominal
+    2dl.A:
+    - kind: rule
+      value: $pro_st
+      stage: pronominal
+    2dl.B:
+    - kind: rule
+      value: $pro_st
+      stage: pronominal
+    2pl.A:
+    - kind: rule
+      value: $pro_its
+      stage: pronominal
+    2pl.B:
+    - kind: rule
+      value: $pro_its
+      stage: pronominal
+    2sg.A:
+    - kind: rule
+      value: $pro_h
+      stage: pronominal
+    2sg.B:
+    - kind: rule
+      value: $pro_ts
+      stage: pronominal
+    2sg>3sg:
+    - kind: rule
+      value: $pro_hiy
+      stage: pronominal
+    3ns.A:
+    - kind: rule
+      value: $pro_an
+      stage: pronominal
+    3ns.B:
+    - kind: rule
+      value: $pro_un
+      stage: pronominal
+    3sg.A:
+    - kind: rule
+      value: $pro_a
+      stage: pronominal
+    3sg.B:
+    - kind: rule
+      value: $pro_u
+      stage: pronominal
+    Edl.A:
+    - kind: rule
+      value: $pro_ost
+      stage: pronominal
+    Edl.B:
+    - kind: rule
+      value: $pro_okin
+      stage: pronominal
+    Epl.A:
+    - kind: rule
+      value: $pro_ots
+      stage: pronominal
+    Epl.B:
+    - kind: rule
+      value: $pro_ok
+      stage: pronominal
+    Idl.A:
+    - kind: rule
+      value: $pro_in
+      stage: pronominal
+    Idl.B:
+    - kind: rule
+      value: $pro_kin
+      stage: pronominal
+    Ipl.A:
+    - kind: rule
+      value: $pro_it
+      stage: pronominal
+    Ipl.B:
+    - kind: rule
+      value: $pro_ik
+      stage: pronominal
+  cons_stem:
+    1sg.A:
+    - kind: rule
+      value: $pro_tsi
+      stage: pronominal
+    1sg.B:
+    - kind: rule
+      value: $pro_aki
+      stage: pronominal
+    1sg>3sg:
+    - kind: rule
+      value: $pro_tsi
+      stage: pronominal
+    2dl.A:
+    - kind: rule
+      value: $pro_sti
+      stage: pronominal
+    2dl.B:
+    - kind: rule
+      value: $pro_sti
+      stage: pronominal
+    2pl.A:
+    - kind: rule
+      value: $pro_itsi
+      stage: pronominal
+    2pl.B:
+    - kind: rule
+      value: $pro_itsi
+      stage: pronominal
+    2sg.A:
+    - kind: rule
+      value: $pro_hi
+      stage: pronominal
+    2sg.B:
+    - kind: rule
+      value: $pro_tsa
+      stage: pronominal
+    2sg>3sg:
+    - kind: rule
+      value: $pro_hi
+      stage: pronominal
+    3ns.A:
+    - kind: rule
+      value: $pro_ani
+      stage: pronominal
+    3ns.B:
+    - kind: rule
+      value: $pro_uni
+      stage: pronominal
+    3sg.A:
+    - kind: rule
+      value: $pro_a
+      stage: pronominal
+    3sg.B:
+    - kind: rule
+      value: $pro_u
+      stage: pronominal
+    Edl.A:
+    - kind: rule
+      value: $pro_osti
+      stage: pronominal
+    Edl.B:
+    - kind: rule
+      value: $pro_okini
+      stage: pronominal
+    Epl.A:
+    - kind: rule
+      value: $pro_otsi
+      stage: pronominal
+    Epl.B:
+    - kind: rule
+      value: $pro_oki
+      stage: pronominal
+    Idl.A:
+    - kind: rule
+      value: $pro_ini
+      stage: pronominal
+    Idl.B:
+    - kind: rule
+      value: $pro_kini
+      stage: pronominal
+    Ipl.A:
+    - kind: rule
+      value: $pro_iti
+      stage: pronominal
+    Ipl.B:
+    - kind: rule
+      value: $pro_iki
+      stage: pronominal
+  e_stem:
+    1sg.A:
+    - kind: rule
+      value: $pro_k
+      stage: pronominal
+    1sg.B:
+    - kind: rule
+      value: $pro_akw
+      stage: pronominal
+    1sg>3sg:
+    - kind: rule
+      value: $pro_tsiy
+      stage: pronominal
+    2dl.A:
+    - kind: rule
+      value: $pro_st
+      stage: pronominal
+    2dl.B:
+    - kind: rule
+      value: $pro_st
+      stage: pronominal
+    2pl.A:
+    - kind: rule
+      value: $pro_its
+      stage: pronominal
+    2pl.B:
+    - kind: rule
+      value: $pro_its
+      stage: pronominal
+    2sg.A:
+    - kind: rule
+      value: $pro_h
+      stage: pronominal
+    2sg.B:
+    - kind: rule
+      value: $pro_ts
+      stage: pronominal
+    2sg>3sg:
+    - kind: rule
+      value: $pro_hiy
+      stage: pronominal
+    3ns.A:
+    - kind: rule
+      value: $pro_an
+      stage: pronominal
+    3ns.B:
+    - kind: rule
+      value: $pro_un
+      stage: pronominal
+    3sg.A:
+    - kind: rule
+      value: $pro_empty
+      stage: pronominal
+    3sg.B:
+    - kind: rule
+      value: $pro_uw
+      stage: pronominal
+    Edl.A:
+    - kind: rule
+      value: $pro_ost
+      stage: pronominal
+    Edl.B:
+    - kind: rule
+      value: $pro_okin
+      stage: pronominal
+    Epl.A:
+    - kind: rule
+      value: $pro_ots
+      stage: pronominal
+    Epl.B:
+    - kind: rule
+      value: $pro_ok
+      stage: pronominal
+    Idl.A:
+    - kind: rule
+      value: $pro_in
+      stage: pronominal
+    Idl.B:
+    - kind: rule
+      value: $pro_kin
+      stage: pronominal
+    Ipl.A:
+    - kind: rule
+      value: $pro_it
+      stage: pronominal
+    Ipl.B:
+    - kind: rule
+      value: $pro_ik
+      stage: pronominal
+  k_a_stem:
+    1sg.A:
+    - kind: rule
+      value: $pro_k
+      stage: pronominal
+    1sg.B:
+    - kind: rule
+      value: $pro_akw
+      stage: pronominal
+    1sg>3sg:
+    - kind: rule
+      value: $pro_tsiy
+      stage: pronominal
+    2dl.A:
+    - kind: rule
+      value: $pro_st
+      stage: pronominal
+    2dl.B:
+    - kind: rule
+      value: $pro_st
+      stage: pronominal
+    2pl.A:
+    - kind: rule
+      value: $pro_its
+      stage: pronominal
+    2pl.B:
+    - kind: rule
+      value: $pro_its
+      stage: pronominal
+    2sg.A:
+    - kind: rule
+      value: $pro_h
+      stage: pronominal
+    2sg.B:
+    - kind: rule
+      value: $pro_ts
+      stage: pronominal
+    2sg>3sg:
+    - kind: rule
+      value: $pro_hiy
+      stage: pronominal
+    3ns.A:
+    - kind: rule
+      value: $pro_an
+      stage: pronominal
+    3ns.B:
+    - kind: rule
+      value: $pro_un
+      stage: pronominal
+    3sg.A:
+    - kind: rule
+      value: $pro_k
+      stage: pronominal
+    3sg.B:
+    - kind: rule
+      value: $pro_u
+      stage: pronominal
+    Edl.A:
+    - kind: rule
+      value: $pro_ost
+      stage: pronominal
+    Edl.B:
+    - kind: rule
+      value: $pro_okin
+      stage: pronominal
+    Epl.A:
+    - kind: rule
+      value: $pro_ots
+      stage: pronominal
+    Epl.B:
+    - kind: rule
+      value: $pro_ok
+      stage: pronominal
+    Idl.A:
+    - kind: rule
+      value: $pro_in
+      stage: pronominal
+    Idl.B:
+    - kind: rule
+      value: $pro_kin
+      stage: pronominal
+    Ipl.A:
+    - kind: rule
+      value: $pro_it
+      stage: pronominal
+    Ipl.B:
+    - kind: rule
+      value: $pro_ik
+      stage: pronominal
+  r_stem:
+    1sg.A:
+    - kind: rule
+      value: $pro_tsi
+      stage: pronominal
+    1sg.B:
+    - kind: rule
+      value: $pro_aki
+      stage: pronominal
+    1sg>3sg:
+    - kind: rule
+      value: $pro_tsi
+      stage: pronominal
+    2dl.A:
+    - kind: rule
+      value: $pro_sti
+      stage: pronominal
+    2dl.B:
+    - kind: rule
+      value: $pro_sti
+      stage: pronominal
+    2pl.A:
+    - kind: rule
+      value: $pro_itsi
+      stage: pronominal
+    2pl.B:
+    - kind: rule
+      value: $pro_itsi
+      stage: pronominal
+    2sg.A:
+    - kind: rule
+      value: $pro_hi
+      stage: pronominal
+    2sg.B:
+    - kind: rule
+      value: $pro_tsa
+      stage: pronominal
+    2sg>3sg:
+    - kind: rule
+      value: $pro_hi
+      stage: pronominal
+    3ns.A:
+    - kind: rule
+      value: $pro_ani
+      stage: pronominal
+    3ns.B:
+    - kind: rule
+      value: $pro_uni
+      stage: pronominal
+    3sg.A:
+    - kind: rule
+      value: $pro_ka
+      stage: pronominal
+    3sg.B:
+    - kind: rule
+      value: $pro_u
+      stage: pronominal
+    Edl.A:
+    - kind: rule
+      value: $pro_osti
+      stage: pronominal
+    Edl.B:
+    - kind: rule
+      value: $pro_okini
+      stage: pronominal
+    Epl.A:
+    - kind: rule
+      value: $pro_otsi
+      stage: pronominal
+    Epl.B:
+    - kind: rule
+      value: $pro_oki
+      stage: pronominal
+    Idl.A:
+    - kind: rule
+      value: $pro_ini
+      stage: pronominal
+    Idl.B:
+    - kind: rule
+      value: $pro_kini
+      stage: pronominal
+    Ipl.A:
+    - kind: rule
+      value: $pro_iti
+      stage: pronominal
+    Ipl.B:
+    - kind: rule
+      value: $pro_iki
+      stage: pronominal
+  v_stem:
+    1sg.A:
+    - kind: rule
+      value: $pro_k
+      stage: pronominal
+    1sg.B:
+    - kind: rule
+      value: $pro_akw
+      stage: pronominal
+    1sg>3sg:
+    - kind: rule
+      value: $pro_tsiy
+      stage: pronominal
+    2dl.A:
+    - kind: rule
+      value: $pro_st
+      stage: pronominal
+    2dl.B:
+    - kind: rule
+      value: $pro_st
+      stage: pronominal
+    2pl.A:
+    - kind: rule
+      value: $pro_its
+      stage: pronominal
+    2pl.B:
+    - kind: rule
+      value: $pro_its
+      stage: pronominal
+    2sg.A:
+    - kind: rule
+      value: $pro_h
+      stage: pronominal
+    2sg.B:
+    - kind: rule
+      value: $pro_ts
+      stage: pronominal
+    2sg>3sg:
+    - kind: rule
+      value: $pro_hiy
+      stage: pronominal
+    3ns.A:
+    - kind: rule
+      value: $pro_an
+      stage: pronominal
+    3ns.B:
+    - kind: rule
+      value: $pro_un
+      stage: pronominal
+    3sg.A:
+    - kind: rule
+      value: $pro_k
+      stage: pronominal
+    3sg.B:
+    - kind: rule
+      value: $pro_uwa
+      stage: pronominal
+    Edl.A:
+    - kind: rule
+      value: $pro_ost
+      stage: pronominal
+    Edl.B:
+    - kind: rule
+      value: $pro_okin
+      stage: pronominal
+    Epl.A:
+    - kind: rule
+      value: $pro_ots
+      stage: pronominal
+    Epl.B:
+    - kind: rule
+      value: $pro_ok
+      stage: pronominal
+    Idl.A:
+    - kind: rule
+      value: $pro_in
+      stage: pronominal
+    Idl.B:
+    - kind: rule
+      value: $pro_kin
+      stage: pronominal
+    Ipl.A:
+    - kind: rule
+      value: $pro_it
+      stage: pronominal
+    Ipl.B:
+    - kind: rule
+      value: $pro_ik
+      stage: pronominal
+  vowel_stem:
+    1sg.A:
+    - kind: rule
+      value: $pro_k
+      stage: pronominal
+    1sg.B:
+    - kind: rule
+      value: $pro_akw
+      stage: pronominal
+    1sg>3sg:
+    - kind: rule
+      value: $pro_tsiy
+      stage: pronominal
+    2dl.A:
+    - kind: rule
+      value: $pro_st
+      stage: pronominal
+    2dl.B:
+    - kind: rule
+      value: $pro_st
+      stage: pronominal
+    2pl.A:
+    - kind: rule
+      value: $pro_its
+      stage: pronominal
+    2pl.B:
+    - kind: rule
+      value: $pro_its
+      stage: pronominal
+    2sg.A:
+    - kind: rule
+      value: $pro_h
+      stage: pronominal
+    2sg.B:
+    - kind: rule
+      value: $pro_ts
+      stage: pronominal
+    2sg>3sg:
+    - kind: rule
+      value: $pro_hiy
+      stage: pronominal
+    3ns.A:
+    - kind: rule
+      value: $pro_an
+      stage: pronominal
+    3ns.B:
+    - kind: rule
+      value: $pro_un
+      stage: pronominal
+    3sg.A:
+    - kind: rule
+      value: $pro_k
+      stage: pronominal
+    3sg.B:
+    - kind: rule
+      value: $pro_uw
+      stage: pronominal
+    Edl.A:
+    - kind: rule
+      value: $pro_ost
+      stage: pronominal
+    Edl.B:
+    - kind: rule
+      value: $pro_okin
+      stage: pronominal
+    Epl.A:
+    - kind: rule
+      value: $pro_ots
+      stage: pronominal
+    Epl.B:
+    - kind: rule
+      value: $pro_ok
+      stage: pronominal
+    Idl.A:
+    - kind: rule
+      value: $pro_in
+      stage: pronominal
+    Idl.B:
+    - kind: rule
+      value: $pro_kin
+      stage: pronominal
+    Ipl.A:
+    - kind: rule
+      value: $pro_it
+      stage: pronominal
+    Ipl.B:
+    - kind: rule
+      value: $pro_ik
+      stage: pronominal

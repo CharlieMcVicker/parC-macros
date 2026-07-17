@@ -21,7 +21,7 @@ data:
     phones: [a, e, i, o, u, v]
   - name: Temp Tags
     ref: <TempTags>
-    tags: ["[TEMP]", "[WI]", "[DIST]", "[NI]"]
+    tags: ["[TEMP]", "[WI]", "[DIST]", "[NI]", "[Pro]"]
 
 ## HELP FOR INVENTORY ##
 # The inventory is built as a nested tree

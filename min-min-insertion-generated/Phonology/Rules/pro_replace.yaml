@@ -1,0 +1,164 @@
+# This is a Rules config file
+# Generated automatically by generate_morpheme_replace_rules.py
+kind: Rules
+rules:
+- name: pro_empty
+  string_map:
+  - - '[Pro]'
+    - ''
+- name: pro_a
+  string_map:
+  - - '[Pro]'
+    - a
+- name: pro_aki
+  string_map:
+  - - '[Pro]'
+    - aki
+- name: pro_akw
+  string_map:
+  - - '[Pro]'
+    - akw
+- name: pro_an
+  string_map:
+  - - '[Pro]'
+    - an
+- name: pro_ani
+  string_map:
+  - - '[Pro]'
+    - ani
+- name: pro_h
+  string_map:
+  - - '[Pro]'
+    - h
+- name: pro_hi
+  string_map:
+  - - '[Pro]'
+    - hi
+- name: pro_hiy
+  string_map:
+  - - '[Pro]'
+    - hiy
+- name: pro_ik
+  string_map:
+  - - '[Pro]'
+    - ik
+- name: pro_iki
+  string_map:
+  - - '[Pro]'
+    - iki
+- name: pro_in
+  string_map:
+  - - '[Pro]'
+    - in
+- name: pro_ini
+  string_map:
+  - - '[Pro]'
+    - ini
+- name: pro_it
+  string_map:
+  - - '[Pro]'
+    - it
+- name: pro_iti
+  string_map:
+  - - '[Pro]'
+    - iti
+- name: pro_its
+  string_map:
+  - - '[Pro]'
+    - its
+- name: pro_itsi
+  string_map:
+  - - '[Pro]'
+    - itsi
+- name: pro_k
+  string_map:
+  - - '[Pro]'
+    - k
+- name: pro_ka
+  string_map:
+  - - '[Pro]'
+    - ka
+- name: pro_kin
+  string_map:
+  - - '[Pro]'
+    - kin
+- name: pro_kini
+  string_map:
+  - - '[Pro]'
+    - kini
+- name: pro_ok
+  string_map:
+  - - '[Pro]'
+    - ok
+- name: pro_oki
+  string_map:
+  - - '[Pro]'
+    - oki
+- name: pro_okin
+  string_map:
+  - - '[Pro]'
+    - okin
+- name: pro_okini
+  string_map:
+  - - '[Pro]'
+    - okini
+- name: pro_ost
+  string_map:
+  - - '[Pro]'
+    - ost
+- name: pro_osti
+  string_map:
+  - - '[Pro]'
+    - osti
+- name: pro_ots
+  string_map:
+  - - '[Pro]'
+    - ots
+- name: pro_otsi
+  string_map:
+  - - '[Pro]'
+    - otsi
+- name: pro_st
+  string_map:
+  - - '[Pro]'
+    - st
+- name: pro_sti
+  string_map:
+  - - '[Pro]'
+    - sti
+- name: pro_ts
+  string_map:
+  - - '[Pro]'
+    - ts
+- name: pro_tsa
+  string_map:
+  - - '[Pro]'
+    - tsa
+- name: pro_tsi
+  string_map:
+  - - '[Pro]'
+    - tsi
+- name: pro_tsiy
+  string_map:
+  - - '[Pro]'
+    - tsiy
+- name: pro_u
+  string_map:
+  - - '[Pro]'
+    - u
+- name: pro_un
+  string_map:
+  - - '[Pro]'
+    - un
+- name: pro_uni
+  string_map:
+  - - '[Pro]'
+    - uni
+- name: pro_uw
+  string_map:
+  - - '[Pro]'
+    - uw
+- name: pro_uwa
+  string_map:
+  - - '[Pro]'
+    - uwa

@@ -4,6 +4,8 @@ kind: PartOfSpeech
 name: verb
 features:
 - tense
+- pronominal
 - rules
 lexical_features:
 - tense_present_class
+- prefix_class

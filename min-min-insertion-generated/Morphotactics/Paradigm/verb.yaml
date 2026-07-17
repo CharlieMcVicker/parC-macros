@@ -3,12 +3,15 @@
 kind: Paradigm
 part_of_speech: $verb
 feature_markers:
+  pronominal: null
   tense: $verb_tense
   rules: $verb_rules
 contingent_markers:
+- verb_pronominal_prefix_class_contingent
 - verb_tense_tense_present_class_contingent
 stage_order:
+- pronominal
 - tense
 - insert_dist
 - insert_wi
-open_root_template: '[WI]?[DIST]?<Phone>*'
+open_root_template: '[WI]?[DIST]?[Pro]<V>?(<C>+<V>)*<C>*'

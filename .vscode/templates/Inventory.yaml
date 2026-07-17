@@ -53,4 +53,4 @@ data:
 #     phones: [a, æ]
 # - name: tone slots
 #   ref: <ToneSlot>
-#   tags: ["[TBU]", "[FLOAT]"]
+#   tags: ["[TBU]", "[FLOAT]", "[Pro]"]
