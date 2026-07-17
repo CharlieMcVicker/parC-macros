@@ -1,354 +1,354 @@
-corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,imperative,infinitive,root,aspect_class,distributive,prefix_class,tense_present_class,translocutive
-4,8,it’s bouncing,atateka,katateka,atateko'i,utatinvsv'i,hatatuka,utatinvti,[Pro]atat[Aspect][Tense],go-in,,a_stem,a_present,
-5,9,he/she is limping,atateka,katateka,atateko'i,utatesv'i,hatatuka,utatinvti,[Pro]atat[Aspect][Tense],go-in[perf2],,a_stem,a_present,
-6,10,he/she is bouncing it,atatinvtiha,katatinvtiha,atatinvtisko'i,utatinvthanv'i,hatatinvta,utatinvtohti,[Pro]atatinvt[Aspect][Tense],cause,,a_stem,a_present,
-7,11,he/she is putting on a belt,atatlohiha,katatlohiha,atatlohiho'i,utatlolhv'i,hatatloka,utatlosti,[Pro]atatlo[Aspect][Tense],hih-lh,,a_stem,a_present,
-10,14,he/she is praying,atatolistiha,katatolistiha,atatolistisko'i,utatolisthanv'i,hatatolista,utatolistohti,[Pro]atatolist[Aspect][Tense],cause,,a_stem,a_present,
-27,31,he/she is looking at himself/herself in a mirror,atakheha,katakheha,atakhesko'i,utakhehv'i,hatakhvla,utakhehti,[Pro]atakh[Aspect][Tense],apl-active,,a_stem,a_present,
-29,33,it’s beginning,ataleniha,,atalenisko'i,utalenvhv'i,,utalenhti,[Pro]atalen[Aspect][Tense],ih-vh,,a_stem,a_present,
-29,33,it’s beginning,ataleniha,,atalenisko'i,utalenvhv'i,,utalenhti,[Pro]talen[Aspect][Tense],ih-vh,,cons_stem,a_present,
-30,34,he/she is shopping,atananesvhvska,katananesvhvska,atananesvhvsko'i,utananesvnhv'i,hatananesvhvka,utananesvhvsti,[Pro]atananes[Aspect][Tense],episodic[inf2],,a_stem,a_present,
-30,34,he/she is shopping,atananesvhvska,katananesvhvska,atananesvhvsko'i,utananesvnhv'i,hatananesvhvka,utananesvhvsti,[Pro]atananesv[Aspect][Tense],hvsk-nh[inf3],,a_stem,a_present,
-32,36,he/she is taking off running,atanawhstiha,katanawhstiha,atanawhstisko'i,utanawhsthanv'i,hatanawhsta,utanawhstohti,[Pro]atanawhst[Aspect][Tense],cause,,a_stem,a_present,
-33,37,he/she is changing,atanetliyv'a,katanetliyv'a,atanetliyvsko'i,utanetliyvsv'i,hatanetliyvna,utanetliyvsti,[Pro]atanetliy[Aspect][Tense],v-vhs,,a_stem,a_present,
-34,38,he/she is taking turns with him/her,atanetliyvstiha,katanetliyvstiha,atanetliyvstisko'i,utanetliyvsthanv'i,hatanetliyvsta,utanetliyvstohti,[Pro]atanetliyvst[Aspect][Tense],cause,,a_stem,a_present,
-44,48,it’s twisting,atanutheyoha,katanutheyoha,atanutheyoho'i,utanutheyolv'i,hatanutheyaka,utanutheyoti,[Pro]atanuthey[Aspect][Tense],oh-ol,,a_stem,a_present,
-46,50,he/she is ordering it,atanvska,katanvska,atanvsko'i,utanvsv'i,hatanvla,utanvsti,[Pro]atanv[Aspect][Tense],sk-s-la,,a_stem,a_present,
-48,52,he/she is cooking a meal,atastayvhvska,katastayvhvska,atastayvhvsko'i,utastayvnhv'i,hatastayvhvka,utastayhti,[Pro]atastay[Aspect][Tense],episodic,,a_stem,a_present,
-48,52,he/she is cooking a meal,atastayvhvska,katastayvhvska,atastayvhvsko'i,utastayvnhv'i,hatastayvhvka,utastayhti,[Pro]atastayv[Aspect][Tense],hvsk-nh[inf2],,a_stem,a_present,
-51,55,it’s burning (refers to flames),atawelaki'a,katawelaki'a,atawelakisko'i,utawelakv'i,hatawelaka,utawelakisti,[Pro]atawelak[Aspect][Tense],i-a-i,,a_stem,a_present,
-54,58,he/she is resting,atawesolvstiha,katawesolvstiha,atawesolvstisko'i,utawesolvsthanv'i,hatawesolvsta,utawesolvstohti,[Pro]atawesolvst[Aspect][Tense],cause,,a_stem,a_present,
-56,60,he/she is bathing,atawo'a,katawo'a,atawosko'i,utawo'v'i,hatawotsa,utawosti,[Pro]ataw[Aspect][Tense],o,,a_stem,a_present,
-59,63,he/she is giving him/her it (refers to a long object),ateha,tsiteha,ateho'i,utelv'i,hitisi,utehti,[Pro]t[Aspect][Tense],apl[imp3],,cons_stem,a_present,
-72,76,he/she is laying it down (refers to a long object),ati'a,tsiti'a,atisko'i,utv'i,hita,utisti,[Pro]t[Aspect][Tense],i-a-i,,cons_stem,a_present,
-74,78,he/she is scattering it,atikaleya'a,katikaleya'a,atikaleyasko'i,utikaleyv'i,hatikaleya,utikaleyasti,[Pro]atikaley[Aspect][Tense],a,,a_stem,a_present,
-75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,[Pro]tikaleyo[Aspect][Tense],become[inf3],,cons_stem,a_present,
-75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,[Pro]atikaleyo[Aspect][Tense],become[inf3],,a_stem,a_present,
-78,82,he/she is running over him/her,atinvtiha,tsiyatinvtiha,atinvtisko'i,utinvthanv'i,hiyatinvta,utinvtohti,[Pro]atinvt[Aspect][Tense],cause,,a_stem,a_present,
-79,83,he/she is hiding,atiskalhvska,katiskalhvska,atiskalhvsko'i,utiskalhanv'i,hatiskalhvka,utiskalhti,[Pro]atiskal[Aspect][Tense],hvsk-han,,a_stem,a_present,
-80,84,he/she is leaving it behind (refers to a long object),atisiya'a,tsitisiya'a,atisiyasko'i,utisiyv'i,hitisiya,utisiyasti,[Pro]tisiy[Aspect][Tense],a,,cons_stem,a_present,
-82,86,he/she is drinking it,atithaska,katithaska,atithasko'i,utithahv'i,hatitha,utithasti,[Pro]atitha[Aspect][Tense],sk-h[imp2],,a_stem,a_present,
-85,89,he/she is scratching,atlakoska,katlakoska,atlakosko'i,utlakosv'i,hatlakola,utlakosti,[Pro]atlako[Aspect][Tense],sk-s-la,,a_stem,a_present,
-87,91,he/she is turning off the road,atle'a,katle'a,atlesko'i,utlesv'i,hatlaki,utlesti,[Pro]atl[Aspect][Tense],rev-e,,a_stem,a_present,
-88,92,he/she is taking revenge against him/her,atletsheha,tsiyatletsheha,atletsheho'i,utletshelv'i,hiyatletshisi,utletshehti,[Pro]atletsh[Aspect][Tense],apl[imp3],,a_stem,a_present,
-94,98,it’s pouring into a container (refers to liquid),atlika,,atliko'i,utlitsv'i,,utliyhsti,[Pro]tli[Aspect][Tense],become[inf3],,cons_stem,a_present,
-94,98,it’s pouring into a container (refers to liquid),atlika,,atliko'i,utlitsv'i,,utliyhsti,[Pro]atli[Aspect][Tense],become[inf3],,a_stem,a_present,
-96,100,he/she is pouring a liquid into a container,atlistiha,tsitlistiha,atlistisko'i,utlisthanv'i,hitlista,utlistohti,[Pro]tlist[Aspect][Tense],cause,,cons_stem,a_present,
-101,105,he/she is catching up with him/her,atlvthaska,tsiyatlvthaska,atlvthasko'i,utlvthahv'i,hiyatlvtha,utlvthasti,[Pro]atlvtha[Aspect][Tense],sk-h[imp2],,a_stem,a_present,
-107,111,he/she is acting silly,atvneliha,katvneliha,atvnelisko'i,utvnelvnhv'i,hatvnela,utvnelhti,[Pro]atvnel[Aspect][Tense],vnh-ih-a,,a_stem,a_present,
-109,113,he/she is preparing it,atvnv'istiha,katvnv'istiha,atvnv'istisko'i,utvnv'isthanv'i,hatvnv'ista,utvnv'istohti,[Pro]atvnv'ist[Aspect][Tense],cause,,a_stem,a_present,
-112,116,it is shining (refers to sun or moon),akaliha,,akalisko'i,ukalisv'i,,ukalihisti,[Pro]akal[Aspect][Tense],ih-ihi,,a_stem,a_present,
-112,116,it is shining (refers to sun or moon),akaliha,,akalisko'i,ukalisv'i,,ukalihisti,[Pro]kal[Aspect][Tense],ih-ihi,,cons_stem,a_present,
-115,119,he/she is licking it,akanati'a,tsikanati'a,akanatisko'i,ukanatv'i,hikanata,ukanatisti,[Pro]kanat[Aspect][Tense],i-a-i,,cons_stem,a_present,
-118,122,it’s getting warm,akanawoska,,akanawosko'i,ukanawosv'i,,ukanawohisti,[Pro]akanawo[Aspect][Tense],sk-s-hi-hihst,,a_stem,a_present,
-118,122,it’s getting warm,akanawoska,,akanawosko'i,ukanawosv'i,,ukanawohisti,[Pro]akanawo[Aspect][Tense],sk-s-a,,a_stem,a_present,
-118,122,it’s getting warm,akanawoska,,akanawosko'i,ukanawosv'i,,ukanawohisti,[Pro]kanawo[Aspect][Tense],sk-s-hi-hihst,,cons_stem,a_present,
-118,122,it’s getting warm,akanawoska,,akanawosko'i,ukanawosv'i,,ukanawohisti,[Pro]kanawo[Aspect][Tense],sk-s-a,,cons_stem,a_present,
-127,132,he/she is eating it (refers to a single solid food),aki'a,tsiki'a,akisko'i,ukv'i,hika,ukisti,[Pro]k[Aspect][Tense],i-a-i,,cons_stem,a_present,
-128,133,he/she is picking it up,aki'a,tsiki'a,akisko'i,ukisv'i,hiki,ukisti,[Pro]k[Aspect][Tense],rev-i,,cons_stem,a_present,
-133,138,he/she is chewing it,akisto'a,tsikisto'a,akistosko'i,ukisto'v'i,hikistotsa,ukistosti,[Pro]kist[Aspect][Tense],o,,cons_stem,a_present,
-135,140,he/she is burning him/her,akohvstiha,tsiyakohvstiha,akohvstisko'i,ukohvsthanv'i,hiyakohvsta,ukohvstohti,[Pro]akohvst[Aspect][Tense],cause,,a_stem,a_present,
-136,141,it’s burning,akohvska,kakohvska,akohvsko'i,ukonhv'i,hakonha,ukohvsti,[Pro]ako[Aspect][Tense],terminative-no-o,,a_stem,a_present,
-136,141,it’s burning,akohvska,kakohvska,akohvsko'i,ukonhv'i,hakonha,ukohvsti,[Pro]ak[Aspect][Tense],terminative,,a_stem,a_present,
-138,143,he/she is reading,akoliye'a,tsikoliye'a,akoliyesko'i,ukoliye'v'i,hikoliya,ukoliyeti,[Pro]koliy[Aspect][Tense],e-a,,cons_stem,a_present,
-140,145,he/she is target practicing,akoniha,kakoniha,akonisko'i,ukonvhv'i,hakona,ukonhti,[Pro]akon[Aspect][Tense],ih-vh,,a_stem,a_present,
-145,150,he/she is showing it to him/her,akowhthvhtiha,tsikowhthvhtiha,akowhthvhtisko'i,ukowhthvhthanv'i,hikowhthvhta,ukowhthvhtohti,[Pro]kowhthvht[Aspect][Tense],cause,,cons_stem,a_present,
-152,157,he/she is scolding him/her,akvskolvska,tsikvskolvska,akvskolvsko'i,ukvskolvnv'i,hikvskolv'vka,ukvskolvti,[Pro]kvskol[Aspect][Tense],vsk[imp2],,cons_stem,a_present,
-153,158,he/she is washing his face,akvskwo'a,kakvskwo'a,akvskwosko'i,ukvskwo'v'i,hakvskwotsa,ukvskwosti,[Pro]akvskw[Aspect][Tense],o,,a_stem,a_present,
-166,172,he/she is placing it on something,alhahvska,tsilhahvska,alhahvsko'i,ulhanhv'i,hilhahvka,ulhohti,[Pro]lha[Aspect][Tense],hvsk-nh[inf4],,cons_stem,a_present,
-172,178,it’s taking time,alhi'ilitoha,,alhi'ilitoho'i,ulhi'ilitolv'i,,ulhi'ilitasti,[Pro]alhi'ilit[Aspect][Tense],oh-ol[inf3],,a_stem,a_present,
-172,178,it’s taking time,alhi'ilitoha,,alhi'ilitoho'i,ulhi'ilitolv'i,,ulhi'ilitasti,[Pro]lhi'ilit[Aspect][Tense],be-at,,cons_stem,a_present,
-172,178,it’s taking time,alhi'ilitoha,,alhi'ilitoho'i,ulhi'ilitolv'i,,ulhi'ilitasti,[Pro]lhi'ilit[Aspect][Tense],oh-ol[inf3],,cons_stem,a_present,
-172,178,it’s taking time,alhi'ilitoha,,alhi'ilitoho'i,ulhi'ilitolv'i,,ulhi'ilitasti,[Pro]alhi'ilit[Aspect][Tense],be-at,,a_stem,a_present,
-175,181,it’s bending,alhiyvhkwitvska,,alhiyvhkwitvsko'i,ulhiyvhkwitvnv'i,,ulhiyvhkwitvti,[Pro]alhiyvhkwit[Aspect][Tense],vsk,,a_stem,a_present,
-175,181,it’s bending,alhiyvhkwitvska,,alhiyvhkwitvsko'i,ulhiyvhkwitvnv'i,,ulhiyvhkwitvti,[Pro]alhiyvhkwit[Aspect][Tense],vsk[imp2],,a_stem,a_present,
-175,181,it’s bending,alhiyvhkwitvska,,alhiyvhkwitvsko'i,ulhiyvhkwitvnv'i,,ulhiyvhkwitvti,[Pro]lhiyvhkwit[Aspect][Tense],vsk,,cons_stem,a_present,
-175,181,it’s bending,alhiyvhkwitvska,,alhiyvhkwitvsko'i,ulhiyvhkwitvnv'i,,ulhiyvhkwitvti,[Pro]lhiyvhkwit[Aspect][Tense],vsk[imp2],,cons_stem,a_present,
-179,185,it’s shattering,alhkhotvska,,alhkhotvsko'i,ulhkhotvnhv'i,,,[Pro]alhkhot[Aspect][Tense],vnh-vsk,,a_stem,a_present,
-179,185,it’s shattering,alhkhotvska,,alhkhotvsko'i,ulhkhotvnhv'i,,,[Pro]alhkhot[Aspect][Tense],vnh-vsk[inf3],,a_stem,a_present,
-179,185,it’s shattering,alhkhotvska,,alhkhotvsko'i,ulhkhotvnhv'i,,,[Pro]lhkhot[Aspect][Tense],vnh-vsk[inf3],,cons_stem,a_present,
-179,185,it’s shattering,alhkhotvska,,alhkhotvsko'i,ulhkhotvnhv'i,,,[Pro]alhkhot[Aspect][Tense],vnh-vsk[inf2],,a_stem,a_present,
-179,185,it’s shattering,alhkhotvska,,alhkhotvsko'i,ulhkhotvnhv'i,,,[Pro]lhkhot[Aspect][Tense],vnh-vsk,,cons_stem,a_present,
-179,185,it’s shattering,alhkhotvska,,alhkhotvsko'i,ulhkhotvnhv'i,,,[Pro]lhkhot[Aspect][Tense],vnh-vsk[inf2],,cons_stem,a_present,
-179,185,it’s shattering,alhkhotvska,,alhkhotvsko'i,ulhkhotvnhv'i,,,[Pro]lhkhot[Aspect][Tense],vnh-vsk[inf4],,cons_stem,a_present,
-179,185,it’s shattering,alhkhotvska,,alhkhotvsko'i,ulhkhotvnhv'i,,,[Pro]alhkhot[Aspect][Tense],vnh-vsk[inf4],,a_stem,a_present,
-182,188,he/she is beating him/her at a game,alhoska,tsilhoska,alhosko'i,ulhosv'i,hilhohi,ulhohisti,[Pro]lho[Aspect][Tense],sk-s-hi-hihst,,cons_stem,a_present,
-191,197,he/she is wrestling,anhehiha,kanhehiha,anhehiho'i,unhelhv'i,hanheka,unhesti,[Pro]anhe[Aspect][Tense],hih-lh,,a_stem,a_present,
-224,230,it’s thundering,ayhvtakwalo'a,,ayhvtakwalosko'i,uyhvtakwalo'v'i,,uyhvtakwalosti,[Pro]yhvtakwal[Aspect][Tense],o,,cons_stem,a_present,
-224,230,it’s thundering,ayhvtakwalo'a,,ayhvtakwalosko'i,uyhvtakwalo'v'i,,uyhvtakwalosti,[Pro]ayhvtakwal[Aspect][Tense],o,,a_stem,a_present,
-238,244,it’s hatching,atsa'i'a,katsa'i'a,atsa'isko'i,utsa'isv'i,hatsa'i,utsa'isti,[Pro]atsa[Aspect][Tense],rev-'i,,a_stem,a_present,
-238,244,it’s hatching,atsa'i'a,katsa'i'a,atsa'isko'i,utsa'isv'i,hatsa'i,utsa'isti,[Pro]atsa'[Aspect][Tense],rev-i,,a_stem,a_present,
-239,245,he/she is dressing up,atsanvska,katsanvska,atsanvsko'i,utsanvnhv'i,hatsanvna,utsanvhti,[Pro]atsan[Aspect][Tense],vnh-vsk[inf2],,a_stem,a_present,
-242,248,he/she is acting like him/her,atselvska,katselvska,atselvsko'i,utselvnhv'i,hatselvna,utselhti,[Pro]atsel[Aspect][Tense],vnh-vsk,,a_stem,a_present,
-250,256,it’s blooming,atsilvska,,atsilvsko'i,utsilvnhv'i,,utsilhti,[Pro]atsil[Aspect][Tense],vnh-vsk,,a_stem,a_present,
-250,256,it’s blooming,atsilvska,,atsilvsko'i,utsilvnhv'i,,utsilhti,[Pro]tsil[Aspect][Tense],vnh-vsk,,cons_stem,a_present,
-253,259,he/she is lighting a fire,atsislhvska,tsitsislhvska,atsislhvsko'i,utsislhanv'i,hitsislhvka,utsislhvsti,[Pro]tsisl[Aspect][Tense],hvsk-han[inf2],,cons_stem,a_present,
-254,260,he/she is blowing,atsothaska,katsothaska,atsothasko'i,utsothahv'i,hatsotha,utsothasti,[Pro]atsotha[Aspect][Tense],sk-h[imp2],,a_stem,a_present,
-255,261,he/she is turning on a light,atsvsthvska,tsitsvsthvska,atsvsthvsko'i,utsvsthanv'i,hitsvsthvka,utsvsthvsti,[Pro]tsvst[Aspect][Tense],hvsk-han[inf2],,cons_stem,a_present,
-259,266,he/she is chasing him/her,akheheka,tsikheheka,akheheko'i,ukhehvsv'i,hikhehuka,ukhehvsti,[Pro]kheh[Aspect][Tense],go,,cons_stem,a_present,
-261,268,he/she is riding it (refers to anything that can be straddled),akhilvtiha,tsiyakhilvtiha,akhilvtisko'i,ukhilvthanv'i,hiyakhilvta,ukhilvtohti,[Pro]akhilvt[Aspect][Tense],cause,,a_stem,a_present,
-266,273,he/she is shovelling it,akhote'a,tsikhote'a,akhotesko'i,ukhotesv'i,hikhotaki,ukhotesti,[Pro]khot[Aspect][Tense],rev-e,,cons_stem,a_present,
-296,303,he/she is tromping on him/her,alasta'eha,tsiyalasta'eha,alasta'esko'i,ulasta'elhv'i,hiyalasta'vla,ulasta'ehti,[Pro]alasta'[Aspect][Tense],apl-active-',,a_stem,a_present,
-297,304,he/she is stepping on him/her,alastvska,tsiyalastvska,alastvsko'i,ulastvnv'i,hiyalastv'vka,ulastvti,[Pro]alast[Aspect][Tense],vsk[imp2],,a_stem,a_present,
-298,305,he/she is playing ball,alaskaliha,kalaskaliha,alaskalisko'i,ulaskalvhv'i,halaskala,ulaskalhti,[Pro]alaskal[Aspect][Tense],ih-vh,,a_stem,a_present,
-300,307,he/she is taking a step,alaskv'a,kalaskv'a,alaskvsko'i,ulaskvsv'i,halaskvna,ulaskvsti,[Pro]alask[Aspect][Tense],v-vhs,,a_stem,a_present,
-317,324,he/she is exchanging it,ali'iti'a,kali'iti'a,ali'itisko'i,uli'itv'i,hali'ita,uli'itisti,[Pro]ali'it[Aspect][Tense],i-a-i,,a_stem,a_present,
-318,325,he/she is running away,alithi'a,kalithi'a,alithisko'i,ulithisv'i,halithi,ulithisti,[Pro]alith[Aspect][Tense],rev-i,,a_stem,a_present,
-320,327,he/she is taking his/her ring off,aliyesusthki'a,kaliyesusthki'a,aliyesusthkisko'i,uliyesusthkisv'i,haliyesusthki,uliyesusthkisti,[Pro]aliyesusth[Aspect][Tense],rev-gi,,a_stem,a_present,
-320,327,he/she is taking his/her ring off,aliyesusthki'a,kaliyesusthki'a,aliyesusthkisko'i,uliyesusthkisv'i,haliyesusthki,uliyesusthkisti,[Pro]aliyesusthk[Aspect][Tense],rev-i,,a_stem,a_present,
-322,329,he/she is putting a ring on his/her finger,aliyesusthvska,kaliyesusthvska,aliyesusthvsko'i,uliyesusthanv'i,haliyesusthvka,uliyesusthvsti,[Pro]aliyesust[Aspect][Tense],hvsk-han[inf2],,a_stem,a_present,
-339,346,it’s ending,alhskwati'a,,alhskwatisko'i,ulhskwatv'i,,ulhskwatisti,[Pro]alhskwat[Aspect][Tense],i-a-i,,a_stem,a_present,
-339,346,it’s ending,alhskwati'a,,alhskwatisko'i,ulhskwatv'i,,ulhskwatisti,[Pro]lhskwat[Aspect][Tense],i-a-i,,cons_stem,a_present,
-355,362,they are gathering,anatalhisiha,otsatalhisiha,anatalhisisko'i,unatalhisanhv'i,itsatalhisa,unatalhisohti,[Pro]atalhis[Aspect][Tense],cause[perf2],,k_a_stem,a_present,
-355,362,they are gathering,anatalhisiha,otsatalhisiha,anatalhisisko'i,unatalhisanhv'i,itsatalhisa,unatalhisohti,[Pro]atalhis[Aspect][Tense],cause[perf2],,vowel_stem,a_present,
-355,362,they are gathering,anatalhisiha,otsatalhisiha,anatalhisisko'i,unatalhisanhv'i,itsatalhisa,unatalhisohti,[Pro]atalhis[Aspect][Tense],cause[perf2],,a_stem,a_present,
-356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]akal[Aspect][Tense],ih-vh[inf2],,a_stem,a_present,
-356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]nakal[Aspect][Tense],ih-vh,,cons_stem,a_present,
-356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]akal[Aspect][Tense],ih-vh,,k_a_stem,a_present,
-356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]akal[Aspect][Tense],ih-vh,,vowel_stem,a_present,
-356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]nakal[Aspect][Tense],ih-vh[inf2],,cons_stem,a_present,
-356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]anakal[Aspect][Tense],ih-vh[inf2],,a_stem,a_present,
-356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]akal[Aspect][Tense],ih-vh,,a_stem,a_present,
-356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]akal[Aspect][Tense],ih-vh[inf2],,vowel_stem,a_present,
-356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]anakal[Aspect][Tense],ih-vh,,a_stem,a_present,
-356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]akal[Aspect][Tense],ih-vh[inf2],,k_a_stem,a_present,
-359,366,they are getting together,analikohvska,otsalikohvska,analikohvsko'i,unalikonhv'i,itsalikohvka,unalikhti,[Pro]aliko[Aspect][Tense],hvsk-nh[inf2],,a_stem,a_present,
-359,366,they are getting together,analikohvska,otsalikohvska,analikohvsko'i,unalikonhv'i,itsalikohvka,unalikhti,[Pro]aliko[Aspect][Tense],hvsk-nh[inf2],,vowel_stem,a_present,
-359,366,they are getting together,analikohvska,otsalikohvska,analikohvsko'i,unalikonhv'i,itsalikohvka,unalikhti,[Pro]aliko[Aspect][Tense],hvsk-nh[inf2],,k_a_stem,a_present,
-361,368,he/she is attempting it,anelhtiha,kanelhtiha,anelhtisko'i,unelhthanv'i,hanelhta,unelhtohti,[Pro]anelht[Aspect][Tense],cause,,a_stem,a_present,
-362,369,he is getting married,anelati'a,kanelati'a,anelatisko'i,unelatv'i,hanelata,unelatisti,[Pro]anelat[Aspect][Tense],i-a-i,,a_stem,a_present,
-365,372,they are standing (refers to a congregation),anitona'a,otsitona'a,anitona'o'i,anitona'v'i,,,[Pro]tona'[Aspect][Tense],stative,,cons_stem,a_present,
-365,372,they are standing (refers to a congregation),anitona'a,otsitona'a,anitona'o'i,anitona'v'i,,,[Pro]itona'[Aspect][Tense],stative,,vowel_stem,a_present,
-366,373,they are asleep (refers to more than two),anilhina,otsilhina,anilhino'i,,,,[Pro]lhin[Aspect][Tense],stative,,r_stem,a_present,
-366,373,they are asleep (refers to more than two),anilhina,otsilhina,anilhino'i,,,,[Pro]lhin[Aspect][Tense],stative,,cons_stem,a_present,
-366,373,they are asleep (refers to more than two),anilhina,otsilhina,anilhino'i,,,,[Pro]ilhin[Aspect][Tense],stative,,vowel_stem,a_present,
-367,374,they are sitting (refers to a congregation),ani'na,otsi'na,ani'no'i,ani'nv'i,,,[Pro]i'n[Aspect][Tense],stative,,vowel_stem,a_present,
-367,374,they are sitting (refers to a congregation),ani'na,otsi'na,ani'no'i,ani'nv'i,,,[Pro]'n[Aspect][Tense],stative,,cons_stem,a_present,
-373,380,he/she is setting a trap,asatvska,tsisatvska,asatvsko'i,usatvnv'i,hisatv'vka,usatvti,[Pro]sat[Aspect][Tense],vsk[imp2],,cons_stem,a_present,
-374,381,he/she is lifting him/her,asalati'a,tsisalati'a,asalatisko'i,usalatanv'i,hisalatvka,usalatoti,[Pro]salat[Aspect][Tense],i-vka,,cons_stem,a_present,
-377,384,he/she is making it crisp,astakayhtiha,tsistakayhtiha,astakayhtisko'i,ustakayhthanv'i,histakayhta,ustakayhtohti,[Pro]stakayht[Aspect][Tense],cause,,cons_stem,a_present,
-378,385,it’s becoming crisp,astakayvhiha,,astakayvhiho'i,ustakayvlhv'i,,,[Pro]astakayv[Aspect][Tense],hih-lh,,a_stem,a_present,
-378,385,it’s becoming crisp,astakayvhiha,,astakayvhiho'i,ustakayvlhv'i,,,[Pro]astakayv[Aspect][Tense],hih-lh[imp2],,a_stem,a_present,
-378,385,it’s becoming crisp,astakayvhiha,,astakayvhiho'i,ustakayvlhv'i,,,[Pro]stakayv[Aspect][Tense],hih-lh,,cons_stem,a_present,
-378,385,it’s becoming crisp,astakayvhiha,,astakayvhiho'i,ustakayvlhv'i,,,[Pro]stakayv[Aspect][Tense],hih-lh[imp2],,cons_stem,a_present,
-380,387,he/she is drawing a line,astanvnhvska,tsistanvnhvska,astanvnhvsko'i,ustanvnhanv'i,histanvnhvka,ustanvnhti,[Pro]stanvn[Aspect][Tense],hvsk-han,,cons_stem,a_present,
-381,388,he/she is following him/her,astawateka,tsistawateka,astawateko'i,ustawatvsv'i,histawatuka,ustawatvsti,[Pro]stawat[Aspect][Tense],go,,cons_stem,a_present,
-382,389,he/she is helping him/her,asteliha,tsisteliha,astelisko'i,ustelvhv'i,histela,ustelhti,[Pro]stel[Aspect][Tense],ih-vh,,cons_stem,a_present,
-383,390,he/she is braiding it,asteyoha,tsisteyoha,asteyoho'i,usteyolv'i,histeyaka,usteyoti,[Pro]stey[Aspect][Tense],oh-ol,,cons_stem,a_present,
-384,391,he/she is eating it (refers to a long object),astiki'a,tsistiki'a,astikisko'i,ustikv'i,histika,ustikisti,[Pro]stik[Aspect][Tense],i-a-i,,cons_stem,a_present,
-386,393,he/she is crushing it,asto'a,tsisto'a,astosko'i,usto'v'i,histotsa,ustosti,[Pro]st[Aspect][Tense],o,,cons_stem,a_present,
-388,395,he/she is trimming it (refers to hair‚ grass‚ hedge; but not paper‚ cloth),astoyeha,tsistoyeha,astoyesko'i,ustoyehv'i,histoya,ustoyhti,[Pro]stoy[Aspect][Tense],apl-active-a,,cons_stem,a_present,
-390,397,he/she is opening it,astu'i'a,tsistu'i'a,astu'isko'i,ustu'isv'i,histu'i,ustu'isti,[Pro]stu[Aspect][Tense],rev-'i,,cons_stem,a_present,
-390,397,he/she is opening it,astu'i'a,tsistu'i'a,astu'isko'i,ustu'isv'i,histu'i,ustu'isti,[Pro]stu'[Aspect][Tense],rev-i,,cons_stem,a_present,
-392,399,he/she is sandwiching it,astvhalhvska,tsistvhalhvska,astvhalhvsko'i,ustvhalhanv'i,histvhalhvka,ustvhalhti,[Pro]stvhal[Aspect][Tense],hvsk-han,,cons_stem,a_present,
-397,404,he/she is including him/her (refers to in counting),asestiha,tsiyasestiha,asestisko'i,usesthanv'i,hiyasesta,usestohti,[Pro]asest[Aspect][Tense],cause,,a_stem,a_present,
-398,405,he/she is withdrawing (refers to a motion),asesiha,kasesiha,asesisko'i,usesvhv'i,hasesa,usesvhti,[Pro]ases[Aspect][Tense],ih-vh[inf2],,a_stem,a_present,
-400,407,he/she is reprimanding him/her,askaka,tsiskaka,askako'i,uskatsv'i,hiskaki,uskayhsti,[Pro]ska[Aspect][Tense],become[inf3],,cons_stem,a_present,
-405,412,he/she is committing a crime,askanvka,tsiskanvka,askanvko'i,uskanvtsv'i,hiskanvki,uskanvyhsti,[Pro]skanv[Aspect][Tense],become[inf3],,cons_stem,a_present,
-411,418,he/she is gnawing it,askoki'a,tsiskoki'a,askokisko'i,uskokv'i,hiskoka,uskokisti,[Pro]skok[Aspect][Tense],i-a-i,,cons_stem,a_present,
-413,420,he/she is rubbing him/her,askoliye'a,tsiyaskoliye'a,askoliyesko'i,uskoliye'v'i,hiyaskoliya,uskoliyeti,[Pro]askoliy[Aspect][Tense],e-a,,a_stem,a_present,
-416,423,it’s fading,askolvka,,askolvko'i,uskolvtsv'i,,uskolvyhsti,[Pro]askolv[Aspect][Tense],become[inf3],,a_stem,a_present,
-416,423,it’s fading,askolvka,,askolvko'i,uskolvtsv'i,,uskolvyhsti,[Pro]skolv[Aspect][Tense],become[inf3],,cons_stem,a_present,
-417,424,he/she is digging it,askoska,kaskoska,askosko'i,uskosv'i,haskola,uskosti,[Pro]asko[Aspect][Tense],sk-s-la,,a_stem,a_present,
-419,426,he/she is finishing it,askwati'a,tsiskwati'a,askwatisko'i,uskwatv'i,hiskwata,uskwatisti,[Pro]skwat[Aspect][Tense],i-a-i,,cons_stem,a_present,
-421,428,he/she is catching him/her (refers to a falling person or object),askwalhe'a,tsiskwalhe'a,askwalhesko'i,uskwalhesv'i,hiskwalhaki,uskwalhesti,[Pro]skwalh[Aspect][Tense],rev-e,,cons_stem,a_present,
-423,430,it’s getting shorter,askwaloka,tsiskwaloka,askwaloko'i,uskwalotsv'i,hiskwaloki,uskwaloyhsti,[Pro]skwalo[Aspect][Tense],become[inf3],,cons_stem,a_present,
-425,432,he/she is hitting him/her on the head with it (refers to a long object),askwalvniha,tsiskwalvniha,askwalvniho'i,uskwalvnilv'i,hiskwalvnika,uskwalvnisti,[Pro]skwalvn[Aspect][Tense],ih-il,,cons_stem,a_present,
-427,434,he/she is amazed,askwanikoska,tsiskwanikoska,askwanikosko'i,uskwanikosv'i,hiskwanikohi,uskwanikohisti,[Pro]skwaniko[Aspect][Tense],sk-s-hi-hihst,,cons_stem,a_present,
-429,436,he/she is hitting him/her on the abdomen with it (refers to a long object),askwohalvniha,tsiskwohalvniha,askwohalvniho'i,uskwohalvnilv'i,hiskwohalvnika,uskwohalvnisti,[Pro]skwohalvn[Aspect][Tense],ih-il,,cons_stem,a_present,
-430,437,he/she is placing his/her hand on him/her,asihthati'a,tsiyasihthati'a,asihthatisko'i,usihthatv'i,hiyasihthata,usihthatisti,[Pro]asihthat[Aspect][Tense],i-a-i,,a_stem,a_present,
-431,438,he/she is slapping him/her,asihthvniha,tsiyasihthvniha,asihthvniho'i,usihthvnilv'i,hiyasihthvnika,usihthvnisti,[Pro]asihthvn[Aspect][Tense],ih-il,,a_stem,a_present,
-432,439,he/she is backing up,asineka,kasineka,asineko'i,usinvsv'i,hasinuka,usinvsti,[Pro]asin[Aspect][Tense],go,,a_stem,a_present,
-436,443,he/she is roping him/her,aslhati'a,tsislhati'a,aslhatisko'i,uslhatv'i,hislhata,uslhatisti,[Pro]slhat[Aspect][Tense],i-a-i,,cons_stem,a_present,
-439,446,he/she is waving his/her hand,asolvtaki'a,kasolvtaki'a,asolvtakisko'i,usolvtakisv'i,hasolvtaki,usolvtakisti,[Pro]asolvta[Aspect][Tense],rev-gi,,a_stem,a_present,
-439,446,he/she is waving his/her hand,asolvtaki'a,kasolvtaki'a,asolvtakisko'i,usolvtakisv'i,hasolvtaki,usolvtakisti,[Pro]asolvtak[Aspect][Tense],rev-i,,a_stem,a_present,
-440,447,he/she is pressing down on him/her,asonhstiha,tsiyasonhstiha,asonhstisko'i,usonhsthanv'i,hiyasonhsta,usonhstohti,[Pro]asonhst[Aspect][Tense],cause,,a_stem,a_present,
-441,448,he/she is wounding him/her,asonvska,tsisonvska,asonvsko'i,usonvnhv'i,hisonvna,usonvsti,[Pro]son[Aspect][Tense],vnh-vsk[inf4],,cons_stem,a_present,
-444,451,he/she is fishing,asuhvska,kasuhvska,asuhvsko'i,usunhv'i,hasuhvka,usuhti,[Pro]asu[Aspect][Tense],hvsk-nh,,a_stem,a_present,
-445,452,he/she is painting it,asuwhiska,tsisuwhiska,asuwhisko'i,usuwhisv'i,hisuwha,usuwhisti,[Pro]suwh[Aspect][Tense],i-a-ihsk,,cons_stem,a_present,
-446,453,he/she is changing his/her pants,asula'iyv'a,kasula'iyv'a,asula'iyvsko'i,usula'iyvsv'i,hasula'iyvna,usula'iyvsti,[Pro]asula'iy[Aspect][Tense],v-vhs,,a_stem,a_present,
-447,454,he/she is taking his/her pants off,asule'a,kasule'a,asulesko'i,usulesv'i,hasulaki,usulesti,[Pro]asul[Aspect][Tense],rev-e,,a_stem,a_present,
-448,455,he/she is putting his/her pants on,asuli'a,kasuli'a,asulisko'i,usulanv'i,hasulvka,usuloti,[Pro]asul[Aspect][Tense],i-vka,,a_stem,a_present,
-449,456,he/she is quitting,asulikoka,tsisulikoka,asulikoko'i,usulikotsv'i,hisuliko'i,usulikosti,[Pro]suli[Aspect][Tense],ko-kots,,cons_stem,a_present,
-452,459,he/she is choosing him/her,asuye'a,tsiyasuye'a,asuyesko'i,usuyesv'i,hiyasuyaki,usuyesti,[Pro]asuy[Aspect][Tense],rev-e,,a_stem,a_present,
-453,460,he/she is stirring it,asuyeha,kasuyeha,asuyesko'i,usuyehv'i,hasuyvla,usuyehti,[Pro]asuy[Aspect][Tense],apl-active,,a_stem,a_present,
-454,461,he/she is mixing it in,asuyvska,kasuyvska,asuyvsko'i,usuyvnv'i,hasuyv'vka,usuyvti,[Pro]asuy[Aspect][Tense],vsk[imp2],,a_stem,a_present,
-455,462,it smells,asvka,tsisvka,asvko'i,,,,[Pro]sv[Aspect][Tense],become[inf2],,cons_stem,a_present,
-455,462,it smells,asvka,tsisvka,asvko'i,,,,[Pro]svk[Aspect][Tense],stative,,cons_stem,a_present,
-455,462,it smells,asvka,tsisvka,asvko'i,,,,[Pro]sv[Aspect][Tense],stative-k,,cons_stem,a_present,
-455,462,it smells,asvka,tsisvka,asvko'i,,,,[Pro]sv[Aspect][Tense],become[inf4],,cons_stem,a_present,
-455,462,it smells,asvka,tsisvka,asvko'i,,,,[Pro]sv[Aspect][Tense],become[inf3],,cons_stem,a_present,
-455,462,it smells,asvka,tsisvka,asvko'i,,,,[Pro]sv[Aspect][Tense],become,,cons_stem,a_present,
-459,466,he/she is drinking it up,asvhvska,tsisvhvska,asvhvsko'i,usvnhv'i,hisvnha,usvhvsti,[Pro]sv[Aspect][Tense],terminative-no-o,,cons_stem,a_present,
-464,471,he/she is mooring a boat,athalati'a,tsithalati'a,athalatisko'i,uthalatv'i,hithalata,uthalatisti,[Pro]thalat[Aspect][Tense],i-a-i,,cons_stem,a_present,
-467,474,it’s steaming,athanoleka,,athanoleko'i,uthanolvsv'i,,uthanolvsti,[Pro]thanol[Aspect][Tense],go,,cons_stem,a_present,
-467,474,it’s steaming,athanoleka,,athanoleko'i,uthanolvsv'i,,uthanolvsti,[Pro]athanol[Aspect][Tense],go,,a_stem,a_present,
-469,476,it’s exploding,athaski'a,,athaskisko'i,uthaskisv'i,hathaski,uthaskisti,[Pro]athask[Aspect][Tense],rev-i,,a_stem,a_present,
-469,476,it’s exploding,athaski'a,,athaskisko'i,uthaskisv'i,hathaski,uthaskisti,[Pro]athas[Aspect][Tense],rev-gi,,a_stem,a_present,
-474,481,he/she is asking for it,athayohiha,tsithayohiha,athayohiho'i,uthayolhv'i,hithayoha,uthayosti,[Pro]thayo[Aspect][Tense],hih-lh[imp2],,cons_stem,a_present,
-477,484,he/she is shaking him/her,athelvhvska,tsithelvhvska,athelvhvsko'i,uthelvnhv'i,hithelvna,uthelhti,[Pro]thel[Aspect][Tense],episodic[imp2],,cons_stem,a_present,
-479,486,he/she is leading him/her,athinhi,tsiyathinhi,athinheko'i,uthinhvsv'i,hiyathinhuka,uthinhvsti,[Pro]athinh[Aspect][Tense],go[pres2],,a_stem,i_present,
-483,490,he/she is racing,athohkiya'a,kathohkiya'a,athohkiyasko'i,uthohkiyv'i,hathohkiya,uthohkiyasti,[Pro]athohkiy[Aspect][Tense],a,,a_stem,a_present,
-486,493,he/she is loaning it to him/her,atholhstiha,tsiyatholhstiha,atholhstisko'i,utholhsthanv'i,hiyatholhsta,utholhstohti,[Pro]atholhst[Aspect][Tense],cause,,a_stem,a_present,
-488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,[Pro]athoyawh[Aspect][Tense],sk-s-hst,,a_stem,a_present,
-488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,[Pro]thoyawh[Aspect][Tense],sk-s-hst,,cons_stem,a_present,
-488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,[Pro]athoyawh[Aspect][Tense],sk-s-hst[imp2],,a_stem,a_present,
-488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,[Pro]thoyawh[Aspect][Tense],sk-s-la,,cons_stem,a_present,
-488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,[Pro]thoyawh[Aspect][Tense],sk-s-hst[imp2],,cons_stem,a_present,
-488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,[Pro]athoyawh[Aspect][Tense],sk-s-a[inf2],,a_stem,a_present,
-488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,[Pro]thoyawh[Aspect][Tense],sk-s-a[inf2],,cons_stem,a_present,
-488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,[Pro]athoyawh[Aspect][Tense],sk-s-la,,a_stem,a_present,
-493,500,he/she is promising,athu'istiha,tsithu'istiha,athu'istisko'i,uthu'isthanv'i,hithu'ista,uthu'istohti,[Pro]thu'ist[Aspect][Tense],cause,,cons_stem,a_present,
-494,501,he/she is listening to him/her,athvtastiha,tsiyathvtastiha,athvtastisko'i,uthvtasthanv'i,hiyathvtasta,uthvtastohti,[Pro]athvtast[Aspect][Tense],cause,,a_stem,a_present,
-495,502,he/she is asking him/her a question,athvtvhvska,tsiyathvtvhvska,athvtvhvsko'i,uthvtvnhv'i,hiyathvtvhvka,uthvthti,[Pro]athvt[Aspect][Tense],episodic,,a_stem,a_present,
-495,502,he/she is asking him/her a question,athvtvhvska,tsiyathvtvhvska,athvtvhvsko'i,uthvtvnhv'i,hiyathvtvhvka,uthvthti,[Pro]athvtv[Aspect][Tense],hvsk-nh[inf2],,a_stem,a_present,
-496,503,he/she hears him/her,athvki'a,tsiyathvki'a,athvkisko'i,uthvkanv'i,hiyathvkvka,uthvkoti,[Pro]athvk[Aspect][Tense],i-vka,,a_stem,a_present,
-502,509,he/she is inside,aya'a,tsiya'a,aya'o'i,,,,[Pro]y[Aspect][Tense],stative-a',,cons_stem,a_present,
-502,509,he/she is inside,aya'a,tsiya'a,aya'o'i,,,,[Pro]ya'[Aspect][Tense],stative,,cons_stem,a_present,
-507,514,he/she is waking up,ayeka,tsiyeka,ayeko'i,uyetsv'i,hiyeki,uye'isti,[Pro]ye[Aspect][Tense],become[inf2],,cons_stem,a_present,
-509,516,he/she is waking him/her up,aye'istiha,tsiye'istiha,aye'istisko'i,uye'isthanv'i,hiye'ista,uye'istohti,[Pro]ye'ist[Aspect][Tense],cause,,cons_stem,a_present,
-515,522,it’s breaking,ayoka,tsiyoka,ayoko'i,uyotsv'i,hiyoki,uyoyhsti,[Pro]yo[Aspect][Tense],become[inf3],,cons_stem,a_present,
-523,530,he/she is greeting him/her,ayoliha,tsiyoliha,ayoliho'i,uyolilv'i,hiyolika,uyolisti,[Pro]yol[Aspect][Tense],ih-il,,cons_stem,a_present,
-524,531,he/she is breaking it,ayostiha,tsiyostiha,ayostisko'i,uyosthanv'i,hiyosta,uyostohti,[Pro]yost[Aspect][Tense],cause,,cons_stem,a_present,
-526,533,he/she is destroying it,ayosthanohvska,tsiyosthanohvska,ayosthanohvsko'i,uyosthanonhv'i,hiyosthanonha,uyosthanohvsti,[Pro]yosthan[Aspect][Tense],terminative,,cons_stem,a_present,
-526,533,he/she is destroying it,ayosthanohvska,tsiyosthanohvska,ayosthanohvsko'i,uyosthanonhv'i,hiyosthanonha,uyosthanohvsti,[Pro]yosthano[Aspect][Tense],terminative-no-o,,cons_stem,a_present,
-742,765,he/she is walking around,etoha,ketoha,etoho'i,uwetolv'i,heta,uwetasti,[Pro]et[Aspect][Tense],be-at,,e_stem,a_present,
-752,776,he/she thinks so,eli'a,keli'a,elisko'i,uwelisv'i,hela,uwelisti,[Pro]el[Aspect][Tense],i-a-i[perf2],,e_stem,a_present,
-766,796,he/she is removing it from a hanging position (refers to solid or flexible object),kate'a,kate'a,katesko'i,utesv'i,hataki,utesti,[Pro]at[Aspect][Tense],rev-e,,a_stem,a_present,
-775,805,he/she is pitying him/her,katolika,tsiyatolika,katoliko'i,uwatolitsv'i,hiyatoliki,uwatolisti,[Pro]atoli[Aspect][Tense],become,,vowel_stem,a_present,
-776,806,he/she is dropping him/her (refers to flexible object),katonhtiha,tsiyatonhtiha,katonhtisko'i,utonhthanv'i,hiyatonhta,utonhtohti,[Pro]atonht[Aspect][Tense],cause,,a_stem,a_present,
-777,807,it is falling from a hanging position (refers to flexible object),katoska,katoska,katosko'i,utosv'i,hatohi,utohisti,[Pro]ato[Aspect][Tense],sk-s-hi-hihst,,a_stem,a_present,
-788,818,he/she is hanging up it (refers to a flexible object),katv'vska,tsiyatv'vska,katv'vsko'i,utvnv'i,hatv'vka,utvti,[Pro]at[Aspect][Tense],vsk-long[imp2],,a_stem,a_present,
-788,818,he/she is hanging up it (refers to a flexible object),katv'vska,tsiyatv'vska,katv'vsko'i,utvnv'i,hatv'vka,utvti,[Pro]atv[Aspect][Tense],vsk-post-v,,a_stem,a_present,
-821,851,he/she is scratching him/her,katsalikoska,tsiyatsalikoska,katsalikosko'i,uwatsalikosv'i,hiyatsalikola,uwatsalikosti,[Pro]atsaliko[Aspect][Tense],sk-s-la,,vowel_stem,a_present,
-826,856,he/she is leaving a living thing behind,kakhahiya'a,tsiyakhahiya'a,kakhahiyasko'i,uwakhahiyv'i,hiyakhahiya,uwakhahiyasti,[Pro]akhahiy[Aspect][Tense],a,,vowel_stem,a_present,
-827,857,he/she is giving him/her a living thing,kakhaneha,tsiyakhaneha,kakhaneho'i,uwakhanelv'i,hiyakhasi,uwakhanehti,[Pro]akhan[Aspect][Tense],apl,,vowel_stem,a_present,
-829,859,he/she is wrapping him/her,kakwhenvska,tsiyakwhenvska,kakwhenvsko'i,uwakwhenvnhv'i,hiyakwhenvna,uwakwhenvhti,[Pro]akwhen[Aspect][Tense],vnh-vsk[inf2],,vowel_stem,a_present,
-830,860,he/she is putting it in a container (refers to a long object),kalati'a,tsilati'a,kalatisko'i,ulatv'i,hilata,ulatisti,[Pro]lat[Aspect][Tense],i-a-i,,r_stem,a_present,
-833,863,he/she is taking it out of a container (refers to a solid or flexible object),kale'a,tsile'a,kalesko'i,ulesv'i,hilaki,ulesti,[Pro]l[Aspect][Tense],rev-e,,r_stem,a_present,
-837,867,he/she is burning,kaleyvska,tsileyvska,kaleyvsko'i,uleyvsv'i,hileyvhi,uleyvhisti,[Pro]leyv[Aspect][Tense],sk-s-hi-hihst,,r_stem,a_present,
-838,868,it is falling from an upright position (refers to a long object eg tree‚ pole),kaleyvska,tsileyvska,kaleyvsko'i,uleyvsv'i,hileyvhi,uleyvhisti,[Pro]leyv[Aspect][Tense],sk-s-hi-hihst,,r_stem,a_present,
-840,870,it is burning (refers to forest or grass),kalika,,kaliko'i,ulitsv'i,,,[Pro]li[Aspect][Tense],become[inf3],,r_stem,a_present,
-840,870,it is burning (refers to forest or grass),kalika,,kaliko'i,ulitsv'i,,,[Pro]ali[Aspect][Tense],become[inf3],,a_stem,a_present,
-840,870,it is burning (refers to forest or grass),kalika,,kaliko'i,ulitsv'i,,,[Pro]ali[Aspect][Tense],become,,a_stem,a_present,
-840,870,it is burning (refers to forest or grass),kalika,,kaliko'i,ulitsv'i,,,[Pro]li[Aspect][Tense],become[inf4],,r_stem,a_present,
-840,870,it is burning (refers to forest or grass),kalika,,kaliko'i,ulitsv'i,,,[Pro]ali[Aspect][Tense],become[inf4],,a_stem,a_present,
-840,870,it is burning (refers to forest or grass),kalika,,kaliko'i,ulitsv'i,,,[Pro]ali[Aspect][Tense],become[inf2],,a_stem,a_present,
-840,870,it is burning (refers to forest or grass),kalika,,kaliko'i,ulitsv'i,,,[Pro]li[Aspect][Tense],become,,r_stem,a_present,
-840,870,it is burning (refers to forest or grass),kalika,,kaliko'i,ulitsv'i,,,[Pro]li[Aspect][Tense],become[inf2],,r_stem,a_present,
-845,875,he/she is hoeing it,kaloki'a,tsiloki'a,kalokisko'i,ulokanv'i,hilokvka,ulokoti,[Pro]lok[Aspect][Tense],i-vka,,r_stem,a_present,
-852,882,he/she is bluffing him/her,kalonastiha,tsilonastiha,kalonastisko'i,ulonasthanv'i,hilonasta,ulonastohti,[Pro]lonast[Aspect][Tense],cause,,r_stem,a_present,
-853,883,he/she is oiling it,kalone'a,tsilone'a,kalonesko'i,ulone'v'i,hilona,uloneti,[Pro]lon[Aspect][Tense],e-a,,r_stem,a_present,
-854,884,he/she is making him/her fall from an elevated position,kalonhtiha,tsilonhtiha,kalonhtisko'i,ulonhthanv'i,hilonhta,ulonhtohti,[Pro]lonht[Aspect][Tense],cause,,r_stem,a_present,
-856,886,he/she is passing by without stopping,kaloska,tsiloska,kalosko'i,ulosv'i,hilohi,ulohisti,[Pro]lo[Aspect][Tense],sk-s-hi-hihst,,r_stem,a_present,
-857,887,he/she is falling from an elevated position,kaloska,tsiloska,kalosko'i,ulosv'i,hilohi,ulohisti,[Pro]lo[Aspect][Tense],sk-s-hi-hihst,,r_stem,a_present,
-859,889,it’s lacking,kaluloka,tsiluloka,kaluloko'i,ululotsv'i,hiluloki,ululosti,[Pro]lulo[Aspect][Tense],become,,r_stem,a_present,
-870,900,he/she is putting it in a hole or a container (refers to a flexible object),kalvska,tsilvska,kalvsko'i,ulvnv'i,hilv'vka,ulvti,[Pro]l[Aspect][Tense],vsk[imp2],,r_stem,a_present,
-871,901,he/she is selling it,kanateka,tsinateka,kanateko'i,unatinvsv'i,hinatuka,unatinvti,[Pro]nat[Aspect][Tense],go-in,,r_stem,a_present,
-873,903,he/she is hiring him/her,kanalhvska,tsinalhvska,kanalhvsko'i,unalhvnv'i,hinalhv'vka,unalhvti,[Pro]nalh[Aspect][Tense],vsk[imp2],,r_stem,a_present,
-876,906,he/she is finding it (refers to a flexible object),kanawhthiha,tsinawhthiha,kanawhthisko'i,unawhthvhv'i,hinawhtha,unawhthvhti,[Pro]nawhth[Aspect][Tense],ih-vh[inf2],,r_stem,a_present,
-877,907,he/she is taking it somewhere (refers to an animal‚ flexible object),kanawitiha,tsinawitiha,kanawitisko'i,unawitvhv'i,hinawita,unawithti,[Pro]nawit[Aspect][Tense],ih-vh,,r_stem,a_present,
-879,909,he/she is getting it (refers to a flexible object),kane'a,tsine'a,kanesko'i,unesv'i,hinaki,unesti,[Pro]n[Aspect][Tense],rev-e,,r_stem,a_present,
-880,910,he/she is changing it,kanetliyv'a,tsinetliyv'a,kanetliyvsko'i,unetliyvsv'i,hinetliyvna,unetliyvsti,[Pro]netliy[Aspect][Tense],v-vhs,,r_stem,a_present,
-883,913,he/she is peeling him/her,kanekaliha,tsinekaliha,kanekalisko'i,unekalvhv'i,hinekala,unekalhti,[Pro]nekal[Aspect][Tense],ih-vh,,r_stem,a_present,
-884,914,he/she is getting some liquid,kaneki'a,tsineki'a,kanekisko'i,unekisv'i,hineki,unekisti,[Pro]ne[Aspect][Tense],rev-gi,,r_stem,a_present,
-884,914,he/she is getting some liquid,kaneki'a,tsineki'a,kanekisko'i,unekisv'i,hineki,unekisti,[Pro]nek[Aspect][Tense],rev-i,,r_stem,a_present,
-885,915,he/she is taking liquid from him/her,kaneki'eha,tsineki'eha,kaneki'eho'i,uneki'elv'i,hinekisi,uneki'ehti,[Pro]neki'[Aspect][Tense],apl,,r_stem,a_present,
-886,916,he/she is bewitching him/her,kanekuti'a,tsinekuti'a,kanekutisko'i,unekutv'i,hinekuta,unekutisti,[Pro]nekut[Aspect][Tense],i-a-i,,r_stem,a_present,
-895,925,it’s freezing,kanestalati'a,tsinestalati'a,kanestalatisko'i,unestalatv'i,hinestalata,unestalatisti,[Pro]nestalat[Aspect][Tense],i-a-i,,r_stem,a_present,
-896,926,it’s hailing,kanesoyhska,,kanesoyhsko'i,unesoyhsv'i,,unesoyhsti,[Pro]anesoyh[Aspect][Tense],sk-s-la,,a_stem,a_present,
-896,926,it’s hailing,kanesoyhska,,kanesoyhsko'i,unesoyhsv'i,,unesoyhsti,[Pro]nesoyh[Aspect][Tense],sk-s-hst[imp2],,r_stem,a_present,
-896,926,it’s hailing,kanesoyhska,,kanesoyhsko'i,unesoyhsv'i,,unesoyhsti,[Pro]anesoyh[Aspect][Tense],sk-s-hst[imp2],,a_stem,a_present,
-896,926,it’s hailing,kanesoyhska,,kanesoyhsko'i,unesoyhsv'i,,unesoyhsti,[Pro]anesoyh[Aspect][Tense],sk-s-hst,,a_stem,a_present,
-896,926,it’s hailing,kanesoyhska,,kanesoyhsko'i,unesoyhsv'i,,unesoyhsti,[Pro]nesoyh[Aspect][Tense],sk-s-hst,,r_stem,a_present,
-896,926,it’s hailing,kanesoyhska,,kanesoyhsko'i,unesoyhsv'i,,unesoyhsti,[Pro]anesoyh[Aspect][Tense],sk-s-a[inf2],,a_stem,a_present,
-896,926,it’s hailing,kanesoyhska,,kanesoyhsko'i,unesoyhsv'i,,unesoyhsti,[Pro]nesoyh[Aspect][Tense],sk-s-la,,r_stem,a_present,
-896,926,it’s hailing,kanesoyhska,,kanesoyhsko'i,unesoyhsv'i,,unesoyhsti,[Pro]nesoyh[Aspect][Tense],sk-s-a[inf2],,r_stem,a_present,
-901,931,he/she is agitating liquid,kanhkwa'eha,tsinhkwa'eha,kanhkwa'esko'i,unhkwa'ehv'i,hinhkwa'vla,unhkwa'ehti,[Pro]nhkwa'[Aspect][Tense],apl-active,,r_stem,a_present,
-909,939,he/she hates him/her,kanikwathiha,tsinikwathiha,kanikwathiho'i,unikwathilhv'i,hinikwathika,unikwathisti,[Pro]nikwat[Aspect][Tense],hih-hilh,,r_stem,a_present,
-910,940,he/she is setting up a bed,kanilhati'a,tsinilhati'a,kanilhatisko'i,unilhatv'i,hinilhata,unilhatisti,[Pro]nilhat[Aspect][Tense],i-a-i,,r_stem,a_present,
-913,943,he/she is pleading,kanilati'a,tsinilati'a,kanilatisko'i,unilatv'i,hinilata,unilatisti,[Pro]nilat[Aspect][Tense],i-a-i,,r_stem,a_present,
-921,951,it’s flooding,kanohuki'a,,kanohukisko'i,unohukanv'i,,unohukoti,[Pro]nohuk[Aspect][Tense],i-vka,,r_stem,a_present,
-921,951,it’s flooding,kanohuki'a,,kanohukisko'i,unohukanv'i,,unohukoti,[Pro]anohuk[Aspect][Tense],i-vka,,a_stem,a_present,
-924,954,it is blowing (refers to wind),kanolv'vska,,kanolv'vsko'i,unolvnv'i,,unolvti,[Pro]nol[Aspect][Tense],vsk-long[imp2],,r_stem,a_present,
-924,954,it is blowing (refers to wind),kanolv'vska,,kanolv'vsko'i,unolvnv'i,,unolvti,[Pro]anolv[Aspect][Tense],vsk-post-v,,a_stem,a_present,
-924,954,it is blowing (refers to wind),kanolv'vska,,kanolv'vsko'i,unolvnv'i,,unolvti,[Pro]nolv[Aspect][Tense],vsk-post-v,,r_stem,a_present,
-924,954,it is blowing (refers to wind),kanolv'vska,,kanolv'vsko'i,unolvnv'i,,unolvti,[Pro]anol[Aspect][Tense],vsk-long[imp2],,a_stem,a_present,
-924,954,it is blowing (refers to wind),kanolv'vska,,kanolv'vsko'i,unolvnv'i,,unolvti,[Pro]nol[Aspect][Tense],vsk-long,,r_stem,a_present,
-924,954,it is blowing (refers to wind),kanolv'vska,,kanolv'vsko'i,unolvnv'i,,unolvti,[Pro]anol[Aspect][Tense],vsk-long,,a_stem,a_present,
-925,955,he/she is stealing it,kanoski'a,tsinoski'a,kanoskisko'i,unoskisv'i,hinoski,unoskisti,[Pro]nosk[Aspect][Tense],rev-i,,r_stem,a_present,
-925,955,he/she is stealing it,kanoski'a,tsinoski'a,kanoskisko'i,unoskisv'i,hinoski,unoskisti,[Pro]nos[Aspect][Tense],rev-gi,,r_stem,a_present,
-928,958,he/she is sinking,kanoyvka,tsinoyvka,kanoyvko'i,unoyvtsv'i,hinoyvki,unoyv'isti,[Pro]noyv[Aspect][Tense],become[inf2],,r_stem,a_present,
-932,962,he/she is exiting,kanukoka,tsinukoka,kanukoko'i,unukotsv'i,hinuko'i,unukosti,[Pro]nu[Aspect][Tense],ko-kots,,r_stem,a_present,
-937,967,he/she is twisting him/her,kanutheyoha,tsinutheyoha,kanutheyoho'i,unutheyolv'i,hinutheyaka,unutheyasti,[Pro]nuthey[Aspect][Tense],oh-ol[inf3],,r_stem,a_present,
-938,968,he/she is missing him/her (refers to as a target),kanvti'a,tsinvti'a,kanvtisko'i,unvtv'i,hinvta,unvtisti,[Pro]nvt[Aspect][Tense],i-a-i,,r_stem,a_present,
-940,970,he/she is falling from an upright position,kanvka,tsinvka,kanvko'i,unvtsv'i,hinvki,unv'isti,[Pro]nv[Aspect][Tense],become[inf2],,r_stem,a_present,
-942,972,he/she is hammering it,kanvkwalo'a,tsinvkwalo'a,kanvkwalosko'i,unvkwalo'v'i,hinvkwalotsa,unvkwalosti,[Pro]nvkwal[Aspect][Tense],o,,r_stem,a_present,
-946,976,he/she is tying up a leg,kanvlhohiha,tsinvlhohiha,kanvlhohiho'i,unvlholhv'i,hinvlhoka,unvlhosti,[Pro]nvlho[Aspect][Tense],hih-lh,,r_stem,a_present,
-949,979,he/she is tossing about,kanvtsitoha,tsinvtsitoha,kanvtsitoho'i,unvtsitolv'i,hinvtsita,unvtsitasti,[Pro]nvtsit[Aspect][Tense],be-at,,r_stem,a_present,
-950,980,he/she is giving him/her an object (refers to a flexible object),kanvneha,tsinvneha,kanvneho'i,unvnelv'i,hinvsi,unvnehti,[Pro]nvn[Aspect][Tense],apl,,r_stem,a_present,
-955,985,he/she is pushing him/her,kasatoska,tsiyasatoska,kasatosko'i,uwasatoyhv'i,hiyasatoyha,uwasatosti,[Pro]asato[Aspect][Tense],sk-h-yh,,vowel_stem,a_present,
-956,986,he/she is rolling him/her,kasakwalehiha,tsiyasakwalehiha,kasakwalehiho'i,uwasakwalelhv'i,hiyasakwaleka,uwasakwalesti,[Pro]asakwale[Aspect][Tense],hih-lh,,vowel_stem,a_present,
-973,1003,he/she is stabbing him/her,kathiha,tsiyathiha,kathiho'i,uwathilhv'i,hiyathika,uwathisti,[Pro]at[Aspect][Tense],hih-hilh,,vowel_stem,a_present,
-979,1009,he/she is bathing him/her,kawo'a,tsiyawo'a,kawosko'i,uwo'v'i,hiyawotsa,uwosti,[Pro]aw[Aspect][Tense],o,,a_stem,a_present,
-981,1011,he/she is lecturing him/her,kawonhtiha,tsiwonhtiha,kawonhtisko'i,uwonhthanv'i,hiwonhta,uwonhtohti,[Pro]wonht[Aspect][Tense],cause,,r_stem,a_present,
-983,1013,he/she is speaking,kawoniha,tsiwoniha,kawonisko'i,uwonisv'i,hiwonihi,uwonihisti,[Pro]won[Aspect][Tense],ih-ihi,,r_stem,a_present,
-1022,1052,he/she is making it,kolhvska,kolhvska,kolhvsko'i,uwolhvnhv'i,holhvna,uwolhvnhti,[Pro]olh[Aspect][Tense],vnh-vsk[inf3],,vowel_stem,a_present,
-1030,1061,he/she is pulling a trigger,kotsane'a,kotsane'a,kotsanesko'i,uwotsanesv'i,hotsanaki,uwotsanesti,[Pro]otsan[Aspect][Tense],rev-e,,vowel_stem,a_present,
-1038,1069,he/she is batting it,kostvniha,kostvniha,kostvniho'i,uwostvnilv'i,hostvnika,uwostvnisti,[Pro]ostvn[Aspect][Tense],ih-il,,vowel_stem,a_present,
-1040,1071,he/she is saying to him/her,koseha,tsiyoseha,koseho'i,uwoselv'i,hiyosi,uwosehti,[Pro]os[Aspect][Tense],apl,,vowel_stem,a_present,
-1041,1072,it’s swelling,kothiska,kothiska,kothisko'i,uwothisv'i,hothihi,uwothihisti,[Pro]othi[Aspect][Tense],sk-s-hi-hihst,,vowel_stem,a_present,
-1044,1075,he/she is unhitching him/her,kutale'a,tsiyutale'a,kutalesko'i,uwutalesv'i,hiyutalaki,uwutalesti,[Pro]utal[Aspect][Tense],rev-e,,vowel_stem,a_present,
-1045,1076,he/she is hitching him/her up,kutalvska,tsiyutalvska,kutalvsko'i,uwutalvnv'i,hiyutalv'vka,uwutalvti,[Pro]utal[Aspect][Tense],vsk[imp2],,vowel_stem,a_present,
-1055,1086,he/she is covering it,kulhvska,kulhvska,kulhvsko'i,uwulhvnv'i,hulhv'vka,uwulhvti,[Pro]ulh[Aspect][Tense],vsk[imp2],,vowel_stem,a_present,
-1060,1091,he/she is picking him/her up,kuthe'a,tsiyuthe'a,kuthesko'i,uwuthesv'i,hiyuthaki,uwuthesti,[Pro]uth[Aspect][Tense],rev-e,,vowel_stem,a_present,
-1061,1092,it’s snowing,kuthiha,,kuthisko'i,uwuthanhv'i,,uwuthohti,[Pro]uth[Aspect][Tense],cause[perf2],,vowel_stem,a_present,
-1063,1094,he/she is sifting it,kvkustiha,kvkustiha,kvkustisko'i,uwakusthanv'i,hvkusta,uwakustohti,[Pro]vkust[Aspect][Tense],cause,,v_stem,a_present,
-1064,1095,it’s leaking,kvkuska,,kvkusko'i,uwakusv'i,,uwakusti,[Pro]vku[Aspect][Tense],sk-s-hst,,v_stem,a_present,
-1064,1095,it’s leaking,kvkuska,,kvkusko'i,uwakusv'i,,uwakusti,[Pro]vku[Aspect][Tense],sk-s-la,,v_stem,a_present,
-1064,1095,it’s leaking,kvkuska,,kvkusko'i,uwakusv'i,,uwakusti,[Pro]vku[Aspect][Tense],sk-s-a[inf2],,v_stem,a_present,
-1064,1095,it’s leaking,kvkuska,,kvkusko'i,uwakusv'i,,uwakusti,[Pro]vku[Aspect][Tense],sk-s-hst[imp2],,v_stem,a_present,
-1076,1107,he/she is frying it,kvtsalhvska,kvtsalhvska,kvtsalhvsko'i,uwvtsalhanv'i,hvtsalhvka,uwvtsalhti,[Pro]vtsal[Aspect][Tense],hvsk-han,,vowel_stem,a_present,
-1079,1110,it’s melting,kvnawoska,kvnawoska,kvnawosko'i,uwanawosv'i,hvnawohi,uwanawohisti,[Pro]vnawo[Aspect][Tense],sk-s-hi-hihst,,v_stem,a_present,
-1081,1112,he/she is sweeping it,kvnosaska,kvnosaska,kvnosasko'i,uwanosahv'i,hvnosa,uwanosasti,[Pro]vnosa[Aspect][Tense],sk-h[imp2],,v_stem,a_present,
-1083,1114,he/she is hiding it,kvskalhvska,kvskalhvska,kvskalhvsko'i,uwaskalhanv'i,hvskalhvka,uwaskalhti,[Pro]vskal[Aspect][Tense],hvsk-han,,v_stem,a_present,
-1084,1115,he/she is hiding it (refers to a long object),kvskalati'a,kvskalati'a,kvskalatisko'i,uwaskalatv'i,hvskalata,uwaskalatisti,[Pro]vskalat[Aspect][Tense],i-a-i,,v_stem,a_present,
-1085,1116,he/she is hiding him/her (refers to a flexible object),kvskalvska,tsiyvskalvska,kvskalvsko'i,uwaskalvnv'i,hiyvskalv'vka,uwaskalvti,[Pro]vskal[Aspect][Tense],vsk[imp2],,v_stem,a_present,
-1086,1117,he/she is cracking it,kvskwalo'a,kvskwalo'a,kvskwalosko'i,uwaskwalo'v'i,hvskwalotsa,uwaskwalosti,[Pro]vskwal[Aspect][Tense],o,,v_stem,a_present,
-1088,1119,he/she is soaking it (refers to a flexible object),kvwalhvska,kvwalhvska,kvwalhvsko'i,uwvwalhanv'i,hvwalhvka,uwvwalhti,[Pro]vwal[Aspect][Tense],hvsk-han,,vowel_stem,a_present,
-1471,1537,he/she is throwing it,uteka,akwateka,uteko'i,utinvsv'i,tsatuka,utinvti,[Pro]at[Aspect][Tense],go-in,,a_stem,a_present,
-1476,1542,he/she is having a birthday,utethiyiha,akwatethiyiha,utethiyisko'i,utethiyvhv'i,tsatethiya,utethiyhti,[Pro]atethiy[Aspect][Tense],ih-vh,,a_stem,a_present,
-1483,1549,there’s an opening,utlanvta,,utlanvto'i,utlanvtv'i,,,[Pro]tlanvt[Aspect][Tense],stative,,cons_stem,a_present,
-1483,1549,there’s an opening,utlanvta,,utlanvto'i,utlanvtv'i,,,[Pro]atlanvt[Aspect][Tense],stative,,a_stem,a_present,
-1485,1551,he/she is disbelieving,utlasithv'eha,akwatlasithv'eha,utlasithv'eho'i,utlasithv'elv'i,tsatlasithvsi,utlasithv'ehti,[Pro]atlasithv'[Aspect][Tense],apl,,a_stem,a_present,
-1487,1553,he/she is taking revenge,utleka,akwatleka,utleko'i,utletsv'i,tsatleki,utle'isti,[Pro]atle[Aspect][Tense],become[inf2],,a_stem,a_present,
-1507,1573,he/she wants it,utuliha,akwatuliha,utulisko'i,utulvhv'i,tsatula,utulhti,[Pro]atul[Aspect][Tense],ih-vh,,a_stem,a_present,
-1514,1580,he/she is becoming warm,ukanawoska,akikanawoska,ukanawosko'i,ukanawosv'i,tsakanawohi,ukanawohisti,[Pro]kanawo[Aspect][Tense],sk-s-hi-hihst,,cons_stem,a_present,
-1523,1589,he/she is late,ukonhiyoka,akikonhiyoka,ukonhiyoko'i,ukonhiyotsv'i,tsakonhiyoki,ukonhiyosti,[Pro]konhiyo[Aspect][Tense],become,,cons_stem,a_present,
-1524,1590,it’s decaying,ukoska,akikoska,ukosko'i,ukosv'i,tsakohi,ukohisti,[Pro]ko[Aspect][Tense],sk-s-hi-hihst,,cons_stem,a_present,
-1534,1600,he/she is having trouble breathing,uhawostiha,akihawostiha,uhawostisko'i,uhawosthanv'i,tsahawosta,uhawostohti,[Pro]hawost[Aspect][Tense],cause,,cons_stem,a_present,
-1536,1602,he/she is lonesome,uhisohtaneha,akihisohtaneha,uhisohtaneho'i,uhisohtanelv'i,tsahisohtasi,uhisohtanehti,[Pro]hisohtan[Aspect][Tense],apl,,cons_stem,a_present,
-1537,1603,it’s lonesome,uhisohti,,uhisohto'i,uhisohtv'i,,,[Pro]ahisoht[Aspect][Tense],stative,,a_stem,i_present,
-1537,1603,it’s lonesome,uhisohti,,uhisohto'i,uhisohtv'i,,,[Pro]hisoht[Aspect][Tense],stative,,cons_stem,i_present,
-1569,1635,it is cold (refers to weather),uyhvtla,,uyhvtlo'i,uyhvtlv'i,,,[Pro]yhvtl[Aspect][Tense],stative,,r_stem,a_present,
-1569,1635,it is cold (refers to weather),uyhvtla,,uyhvtlo'i,uyhvtlv'i,,,[Pro]yhvtl[Aspect][Tense],stative,,cons_stem,a_present,
-1569,1635,it is cold (refers to weather),uyhvtla,,uyhvtlo'i,uyhvtlv'i,,,[Pro]ayhvtl[Aspect][Tense],stative,,a_stem,a_present,
-1599,1665,he/she is not having luck at hunting,ukwholeka,akikwholeka,ukwholeko'i,ukwholvsv'i,tsakwholuka,ukwholvsti,[Pro]kwhol[Aspect][Tense],go,,cons_stem,a_present,
-1602,1668,he/she is losing his/her way,ulenahiha,akwalenahiha,ulenahiho'i,ulenalhv'i,tsalenaka,ulenasti,[Pro]alena[Aspect][Tense],hih-lh,,a_stem,a_present,
-1604,1670,he/she is making a mistake,ulitastiha,akilitastiha,ulitastisko'i,ulitasthanv'i,tsalitasta,ulitastohti,[Pro]litast[Aspect][Tense],cause,,cons_stem,a_present,
-1604,1670,he/she is making a mistake,ulitastiha,akilitastiha,ulitastisko'i,ulitasthanv'i,tsalitasta,ulitastohti,[Pro]litast[Aspect][Tense],cause,,r_stem,a_present,
-1612,1678,he/she is whining,uliyetiha,akiliyetiha,uliyetisko'i,uliyethanv'i,tsaliyeta,uliyetohti,[Pro]liyet[Aspect][Tense],cause,,r_stem,a_present,
-1612,1678,he/she is whining,uliyetiha,akiliyetiha,uliyetisko'i,uliyethanv'i,tsaliyeta,uliyetohti,[Pro]liyet[Aspect][Tense],cause,,cons_stem,a_present,
-1614,1680,it’s cloudy,ulokila,,ulokilo'i,ulokilv'i,,,[Pro]alokil[Aspect][Tense],stative,,a_stem,a_present,
-1614,1680,it’s cloudy,ulokila,,ulokilo'i,ulokilv'i,,,[Pro]lokil[Aspect][Tense],stative,,r_stem,a_present,
-1614,1680,it’s cloudy,ulokila,,ulokilo'i,ulokilv'i,,,[Pro]lokil[Aspect][Tense],stative,,cons_stem,a_present,
-1616,1682,it’s happening to him,ulhstanheha,akwalhstanheha,ulhstanheho'i,ulhstanhelv'i,tsalhstasi,ulhstanhehti,[Pro]alhstanh[Aspect][Tense],apl[imp2],,a_stem,a_present,
-1710,1776,he/she is aching,uwehistaneha,akwehistaneha,uwehistaneho'i,uwehistanelv'i,tsehistasi,uwehistanehti,[Pro]ehistan[Aspect][Tense],apl,,e_stem,a_present,
-1710,1776,he/she is aching,uwehistaneha,akwehistaneha,uwehistaneho'i,uwehistanelv'i,tsehistasi,uwehistanehti,[Pro]ehistan[Aspect][Tense],apl,,vowel_stem,a_present,
-1741,1807,he/she is losing it,uyohuseha,akiyohuseha,uyohuseho'i,uyohuselv'i,tsayohusi,uyohusehti,[Pro]yohus[Aspect][Tense],apl,,cons_stem,a_present,
-1741,1807,he/she is losing it,uyohuseha,akiyohuseha,uyohuseho'i,uyohuselv'i,tsayohusi,uyohusehti,[Pro]yohus[Aspect][Tense],apl,,r_stem,a_present,
-1754,1823,he/she is sending on object (refers to a long object),wati'a,witsiti'a,watisko'i,wutv'i,whita,wutisti,[WI][Pro]t[Aspect][Tense],i-a-i,,cons_stem,a_present,
-1774,1845,he/she is sending it,wikakhahvska,witsiyakhahvska,wikakhahvsko'i,wuwakhanv'i,whiyakhahvka,wuwakhohti,[WI][Pro]akha[Aspect][Tense],hvsk-n,,vowel_stem,a_present,
-1776,1847,he/she is sending it (refers to a flexible object),wikanv'vska,witsinv'vska,wikanv'vsko'i,wunvnv'i,whinv'vka,wunvti,[WI][Pro]nv[Aspect][Tense],vsk-post-v,,r_stem,a_present,
-1776,1847,he/she is sending it (refers to a flexible object),wikanv'vska,witsinv'vska,wikanv'vsko'i,wunvnv'i,whinv'vka,wunvti,[WI][Pro]n[Aspect][Tense],vsk-long[imp2],,r_stem,a_present,
-1778,1849,he/she is going out of sight,wutelika,wakwatelika,wuteliko'i,wutelitsv'i,witsateliki,wutelisti,[WI][Pro]ateli[Aspect][Tense],become,,a_stem,a_present,
+corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,imperative,infinitive,root,aspect_class,prefix_class,tense_present_class
+4,8,it’s bouncing,atateka,katateka,atateko'i,utatinvsv'i,hatatuka,utatinvti,[Pro]atat[Aspect][Tense],go-in,a_stem,a_present
+5,9,he/she is limping,atateka,katateka,atateko'i,utatesv'i,hatatuka,utatinvti,[Pro]atat[Aspect][Tense],go-in[perf2],a_stem,a_present
+6,10,he/she is bouncing it,atatinvtiha,katatinvtiha,atatinvtisko'i,utatinvthanv'i,hatatinvta,utatinvtohti,[Pro]atatinvt[Aspect][Tense],cause,a_stem,a_present
+7,11,he/she is putting on a belt,atatlohiha,katatlohiha,atatlohiho'i,utatlolhv'i,hatatloka,utatlosti,[Pro]atatlo[Aspect][Tense],hih-lh,a_stem,a_present
+10,14,he/she is praying,atatolistiha,katatolistiha,atatolistisko'i,utatolisthanv'i,hatatolista,utatolistohti,[Pro]atatolist[Aspect][Tense],cause,a_stem,a_present
+27,31,he/she is looking at himself/herself in a mirror,atakheha,katakheha,atakhesko'i,utakhehv'i,hatakhvla,utakhehti,[Pro]atakh[Aspect][Tense],apl-active,a_stem,a_present
+29,33,it’s beginning,ataleniha,,atalenisko'i,utalenvhv'i,,utalenhti,[Pro]atalen[Aspect][Tense],ih-vh,a_stem,a_present
+29,33,it’s beginning,ataleniha,,atalenisko'i,utalenvhv'i,,utalenhti,[Pro]talen[Aspect][Tense],ih-vh,cons_stem,a_present
+30,34,he/she is shopping,atananesvhvska,katananesvhvska,atananesvhvsko'i,utananesvnhv'i,hatananesvhvka,utananesvhvsti,[Pro]atananes[Aspect][Tense],episodic[inf2],a_stem,a_present
+30,34,he/she is shopping,atananesvhvska,katananesvhvska,atananesvhvsko'i,utananesvnhv'i,hatananesvhvka,utananesvhvsti,[Pro]atananesv[Aspect][Tense],hvsk-nh[inf3],a_stem,a_present
+32,36,he/she is taking off running,atanawhstiha,katanawhstiha,atanawhstisko'i,utanawhsthanv'i,hatanawhsta,utanawhstohti,[Pro]atanawhst[Aspect][Tense],cause,a_stem,a_present
+33,37,he/she is changing,atanetliyv'a,katanetliyv'a,atanetliyvsko'i,utanetliyvsv'i,hatanetliyvna,utanetliyvsti,[Pro]atanetliy[Aspect][Tense],v-vhs,a_stem,a_present
+34,38,he/she is taking turns with him/her,atanetliyvstiha,katanetliyvstiha,atanetliyvstisko'i,utanetliyvsthanv'i,hatanetliyvsta,utanetliyvstohti,[Pro]atanetliyvst[Aspect][Tense],cause,a_stem,a_present
+44,48,it’s twisting,atanutheyoha,katanutheyoha,atanutheyoho'i,utanutheyolv'i,hatanutheyaka,utanutheyoti,[Pro]atanuthey[Aspect][Tense],oh-ol,a_stem,a_present
+46,50,he/she is ordering it,atanvska,katanvska,atanvsko'i,utanvsv'i,hatanvla,utanvsti,[Pro]atanv[Aspect][Tense],sk-s-la,a_stem,a_present
+48,52,he/she is cooking a meal,atastayvhvska,katastayvhvska,atastayvhvsko'i,utastayvnhv'i,hatastayvhvka,utastayhti,[Pro]atastay[Aspect][Tense],episodic,a_stem,a_present
+48,52,he/she is cooking a meal,atastayvhvska,katastayvhvska,atastayvhvsko'i,utastayvnhv'i,hatastayvhvka,utastayhti,[Pro]atastayv[Aspect][Tense],hvsk-nh[inf2],a_stem,a_present
+51,55,it’s burning (refers to flames),atawelaki'a,katawelaki'a,atawelakisko'i,utawelakv'i,hatawelaka,utawelakisti,[Pro]atawelak[Aspect][Tense],i-a-i,a_stem,a_present
+54,58,he/she is resting,atawesolvstiha,katawesolvstiha,atawesolvstisko'i,utawesolvsthanv'i,hatawesolvsta,utawesolvstohti,[Pro]atawesolvst[Aspect][Tense],cause,a_stem,a_present
+56,60,he/she is bathing,atawo'a,katawo'a,atawosko'i,utawo'v'i,hatawotsa,utawosti,[Pro]ataw[Aspect][Tense],o,a_stem,a_present
+59,63,he/she is giving him/her it (refers to a long object),ateha,tsiteha,ateho'i,utelv'i,hitisi,utehti,[Pro]t[Aspect][Tense],apl[imp3],cons_stem,a_present
+72,76,he/she is laying it down (refers to a long object),ati'a,tsiti'a,atisko'i,utv'i,hita,utisti,[Pro]t[Aspect][Tense],i-a-i,cons_stem,a_present
+74,78,he/she is scattering it,atikaleya'a,katikaleya'a,atikaleyasko'i,utikaleyv'i,hatikaleya,utikaleyasti,[Pro]atikaley[Aspect][Tense],a,a_stem,a_present
+75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,[Pro]tikaleyo[Aspect][Tense],become[inf3],cons_stem,a_present
+75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,[Pro]atikaleyo[Aspect][Tense],become[inf3],a_stem,a_present
+78,82,he/she is running over him/her,atinvtiha,tsiyatinvtiha,atinvtisko'i,utinvthanv'i,hiyatinvta,utinvtohti,[Pro]atinvt[Aspect][Tense],cause,a_stem,a_present
+79,83,he/she is hiding,atiskalhvska,katiskalhvska,atiskalhvsko'i,utiskalhanv'i,hatiskalhvka,utiskalhti,[Pro]atiskal[Aspect][Tense],hvsk-han,a_stem,a_present
+80,84,he/she is leaving it behind (refers to a long object),atisiya'a,tsitisiya'a,atisiyasko'i,utisiyv'i,hitisiya,utisiyasti,[Pro]tisiy[Aspect][Tense],a,cons_stem,a_present
+82,86,he/she is drinking it,atithaska,katithaska,atithasko'i,utithahv'i,hatitha,utithasti,[Pro]atitha[Aspect][Tense],sk-h[imp2],a_stem,a_present
+85,89,he/she is scratching,atlakoska,katlakoska,atlakosko'i,utlakosv'i,hatlakola,utlakosti,[Pro]atlako[Aspect][Tense],sk-s-la,a_stem,a_present
+87,91,he/she is turning off the road,atle'a,katle'a,atlesko'i,utlesv'i,hatlaki,utlesti,[Pro]atl[Aspect][Tense],rev-e,a_stem,a_present
+88,92,he/she is taking revenge against him/her,atletsheha,tsiyatletsheha,atletsheho'i,utletshelv'i,hiyatletshisi,utletshehti,[Pro]atletsh[Aspect][Tense],apl[imp3],a_stem,a_present
+94,98,it’s pouring into a container (refers to liquid),atlika,,atliko'i,utlitsv'i,,utliyhsti,[Pro]tli[Aspect][Tense],become[inf3],cons_stem,a_present
+94,98,it’s pouring into a container (refers to liquid),atlika,,atliko'i,utlitsv'i,,utliyhsti,[Pro]atli[Aspect][Tense],become[inf3],a_stem,a_present
+96,100,he/she is pouring a liquid into a container,atlistiha,tsitlistiha,atlistisko'i,utlisthanv'i,hitlista,utlistohti,[Pro]tlist[Aspect][Tense],cause,cons_stem,a_present
+101,105,he/she is catching up with him/her,atlvthaska,tsiyatlvthaska,atlvthasko'i,utlvthahv'i,hiyatlvtha,utlvthasti,[Pro]atlvtha[Aspect][Tense],sk-h[imp2],a_stem,a_present
+107,111,he/she is acting silly,atvneliha,katvneliha,atvnelisko'i,utvnelvnhv'i,hatvnela,utvnelhti,[Pro]atvnel[Aspect][Tense],vnh-ih-a,a_stem,a_present
+109,113,he/she is preparing it,atvnv'istiha,katvnv'istiha,atvnv'istisko'i,utvnv'isthanv'i,hatvnv'ista,utvnv'istohti,[Pro]atvnv'ist[Aspect][Tense],cause,a_stem,a_present
+112,116,it is shining (refers to sun or moon),akaliha,,akalisko'i,ukalisv'i,,ukalihisti,[Pro]kal[Aspect][Tense],ih-ihi,cons_stem,a_present
+112,116,it is shining (refers to sun or moon),akaliha,,akalisko'i,ukalisv'i,,ukalihisti,[Pro]akal[Aspect][Tense],ih-ihi,a_stem,a_present
+115,119,he/she is licking it,akanati'a,tsikanati'a,akanatisko'i,ukanatv'i,hikanata,ukanatisti,[Pro]kanat[Aspect][Tense],i-a-i,cons_stem,a_present
+118,122,it’s getting warm,akanawoska,,akanawosko'i,ukanawosv'i,,ukanawohisti,[Pro]akanawo[Aspect][Tense],sk-s-hi-hihst,a_stem,a_present
+118,122,it’s getting warm,akanawoska,,akanawosko'i,ukanawosv'i,,ukanawohisti,[Pro]kanawo[Aspect][Tense],sk-s-hi-hihst,cons_stem,a_present
+118,122,it’s getting warm,akanawoska,,akanawosko'i,ukanawosv'i,,ukanawohisti,[Pro]akanawo[Aspect][Tense],sk-s-a,a_stem,a_present
+118,122,it’s getting warm,akanawoska,,akanawosko'i,ukanawosv'i,,ukanawohisti,[Pro]kanawo[Aspect][Tense],sk-s-a,cons_stem,a_present
+127,132,he/she is eating it (refers to a single solid food),aki'a,tsiki'a,akisko'i,ukv'i,hika,ukisti,[Pro]k[Aspect][Tense],i-a-i,cons_stem,a_present
+128,133,he/she is picking it up,aki'a,tsiki'a,akisko'i,ukisv'i,hiki,ukisti,[Pro]k[Aspect][Tense],rev-i,cons_stem,a_present
+133,138,he/she is chewing it,akisto'a,tsikisto'a,akistosko'i,ukisto'v'i,hikistotsa,ukistosti,[Pro]kist[Aspect][Tense],o,cons_stem,a_present
+135,140,he/she is burning him/her,akohvstiha,tsiyakohvstiha,akohvstisko'i,ukohvsthanv'i,hiyakohvsta,ukohvstohti,[Pro]akohvst[Aspect][Tense],cause,a_stem,a_present
+136,141,it’s burning,akohvska,kakohvska,akohvsko'i,ukonhv'i,hakonha,ukohvsti,[Pro]ak[Aspect][Tense],terminative,a_stem,a_present
+136,141,it’s burning,akohvska,kakohvska,akohvsko'i,ukonhv'i,hakonha,ukohvsti,[Pro]ako[Aspect][Tense],terminative-no-o,a_stem,a_present
+138,143,he/she is reading,akoliye'a,tsikoliye'a,akoliyesko'i,ukoliye'v'i,hikoliya,ukoliyeti,[Pro]koliy[Aspect][Tense],e-a,cons_stem,a_present
+140,145,he/she is target practicing,akoniha,kakoniha,akonisko'i,ukonvhv'i,hakona,ukonhti,[Pro]akon[Aspect][Tense],ih-vh,a_stem,a_present
+145,150,he/she is showing it to him/her,akowhthvhtiha,tsikowhthvhtiha,akowhthvhtisko'i,ukowhthvhthanv'i,hikowhthvhta,ukowhthvhtohti,[Pro]kowhthvht[Aspect][Tense],cause,cons_stem,a_present
+152,157,he/she is scolding him/her,akvskolvska,tsikvskolvska,akvskolvsko'i,ukvskolvnv'i,hikvskolv'vka,ukvskolvti,[Pro]kvskol[Aspect][Tense],vsk[imp2],cons_stem,a_present
+153,158,he/she is washing his face,akvskwo'a,kakvskwo'a,akvskwosko'i,ukvskwo'v'i,hakvskwotsa,ukvskwosti,[Pro]akvskw[Aspect][Tense],o,a_stem,a_present
+166,172,he/she is placing it on something,alhahvska,tsilhahvska,alhahvsko'i,ulhanhv'i,hilhahvka,ulhohti,[Pro]lha[Aspect][Tense],hvsk-nh[inf4],cons_stem,a_present
+172,178,it’s taking time,alhi'ilitoha,,alhi'ilitoho'i,ulhi'ilitolv'i,,ulhi'ilitasti,[Pro]alhi'ilit[Aspect][Tense],oh-ol[inf3],a_stem,a_present
+172,178,it’s taking time,alhi'ilitoha,,alhi'ilitoho'i,ulhi'ilitolv'i,,ulhi'ilitasti,[Pro]alhi'ilit[Aspect][Tense],be-at,a_stem,a_present
+172,178,it’s taking time,alhi'ilitoha,,alhi'ilitoho'i,ulhi'ilitolv'i,,ulhi'ilitasti,[Pro]lhi'ilit[Aspect][Tense],oh-ol[inf3],cons_stem,a_present
+172,178,it’s taking time,alhi'ilitoha,,alhi'ilitoho'i,ulhi'ilitolv'i,,ulhi'ilitasti,[Pro]lhi'ilit[Aspect][Tense],be-at,cons_stem,a_present
+175,181,it’s bending,alhiyvhkwitvska,,alhiyvhkwitvsko'i,ulhiyvhkwitvnv'i,,ulhiyvhkwitvti,[Pro]lhiyvhkwit[Aspect][Tense],vsk[imp2],cons_stem,a_present
+175,181,it’s bending,alhiyvhkwitvska,,alhiyvhkwitvsko'i,ulhiyvhkwitvnv'i,,ulhiyvhkwitvti,[Pro]lhiyvhkwit[Aspect][Tense],vsk,cons_stem,a_present
+175,181,it’s bending,alhiyvhkwitvska,,alhiyvhkwitvsko'i,ulhiyvhkwitvnv'i,,ulhiyvhkwitvti,[Pro]alhiyvhkwit[Aspect][Tense],vsk[imp2],a_stem,a_present
+175,181,it’s bending,alhiyvhkwitvska,,alhiyvhkwitvsko'i,ulhiyvhkwitvnv'i,,ulhiyvhkwitvti,[Pro]alhiyvhkwit[Aspect][Tense],vsk,a_stem,a_present
+179,185,it’s shattering,alhkhotvska,,alhkhotvsko'i,ulhkhotvnhv'i,,,[Pro]alhkhot[Aspect][Tense],vnh-vsk,a_stem,a_present
+179,185,it’s shattering,alhkhotvska,,alhkhotvsko'i,ulhkhotvnhv'i,,,[Pro]lhkhot[Aspect][Tense],vnh-vsk,cons_stem,a_present
+179,185,it’s shattering,alhkhotvska,,alhkhotvsko'i,ulhkhotvnhv'i,,,[Pro]alhkhot[Aspect][Tense],vnh-vsk[inf4],a_stem,a_present
+179,185,it’s shattering,alhkhotvska,,alhkhotvsko'i,ulhkhotvnhv'i,,,[Pro]lhkhot[Aspect][Tense],vnh-vsk[inf4],cons_stem,a_present
+179,185,it’s shattering,alhkhotvska,,alhkhotvsko'i,ulhkhotvnhv'i,,,[Pro]lhkhot[Aspect][Tense],vnh-vsk[inf2],cons_stem,a_present
+179,185,it’s shattering,alhkhotvska,,alhkhotvsko'i,ulhkhotvnhv'i,,,[Pro]alhkhot[Aspect][Tense],vnh-vsk[inf2],a_stem,a_present
+179,185,it’s shattering,alhkhotvska,,alhkhotvsko'i,ulhkhotvnhv'i,,,[Pro]alhkhot[Aspect][Tense],vnh-vsk[inf3],a_stem,a_present
+179,185,it’s shattering,alhkhotvska,,alhkhotvsko'i,ulhkhotvnhv'i,,,[Pro]lhkhot[Aspect][Tense],vnh-vsk[inf3],cons_stem,a_present
+182,188,he/she is beating him/her at a game,alhoska,tsilhoska,alhosko'i,ulhosv'i,hilhohi,ulhohisti,[Pro]lho[Aspect][Tense],sk-s-hi-hihst,cons_stem,a_present
+191,197,he/she is wrestling,anhehiha,kanhehiha,anhehiho'i,unhelhv'i,hanheka,unhesti,[Pro]anhe[Aspect][Tense],hih-lh,a_stem,a_present
+224,230,it’s thundering,ayhvtakwalo'a,,ayhvtakwalosko'i,uyhvtakwalo'v'i,,uyhvtakwalosti,[Pro]ayhvtakwal[Aspect][Tense],o,a_stem,a_present
+224,230,it’s thundering,ayhvtakwalo'a,,ayhvtakwalosko'i,uyhvtakwalo'v'i,,uyhvtakwalosti,[Pro]yhvtakwal[Aspect][Tense],o,cons_stem,a_present
+238,244,it’s hatching,atsa'i'a,katsa'i'a,atsa'isko'i,utsa'isv'i,hatsa'i,utsa'isti,[Pro]atsa'[Aspect][Tense],rev-i,a_stem,a_present
+238,244,it’s hatching,atsa'i'a,katsa'i'a,atsa'isko'i,utsa'isv'i,hatsa'i,utsa'isti,[Pro]atsa[Aspect][Tense],rev-'i,a_stem,a_present
+239,245,he/she is dressing up,atsanvska,katsanvska,atsanvsko'i,utsanvnhv'i,hatsanvna,utsanvhti,[Pro]atsan[Aspect][Tense],vnh-vsk[inf2],a_stem,a_present
+242,248,he/she is acting like him/her,atselvska,katselvska,atselvsko'i,utselvnhv'i,hatselvna,utselhti,[Pro]atsel[Aspect][Tense],vnh-vsk,a_stem,a_present
+250,256,it’s blooming,atsilvska,,atsilvsko'i,utsilvnhv'i,,utsilhti,[Pro]atsil[Aspect][Tense],vnh-vsk,a_stem,a_present
+250,256,it’s blooming,atsilvska,,atsilvsko'i,utsilvnhv'i,,utsilhti,[Pro]tsil[Aspect][Tense],vnh-vsk,cons_stem,a_present
+253,259,he/she is lighting a fire,atsislhvska,tsitsislhvska,atsislhvsko'i,utsislhanv'i,hitsislhvka,utsislhvsti,[Pro]tsisl[Aspect][Tense],hvsk-han[inf2],cons_stem,a_present
+254,260,he/she is blowing,atsothaska,katsothaska,atsothasko'i,utsothahv'i,hatsotha,utsothasti,[Pro]atsotha[Aspect][Tense],sk-h[imp2],a_stem,a_present
+255,261,he/she is turning on a light,atsvsthvska,tsitsvsthvska,atsvsthvsko'i,utsvsthanv'i,hitsvsthvka,utsvsthvsti,[Pro]tsvst[Aspect][Tense],hvsk-han[inf2],cons_stem,a_present
+259,266,he/she is chasing him/her,akheheka,tsikheheka,akheheko'i,ukhehvsv'i,hikhehuka,ukhehvsti,[Pro]kheh[Aspect][Tense],go,cons_stem,a_present
+261,268,he/she is riding it (refers to anything that can be straddled),akhilvtiha,tsiyakhilvtiha,akhilvtisko'i,ukhilvthanv'i,hiyakhilvta,ukhilvtohti,[Pro]akhilvt[Aspect][Tense],cause,a_stem,a_present
+266,273,he/she is shovelling it,akhote'a,tsikhote'a,akhotesko'i,ukhotesv'i,hikhotaki,ukhotesti,[Pro]khot[Aspect][Tense],rev-e,cons_stem,a_present
+296,303,he/she is tromping on him/her,alasta'eha,tsiyalasta'eha,alasta'esko'i,ulasta'elhv'i,hiyalasta'vla,ulasta'ehti,[Pro]alasta'[Aspect][Tense],apl-active-',a_stem,a_present
+297,304,he/she is stepping on him/her,alastvska,tsiyalastvska,alastvsko'i,ulastvnv'i,hiyalastv'vka,ulastvti,[Pro]alast[Aspect][Tense],vsk[imp2],a_stem,a_present
+298,305,he/she is playing ball,alaskaliha,kalaskaliha,alaskalisko'i,ulaskalvhv'i,halaskala,ulaskalhti,[Pro]alaskal[Aspect][Tense],ih-vh,a_stem,a_present
+300,307,he/she is taking a step,alaskv'a,kalaskv'a,alaskvsko'i,ulaskvsv'i,halaskvna,ulaskvsti,[Pro]alask[Aspect][Tense],v-vhs,a_stem,a_present
+317,324,he/she is exchanging it,ali'iti'a,kali'iti'a,ali'itisko'i,uli'itv'i,hali'ita,uli'itisti,[Pro]ali'it[Aspect][Tense],i-a-i,a_stem,a_present
+318,325,he/she is running away,alithi'a,kalithi'a,alithisko'i,ulithisv'i,halithi,ulithisti,[Pro]alith[Aspect][Tense],rev-i,a_stem,a_present
+320,327,he/she is taking his/her ring off,aliyesusthki'a,kaliyesusthki'a,aliyesusthkisko'i,uliyesusthkisv'i,haliyesusthki,uliyesusthkisti,[Pro]aliyesusthk[Aspect][Tense],rev-i,a_stem,a_present
+320,327,he/she is taking his/her ring off,aliyesusthki'a,kaliyesusthki'a,aliyesusthkisko'i,uliyesusthkisv'i,haliyesusthki,uliyesusthkisti,[Pro]aliyesusth[Aspect][Tense],rev-gi,a_stem,a_present
+322,329,he/she is putting a ring on his/her finger,aliyesusthvska,kaliyesusthvska,aliyesusthvsko'i,uliyesusthanv'i,haliyesusthvka,uliyesusthvsti,[Pro]aliyesust[Aspect][Tense],hvsk-han[inf2],a_stem,a_present
+339,346,it’s ending,alhskwati'a,,alhskwatisko'i,ulhskwatv'i,,ulhskwatisti,[Pro]lhskwat[Aspect][Tense],i-a-i,cons_stem,a_present
+339,346,it’s ending,alhskwati'a,,alhskwatisko'i,ulhskwatv'i,,ulhskwatisti,[Pro]alhskwat[Aspect][Tense],i-a-i,a_stem,a_present
+355,362,they are gathering,anatalhisiha,otsatalhisiha,anatalhisisko'i,unatalhisanhv'i,itsatalhisa,unatalhisohti,[Pro]atalhis[Aspect][Tense],cause[perf2],vowel_stem,a_present
+355,362,they are gathering,anatalhisiha,otsatalhisiha,anatalhisisko'i,unatalhisanhv'i,itsatalhisa,unatalhisohti,[Pro]atalhis[Aspect][Tense],cause[perf2],a_stem,a_present
+355,362,they are gathering,anatalhisiha,otsatalhisiha,anatalhisisko'i,unatalhisanhv'i,itsatalhisa,unatalhisohti,[Pro]atalhis[Aspect][Tense],cause[perf2],k_a_stem,a_present
+356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]akal[Aspect][Tense],ih-vh[inf2],a_stem,a_present
+356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]akal[Aspect][Tense],ih-vh,k_a_stem,a_present
+356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]nakal[Aspect][Tense],ih-vh[inf2],cons_stem,a_present
+356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]akal[Aspect][Tense],ih-vh,vowel_stem,a_present
+356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]akal[Aspect][Tense],ih-vh[inf2],k_a_stem,a_present
+356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]anakal[Aspect][Tense],ih-vh[inf2],a_stem,a_present
+356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]nakal[Aspect][Tense],ih-vh,cons_stem,a_present
+356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]akal[Aspect][Tense],ih-vh,a_stem,a_present
+356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]akal[Aspect][Tense],ih-vh[inf2],vowel_stem,a_present
+356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,,[Pro]anakal[Aspect][Tense],ih-vh,a_stem,a_present
+359,366,they are getting together,analikohvska,otsalikohvska,analikohvsko'i,unalikonhv'i,itsalikohvka,unalikhti,[Pro]aliko[Aspect][Tense],hvsk-nh[inf2],a_stem,a_present
+359,366,they are getting together,analikohvska,otsalikohvska,analikohvsko'i,unalikonhv'i,itsalikohvka,unalikhti,[Pro]aliko[Aspect][Tense],hvsk-nh[inf2],vowel_stem,a_present
+359,366,they are getting together,analikohvska,otsalikohvska,analikohvsko'i,unalikonhv'i,itsalikohvka,unalikhti,[Pro]aliko[Aspect][Tense],hvsk-nh[inf2],k_a_stem,a_present
+361,368,he/she is attempting it,anelhtiha,kanelhtiha,anelhtisko'i,unelhthanv'i,hanelhta,unelhtohti,[Pro]anelht[Aspect][Tense],cause,a_stem,a_present
+362,369,he is getting married,anelati'a,kanelati'a,anelatisko'i,unelatv'i,hanelata,unelatisti,[Pro]anelat[Aspect][Tense],i-a-i,a_stem,a_present
+365,372,they are standing (refers to a congregation),anitona'a,otsitona'a,anitona'o'i,anitona'v'i,,,[Pro]itona'[Aspect][Tense],stative,vowel_stem,a_present
+365,372,they are standing (refers to a congregation),anitona'a,otsitona'a,anitona'o'i,anitona'v'i,,,[Pro]tona'[Aspect][Tense],stative,cons_stem,a_present
+366,373,they are asleep (refers to more than two),anilhina,otsilhina,anilhino'i,,,,[Pro]lhin[Aspect][Tense],stative,cons_stem,a_present
+366,373,they are asleep (refers to more than two),anilhina,otsilhina,anilhino'i,,,,[Pro]lhin[Aspect][Tense],stative,r_stem,a_present
+366,373,they are asleep (refers to more than two),anilhina,otsilhina,anilhino'i,,,,[Pro]ilhin[Aspect][Tense],stative,vowel_stem,a_present
+367,374,they are sitting (refers to a congregation),ani'na,otsi'na,ani'no'i,ani'nv'i,,,[Pro]i'n[Aspect][Tense],stative,vowel_stem,a_present
+367,374,they are sitting (refers to a congregation),ani'na,otsi'na,ani'no'i,ani'nv'i,,,[Pro]'n[Aspect][Tense],stative,cons_stem,a_present
+373,380,he/she is setting a trap,asatvska,tsisatvska,asatvsko'i,usatvnv'i,hisatv'vka,usatvti,[Pro]sat[Aspect][Tense],vsk[imp2],cons_stem,a_present
+374,381,he/she is lifting him/her,asalati'a,tsisalati'a,asalatisko'i,usalatanv'i,hisalatvka,usalatoti,[Pro]salat[Aspect][Tense],i-vka,cons_stem,a_present
+377,384,he/she is making it crisp,astakayhtiha,tsistakayhtiha,astakayhtisko'i,ustakayhthanv'i,histakayhta,ustakayhtohti,[Pro]stakayht[Aspect][Tense],cause,cons_stem,a_present
+378,385,it’s becoming crisp,astakayvhiha,,astakayvhiho'i,ustakayvlhv'i,,,[Pro]astakayv[Aspect][Tense],hih-lh,a_stem,a_present
+378,385,it’s becoming crisp,astakayvhiha,,astakayvhiho'i,ustakayvlhv'i,,,[Pro]astakayv[Aspect][Tense],hih-lh[imp2],a_stem,a_present
+378,385,it’s becoming crisp,astakayvhiha,,astakayvhiho'i,ustakayvlhv'i,,,[Pro]stakayv[Aspect][Tense],hih-lh[imp2],cons_stem,a_present
+378,385,it’s becoming crisp,astakayvhiha,,astakayvhiho'i,ustakayvlhv'i,,,[Pro]stakayv[Aspect][Tense],hih-lh,cons_stem,a_present
+380,387,he/she is drawing a line,astanvnhvska,tsistanvnhvska,astanvnhvsko'i,ustanvnhanv'i,histanvnhvka,ustanvnhti,[Pro]stanvn[Aspect][Tense],hvsk-han,cons_stem,a_present
+381,388,he/she is following him/her,astawateka,tsistawateka,astawateko'i,ustawatvsv'i,histawatuka,ustawatvsti,[Pro]stawat[Aspect][Tense],go,cons_stem,a_present
+382,389,he/she is helping him/her,asteliha,tsisteliha,astelisko'i,ustelvhv'i,histela,ustelhti,[Pro]stel[Aspect][Tense],ih-vh,cons_stem,a_present
+383,390,he/she is braiding it,asteyoha,tsisteyoha,asteyoho'i,usteyolv'i,histeyaka,usteyoti,[Pro]stey[Aspect][Tense],oh-ol,cons_stem,a_present
+384,391,he/she is eating it (refers to a long object),astiki'a,tsistiki'a,astikisko'i,ustikv'i,histika,ustikisti,[Pro]stik[Aspect][Tense],i-a-i,cons_stem,a_present
+386,393,he/she is crushing it,asto'a,tsisto'a,astosko'i,usto'v'i,histotsa,ustosti,[Pro]st[Aspect][Tense],o,cons_stem,a_present
+388,395,he/she is trimming it (refers to hair‚ grass‚ hedge; but not paper‚ cloth),astoyeha,tsistoyeha,astoyesko'i,ustoyehv'i,histoya,ustoyhti,[Pro]stoy[Aspect][Tense],apl-active-a,cons_stem,a_present
+390,397,he/she is opening it,astu'i'a,tsistu'i'a,astu'isko'i,ustu'isv'i,histu'i,ustu'isti,[Pro]stu[Aspect][Tense],rev-'i,cons_stem,a_present
+390,397,he/she is opening it,astu'i'a,tsistu'i'a,astu'isko'i,ustu'isv'i,histu'i,ustu'isti,[Pro]stu'[Aspect][Tense],rev-i,cons_stem,a_present
+392,399,he/she is sandwiching it,astvhalhvska,tsistvhalhvska,astvhalhvsko'i,ustvhalhanv'i,histvhalhvka,ustvhalhti,[Pro]stvhal[Aspect][Tense],hvsk-han,cons_stem,a_present
+397,404,he/she is including him/her (refers to in counting),asestiha,tsiyasestiha,asestisko'i,usesthanv'i,hiyasesta,usestohti,[Pro]asest[Aspect][Tense],cause,a_stem,a_present
+398,405,he/she is withdrawing (refers to a motion),asesiha,kasesiha,asesisko'i,usesvhv'i,hasesa,usesvhti,[Pro]ases[Aspect][Tense],ih-vh[inf2],a_stem,a_present
+400,407,he/she is reprimanding him/her,askaka,tsiskaka,askako'i,uskatsv'i,hiskaki,uskayhsti,[Pro]ska[Aspect][Tense],become[inf3],cons_stem,a_present
+405,412,he/she is committing a crime,askanvka,tsiskanvka,askanvko'i,uskanvtsv'i,hiskanvki,uskanvyhsti,[Pro]skanv[Aspect][Tense],become[inf3],cons_stem,a_present
+411,418,he/she is gnawing it,askoki'a,tsiskoki'a,askokisko'i,uskokv'i,hiskoka,uskokisti,[Pro]skok[Aspect][Tense],i-a-i,cons_stem,a_present
+413,420,he/she is rubbing him/her,askoliye'a,tsiyaskoliye'a,askoliyesko'i,uskoliye'v'i,hiyaskoliya,uskoliyeti,[Pro]askoliy[Aspect][Tense],e-a,a_stem,a_present
+416,423,it’s fading,askolvka,,askolvko'i,uskolvtsv'i,,uskolvyhsti,[Pro]askolv[Aspect][Tense],become[inf3],a_stem,a_present
+416,423,it’s fading,askolvka,,askolvko'i,uskolvtsv'i,,uskolvyhsti,[Pro]skolv[Aspect][Tense],become[inf3],cons_stem,a_present
+417,424,he/she is digging it,askoska,kaskoska,askosko'i,uskosv'i,haskola,uskosti,[Pro]asko[Aspect][Tense],sk-s-la,a_stem,a_present
+419,426,he/she is finishing it,askwati'a,tsiskwati'a,askwatisko'i,uskwatv'i,hiskwata,uskwatisti,[Pro]skwat[Aspect][Tense],i-a-i,cons_stem,a_present
+421,428,he/she is catching him/her (refers to a falling person or object),askwalhe'a,tsiskwalhe'a,askwalhesko'i,uskwalhesv'i,hiskwalhaki,uskwalhesti,[Pro]skwalh[Aspect][Tense],rev-e,cons_stem,a_present
+423,430,it’s getting shorter,askwaloka,tsiskwaloka,askwaloko'i,uskwalotsv'i,hiskwaloki,uskwaloyhsti,[Pro]skwalo[Aspect][Tense],become[inf3],cons_stem,a_present
+425,432,he/she is hitting him/her on the head with it (refers to a long object),askwalvniha,tsiskwalvniha,askwalvniho'i,uskwalvnilv'i,hiskwalvnika,uskwalvnisti,[Pro]skwalvn[Aspect][Tense],ih-il,cons_stem,a_present
+427,434,he/she is amazed,askwanikoska,tsiskwanikoska,askwanikosko'i,uskwanikosv'i,hiskwanikohi,uskwanikohisti,[Pro]skwaniko[Aspect][Tense],sk-s-hi-hihst,cons_stem,a_present
+429,436,he/she is hitting him/her on the abdomen with it (refers to a long object),askwohalvniha,tsiskwohalvniha,askwohalvniho'i,uskwohalvnilv'i,hiskwohalvnika,uskwohalvnisti,[Pro]skwohalvn[Aspect][Tense],ih-il,cons_stem,a_present
+430,437,he/she is placing his/her hand on him/her,asihthati'a,tsiyasihthati'a,asihthatisko'i,usihthatv'i,hiyasihthata,usihthatisti,[Pro]asihthat[Aspect][Tense],i-a-i,a_stem,a_present
+431,438,he/she is slapping him/her,asihthvniha,tsiyasihthvniha,asihthvniho'i,usihthvnilv'i,hiyasihthvnika,usihthvnisti,[Pro]asihthvn[Aspect][Tense],ih-il,a_stem,a_present
+432,439,he/she is backing up,asineka,kasineka,asineko'i,usinvsv'i,hasinuka,usinvsti,[Pro]asin[Aspect][Tense],go,a_stem,a_present
+436,443,he/she is roping him/her,aslhati'a,tsislhati'a,aslhatisko'i,uslhatv'i,hislhata,uslhatisti,[Pro]slhat[Aspect][Tense],i-a-i,cons_stem,a_present
+439,446,he/she is waving his/her hand,asolvtaki'a,kasolvtaki'a,asolvtakisko'i,usolvtakisv'i,hasolvtaki,usolvtakisti,[Pro]asolvta[Aspect][Tense],rev-gi,a_stem,a_present
+439,446,he/she is waving his/her hand,asolvtaki'a,kasolvtaki'a,asolvtakisko'i,usolvtakisv'i,hasolvtaki,usolvtakisti,[Pro]asolvtak[Aspect][Tense],rev-i,a_stem,a_present
+440,447,he/she is pressing down on him/her,asonhstiha,tsiyasonhstiha,asonhstisko'i,usonhsthanv'i,hiyasonhsta,usonhstohti,[Pro]asonhst[Aspect][Tense],cause,a_stem,a_present
+441,448,he/she is wounding him/her,asonvska,tsisonvska,asonvsko'i,usonvnhv'i,hisonvna,usonvsti,[Pro]son[Aspect][Tense],vnh-vsk[inf4],cons_stem,a_present
+444,451,he/she is fishing,asuhvska,kasuhvska,asuhvsko'i,usunhv'i,hasuhvka,usuhti,[Pro]asu[Aspect][Tense],hvsk-nh,a_stem,a_present
+445,452,he/she is painting it,asuwhiska,tsisuwhiska,asuwhisko'i,usuwhisv'i,hisuwha,usuwhisti,[Pro]suwh[Aspect][Tense],i-a-ihsk,cons_stem,a_present
+446,453,he/she is changing his/her pants,asula'iyv'a,kasula'iyv'a,asula'iyvsko'i,usula'iyvsv'i,hasula'iyvna,usula'iyvsti,[Pro]asula'iy[Aspect][Tense],v-vhs,a_stem,a_present
+447,454,he/she is taking his/her pants off,asule'a,kasule'a,asulesko'i,usulesv'i,hasulaki,usulesti,[Pro]asul[Aspect][Tense],rev-e,a_stem,a_present
+448,455,he/she is putting his/her pants on,asuli'a,kasuli'a,asulisko'i,usulanv'i,hasulvka,usuloti,[Pro]asul[Aspect][Tense],i-vka,a_stem,a_present
+449,456,he/she is quitting,asulikoka,tsisulikoka,asulikoko'i,usulikotsv'i,hisuliko'i,usulikosti,[Pro]suli[Aspect][Tense],ko-kots,cons_stem,a_present
+452,459,he/she is choosing him/her,asuye'a,tsiyasuye'a,asuyesko'i,usuyesv'i,hiyasuyaki,usuyesti,[Pro]asuy[Aspect][Tense],rev-e,a_stem,a_present
+453,460,he/she is stirring it,asuyeha,kasuyeha,asuyesko'i,usuyehv'i,hasuyvla,usuyehti,[Pro]asuy[Aspect][Tense],apl-active,a_stem,a_present
+454,461,he/she is mixing it in,asuyvska,kasuyvska,asuyvsko'i,usuyvnv'i,hasuyv'vka,usuyvti,[Pro]asuy[Aspect][Tense],vsk[imp2],a_stem,a_present
+455,462,it smells,asvka,tsisvka,asvko'i,,,,[Pro]sv[Aspect][Tense],become[inf4],cons_stem,a_present
+455,462,it smells,asvka,tsisvka,asvko'i,,,,[Pro]sv[Aspect][Tense],become[inf3],cons_stem,a_present
+455,462,it smells,asvka,tsisvka,asvko'i,,,,[Pro]sv[Aspect][Tense],become[inf2],cons_stem,a_present
+455,462,it smells,asvka,tsisvka,asvko'i,,,,[Pro]sv[Aspect][Tense],become,cons_stem,a_present
+455,462,it smells,asvka,tsisvka,asvko'i,,,,[Pro]svk[Aspect][Tense],stative,cons_stem,a_present
+455,462,it smells,asvka,tsisvka,asvko'i,,,,[Pro]sv[Aspect][Tense],stative-k,cons_stem,a_present
+459,466,he/she is drinking it up,asvhvska,tsisvhvska,asvhvsko'i,usvnhv'i,hisvnha,usvhvsti,[Pro]sv[Aspect][Tense],terminative-no-o,cons_stem,a_present
+464,471,he/she is mooring a boat,athalati'a,tsithalati'a,athalatisko'i,uthalatv'i,hithalata,uthalatisti,[Pro]thalat[Aspect][Tense],i-a-i,cons_stem,a_present
+467,474,it’s steaming,athanoleka,,athanoleko'i,uthanolvsv'i,,uthanolvsti,[Pro]thanol[Aspect][Tense],go,cons_stem,a_present
+467,474,it’s steaming,athanoleka,,athanoleko'i,uthanolvsv'i,,uthanolvsti,[Pro]athanol[Aspect][Tense],go,a_stem,a_present
+469,476,it’s exploding,athaski'a,,athaskisko'i,uthaskisv'i,hathaski,uthaskisti,[Pro]athas[Aspect][Tense],rev-gi,a_stem,a_present
+469,476,it’s exploding,athaski'a,,athaskisko'i,uthaskisv'i,hathaski,uthaskisti,[Pro]athask[Aspect][Tense],rev-i,a_stem,a_present
+474,481,he/she is asking for it,athayohiha,tsithayohiha,athayohiho'i,uthayolhv'i,hithayoha,uthayosti,[Pro]thayo[Aspect][Tense],hih-lh[imp2],cons_stem,a_present
+477,484,he/she is shaking him/her,athelvhvska,tsithelvhvska,athelvhvsko'i,uthelvnhv'i,hithelvna,uthelhti,[Pro]thel[Aspect][Tense],episodic[imp2],cons_stem,a_present
+479,486,he/she is leading him/her,athinhi,tsiyathinhi,athinheko'i,uthinhvsv'i,hiyathinhuka,uthinhvsti,[Pro]athinh[Aspect][Tense],go[pres2],a_stem,i_present
+483,490,he/she is racing,athohkiya'a,kathohkiya'a,athohkiyasko'i,uthohkiyv'i,hathohkiya,uthohkiyasti,[Pro]athohkiy[Aspect][Tense],a,a_stem,a_present
+486,493,he/she is loaning it to him/her,atholhstiha,tsiyatholhstiha,atholhstisko'i,utholhsthanv'i,hiyatholhsta,utholhstohti,[Pro]atholhst[Aspect][Tense],cause,a_stem,a_present
+488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,[Pro]thoyawh[Aspect][Tense],sk-s-la,cons_stem,a_present
+488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,[Pro]thoyawh[Aspect][Tense],sk-s-hst[imp2],cons_stem,a_present
+488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,[Pro]athoyawh[Aspect][Tense],sk-s-la,a_stem,a_present
+488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,[Pro]thoyawh[Aspect][Tense],sk-s-hst,cons_stem,a_present
+488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,[Pro]athoyawh[Aspect][Tense],sk-s-hst[imp2],a_stem,a_present
+488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,[Pro]athoyawh[Aspect][Tense],sk-s-hst,a_stem,a_present
+488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,[Pro]thoyawh[Aspect][Tense],sk-s-a[inf2],cons_stem,a_present
+488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,[Pro]athoyawh[Aspect][Tense],sk-s-a[inf2],a_stem,a_present
+493,500,he/she is promising,athu'istiha,tsithu'istiha,athu'istisko'i,uthu'isthanv'i,hithu'ista,uthu'istohti,[Pro]thu'ist[Aspect][Tense],cause,cons_stem,a_present
+494,501,he/she is listening to him/her,athvtastiha,tsiyathvtastiha,athvtastisko'i,uthvtasthanv'i,hiyathvtasta,uthvtastohti,[Pro]athvtast[Aspect][Tense],cause,a_stem,a_present
+495,502,he/she is asking him/her a question,athvtvhvska,tsiyathvtvhvska,athvtvhvsko'i,uthvtvnhv'i,hiyathvtvhvka,uthvthti,[Pro]athvt[Aspect][Tense],episodic,a_stem,a_present
+495,502,he/she is asking him/her a question,athvtvhvska,tsiyathvtvhvska,athvtvhvsko'i,uthvtvnhv'i,hiyathvtvhvka,uthvthti,[Pro]athvtv[Aspect][Tense],hvsk-nh[inf2],a_stem,a_present
+496,503,he/she hears him/her,athvki'a,tsiyathvki'a,athvkisko'i,uthvkanv'i,hiyathvkvka,uthvkoti,[Pro]athvk[Aspect][Tense],i-vka,a_stem,a_present
+502,509,he/she is inside,aya'a,tsiya'a,aya'o'i,,,,[Pro]ya'[Aspect][Tense],stative,cons_stem,a_present
+502,509,he/she is inside,aya'a,tsiya'a,aya'o'i,,,,[Pro]y[Aspect][Tense],stative-a',cons_stem,a_present
+507,514,he/she is waking up,ayeka,tsiyeka,ayeko'i,uyetsv'i,hiyeki,uye'isti,[Pro]ye[Aspect][Tense],become[inf2],cons_stem,a_present
+509,516,he/she is waking him/her up,aye'istiha,tsiye'istiha,aye'istisko'i,uye'isthanv'i,hiye'ista,uye'istohti,[Pro]ye'ist[Aspect][Tense],cause,cons_stem,a_present
+515,522,it’s breaking,ayoka,tsiyoka,ayoko'i,uyotsv'i,hiyoki,uyoyhsti,[Pro]yo[Aspect][Tense],become[inf3],cons_stem,a_present
+523,530,he/she is greeting him/her,ayoliha,tsiyoliha,ayoliho'i,uyolilv'i,hiyolika,uyolisti,[Pro]yol[Aspect][Tense],ih-il,cons_stem,a_present
+524,531,he/she is breaking it,ayostiha,tsiyostiha,ayostisko'i,uyosthanv'i,hiyosta,uyostohti,[Pro]yost[Aspect][Tense],cause,cons_stem,a_present
+526,533,he/she is destroying it,ayosthanohvska,tsiyosthanohvska,ayosthanohvsko'i,uyosthanonhv'i,hiyosthanonha,uyosthanohvsti,[Pro]yosthano[Aspect][Tense],terminative-no-o,cons_stem,a_present
+526,533,he/she is destroying it,ayosthanohvska,tsiyosthanohvska,ayosthanohvsko'i,uyosthanonhv'i,hiyosthanonha,uyosthanohvsti,[Pro]yosthan[Aspect][Tense],terminative,cons_stem,a_present
+742,765,he/she is walking around,etoha,ketoha,etoho'i,uwetolv'i,heta,uwetasti,[Pro]et[Aspect][Tense],be-at,e_stem,a_present
+752,776,he/she thinks so,eli'a,keli'a,elisko'i,uwelisv'i,hela,uwelisti,[Pro]el[Aspect][Tense],i-a-i[perf2],e_stem,a_present
+766,796,he/she is removing it from a hanging position (refers to solid or flexible object),kate'a,kate'a,katesko'i,utesv'i,hataki,utesti,[Pro]at[Aspect][Tense],rev-e,a_stem,a_present
+775,805,he/she is pitying him/her,katolika,tsiyatolika,katoliko'i,uwatolitsv'i,hiyatoliki,uwatolisti,[Pro]atoli[Aspect][Tense],become,vowel_stem,a_present
+776,806,he/she is dropping him/her (refers to flexible object),katonhtiha,tsiyatonhtiha,katonhtisko'i,utonhthanv'i,hiyatonhta,utonhtohti,[Pro]atonht[Aspect][Tense],cause,a_stem,a_present
+777,807,it is falling from a hanging position (refers to flexible object),katoska,katoska,katosko'i,utosv'i,hatohi,utohisti,[Pro]ato[Aspect][Tense],sk-s-hi-hihst,a_stem,a_present
+788,818,he/she is hanging up it (refers to a flexible object),katv'vska,tsiyatv'vska,katv'vsko'i,utvnv'i,hatv'vka,utvti,[Pro]atv[Aspect][Tense],vsk-post-v,a_stem,a_present
+788,818,he/she is hanging up it (refers to a flexible object),katv'vska,tsiyatv'vska,katv'vsko'i,utvnv'i,hatv'vka,utvti,[Pro]at[Aspect][Tense],vsk-long[imp2],a_stem,a_present
+821,851,he/she is scratching him/her,katsalikoska,tsiyatsalikoska,katsalikosko'i,uwatsalikosv'i,hiyatsalikola,uwatsalikosti,[Pro]atsaliko[Aspect][Tense],sk-s-la,vowel_stem,a_present
+826,856,he/she is leaving a living thing behind,kakhahiya'a,tsiyakhahiya'a,kakhahiyasko'i,uwakhahiyv'i,hiyakhahiya,uwakhahiyasti,[Pro]akhahiy[Aspect][Tense],a,vowel_stem,a_present
+827,857,he/she is giving him/her a living thing,kakhaneha,tsiyakhaneha,kakhaneho'i,uwakhanelv'i,hiyakhasi,uwakhanehti,[Pro]akhan[Aspect][Tense],apl,vowel_stem,a_present
+829,859,he/she is wrapping him/her,kakwhenvska,tsiyakwhenvska,kakwhenvsko'i,uwakwhenvnhv'i,hiyakwhenvna,uwakwhenvhti,[Pro]akwhen[Aspect][Tense],vnh-vsk[inf2],vowel_stem,a_present
+830,860,he/she is putting it in a container (refers to a long object),kalati'a,tsilati'a,kalatisko'i,ulatv'i,hilata,ulatisti,[Pro]lat[Aspect][Tense],i-a-i,r_stem,a_present
+833,863,he/she is taking it out of a container (refers to a solid or flexible object),kale'a,tsile'a,kalesko'i,ulesv'i,hilaki,ulesti,[Pro]l[Aspect][Tense],rev-e,r_stem,a_present
+837,867,he/she is burning,kaleyvska,tsileyvska,kaleyvsko'i,uleyvsv'i,hileyvhi,uleyvhisti,[Pro]leyv[Aspect][Tense],sk-s-hi-hihst,r_stem,a_present
+838,868,it is falling from an upright position (refers to a long object eg tree‚ pole),kaleyvska,tsileyvska,kaleyvsko'i,uleyvsv'i,hileyvhi,uleyvhisti,[Pro]leyv[Aspect][Tense],sk-s-hi-hihst,r_stem,a_present
+840,870,it is burning (refers to forest or grass),kalika,,kaliko'i,ulitsv'i,,,[Pro]ali[Aspect][Tense],become[inf4],a_stem,a_present
+840,870,it is burning (refers to forest or grass),kalika,,kaliko'i,ulitsv'i,,,[Pro]li[Aspect][Tense],become[inf2],r_stem,a_present
+840,870,it is burning (refers to forest or grass),kalika,,kaliko'i,ulitsv'i,,,[Pro]ali[Aspect][Tense],become[inf3],a_stem,a_present
+840,870,it is burning (refers to forest or grass),kalika,,kaliko'i,ulitsv'i,,,[Pro]li[Aspect][Tense],become,r_stem,a_present
+840,870,it is burning (refers to forest or grass),kalika,,kaliko'i,ulitsv'i,,,[Pro]ali[Aspect][Tense],become[inf2],a_stem,a_present
+840,870,it is burning (refers to forest or grass),kalika,,kaliko'i,ulitsv'i,,,[Pro]li[Aspect][Tense],become[inf3],r_stem,a_present
+840,870,it is burning (refers to forest or grass),kalika,,kaliko'i,ulitsv'i,,,[Pro]ali[Aspect][Tense],become,a_stem,a_present
+840,870,it is burning (refers to forest or grass),kalika,,kaliko'i,ulitsv'i,,,[Pro]li[Aspect][Tense],become[inf4],r_stem,a_present
+845,875,he/she is hoeing it,kaloki'a,tsiloki'a,kalokisko'i,ulokanv'i,hilokvka,ulokoti,[Pro]lok[Aspect][Tense],i-vka,r_stem,a_present
+852,882,he/she is bluffing him/her,kalonastiha,tsilonastiha,kalonastisko'i,ulonasthanv'i,hilonasta,ulonastohti,[Pro]lonast[Aspect][Tense],cause,r_stem,a_present
+853,883,he/she is oiling it,kalone'a,tsilone'a,kalonesko'i,ulone'v'i,hilona,uloneti,[Pro]lon[Aspect][Tense],e-a,r_stem,a_present
+854,884,he/she is making him/her fall from an elevated position,kalonhtiha,tsilonhtiha,kalonhtisko'i,ulonhthanv'i,hilonhta,ulonhtohti,[Pro]lonht[Aspect][Tense],cause,r_stem,a_present
+856,886,he/she is passing by without stopping,kaloska,tsiloska,kalosko'i,ulosv'i,hilohi,ulohisti,[Pro]lo[Aspect][Tense],sk-s-hi-hihst,r_stem,a_present
+857,887,he/she is falling from an elevated position,kaloska,tsiloska,kalosko'i,ulosv'i,hilohi,ulohisti,[Pro]lo[Aspect][Tense],sk-s-hi-hihst,r_stem,a_present
+859,889,it’s lacking,kaluloka,tsiluloka,kaluloko'i,ululotsv'i,hiluloki,ululosti,[Pro]lulo[Aspect][Tense],become,r_stem,a_present
+870,900,he/she is putting it in a hole or a container (refers to a flexible object),kalvska,tsilvska,kalvsko'i,ulvnv'i,hilv'vka,ulvti,[Pro]l[Aspect][Tense],vsk[imp2],r_stem,a_present
+871,901,he/she is selling it,kanateka,tsinateka,kanateko'i,unatinvsv'i,hinatuka,unatinvti,[Pro]nat[Aspect][Tense],go-in,r_stem,a_present
+873,903,he/she is hiring him/her,kanalhvska,tsinalhvska,kanalhvsko'i,unalhvnv'i,hinalhv'vka,unalhvti,[Pro]nalh[Aspect][Tense],vsk[imp2],r_stem,a_present
+876,906,he/she is finding it (refers to a flexible object),kanawhthiha,tsinawhthiha,kanawhthisko'i,unawhthvhv'i,hinawhtha,unawhthvhti,[Pro]nawhth[Aspect][Tense],ih-vh[inf2],r_stem,a_present
+877,907,he/she is taking it somewhere (refers to an animal‚ flexible object),kanawitiha,tsinawitiha,kanawitisko'i,unawitvhv'i,hinawita,unawithti,[Pro]nawit[Aspect][Tense],ih-vh,r_stem,a_present
+879,909,he/she is getting it (refers to a flexible object),kane'a,tsine'a,kanesko'i,unesv'i,hinaki,unesti,[Pro]n[Aspect][Tense],rev-e,r_stem,a_present
+880,910,he/she is changing it,kanetliyv'a,tsinetliyv'a,kanetliyvsko'i,unetliyvsv'i,hinetliyvna,unetliyvsti,[Pro]netliy[Aspect][Tense],v-vhs,r_stem,a_present
+883,913,he/she is peeling him/her,kanekaliha,tsinekaliha,kanekalisko'i,unekalvhv'i,hinekala,unekalhti,[Pro]nekal[Aspect][Tense],ih-vh,r_stem,a_present
+884,914,he/she is getting some liquid,kaneki'a,tsineki'a,kanekisko'i,unekisv'i,hineki,unekisti,[Pro]ne[Aspect][Tense],rev-gi,r_stem,a_present
+884,914,he/she is getting some liquid,kaneki'a,tsineki'a,kanekisko'i,unekisv'i,hineki,unekisti,[Pro]nek[Aspect][Tense],rev-i,r_stem,a_present
+885,915,he/she is taking liquid from him/her,kaneki'eha,tsineki'eha,kaneki'eho'i,uneki'elv'i,hinekisi,uneki'ehti,[Pro]neki'[Aspect][Tense],apl,r_stem,a_present
+886,916,he/she is bewitching him/her,kanekuti'a,tsinekuti'a,kanekutisko'i,unekutv'i,hinekuta,unekutisti,[Pro]nekut[Aspect][Tense],i-a-i,r_stem,a_present
+895,925,it’s freezing,kanestalati'a,tsinestalati'a,kanestalatisko'i,unestalatv'i,hinestalata,unestalatisti,[Pro]nestalat[Aspect][Tense],i-a-i,r_stem,a_present
+896,926,it’s hailing,kanesoyhska,,kanesoyhsko'i,unesoyhsv'i,,unesoyhsti,[Pro]anesoyh[Aspect][Tense],sk-s-hst,a_stem,a_present
+896,926,it’s hailing,kanesoyhska,,kanesoyhsko'i,unesoyhsv'i,,unesoyhsti,[Pro]anesoyh[Aspect][Tense],sk-s-a[inf2],a_stem,a_present
+896,926,it’s hailing,kanesoyhska,,kanesoyhsko'i,unesoyhsv'i,,unesoyhsti,[Pro]nesoyh[Aspect][Tense],sk-s-la,r_stem,a_present
+896,926,it’s hailing,kanesoyhska,,kanesoyhsko'i,unesoyhsv'i,,unesoyhsti,[Pro]nesoyh[Aspect][Tense],sk-s-hst[imp2],r_stem,a_present
+896,926,it’s hailing,kanesoyhska,,kanesoyhsko'i,unesoyhsv'i,,unesoyhsti,[Pro]nesoyh[Aspect][Tense],sk-s-hst,r_stem,a_present
+896,926,it’s hailing,kanesoyhska,,kanesoyhsko'i,unesoyhsv'i,,unesoyhsti,[Pro]nesoyh[Aspect][Tense],sk-s-a[inf2],r_stem,a_present
+896,926,it’s hailing,kanesoyhska,,kanesoyhsko'i,unesoyhsv'i,,unesoyhsti,[Pro]anesoyh[Aspect][Tense],sk-s-hst[imp2],a_stem,a_present
+896,926,it’s hailing,kanesoyhska,,kanesoyhsko'i,unesoyhsv'i,,unesoyhsti,[Pro]anesoyh[Aspect][Tense],sk-s-la,a_stem,a_present
+901,931,he/she is agitating liquid,kanhkwa'eha,tsinhkwa'eha,kanhkwa'esko'i,unhkwa'ehv'i,hinhkwa'vla,unhkwa'ehti,[Pro]nhkwa'[Aspect][Tense],apl-active,r_stem,a_present
+909,939,he/she hates him/her,kanikwathiha,tsinikwathiha,kanikwathiho'i,unikwathilhv'i,hinikwathika,unikwathisti,[Pro]nikwat[Aspect][Tense],hih-hilh,r_stem,a_present
+910,940,he/she is setting up a bed,kanilhati'a,tsinilhati'a,kanilhatisko'i,unilhatv'i,hinilhata,unilhatisti,[Pro]nilhat[Aspect][Tense],i-a-i,r_stem,a_present
+913,943,he/she is pleading,kanilati'a,tsinilati'a,kanilatisko'i,unilatv'i,hinilata,unilatisti,[Pro]nilat[Aspect][Tense],i-a-i,r_stem,a_present
+921,951,it’s flooding,kanohuki'a,,kanohukisko'i,unohukanv'i,,unohukoti,[Pro]anohuk[Aspect][Tense],i-vka,a_stem,a_present
+921,951,it’s flooding,kanohuki'a,,kanohukisko'i,unohukanv'i,,unohukoti,[Pro]nohuk[Aspect][Tense],i-vka,r_stem,a_present
+924,954,it is blowing (refers to wind),kanolv'vska,,kanolv'vsko'i,unolvnv'i,,unolvti,[Pro]nol[Aspect][Tense],vsk-long,r_stem,a_present
+924,954,it is blowing (refers to wind),kanolv'vska,,kanolv'vsko'i,unolvnv'i,,unolvti,[Pro]anol[Aspect][Tense],vsk-long[imp2],a_stem,a_present
+924,954,it is blowing (refers to wind),kanolv'vska,,kanolv'vsko'i,unolvnv'i,,unolvti,[Pro]anolv[Aspect][Tense],vsk-post-v,a_stem,a_present
+924,954,it is blowing (refers to wind),kanolv'vska,,kanolv'vsko'i,unolvnv'i,,unolvti,[Pro]nolv[Aspect][Tense],vsk-post-v,r_stem,a_present
+924,954,it is blowing (refers to wind),kanolv'vska,,kanolv'vsko'i,unolvnv'i,,unolvti,[Pro]anol[Aspect][Tense],vsk-long,a_stem,a_present
+924,954,it is blowing (refers to wind),kanolv'vska,,kanolv'vsko'i,unolvnv'i,,unolvti,[Pro]nol[Aspect][Tense],vsk-long[imp2],r_stem,a_present
+925,955,he/she is stealing it,kanoski'a,tsinoski'a,kanoskisko'i,unoskisv'i,hinoski,unoskisti,[Pro]nosk[Aspect][Tense],rev-i,r_stem,a_present
+925,955,he/she is stealing it,kanoski'a,tsinoski'a,kanoskisko'i,unoskisv'i,hinoski,unoskisti,[Pro]nos[Aspect][Tense],rev-gi,r_stem,a_present
+928,958,he/she is sinking,kanoyvka,tsinoyvka,kanoyvko'i,unoyvtsv'i,hinoyvki,unoyv'isti,[Pro]noyv[Aspect][Tense],become[inf2],r_stem,a_present
+932,962,he/she is exiting,kanukoka,tsinukoka,kanukoko'i,unukotsv'i,hinuko'i,unukosti,[Pro]nu[Aspect][Tense],ko-kots,r_stem,a_present
+937,967,he/she is twisting him/her,kanutheyoha,tsinutheyoha,kanutheyoho'i,unutheyolv'i,hinutheyaka,unutheyasti,[Pro]nuthey[Aspect][Tense],oh-ol[inf3],r_stem,a_present
+938,968,he/she is missing him/her (refers to as a target),kanvti'a,tsinvti'a,kanvtisko'i,unvtv'i,hinvta,unvtisti,[Pro]nvt[Aspect][Tense],i-a-i,r_stem,a_present
+940,970,he/she is falling from an upright position,kanvka,tsinvka,kanvko'i,unvtsv'i,hinvki,unv'isti,[Pro]nv[Aspect][Tense],become[inf2],r_stem,a_present
+942,972,he/she is hammering it,kanvkwalo'a,tsinvkwalo'a,kanvkwalosko'i,unvkwalo'v'i,hinvkwalotsa,unvkwalosti,[Pro]nvkwal[Aspect][Tense],o,r_stem,a_present
+946,976,he/she is tying up a leg,kanvlhohiha,tsinvlhohiha,kanvlhohiho'i,unvlholhv'i,hinvlhoka,unvlhosti,[Pro]nvlho[Aspect][Tense],hih-lh,r_stem,a_present
+949,979,he/she is tossing about,kanvtsitoha,tsinvtsitoha,kanvtsitoho'i,unvtsitolv'i,hinvtsita,unvtsitasti,[Pro]nvtsit[Aspect][Tense],be-at,r_stem,a_present
+950,980,he/she is giving him/her an object (refers to a flexible object),kanvneha,tsinvneha,kanvneho'i,unvnelv'i,hinvsi,unvnehti,[Pro]nvn[Aspect][Tense],apl,r_stem,a_present
+955,985,he/she is pushing him/her,kasatoska,tsiyasatoska,kasatosko'i,uwasatoyhv'i,hiyasatoyha,uwasatosti,[Pro]asato[Aspect][Tense],sk-h-yh,vowel_stem,a_present
+956,986,he/she is rolling him/her,kasakwalehiha,tsiyasakwalehiha,kasakwalehiho'i,uwasakwalelhv'i,hiyasakwaleka,uwasakwalesti,[Pro]asakwale[Aspect][Tense],hih-lh,vowel_stem,a_present
+973,1003,he/she is stabbing him/her,kathiha,tsiyathiha,kathiho'i,uwathilhv'i,hiyathika,uwathisti,[Pro]at[Aspect][Tense],hih-hilh,vowel_stem,a_present
+979,1009,he/she is bathing him/her,kawo'a,tsiyawo'a,kawosko'i,uwo'v'i,hiyawotsa,uwosti,[Pro]aw[Aspect][Tense],o,a_stem,a_present
+981,1011,he/she is lecturing him/her,kawonhtiha,tsiwonhtiha,kawonhtisko'i,uwonhthanv'i,hiwonhta,uwonhtohti,[Pro]wonht[Aspect][Tense],cause,r_stem,a_present
+983,1013,he/she is speaking,kawoniha,tsiwoniha,kawonisko'i,uwonisv'i,hiwonihi,uwonihisti,[Pro]won[Aspect][Tense],ih-ihi,r_stem,a_present
+1022,1052,he/she is making it,kolhvska,kolhvska,kolhvsko'i,uwolhvnhv'i,holhvna,uwolhvnhti,[Pro]olh[Aspect][Tense],vnh-vsk[inf3],vowel_stem,a_present
+1030,1061,he/she is pulling a trigger,kotsane'a,kotsane'a,kotsanesko'i,uwotsanesv'i,hotsanaki,uwotsanesti,[Pro]otsan[Aspect][Tense],rev-e,vowel_stem,a_present
+1038,1069,he/she is batting it,kostvniha,kostvniha,kostvniho'i,uwostvnilv'i,hostvnika,uwostvnisti,[Pro]ostvn[Aspect][Tense],ih-il,vowel_stem,a_present
+1040,1071,he/she is saying to him/her,koseha,tsiyoseha,koseho'i,uwoselv'i,hiyosi,uwosehti,[Pro]os[Aspect][Tense],apl,vowel_stem,a_present
+1041,1072,it’s swelling,kothiska,kothiska,kothisko'i,uwothisv'i,hothihi,uwothihisti,[Pro]othi[Aspect][Tense],sk-s-hi-hihst,vowel_stem,a_present
+1044,1075,he/she is unhitching him/her,kutale'a,tsiyutale'a,kutalesko'i,uwutalesv'i,hiyutalaki,uwutalesti,[Pro]utal[Aspect][Tense],rev-e,vowel_stem,a_present
+1045,1076,he/she is hitching him/her up,kutalvska,tsiyutalvska,kutalvsko'i,uwutalvnv'i,hiyutalv'vka,uwutalvti,[Pro]utal[Aspect][Tense],vsk[imp2],vowel_stem,a_present
+1055,1086,he/she is covering it,kulhvska,kulhvska,kulhvsko'i,uwulhvnv'i,hulhv'vka,uwulhvti,[Pro]ulh[Aspect][Tense],vsk[imp2],vowel_stem,a_present
+1060,1091,he/she is picking him/her up,kuthe'a,tsiyuthe'a,kuthesko'i,uwuthesv'i,hiyuthaki,uwuthesti,[Pro]uth[Aspect][Tense],rev-e,vowel_stem,a_present
+1061,1092,it’s snowing,kuthiha,,kuthisko'i,uwuthanhv'i,,uwuthohti,[Pro]uth[Aspect][Tense],cause[perf2],vowel_stem,a_present
+1063,1094,he/she is sifting it,kvkustiha,kvkustiha,kvkustisko'i,uwakusthanv'i,hvkusta,uwakustohti,[Pro]vkust[Aspect][Tense],cause,v_stem,a_present
+1064,1095,it’s leaking,kvkuska,,kvkusko'i,uwakusv'i,,uwakusti,[Pro]vku[Aspect][Tense],sk-s-hst,v_stem,a_present
+1064,1095,it’s leaking,kvkuska,,kvkusko'i,uwakusv'i,,uwakusti,[Pro]vku[Aspect][Tense],sk-s-la,v_stem,a_present
+1064,1095,it’s leaking,kvkuska,,kvkusko'i,uwakusv'i,,uwakusti,[Pro]vku[Aspect][Tense],sk-s-a[inf2],v_stem,a_present
+1064,1095,it’s leaking,kvkuska,,kvkusko'i,uwakusv'i,,uwakusti,[Pro]vku[Aspect][Tense],sk-s-hst[imp2],v_stem,a_present
+1076,1107,he/she is frying it,kvtsalhvska,kvtsalhvska,kvtsalhvsko'i,uwvtsalhanv'i,hvtsalhvka,uwvtsalhti,[Pro]vtsal[Aspect][Tense],hvsk-han,vowel_stem,a_present
+1079,1110,it’s melting,kvnawoska,kvnawoska,kvnawosko'i,uwanawosv'i,hvnawohi,uwanawohisti,[Pro]vnawo[Aspect][Tense],sk-s-hi-hihst,v_stem,a_present
+1081,1112,he/she is sweeping it,kvnosaska,kvnosaska,kvnosasko'i,uwanosahv'i,hvnosa,uwanosasti,[Pro]vnosa[Aspect][Tense],sk-h[imp2],v_stem,a_present
+1083,1114,he/she is hiding it,kvskalhvska,kvskalhvska,kvskalhvsko'i,uwaskalhanv'i,hvskalhvka,uwaskalhti,[Pro]vskal[Aspect][Tense],hvsk-han,v_stem,a_present
+1084,1115,he/she is hiding it (refers to a long object),kvskalati'a,kvskalati'a,kvskalatisko'i,uwaskalatv'i,hvskalata,uwaskalatisti,[Pro]vskalat[Aspect][Tense],i-a-i,v_stem,a_present
+1085,1116,he/she is hiding him/her (refers to a flexible object),kvskalvska,tsiyvskalvska,kvskalvsko'i,uwaskalvnv'i,hiyvskalv'vka,uwaskalvti,[Pro]vskal[Aspect][Tense],vsk[imp2],v_stem,a_present
+1086,1117,he/she is cracking it,kvskwalo'a,kvskwalo'a,kvskwalosko'i,uwaskwalo'v'i,hvskwalotsa,uwaskwalosti,[Pro]vskwal[Aspect][Tense],o,v_stem,a_present
+1088,1119,he/she is soaking it (refers to a flexible object),kvwalhvska,kvwalhvska,kvwalhvsko'i,uwvwalhanv'i,hvwalhvka,uwvwalhti,[Pro]vwal[Aspect][Tense],hvsk-han,vowel_stem,a_present
+1471,1537,he/she is throwing it,uteka,akwateka,uteko'i,utinvsv'i,tsatuka,utinvti,[Pro]at[Aspect][Tense],go-in,a_stem,a_present
+1476,1542,he/she is having a birthday,utethiyiha,akwatethiyiha,utethiyisko'i,utethiyvhv'i,tsatethiya,utethiyhti,[Pro]atethiy[Aspect][Tense],ih-vh,a_stem,a_present
+1483,1549,there’s an opening,utlanvta,,utlanvto'i,utlanvtv'i,,,[Pro]tlanvt[Aspect][Tense],stative,cons_stem,a_present
+1483,1549,there’s an opening,utlanvta,,utlanvto'i,utlanvtv'i,,,[Pro]atlanvt[Aspect][Tense],stative,a_stem,a_present
+1485,1551,he/she is disbelieving,utlasithv'eha,akwatlasithv'eha,utlasithv'eho'i,utlasithv'elv'i,tsatlasithvsi,utlasithv'ehti,[Pro]atlasithv'[Aspect][Tense],apl,a_stem,a_present
+1487,1553,he/she is taking revenge,utleka,akwatleka,utleko'i,utletsv'i,tsatleki,utle'isti,[Pro]atle[Aspect][Tense],become[inf2],a_stem,a_present
+1507,1573,he/she wants it,utuliha,akwatuliha,utulisko'i,utulvhv'i,tsatula,utulhti,[Pro]atul[Aspect][Tense],ih-vh,a_stem,a_present
+1514,1580,he/she is becoming warm,ukanawoska,akikanawoska,ukanawosko'i,ukanawosv'i,tsakanawohi,ukanawohisti,[Pro]kanawo[Aspect][Tense],sk-s-hi-hihst,cons_stem,a_present
+1523,1589,he/she is late,ukonhiyoka,akikonhiyoka,ukonhiyoko'i,ukonhiyotsv'i,tsakonhiyoki,ukonhiyosti,[Pro]konhiyo[Aspect][Tense],become,cons_stem,a_present
+1524,1590,it’s decaying,ukoska,akikoska,ukosko'i,ukosv'i,tsakohi,ukohisti,[Pro]ko[Aspect][Tense],sk-s-hi-hihst,cons_stem,a_present
+1534,1600,he/she is having trouble breathing,uhawostiha,akihawostiha,uhawostisko'i,uhawosthanv'i,tsahawosta,uhawostohti,[Pro]hawost[Aspect][Tense],cause,cons_stem,a_present
+1536,1602,he/she is lonesome,uhisohtaneha,akihisohtaneha,uhisohtaneho'i,uhisohtanelv'i,tsahisohtasi,uhisohtanehti,[Pro]hisohtan[Aspect][Tense],apl,cons_stem,a_present
+1537,1603,it’s lonesome,uhisohti,,uhisohto'i,uhisohtv'i,,,[Pro]hisoht[Aspect][Tense],stative,cons_stem,i_present
+1537,1603,it’s lonesome,uhisohti,,uhisohto'i,uhisohtv'i,,,[Pro]ahisoht[Aspect][Tense],stative,a_stem,i_present
+1569,1635,it is cold (refers to weather),uyhvtla,,uyhvtlo'i,uyhvtlv'i,,,[Pro]ayhvtl[Aspect][Tense],stative,a_stem,a_present
+1569,1635,it is cold (refers to weather),uyhvtla,,uyhvtlo'i,uyhvtlv'i,,,[Pro]yhvtl[Aspect][Tense],stative,r_stem,a_present
+1569,1635,it is cold (refers to weather),uyhvtla,,uyhvtlo'i,uyhvtlv'i,,,[Pro]yhvtl[Aspect][Tense],stative,cons_stem,a_present
+1599,1665,he/she is not having luck at hunting,ukwholeka,akikwholeka,ukwholeko'i,ukwholvsv'i,tsakwholuka,ukwholvsti,[Pro]kwhol[Aspect][Tense],go,cons_stem,a_present
+1602,1668,he/she is losing his/her way,ulenahiha,akwalenahiha,ulenahiho'i,ulenalhv'i,tsalenaka,ulenasti,[Pro]alena[Aspect][Tense],hih-lh,a_stem,a_present
+1604,1670,he/she is making a mistake,ulitastiha,akilitastiha,ulitastisko'i,ulitasthanv'i,tsalitasta,ulitastohti,[Pro]litast[Aspect][Tense],cause,r_stem,a_present
+1604,1670,he/she is making a mistake,ulitastiha,akilitastiha,ulitastisko'i,ulitasthanv'i,tsalitasta,ulitastohti,[Pro]litast[Aspect][Tense],cause,cons_stem,a_present
+1612,1678,he/she is whining,uliyetiha,akiliyetiha,uliyetisko'i,uliyethanv'i,tsaliyeta,uliyetohti,[Pro]liyet[Aspect][Tense],cause,cons_stem,a_present
+1612,1678,he/she is whining,uliyetiha,akiliyetiha,uliyetisko'i,uliyethanv'i,tsaliyeta,uliyetohti,[Pro]liyet[Aspect][Tense],cause,r_stem,a_present
+1614,1680,it’s cloudy,ulokila,,ulokilo'i,ulokilv'i,,,[Pro]alokil[Aspect][Tense],stative,a_stem,a_present
+1614,1680,it’s cloudy,ulokila,,ulokilo'i,ulokilv'i,,,[Pro]lokil[Aspect][Tense],stative,r_stem,a_present
+1614,1680,it’s cloudy,ulokila,,ulokilo'i,ulokilv'i,,,[Pro]lokil[Aspect][Tense],stative,cons_stem,a_present
+1616,1682,it’s happening to him,ulhstanheha,akwalhstanheha,ulhstanheho'i,ulhstanhelv'i,tsalhstasi,ulhstanhehti,[Pro]alhstanh[Aspect][Tense],apl[imp2],a_stem,a_present
+1710,1776,he/she is aching,uwehistaneha,akwehistaneha,uwehistaneho'i,uwehistanelv'i,tsehistasi,uwehistanehti,[Pro]ehistan[Aspect][Tense],apl,e_stem,a_present
+1710,1776,he/she is aching,uwehistaneha,akwehistaneha,uwehistaneho'i,uwehistanelv'i,tsehistasi,uwehistanehti,[Pro]ehistan[Aspect][Tense],apl,vowel_stem,a_present
+1741,1807,he/she is losing it,uyohuseha,akiyohuseha,uyohuseho'i,uyohuselv'i,tsayohusi,uyohusehti,[Pro]yohus[Aspect][Tense],apl,cons_stem,a_present
+1741,1807,he/she is losing it,uyohuseha,akiyohuseha,uyohuseho'i,uyohuselv'i,tsayohusi,uyohusehti,[Pro]yohus[Aspect][Tense],apl,r_stem,a_present
+1754,1823,he/she is sending on object (refers to a long object),wati'a,witsiti'a,watisko'i,wutv'i,whita,wutisti,[WI][Pro]t[Aspect][Tense],i-a-i,cons_stem,a_present
+1774,1845,he/she is sending it,wikakhahvska,witsiyakhahvska,wikakhahvsko'i,wuwakhanv'i,whiyakhahvka,wuwakhohti,[WI][Pro]akha[Aspect][Tense],hvsk-n,vowel_stem,a_present
+1776,1847,he/she is sending it (refers to a flexible object),wikanv'vska,witsinv'vska,wikanv'vsko'i,wunvnv'i,whinv'vka,wunvti,[WI][Pro]n[Aspect][Tense],vsk-long[imp2],r_stem,a_present
+1776,1847,he/she is sending it (refers to a flexible object),wikanv'vska,witsinv'vska,wikanv'vsko'i,wunvnv'i,whinv'vka,wunvti,[WI][Pro]nv[Aspect][Tense],vsk-post-v,r_stem,a_present
+1778,1849,he/she is going out of sight,wutelika,wakwatelika,wuteliko'i,wutelitsv'i,witsateliki,wutelisti,[WI][Pro]ateli[Aspect][Tense],become,a_stem,a_present
