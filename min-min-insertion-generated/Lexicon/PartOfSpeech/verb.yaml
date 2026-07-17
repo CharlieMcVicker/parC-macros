@@ -1,0 +1,9 @@
+# This is a PartOfSpeech config file
+# Generated automatically from config/verb.yaml
+kind: PartOfSpeech
+name: verb
+features:
+- tense
+- rules
+lexical_features:
+- tense_present_class

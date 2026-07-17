@@ -1,0 +1,17 @@
+# This is a Rules config file
+# Generated automatically by generate_insertion_rules.py
+kind: Rules
+rules:
+- name: insert_wi_v_h
+  string_map:
+  - - '[WI]'
+    - w
+  right_context: <V>|h
+- name: insert_wi_default
+  string_map:
+  - - '[WI]'
+    - wi
+- name: insert_WI
+  rule_sequence:
+  - $insert_wi_v_h
+  - $insert_wi_default

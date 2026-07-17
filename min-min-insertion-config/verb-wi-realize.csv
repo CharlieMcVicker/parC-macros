@@ -1,0 +1,7 @@
+# kind: rule
+# stage: insert_wi
+# rule: $insert_WI
+# feature: rules
+# part_of_speech: $verb
++
+Y

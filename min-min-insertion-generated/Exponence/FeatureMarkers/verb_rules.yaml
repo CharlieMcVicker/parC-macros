@@ -1,0 +1,12 @@
+# This is a FeatureMarkers config file
+# Generated automatically from CSV
+kind: FeatureMarkers
+feature: rules
+markers:
+  +:
+  - kind: rule
+    value: $insert_DIST
+    stage: insert_DIST
+  - kind: rule
+    value: $insert_WI
+    stage: insert_wi

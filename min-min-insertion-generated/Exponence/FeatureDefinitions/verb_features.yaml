@@ -1,0 +1,17 @@
+# This is a FeatureDefinitions config file
+# Generated/Updated automatically from CSV
+kind: FeatureDefinitions
+features:
+  tense:
+  - present
+  - immediate
+  - habitual
+  - future_prog
+  - assertive
+  - reported
+  - infinitive
+  rules:
+  - +
+  tense_present_class:
+  - a_present
+  - i_present

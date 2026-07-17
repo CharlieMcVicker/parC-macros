@@ -4,6 +4,7 @@ import os
 import shutil
 import sys
 import yaml
+from parc_macros.generate_insertion_rules import generate_insertion_rules
 
 
 # To ensure beautiful YAML output
@@ -804,6 +805,10 @@ def main():
             if os.path.exists(dest_phonology):
                 shutil.rmtree(dest_phonology)
             shutil.copytree(phonology_dir, dest_phonology)
+
+    # Generate insertion rules from insertions/*.csv into Phonology/Rules/
+    if os.path.isdir(config_path):
+        generate_insertion_rules(config_path, output_dir)
 
     # 1. Determine all CSVs and verb.yaml
     csv_files = []

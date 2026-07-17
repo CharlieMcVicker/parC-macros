@@ -1,0 +1,26 @@
+stages:
+  - tense
+  - insert_dist
+  - insert_wi
+
+# Inflectional Features (originally from verb_features.yaml)
+features:
+  tense:
+    - present
+    - immediate
+    - habitual
+    - future_prog
+    - assertive
+    - reported
+    - infinitive
+  rules: [+]
+  # distributive: [+, -]
+  # partitive: [+, -]
+
+# Lexical features and metadata (originally from verb.yaml)
+lexical_features:
+  - tense_present_class
+
+paradigm:
+  generate_contingent_markers: true
+  open_root_template: "[WI]?[DIST]?<Phone>*"
