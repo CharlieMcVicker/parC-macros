@@ -9,6 +9,10 @@ class FormParsing:
     name: str
     lexical_features: list[tuple]
 
+    # fields used for reconstruction
+    person: str
+    allows_set_a: bool
+
 
 @dataclass
 class EntryType:
@@ -32,6 +36,8 @@ FORMS_TO_PARSE: list[FormParsing] = [
             ("tense", "present"),
             ("aspect", "present"),
         ],
+        person="3rd",
+        allows_set_a=True,
     ),
     FormParsing(
         corpus_key="present_1sg",
@@ -40,6 +46,8 @@ FORMS_TO_PARSE: list[FormParsing] = [
             ("tense", "present"),
             ("aspect", "present"),
         ],
+        person="1st",
+        allows_set_a=True,
     ),
     FormParsing(
         corpus_key="imperfective",
@@ -48,6 +56,8 @@ FORMS_TO_PARSE: list[FormParsing] = [
             ("tense", "habitual"),
             ("aspect", "incompletive"),
         ],
+        person="3rd",
+        allows_set_a=True,
     ),
     FormParsing(
         corpus_key="perfective",
@@ -56,6 +66,8 @@ FORMS_TO_PARSE: list[FormParsing] = [
             ("tense", "assertive"),
             ("aspect", "completive"),
         ],
+        person="3rd",
+        allows_set_a=False,
     ),
     FormParsing(
         corpus_key="perfective",
@@ -64,6 +76,8 @@ FORMS_TO_PARSE: list[FormParsing] = [
             ("tense", "assertive"),
             ("aspect", "incompletive"),
         ],
+        person="3rd",
+        allows_set_a=True,
     ),
     FormParsing(
         corpus_key="imperative",
@@ -72,6 +86,8 @@ FORMS_TO_PARSE: list[FormParsing] = [
             ("tense", "immediate"),
             ("aspect", "immediate"),
         ],
+        person="2nd",
+        allows_set_a=True,
     ),
     FormParsing(
         corpus_key="imperative",
@@ -80,6 +96,8 @@ FORMS_TO_PARSE: list[FormParsing] = [
             ("tense", "future_prog"),
             ("aspect", "incompletive"),
         ],
+        person="2nd",
+        allows_set_a=True,
     ),
     FormParsing(
         corpus_key="infinitive",
@@ -88,6 +106,8 @@ FORMS_TO_PARSE: list[FormParsing] = [
             ("tense", "infinitive"),
             ("aspect", "infinitive"),
         ],
+        person="3rd",
+        allows_set_a=False,
     ),
 ]
 
