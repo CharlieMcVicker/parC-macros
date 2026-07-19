@@ -1,30 +1,31 @@
 {
-    "yaml.schemas": {
-        "./schemas/ContingentFeatureMarkers.json": "ContingentFeatureMarkers/*.yaml",
-        "./schemas/FeatureCombinations.json": "FeatureCombinations/*.yaml",
-        "./schemas/FeatureDefinitions.json": "FeatureDefinitions/*.yaml",
-        "./schemas/FeatureMarkers.json": "FeatureMarkers/*.yaml",
-        "./schemas/Inventory.json": "Inventory/*.yaml",
-        "./schemas/MorphemeSequence.json": "MorphemeSequence/*.yaml",
-        "./schemas/MorphemeSet.json": "MorphemeSet/*.yaml",
-        "./schemas/Paradigm.json": "Paradigm/*.yaml",
-        "./schemas/PartOfSpeech.json": "PartOfSpeech/*.yaml",
-        "./schemas/Patterns.json": "Patterns/*.yaml",
-        "./schemas/Rules.json": "Rules/*.yaml",
-    },
-    "yaml.validate": true,
-    "yaml.completion": true,
-    "yaml.hover": true,
-    "[yaml]": {
-        "editor.insertSpaces": true,
-        "editor.tabSize": 2,
-        "editor.autoIndent": "keep",
-        "diffEditor.ignoreTrimWhitespace": false,
-        "editor.defaultColorDecorators": "never",
-        "editor.quickSuggestions": {
-            "strings": true,
-            "other": true,
-            "comments": false
-        }
-    },
+  "yaml.schemas": {
+    "./schemas/ContingentFeatureMarkers.json": "ContingentFeatureMarkers/*.yaml",
+    "./schemas/FeatureCombinations.json": "FeatureCombinations/*.yaml",
+    "./schemas/FeatureDefinitions.json": "FeatureDefinitions/*.yaml",
+    "./schemas/FeatureMarkers.json": "FeatureMarkers/*.yaml",
+    "./schemas/Inventory.json": "Inventory/*.yaml",
+    "./schemas/MorphemeSequence.json": "MorphemeSequence/*.yaml",
+    "./schemas/MorphemeSet.json": "MorphemeSet/*.yaml",
+    "./schemas/Paradigm.json": "Paradigm/*.yaml",
+    "./schemas/PartOfSpeech.json": "PartOfSpeech/*.yaml",
+    "./schemas/Patterns.json": "Patterns/*.yaml",
+    "./schemas/Rules.json": "Rules/*.yaml"
+  },
+  "yaml.validate": true,
+  "yaml.completion": true,
+  "yaml.hover": true,
+  "[yaml]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "keep",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.defaultColorDecorators": "never",
+    "editor.quickSuggestions": {
+      "strings": true,
+      "other": true,
+      "comments": false
+    }
+  },
+  "python.defaultInterpreterPath": "/opt/homebrew/Caskroom/miniconda/base/envs/parC-macros/bin/python"
 }

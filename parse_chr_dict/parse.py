@@ -1,3 +1,5 @@
+from typing import Iterable
+
 from parC.grammar.paradigm_compilation import (
     get_open_parse_graph,
     get_open_inflect_graph,
@@ -124,7 +126,7 @@ def str_to_lexical_hashable(parse_str: str, lexical_features: set[str]):
 
 
 def parses_by_form(
-    forms: list[tuple[str, list[tuple[str, str]]]], lexical_features: set[str]
+    forms: Iterable[tuple[str, list[tuple[str, str]]]], lexical_features: set[str]
 ):
     for surface, constraints in forms:
         if not surface:
@@ -137,15 +139,13 @@ def parses_by_form(
         yield surface, lexicals
 
 
-def get_roots_for_forms(
-    forms: list[tuple[str, list[tuple[str, str]]]], lexical_features: set[str]
-):
-    possible_lexical_roots = None
-    for _surface, lexicals in parses_by_form(forms, lexical_features):
+def get_roots_for_parses(lexicals: list[set[tuple[tuple[str, str], ...]]]):
+    possible_lexical_roots: set = None
+    for form_lexicals in lexicals:
         if possible_lexical_roots is None:
-            possible_lexical_roots = lexicals
+            possible_lexical_roots = form_lexicals
         else:
-            possible_lexical_roots = possible_lexical_roots.intersection(lexicals)
+            possible_lexical_roots = possible_lexical_roots.intersection(form_lexicals)
 
     return possible_lexical_roots if possible_lexical_roots else set()
 

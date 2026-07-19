@@ -1,0 +1,1 @@
+YAML_DIR=min-min-insertion-generated/ python -u -m parse_chr_dict
