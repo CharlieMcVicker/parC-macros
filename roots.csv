@@ -156,10 +156,6 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 455,462,it smells,asvka,tsisvka,asvko'i,,,,Eventful,[Pro]svk[Aspect][Tense],stative,cons_stem,a_present
 455,462,it smells,asvka,tsisvka,asvko'i,,,,StativeFutProg,[Pro]sv[Aspect][Tense],stative-k,cons_stem,a_present
 455,462,it smells,asvka,tsisvka,asvko'i,,,,StativeFutProg,[Pro]svk[Aspect][Tense],stative,cons_stem,a_present
-455,462,it smells,asvka,tsisvka,asvko'i,,,,StativeNoImp,[Pro]sv[Aspect][Tense],become,cons_stem,a_present
-455,462,it smells,asvka,tsisvka,asvko'i,,,,StativeNoImp,[Pro]sv[Aspect][Tense],become[inf2],cons_stem,a_present
-455,462,it smells,asvka,tsisvka,asvko'i,,,,StativeNoImp,[Pro]sv[Aspect][Tense],become[inf3],cons_stem,a_present
-455,462,it smells,asvka,tsisvka,asvko'i,,,,StativeNoImp,[Pro]sv[Aspect][Tense],become[inf4],cons_stem,a_present
 455,462,it smells,asvka,tsisvka,asvko'i,,,,StativeNoImp,[Pro]sv[Aspect][Tense],stative-k,cons_stem,a_present
 455,462,it smells,asvka,tsisvka,asvko'i,,,,StativeNoImp,[Pro]svk[Aspect][Tense],stative,cons_stem,a_present
 459,466,he/she is drinking it up,asvhvska,tsisvhvska,asvhvsko'i,usvnhv'i,hisvnha,usvhvsti,Eventful,[Pro]sv[Aspect][Tense],terminative-no-o,cons_stem,a_present

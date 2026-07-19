@@ -34,6 +34,9 @@ class EntryType:
     forms: list[str]
     """Names of FormParsings to use"""
 
+    def get_forms_from_parses(self, form_parses):
+        return [form_parses[name][1] for name in self.forms if name in form_parses]
+
 
 def get_label(a: list[tuple[str, str]], key: str):
     return next((v for l, v in a if l == key), None)
@@ -267,25 +270,22 @@ def main():
 
             for entry_type in primary_entry_types:
                 roots = get_roots_for_parses(
-                    [
-                        form_parses[name][1]
-                        for name in entry_type.forms
-                        if name in form_parses
-                    ]
+                    entry_type.get_forms_from_parses(form_parses)
                 )
 
                 roots = sorted(roots, key=str)
                 # print(roots)
                 if len(roots):
                     row_written = True
-                    if entry_type.name.startswith("Stative") and not shims_generated:
-                        shims_generated = True
+                    if entry_type.name.startswith("Stative"):
                         roots = [
                             (root, labels)
                             for root, labels in roots
                             if get_label(labels, "aspect_class").startswith("stative")
                         ]
-                        write_shims(roots, form_parses)
+                        if not shims_generated:
+                            shims_generated = True
+                            write_shims(roots, form_parses)
 
                     write_roots(row, entry_type, roots, roots_writer)
 
