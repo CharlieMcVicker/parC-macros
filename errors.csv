@@ -5,7 +5,6 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 21,25,he/she is denying him/her,atayhiha,tsiyata'yiha,atayhiho'i,utayhilv'i,hiyatayika,utayhsti
 22,26,he/she is committing adultery,atayhoneha,katayoneha,atayhoneho'i,utayhonelv'i,hatayhonvla,utayhonehti
 25,29,it’s ripping,atatsakaliha,katatsakali'a,atatsakalisko'i,utatsakalvhv'i,hatatsakala,utatsakalhti
-29,33,it’s beginning,ataleniha,,atalenisko'i,utalenvhv'i,,utalenhti
 39,43,he/she is thinking,atanhtheha,katanvtheha,atanhthesko'i,utanhthelhv'i,hatanhthvla,utanhthehti
 41,45,he/she is pondering,atanhthehilo'a,katanvthehilo'a,atanhthehilosko'i,utanhthehilo'v'i,hatanhthehilotsa,utanhthehilosti
 42,46,he/she is making noise,atanoyhvlhistiha,katanoyvlistiha,atanoyhvlhistisko'i,utanoyhvlhisthanv'i,hatanoyhvlhista,utanoyhvlhistohti
@@ -18,15 +17,11 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 67,71,he/she is finding it out,atelohoska,katelo'oska,atelohosko'i,utelohosv'i,hatelohohi,utelohohisti
 69,73,he/she is diving,atethvska,katetvska,atethvsko'i,utethinv'i,hatethvka,utethti
 73,77,he/she is rising (from a prone position),atitiha,katiti'a,atitisko'i,utitvhv'i,hatita,utithti
-75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti
 77,81,he/she is saying it,atiha,kati'a,atisko'i,utvnhv'i,hata,uthti
-94,98,it’s pouring into a container (refers to liquid),atlika,,atliko'i,utlitsv'i,,utliyhsti
 95,99,he/she is drawing a liquid out of a container,atliha,tsitli'a,atlisko'i,utlvhv'i,hitla,utlvhti
 98,102,he/she is crying,atloyhiha,katloyiha,atloyhiho'i,utloyhilv'i,hatloyhka,utloyhsti
 100,104,he/she is bragging,atlvkwhska,katlvkwaska,atlvkwhsko'i,utlvkwhsv'i,hatlvkwha,utlvkwhisti
-112,116,it is shining (refers to sun or moon),akaliha,,akalisko'i,ukalisv'i,,ukalihisti
 117,121,he/she is warming it,akanawhtiha,tsikanawotiha,akanawhtisko'i,ukanawhthanv'i,hikanawhta,ukanawhtohti
-118,122,it’s getting warm,akanawoska,,akanawosko'i,ukanawosv'i,,ukanawohisti
 119,123,it’s raining,akaska,,akasko'i,ukanhanv'i,,ukanhti
 130,135,he/she is in agony,akilhiyoka,tsikiliyoka,akilhiyoko'i,ukilhiyotsv'i,hikilhiyoki,ukilhiyosti
 143,148,he/she sees him/her,akowhthiha,tsikowhthiha,akowhthisko'i,ukohv'i,hikowahtha,ukowhthvhti
@@ -42,12 +37,9 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 167,173,he/she is taking off flying,alhawitiha,katlawitiha,alhawitisko'i,ulhawitvhv'i,halhawita,ulhawithti
 169,175,he/she is making him/her fly,alhawithtiha,tsiyatlawithtiha,alhawithtisko'i,ulhawithtanv'i,hiyatlawithta,ulhawithtohti
 171,177,he/she is having a nightmare,alhiki'a,katliki'a,alhikisko'i,ulhikisv'i,halhiki,ulhikisti
-172,178,it’s taking time,alhi'ilitoha,,alhi'ilitoho'i,ulhi'ilitolv'i,,ulhi'ilitasti
 173,179,he/she is measuring it,alhilo'a,katlilo'a,alhilosko'i,ulhilo'v'i,halhilotsa,ulhilosti
-175,181,it’s bending,alhiyvhkwitvska,,alhiyvhkwitvsko'i,ulhiyvhkwitvnv'i,,ulhiyvhkwitvti
 176,182,he/she is snorting,alhiyvsanawhstiha,kaliyvsanawhstiha,alhiyvsanawhstisko'i,ulhiyvsanawhsthanv'i,halhiyvsanawhsta,ulhiyvsanawhstohti
 177,183,he/she is preaching,alhtsatohvska,kalitsatohvska,alhtsatohvsko'i,ulhtsatonhv'i,halhtsatohvka,ulhtsathti
-179,185,it’s shattering,alhkhotvska,,alhkhotvsko'i,ulhkhotvnhv'i,,
 180,186,he/she is shattering it,alhkhothtiha,kalikhothtiha,alhkhothtisko'i,ulhkhoththanv'i,halhkhothta,ulhkhothtohti
 183,189,he/she is combing his/her hair,alhthawo'a,kalithawo'a,alhthawosko'i,ulhthawo'v'i,halhthawotsa,ulhthawosti
 185,191,he/she is moving (without changing location),alhthelvhvska,kalithelvhvska,alhthelvhvsko'i,ulhthelvnhv'i,halhthelvhvka,ulhthelhti
@@ -70,7 +62,6 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 209,215,he/she is taking it somewhere,awhitiha,tsiwitiha,awhitisko'i,uwhitvhv'i,hiwhita,uwithti
 210,216,he/she is planting it,awhiska,tsiwiska,awhisko'i,uwhisv'i,hiwhi,uwhisti
 212,218,he/she is peeling it,ayhahkhetska,tsiyahkhetska,ayhahkhetsko'i,uyhahkhetsv'i,hiyhahkhetsa,uyhahkhetsti
-214,220,it’s becoming frosty (refers to the ground),ayhahthvhvska,,ayhahthvhvsko'i,uyhahthvnhv'i,,uyhahthvthti
 215,221,he/she is calling him/her,ayhaniha,tsiyaniha,ayhanisko'i,uyhanvhv'i,hiyana,uyhanhti
 216,222,he/she is taking it somewhere by hand,ayheka,tsiyeka,ayheko'i,uyhvsv'i,hiyhuka,uyhvsti
 217,223,he/she is holding it in his/her hand,ayheha,tsiyeha,ayheho'i,ayhehv'i,,
@@ -79,14 +70,12 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 220,226,he/she is imitating him/her,ayheli'a,tsiyeli'a,ayhelisko'i,uyhelisv'i,hiyela,uyhelisti
 222,228,he/she is looking for him/her,ayhoha,tsiyoha,ayhoho'i,uyhalv'i,hiyhka,uyhsti
 223,229,he/she is swimming (refers to propelling oneself through the water),ayhu'ineka,kayu'ineka,ayhu'ineko'i,uyhu'invsv'i,hayhu'inuka,uyhu'invsti
-224,230,it’s thundering,ayhvtakwalo'a,,ayhvtakwalosko'i,uyhvtakwalo'v'i,,uyhvtakwalosti
 228,234,he/she is bending it,ayhvhkwitvska,tsiyvhkwitvska,ayhvhkwitvsko'i,uyhvhkwitvnv'i,hiyhvhkwitv'vka,uyhvhkwitvti
 230,236,he/she is kicking him/her,ayhvhthe'a,tsiyayvhthe'a,ayhvhthesko'i,uyhvhthesv'i,hiyayhthaki,uyhvhthesti
 232,238,he/she is capturing him/her,ayhvkhiti'a,tsiyvkhiti'a,ayhvkhitisko'i,uyhvkhitv'i,hiyvkhita,uyhvkhitisti
 233,239,he/she is hitting him/her on the nose,ayhvsteluhvska,tsiyvsteluhvska,ayhvsteluhvsko'i,uyhvstelunhv'i,hiyvsteluhvka,uyhvsteluhti
 234,240,he/she is choking him/her,ayhvskiyiha,tsiyvskiyiha,ayhvskiyisko'i,uyhvskiyvhv'i,hiyvskiya,uyhvskiyhti
 235,241,he/she is walking,a'i,ka'i,a'iso'i,a'isv'i,,
-250,256,it’s blooming,atsilvska,,atsilvsko'i,utsilvnhv'i,,utsilhti
 263,270,he/she is swallowing it,akhiska,tsi'kiska,akhisko'i,ukhisv'i,hikhihi,ukhihisti
 270,277,he/she is going down-hill,akhsoska,tsikasoska,akhsosko'i,ukhsosv'i,hikhsohi,ukhsohisti
 273,280,he/she knows how,akhthaha,tsikathaha,akhthaho'i,,,
@@ -107,7 +96,6 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 307,314,he/she is stopping,alewhistiha,kalewistiha,alewhistisko'i,ulewhisthanv'i,halewhista,ulewhistohti
 308,315,he/she is stopping him/her,alewhistohtiha,tsiyalewistohtiha,alewhistohtisko'i,ulewhistohthanv'i,hiyalewistohta,ulewhistohtohti
 309,316,he/she is starting,aleniha,kaleni'a,alenisko'i,ulenvhv'i,halena,ulenhti
-311,318,it’s boiling,alitliha,,alitlisko'i,ulitlvhv'i,,ulilhti
 314,321,he/she is thanking him/her,alihelitsheha,tsiyali'elitsheha,alihelitsheho'i,ulihelitshelv'i,hiyali'elitshisi,ulihelitshehti
 315,322,he/she is happy,alihelika,kali'elika,aliheliko'i,ulihelitsv'i,haliheliki,ulihelisti
 324,331,he/she is spitting,altsikwhska,kaltsikwhska,altsikwhsko'i,ultsikwhv'i,haltsikwha,ultsikwhsti
@@ -122,27 +110,20 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 336,343,he/she is dancing,alhski'a,kaliski'a,alhskisko'i,ulhskisv'i,halhski,ulhskisti
 337,344,he/she is permitting him/her,alhskolhtaneha,tsiyaliskolhtaneha,alhskolhtaneho'i,ulhskolhtanelv'i,hiyaliskolhtasi,ulhskolhtanehti
 338,345,he/she is nodding his/her head,alhskuska,kaliskuska,alhskusko'i,ulhskuyhv'i,halhskuyha,ulhskusti
-339,346,it’s ending,alhskwati'a,,alhskwatisko'i,ulhskwatv'i,,ulhskwatisti
 340,347,he/she is sticking his/her head out,alhskwaluti'a,kaliskwaluti'a,alhskwalutisko'i,ulhskwalutanv'i,halhskwalutvka,ulhskwalutoti
 341,348,he/she is taking his/her hat off,alhskwethuhki'a,kaliskwethuhki'a,alhskwethuhkisko'i,ulhskwethuhkisv'i,halhskwethuhki,ulhskwethuhkisti
 342,349,he/she is putting his/her hat on,alhskwethuhvska,kaliskwethuhvska,alhskwethuhvsko'i,ulhskwethunhv'i,halhskwethuhvka,ulhskwethusti
 344,351,he/she is setting a goal,alhsostiha,kalisostiha,alhsostisko'i,ulhsosthanv'i,halhsosta,ulhsostohti
 345,352,he/she is smelling it (refers to sniffing),alhsvstiha,kalisvstiha,alhsvstisko'i,ulhsvsthanv'i,halhsvsta,ulhsvstohti
-356,363,it’s lightning,anakaliha,,anakalisko'i,unakalvhv'i,,
 363,370,he/she is remembering him/her,anhtati'a,tsiyanvtati'a,anhtatisko'i,unhtatv'i,hiyanvtata,unhtatisti
-378,385,it’s becoming crisp,astakayvhiha,,astakayvhiho'i,ustakayvlhv'i,,
 401,408,he/she is afraid,askaha,tsiskaha,askaho'i,uskalv'i,hiskaya,uskasti
 414,421,he/she is erasing it,askolvti'a,tsiskolvti'a,askolvtisko'i,uskolvti'i,hiskolvta,uskolvtisti
-416,423,it’s fading,askolvka,,askolvko'i,uskolvtsv'i,,uskolvyhsti
 443,450,he/she is sopping it,asu'a,kasu'a,asusko'i,ususv'i,hasutsa,ususti
 463,470,he/she is holding his/her breath,athawhostiha,ka'tawhostiha,athawhostisko'i,uthawhosthanv'i,hathawhosta,uthawhostohti
-467,474,it’s steaming,athanoleka,,athanoleko'i,uthanolvsv'i,,uthanolvsti
-469,476,it’s exploding,athaski'a,,athaskisko'i,uthaskisv'i,hathaski,uthaskisti
 472,479,he/she is kissing him/her,athaweto'vska,tsitaweto'vska,athaweto'vsko'i,uthawetonv'i,hitaweto'vka,uthawetoti
 475,482,he/she is joining,athelati'a,kate'lati'a,athelatisko'i,uthelatv'i,hathelata,uthelatisti
 480,487,he/she is arguing,athiyohiha,ka'tiyohiha,athiyohiho'i,uthiyolhv'i,hathiyoka,uthiyosti
 482,489,he/she is running,atlhi,katitlhi,atlhiso'i,,,
-488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti
 489,496,he/she is taking a bite,atste'a,katsiste'a,atstesko'i,utstesv'i,hatstaki,utstesti
 490,497,he/she is lying,atsko'vska,katsisko'vska,atsko'vsko'i,utskonv'i,hatsko'vka,utskoti
 491,498,he/she is taking a drink (refers to alcoholic beverage),athuki'a,ka'tuki'a,athukisko'i,uthukisv'i,hathuki,uthukisti
@@ -202,7 +183,6 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 743,766,he/she is going,eka,keka,eko'i,uwenvsv'i,hena,uwenvsti
 746,769,he/she lives,eha,ke'a,eho'i,,hehesti,
 757,787,he/she is straightening it,katshinosiha,tsitshinosiha,katshinosisko'i,uwatshinosanhv'i,hitshinosa,uwatshinosohti
-759,789,it is hanging (refers to flexible object),kata'a,kata'a,kata'o'i,,hata'esti,
 764,794,he/she is plowing it,kataluki'a,tsitaluki'a,katalukisko'i,uwatalukanv'i,hitalukvka,uwatalukoti
 767,797,he/she is turning it,kateyhstiha,tsiteyastiha,kateyhstisko'i,uwateyhsthanv'i,hiteyhsta,uwateyhstohti
 769,799,he/she is spinning it,katikwalvteyhstiha,tsitikwalvteyhstiha,katikwalvteyhstisko'i,uwatikwalvteyhsthanv'i,hitikwalvteyhsta,uwatikwalvteyhstohti
@@ -228,7 +208,6 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 825,855,he/she is stinging it,katsvyhska,tsiyatsvyhska,katsvyhsko'i,uwatsvyhv'i,hiyatsvyha,uwatsvyhsti
 834,864,he/she is climbing it,ka'leka,tsi'leka,ka'leko'i,ulvsv'i,hi'luka,ulvsti
 839,869,he/she is climbing around,ka'litoha,tsi'litoha,ka'litoho'i,ulitolv'i,hi'lita,ulitasti
-840,870,it is burning (refers to forest or grass),kalika,,kaliko'i,ulitsv'i,,
 841,871,he/she is taking it out of a container (refers to a long object),kaliha,tsila'a,kalisko'i,ulvhv'i,hila,ulhti
 842,872,it is dying (refers to an animal or plant),kaliwhoka,tsiliwoka,kaliwhoko'i,uliwhotsv'i,hiliwhoki,uliwhosti
 844,874,he/she is spanking him/her,kali'vnhiha,tsili'vnhiha,kal'vnhiho'i,uli'vnhilv'i,hili'vnhka,uli'vnhsti
@@ -238,13 +217,10 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 858,888,he/she is arriving,ka'luhka,tsi'luhka,ka'luhko'i,uluhtsv'i,hi'luhki,uluhisti
 862,892,he/she is chopping it,kaluyhska,tsiluyhska,kaluyhsko'i,uluyhv'i,hiluyha,uluyhsti
 882,912,he/she is taking it somewhere by hand (refers to a long object),kaneka,tsineka,kaneko'i,uwanvsv'i,hinuka,uwanvsti
-887,917,he/she is holding it in his/her hand (refers to a long object),kaneha,tsineha,kaneho'i,,hinehesti,
 888,918,he/she is leaving some liquid,kanehiya'a,tsine'iya'a,kanehiyasko'i,unehiyv'i,hinehiya,unehiyasti
 889,919,he/she is giving him/her some liquid,kanenheha,tsineneha,kanenheho'i,unenhelv'i,hine'vsi,unenhehti
 890,920,he/she is finding some liquid,kanewhahthiha,tsinewahthiha,kanewhahthisko'i,unewhahthvhv'i,hinewhahtha,unewhahthvhti
 891,921,he/she is taking some liquid somewhere,kanewhitiha,tsinewitiha,kanewhitisko'i,unewhitvhv'i,hinewhita,unewhithti
-893,923,he/she lives (in sense of resides now),kanela,tsinela,kanelo'i,,hinelesti,
-896,926,it’s hailing,kanesoyhska,,kanesoyhsko'i,unesoyhsv'i,,unesoyhsti
 899,929,he/she is lying down,kanhka,tsinvka,kanhko'i,,hinhkesti,
 902,932,he/she is taking a liquid somewhere by hand,kanhtseka,tsinvtseka,kanhtseko'i,unhtsvsv'i,hinhtsuka,unhtsvsti
 903,933,he/she is holding some liquid,kanhtseha,tsinvtseha,kanhtseho'i,,hinhtsehesti,
@@ -255,9 +231,7 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 916,946,he/she is catching him/her,ka'niyiha,tsiniyiha,kaniyisko'i,uniyvhv'i,hiniya,uniyhti
 918,948,he/she is hunting,kanohalitoha,tsino'alitoha,kanohalitoho'i,unohalitolv'i,hinohalita,unohalitasti
 920,950,he/she is flying,kanohili,tsino'ili,kanohiliso'i,,hinohilisesti,
-921,951,it’s flooding,kanohuki'a,,kanohukisko'i,unohukanv'i,,unohukoti
 922,952,he/she is causing it to sound,kanoyhvlhistiha,tsinoyvlistiha,kanoyhvlhistisko'i,unoyhvlhisthanv'i,hinoyhvlhista,unoyhvlhistohti
-924,954,it is blowing (refers to wind),kanolv'vska,,kanolv'vsko'i,unolvnv'i,,unolvti
 929,959,he/she is pulling him/her,kanhsane'a,tsinasane'a,kanhsanesko'i,unhsanesv'i,hinasanaki,unhsanesti
 931,961,he/she is dragging him/her,kanhsineka,tsinasineka,kanhsineko'i,unhsinvsv'i,hinasinuka,unhsinvsti
 941,971,he/she is cleaning him/her,kanvkaliha,tsinvkali'a,kanvkalisko'i,unvkalvhv'i,hinvkala,unvkalhti
@@ -265,14 +239,12 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 965,995,it’s dripping,kaskwo'iha,,kaskwo'iho'i,uwaskwolv'i,,uwaskwo'isti
 968,998,he/she is whistling,kasvnhka,tsisvnhka,kasvnhko'i,uwasvnhtsv'i,hisvnhki,uwasvnhsti
 969,999,he/she is piling it up,kasvthvska,tsisvthvska,kasvthvsko'i,uwasvthanv'i,hisvthvka,uwasvthti
-970,1000,it’s hanging,katha,,katho'i,,hathesti,
 976,1006,he/she is hanging it up,kathvska,ka'tvska,kathvsko'i,uthanv'i,hathvka,uthti
 978,1008,he/she is resting him/her,kawesolvstiha,tsiyawesolvstiha,kawesolvstisko'i,uyawesolvsthanv'i,hiyawesolvsta,uyawesolvstohti
 980,1010,he/she is replying,kawohiliyv'a,kawo'iliyv'a,kawohiliyvsko'i,uwohiliyvsv'i,hawohiliyvna,uwohiliyvsti
 986,1016,he/she is sewing it,kayewhska,tsiyewiska,kayewhsko'i,uwayewhsv'i,hiyewa,uwayewhsti
 992,1022,he/she is feeding him/her,kelhoha,tsiyeloha,kelhoho'i,uwelhalv'i,hiyeloka,uwelhsti
 993,1023,he/she is howling,kelhuhvska,keluhvska,kelhuhvsko'i,uwelhunhv'i,helhuhvka,uwelhuhvsti
-997,1027,he/she is leading it by a leash,kelisineha,tsiyelisineha,kelisineho'i,,hiyelisinehesti,uwelisinvsti
 1001,1031,he/she is setting a post into the ground (refers to a post or other long object),kethvska,ke'tvska,kethvsko'i,uwethinv'i,hethvka,uwethti
 1014,1044,he/she is leading him/her by the hand,kohineka,tsiyo'ineka,kohineko'i,uwohinvsv'i,hiyo'inuka,uwohinvsti
 1015,1045,he/she is agreeing with him/her,kohiyhtaneha,tsiyo'iyhtaneha,kohiyhtaneho'i,uwohiyhtanelv'i,hiyo'iyhtasi,uwohiyhtanehti
@@ -288,13 +260,10 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 1052,1083,he/she is washing it,kuhilo'a,ku'ilo'a,kuhilosko'i,uwuhilo'v'i,huhilotsa,uwuhilosti
 1053,1084,he/she is accusing him/her,kuhistiha,tsiyu'istiha,kuhistisko'i,uwuhisthanv'i,hiyu'ista,uwuhistohti
 1056,1087,he/she is putting it in water,kuhvska,ku'vska,kuhvsko'i,uwunhv'i,huhvka,uwuhti
-1061,1092,it’s snowing,kuthiha,,kuthisko'i,uwuthanhv'i,,uwuthohti
-1064,1095,it’s leaking,kvkuska,,kvkusko'i,uwakusv'i,,uwakusti
 1067,1098,he/she is alive,kvnha,kvna,kvnho'i,,hvnhesti,
 1070,1101,he/she is hitting him/her,kvnhiha,tsiyvniha,kvnhiho'i,uwanhilv'i,hiyvnika,uwanhsti
 1071,1102,he/she is cooking it (refers to a specific food),kvnhistiha,kvnistiha,kvnhistisko'i,uwanhisthanv'i,hvnhista,uwanhistohti
 1078,1109,he/she is melting it,kvnawhtiha,kvnawotiha,kvnawhtisko'i,uwanawhthanv'i,hvnawhta,uwanawhtohti
-1082,1113,it’s becoming done (refers to by cooking),kvnhska,,kvnhsko'i,uwanhsv'i,hvnhi,uwanhisti
 1087,1118,he/she is putting it into a fire,kvthvska,kvtvska,kvthvsko'i,uwvthanv'i,hvthvka,uwvthti
 1119,1163,he/she is returning,ika'luhka,itsi'luhka,ika'luhko'i,v'uluhtsv'i,tsihi'luhki,
 1221,1272,he/she is ascending an incline,khanaluska,tsinaluska,khanalusko'i,unhalusv'i,hinhaluhi,unhaluhisti

@@ -38,7 +38,7 @@ def labels_match(
 
 
 def write_roots(row, entry_type, roots, writer):
-    for r, label_values in roots:
+    for r, label_values in sorted(roots, key=str):
         data = {**row}
         data["entry_type"] = entry_type.name
         data["root"] = r
@@ -122,6 +122,7 @@ def main():
                     parsing.lexical_features,
                 )
                 for parsing in FORMS_TO_PARSE
+                if row[parsing.corpus_key]
             }
             if any(" " in f for f, _ in forms.values()):
                 continue
@@ -141,7 +142,6 @@ def main():
                     entry_type.get_forms_from_parses(form_parses)
                 )
 
-                roots = sorted(roots, key=str)
                 # print(roots)
                 if len(roots):
                     row_written = True
