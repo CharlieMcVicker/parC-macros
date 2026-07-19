@@ -3,6 +3,11 @@ from dataclasses import dataclass
 from tqdm import tqdm
 
 from parse_chr_dict.create_aspect_class_csv import respell_consonants
+from parse_chr_dict.dict_structure import (
+    FORMS_TO_PARSE,
+    PRIMARY_ENTRY_TYPES,
+    SHIM_ENTRY_TYPES,
+)
 from parse_chr_dict.parse import (
     get_roots_for_parses,
     parses_by_form,
@@ -13,29 +18,6 @@ LEXICAL_FEATURES = {
     "prefix_class",
     "tense_present_class",
 }
-
-
-@dataclass
-class FormParsing:
-    """Spec for how to parse a form + a name"""
-
-    corpus_key: str
-    name: str
-    lexical_features: list[tuple]
-
-
-@dataclass
-class EntryType:
-    """A set of forms to parse from a row"""
-
-    name: str
-    """Name for the spec"""
-
-    forms: list[str]
-    """Names of FormParsings to use"""
-
-    def get_forms_from_parses(self, form_parses):
-        return [form_parses[name][1] for name in self.forms if name in form_parses]
 
 
 def get_label(a: list[tuple[str, str]], key: str):
@@ -90,117 +72,6 @@ def main():
     # 1. a parse to do
     # 2. a group of parses to compare together (tied to parses on name)
 
-    forms_to_parse: list[FormParsing] = [
-        FormParsing(
-            corpus_key="present",
-            name="3rd_present",
-            lexical_features=[
-                ("tense", "present"),
-                ("aspect", "present"),
-            ],
-        ),
-        FormParsing(
-            corpus_key="present_1sg",
-            name="1st_present",
-            lexical_features=[
-                ("tense", "present"),
-                ("aspect", "present"),
-            ],
-        ),
-        FormParsing(
-            corpus_key="imperfective",
-            name="3rd_incompletive_habitual",
-            lexical_features=[
-                ("tense", "habitual"),
-                ("aspect", "incompletive"),
-            ],
-        ),
-        FormParsing(
-            corpus_key="perfective",
-            name="3rd_completive_assertive",
-            lexical_features=[
-                ("tense", "assertive"),
-                ("aspect", "completive"),
-            ],
-        ),
-        FormParsing(
-            corpus_key="perfective",
-            name="3rd_incompletive_assertive",
-            lexical_features=[
-                ("tense", "assertive"),
-                ("aspect", "incompletive"),
-            ],
-        ),
-        FormParsing(
-            corpus_key="imperative",
-            name="2nd_imperative",
-            lexical_features=[
-                ("tense", "immediate"),
-                ("aspect", "immediate"),
-            ],
-        ),
-        FormParsing(
-            corpus_key="imperative",
-            name="2nd_future_prog",
-            lexical_features=[
-                ("tense", "future_prog"),
-                ("aspect", "incompletive"),
-            ],
-        ),
-        FormParsing(
-            corpus_key="infinitive",
-            name="3rd_infinitive",
-            lexical_features=[
-                ("tense", "infinitive"),
-                ("aspect", "infinitive"),
-            ],
-        ),
-    ]
-
-    primary_entry_types = [
-        EntryType(
-            name="Eventful",
-            forms=[
-                "3rd_present",
-                "1st_present",
-                "3rd_incompletive_habitual",
-                "3rd_completive_assertive",
-                "2nd_imperative",
-                "3rd_infinitive",
-            ],
-        ),
-        EntryType(
-            name="StativeFutProg",
-            forms=[
-                "3rd_present",
-                "1st_present",
-                "3rd_incompletive_habitual",
-                "3rd_completive_assertive",
-                "2nd_future_prog",
-            ],
-        ),
-        EntryType(
-            name="StativeNoImp",
-            forms=[
-                "3rd_present",
-                "1st_present",
-                "3rd_incompletive_habitual",
-                "3rd_completive_assertive",
-            ],
-        ),
-    ]
-
-    shim_entry_types = [
-        EntryType(
-            name="EventfulInfinitive",
-            forms=["3rd_infinitive"],
-        ),
-        EntryType(
-            name="EventfulImperativeInfinitive",
-            forms=["2nd_imperative", "3rd_infinitive"],
-        ),
-    ]
-
     with open("chr-corpus/corpus.csv") as f, open("errors.csv", "w+") as error_f, open(
         "roots.csv", "w+"
     ) as roots_f:
@@ -218,7 +89,7 @@ def main():
                 (r, [(k, v) for k, v in labels if not k == "aspect_class"])
                 for r, labels in roots
             ]
-            for shim_type in shim_entry_types:
+            for shim_type in SHIM_ENTRY_TYPES:
                 shim_roots = get_roots_for_parses(
                     [
                         form_parses[name][1]
@@ -253,7 +124,7 @@ def main():
                     respell_consonants(row[parsing.corpus_key]),
                     parsing.lexical_features,
                 )
-                for parsing in forms_to_parse
+                for parsing in FORMS_TO_PARSE
             }
             if any(" " in f for f, _ in forms.values()):
                 continue
@@ -268,7 +139,7 @@ def main():
             row_written = False
             shims_generated = False
 
-            for entry_type in primary_entry_types:
+            for entry_type in PRIMARY_ENTRY_TYPES:
                 roots = get_roots_for_parses(
                     entry_type.get_forms_from_parses(form_parses)
                 )
