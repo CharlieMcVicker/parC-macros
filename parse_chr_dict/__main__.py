@@ -49,6 +49,34 @@ def write_roots(row, entry_type, roots, writer):
         writer.writerow(data)
 
 
+def write_shims(row, roots, form_parses, roots_writer):
+    roots_without_aspect = [
+        (r, [(k, v) for k, v in labels if not k == "aspect_class"])
+        for r, labels in roots
+    ]
+    for shim_type in SHIM_ENTRY_TYPES:
+        shim_roots = get_roots_for_parses(
+            [form_parses[name][1] for name in shim_type.forms if name in form_parses]
+        )
+
+        valid_shims = [
+            (shim_r, shim_labels)
+            for shim_r, shim_labels in shim_roots
+            if any(
+                shim_r == parent_r
+                and all(
+                    (
+                        labels_match(shim_labels, parent_labels, k)
+                        for k, _ in parent_labels
+                    )
+                )
+                for parent_r, parent_labels in roots_without_aspect
+            )
+        ]
+        if len(valid_shims):
+            write_roots(row, shim_type, valid_shims, roots_writer)
+
+
 def main():
 
     # 1. open csv
@@ -83,37 +111,6 @@ def main():
             fieldnames=fieldnames + ["entry_type", "root"] + sorted(LEXICAL_FEATURES),
         )
         roots_writer.writeheader()
-
-        def write_shims(roots, form_parses):
-            roots_without_aspect = [
-                (r, [(k, v) for k, v in labels if not k == "aspect_class"])
-                for r, labels in roots
-            ]
-            for shim_type in SHIM_ENTRY_TYPES:
-                shim_roots = get_roots_for_parses(
-                    [
-                        form_parses[name][1]
-                        for name in shim_type.forms
-                        if name in form_parses
-                    ]
-                )
-
-                valid_shims = [
-                    (shim_r, shim_labels)
-                    for shim_r, shim_labels in shim_roots
-                    if any(
-                        shim_r == parent_r
-                        and all(
-                            (
-                                labels_match(shim_labels, parent_labels, k)
-                                for k in parent_labels
-                            )
-                        )
-                        for parent_r, parent_labels in roots_without_aspect
-                    )
-                ]
-                if len(valid_shims):
-                    write_roots(row, entry_type, valid_shims, roots_writer)
 
         next(reader)
         rows = list(reader)
@@ -156,7 +153,7 @@ def main():
                         ]
                         if not shims_generated:
                             shims_generated = True
-                            write_shims(roots, form_parses)
+                            write_shims(row, roots, form_parses, roots_writer)
 
                     write_roots(row, entry_type, roots, roots_writer)
 
