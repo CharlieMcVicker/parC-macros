@@ -2,7 +2,6 @@ from typing import Iterable
 
 from parC.grammar.paradigm_compilation import (
     get_open_parse_graph,
-    get_open_inflect_graph,
     word_fsa,
     fsa,
 )
@@ -46,29 +45,6 @@ def get_inflect_graph():
     return get_open_inflect_graph(
         "verb", infer_lexical_features=True, non_deterministic_cleanup=False
     )
-
-
-def inflect(
-    root: str,
-    # lexical_features: list[tuple[str, str]],
-    # inflectional_features: list[tuple[str, str]],
-) -> list[str]:
-    global INFLECT_GRAPH
-    if INFLECT_GRAPH is None:
-        INFLECT_GRAPH = get_inflect_graph()
-
-    surface_fsa = fsa(root)
-    # for feat, value in sorted(lexical_features, key=lambda l: l[0]):
-    #     surface_fsa = pynini.concat(surface_fsa, fsa(feature_tag(feat, value)))
-
-    # for feat, value in sorted(inflectional_features, key=lambda l: l[0]):
-    #     surface_fsa = pynini.concat(surface_fsa, fsa(feature_tag(feat, value)))
-
-    output_lattice_with_tag = pynini.compose(surface_fsa, INFLECT_GRAPH).optimize()
-    output_lattice_with_tag = pynini.project(
-        output_lattice_with_tag, project_type="output"
-    )
-    return fsm_strings(output_lattice_with_tag, strip_all_tags=False)
 
 
 def feature_tag(feature, value):

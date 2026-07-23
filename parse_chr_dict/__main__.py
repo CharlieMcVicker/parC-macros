@@ -1,5 +1,5 @@
 import csv
-from dataclasses import dataclass
+from dataclasses import asdict
 from tqdm import tqdm
 
 from parse_chr_dict.create_aspect_class_csv import respell_consonants
@@ -12,6 +12,7 @@ from parse_chr_dict.parse import (
     get_roots_for_parses,
     parses_by_form,
 )
+from parse_chr_dict.reconstruct import ReconstructionSpec, reconstruct_row
 
 LEXICAL_FEATURES = {
     "aspect_class",
@@ -46,7 +47,10 @@ def write_roots(row, entry_type, roots, writer):
         for k, v in label_values:
             data[k] = v
 
-        writer.writerow(data)
+        specs = reconstruct_row(data, entry_type, LEXICAL_FEATURES)
+        for spec in specs:
+            row_data = {**data, **asdict(spec)}
+            writer.writerow(row_data)
 
 
 def write_shims(row, roots, form_parses, roots_writer):
@@ -108,7 +112,7 @@ def main():
         error_writer.writeheader()
         roots_writer = csv.DictWriter(
             roots_f,
-            fieldnames=fieldnames + ["entry_type", "root"] + sorted(LEXICAL_FEATURES),
+            fieldnames=fieldnames + ["entry_type", "root"] + sorted(LEXICAL_FEATURES) + ReconstructionSpec.fieldnames(),
         )
         roots_writer.writeheader()
 

@@ -1,1 +1,3 @@
-1. forms without 1st person error out
+- [x] inflection -- keep parse graph in memory to go fast
+- [ ] h metathesis
+- [ ] h alternation - in graph or externally?
