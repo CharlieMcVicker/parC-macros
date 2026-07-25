@@ -1,6 +1,7 @@
 stages:
   - final_dropping
   - aspect_suffix
+  - h_alternation
   - drop_stem_initial_vowel
   - pronominal
   - tense
@@ -58,4 +59,4 @@ lexical_features:
 
 paradigm:
   generate_contingent_markers: true
-  open_root_template: "[WI]?[DIST]?[Pro]<V>?(<C>+<V>)*<C>*[Aspect][Tense]"
+  open_root_template: "[WI]?[DIST]?[Pro][H_ALT]?<V>?(<C>+<V>)*<C>*[Aspect][Tense]"

@@ -1,0 +1,33 @@
+# This is a FeatureMarkers config file
+# Generated automatically from CSV
+kind: FeatureMarkers
+feature: tense
+markers:
+  assertive:
+  - kind: rule
+    value: $insert_DIST1
+    stage: insert_DIST
+  future_prog:
+  - kind: rule
+    value: $insert_DIST1
+    stage: insert_DIST
+  habitual:
+  - kind: rule
+    value: $insert_DIST1
+    stage: insert_DIST
+  immediate:
+  - kind: rule
+    value: $insert_DIST2
+    stage: insert_DIST
+  infinitive:
+  - kind: rule
+    value: $insert_DIST2
+    stage: insert_DIST
+  present:
+  - kind: rule
+    value: $insert_DIST1
+    stage: insert_DIST
+  reported:
+  - kind: rule
+    value: $insert_DIST1
+    stage: insert_DIST

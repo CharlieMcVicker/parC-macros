@@ -1,0 +1,13 @@
+# This is a Rules config file
+# Define context-sensitive phonological rules.
+kind: Rules
+rules:
+  # atanhsini
+  # atanasini
+  - name: h_alternation
+    description: > 
+    string_map:
+      - ["<C>h", "'h"]
+      - ["h", "<V>"] # atan_h_sini -> atan_a_sini
+      - ["h", ""]
+    left_context: "[H_ALT]{^h}*"

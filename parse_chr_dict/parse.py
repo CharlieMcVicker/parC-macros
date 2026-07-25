@@ -6,6 +6,8 @@ from parC.grammar.paradigm_compilation import (
     fsa,
 )
 
+from parC.grammar.paradigm_compilation import inflect
+
 import re
 
 from parC.grammar.acceptor_compilation import fsm_strings
@@ -144,10 +146,10 @@ def main():
         # ("partitive", "+"),
     ]
 
-    words = inflect(
-        "[BOW][Pro]atat[Aspect][Tense][EOW][aspect_class=go][prefix_class=a_stem][tense_present_class=a_present][aspect=present][pronominal=3sg.A][rules=+][tense=present]"
-    )
-    print(words)
+    # words = inflect(
+    #     "[BOW][Pro]atat[Aspect][Tense][EOW][aspect_class=go][prefix_class=a_stem][tense_present_class=a_present][aspect=present][pronominal=3sg.A][rules=+][tense=present]"
+    # )
+    # print(words)
 
     print("interactive parsing - newline to quit, . to flip modes")
     MODE = "PARSE"
@@ -156,21 +158,30 @@ def main():
         if not surface:
             break
 
-        if MODE == "INFLECT":
-            if surface == ".":
-                MODE = "PARSE"
-                continue
-            forms = inflect(surface, [], [])
-            for p in forms:
-                print("\t", p)
+        # if MODE == "INFLECT":
+        #     if surface == ".":
+        #         MODE = "PARSE"
+        #         continue
+        #     forms = inflect(surface, [], [])
+        #     for p in forms:
+        #         print("\t", p)
 
         elif MODE == "PARSE":
             if surface == ".":
                 MODE = "INFLECT"
                 continue
             parses = parse(surface)
+            groups = {}
             for p in parses:
-                print("\t", p)
+                head, tail = p.split("[EOW]")
+                head = head[5:] # cut off [BOW]
+                if not head in groups:
+                    groups[head] = []
+                groups[head].append(tail)
+            for head in groups:
+                print("\t", head)
+                for tail in groups[head]:
+                    print("\t\t",tail)
 
 
 if __name__ == "__main__":

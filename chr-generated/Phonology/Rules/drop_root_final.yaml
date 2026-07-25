@@ -7,14 +7,14 @@ rules:
       mark the final phone for deletion
     string_map:
       - ["<Phone>", "[TEMP]"]
-    right_context: "#"
+    right_context: "[Aspect]"
 
   - name: mark_final_two
     description: >
       mark the final two phones for deletion
     string_map:
       - ["<Phone><Phone>?", "[TEMP]"]
-    right_context: "#"
+    right_context: "[Aspect]"
 
   - name: drop_final
     description: >

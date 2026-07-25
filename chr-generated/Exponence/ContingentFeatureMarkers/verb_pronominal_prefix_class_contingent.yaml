@@ -7,633 +7,633 @@ features:
 markers:
   a_stem:
     1sg.A:
-    - kind: prefix
-      value: k
+    - kind: rule
+      value: $pro_k
       stage: pronominal
     1sg.B:
-    - kind: prefix
-      value: akw
+    - kind: rule
+      value: $pro_akw
       stage: pronominal
     1sg>3sg:
-    - kind: prefix
-      value: tsiy
+    - kind: rule
+      value: $pro_tsiy
       stage: pronominal
     2dl.A:
-    - kind: prefix
-      value: st
+    - kind: rule
+      value: $pro_st
       stage: pronominal
     2dl.B:
-    - kind: prefix
-      value: st
+    - kind: rule
+      value: $pro_st
       stage: pronominal
     2pl.A:
-    - kind: prefix
-      value: its
+    - kind: rule
+      value: $pro_its
       stage: pronominal
     2pl.B:
-    - kind: prefix
-      value: its
+    - kind: rule
+      value: $pro_its
       stage: pronominal
     2sg.A:
-    - kind: prefix
-      value: h
+    - kind: rule
+      value: $pro_h
       stage: pronominal
     2sg.B:
-    - kind: prefix
-      value: ts
+    - kind: rule
+      value: $pro_ts
       stage: pronominal
     2sg>3sg:
-    - kind: prefix
-      value: hiy
+    - kind: rule
+      value: $pro_hiy
       stage: pronominal
     3ns.A:
-    - kind: prefix
-      value: an
+    - kind: rule
+      value: $pro_an
       stage: pronominal
     3ns.B:
-    - kind: prefix
-      value: un
+    - kind: rule
+      value: $pro_un
       stage: pronominal
     3sg.A:
-    - kind: prefix
-      value: a
+    - kind: rule
+      value: $pro_a
       stage: pronominal
     - kind: rule
       value: $drop_stem_initial_a
       stage: drop_stem_initial_vowel
     3sg.B:
-    - kind: prefix
-      value: u
+    - kind: rule
+      value: $pro_u
       stage: pronominal
     - kind: rule
       value: $drop_stem_initial_a
       stage: drop_stem_initial_vowel
     Edl.A:
-    - kind: prefix
-      value: ost
+    - kind: rule
+      value: $pro_ost
       stage: pronominal
     Edl.B:
-    - kind: prefix
-      value: okin
+    - kind: rule
+      value: $pro_okin
       stage: pronominal
     Epl.A:
-    - kind: prefix
-      value: ots
+    - kind: rule
+      value: $pro_ots
       stage: pronominal
     Epl.B:
-    - kind: prefix
-      value: ok
+    - kind: rule
+      value: $pro_ok
       stage: pronominal
     Idl.A:
-    - kind: prefix
-      value: in
+    - kind: rule
+      value: $pro_in
       stage: pronominal
     Idl.B:
-    - kind: prefix
-      value: kin
+    - kind: rule
+      value: $pro_kin
       stage: pronominal
     Ipl.A:
-    - kind: prefix
-      value: it
+    - kind: rule
+      value: $pro_it
       stage: pronominal
     Ipl.B:
-    - kind: prefix
-      value: ik
+    - kind: rule
+      value: $pro_ik
       stage: pronominal
   cons_stem:
     1sg.A:
-    - kind: prefix
-      value: tsi
+    - kind: rule
+      value: $pro_tsi
       stage: pronominal
     1sg.B:
-    - kind: prefix
-      value: aki
+    - kind: rule
+      value: $pro_aki
       stage: pronominal
     1sg>3sg:
-    - kind: prefix
-      value: tsi
+    - kind: rule
+      value: $pro_tsi
       stage: pronominal
     2dl.A:
-    - kind: prefix
-      value: sti
+    - kind: rule
+      value: $pro_sti
       stage: pronominal
     2dl.B:
-    - kind: prefix
-      value: sti
+    - kind: rule
+      value: $pro_sti
       stage: pronominal
     2pl.A:
-    - kind: prefix
-      value: itsi
+    - kind: rule
+      value: $pro_itsi
       stage: pronominal
     2pl.B:
-    - kind: prefix
-      value: itsi
+    - kind: rule
+      value: $pro_itsi
       stage: pronominal
     2sg.A:
-    - kind: prefix
-      value: hi
+    - kind: rule
+      value: $pro_hi
       stage: pronominal
     2sg.B:
-    - kind: prefix
-      value: tsa
+    - kind: rule
+      value: $pro_tsa
       stage: pronominal
     2sg>3sg:
-    - kind: prefix
-      value: hi
+    - kind: rule
+      value: $pro_hi
       stage: pronominal
     3ns.A:
-    - kind: prefix
-      value: ani
+    - kind: rule
+      value: $pro_ani
       stage: pronominal
     3ns.B:
-    - kind: prefix
-      value: uni
+    - kind: rule
+      value: $pro_uni
       stage: pronominal
     3sg.A:
-    - kind: prefix
-      value: a
+    - kind: rule
+      value: $pro_a
       stage: pronominal
     3sg.B:
-    - kind: prefix
-      value: u
+    - kind: rule
+      value: $pro_u
       stage: pronominal
     Edl.A:
-    - kind: prefix
-      value: osti
+    - kind: rule
+      value: $pro_osti
       stage: pronominal
     Edl.B:
-    - kind: prefix
-      value: okini
+    - kind: rule
+      value: $pro_okini
       stage: pronominal
     Epl.A:
-    - kind: prefix
-      value: otsi
+    - kind: rule
+      value: $pro_otsi
       stage: pronominal
     Epl.B:
-    - kind: prefix
-      value: oki
+    - kind: rule
+      value: $pro_oki
       stage: pronominal
     Idl.A:
-    - kind: prefix
-      value: ini
+    - kind: rule
+      value: $pro_ini
       stage: pronominal
     Idl.B:
-    - kind: prefix
-      value: kini
+    - kind: rule
+      value: $pro_kini
       stage: pronominal
     Ipl.A:
-    - kind: prefix
-      value: iti
+    - kind: rule
+      value: $pro_iti
       stage: pronominal
     Ipl.B:
-    - kind: prefix
-      value: iki
+    - kind: rule
+      value: $pro_iki
       stage: pronominal
   e_stem:
     1sg.A:
-    - kind: prefix
-      value: k
+    - kind: rule
+      value: $pro_k
       stage: pronominal
     1sg.B:
-    - kind: prefix
-      value: akw
+    - kind: rule
+      value: $pro_akw
       stage: pronominal
     1sg>3sg:
-    - kind: prefix
-      value: tsiy
+    - kind: rule
+      value: $pro_tsiy
       stage: pronominal
     2dl.A:
-    - kind: prefix
-      value: st
+    - kind: rule
+      value: $pro_st
       stage: pronominal
     2dl.B:
-    - kind: prefix
-      value: st
+    - kind: rule
+      value: $pro_st
       stage: pronominal
     2pl.A:
-    - kind: prefix
-      value: its
+    - kind: rule
+      value: $pro_its
       stage: pronominal
     2pl.B:
-    - kind: prefix
-      value: its
+    - kind: rule
+      value: $pro_its
       stage: pronominal
     2sg.A:
-    - kind: prefix
-      value: h
+    - kind: rule
+      value: $pro_h
       stage: pronominal
     2sg.B:
-    - kind: prefix
-      value: ts
+    - kind: rule
+      value: $pro_ts
       stage: pronominal
     2sg>3sg:
-    - kind: prefix
-      value: hiy
+    - kind: rule
+      value: $pro_hiy
       stage: pronominal
     3ns.A:
-    - kind: prefix
-      value: an
+    - kind: rule
+      value: $pro_an
       stage: pronominal
     3ns.B:
-    - kind: prefix
-      value: un
+    - kind: rule
+      value: $pro_un
       stage: pronominal
     3sg.A:
-    - kind: prefix
-      value: ''
+    - kind: rule
+      value: $pro_empty
       stage: pronominal
     3sg.B:
-    - kind: prefix
-      value: uw
+    - kind: rule
+      value: $pro_uw
       stage: pronominal
     Edl.A:
-    - kind: prefix
-      value: ost
+    - kind: rule
+      value: $pro_ost
       stage: pronominal
     Edl.B:
-    - kind: prefix
-      value: okin
+    - kind: rule
+      value: $pro_okin
       stage: pronominal
     Epl.A:
-    - kind: prefix
-      value: ots
+    - kind: rule
+      value: $pro_ots
       stage: pronominal
     Epl.B:
-    - kind: prefix
-      value: ok
+    - kind: rule
+      value: $pro_ok
       stage: pronominal
     Idl.A:
-    - kind: prefix
-      value: in
+    - kind: rule
+      value: $pro_in
       stage: pronominal
     Idl.B:
-    - kind: prefix
-      value: kin
+    - kind: rule
+      value: $pro_kin
       stage: pronominal
     Ipl.A:
-    - kind: prefix
-      value: it
+    - kind: rule
+      value: $pro_it
       stage: pronominal
     Ipl.B:
-    - kind: prefix
-      value: ik
+    - kind: rule
+      value: $pro_ik
       stage: pronominal
   k_a_stem:
     1sg.A:
-    - kind: prefix
-      value: k
+    - kind: rule
+      value: $pro_k
       stage: pronominal
     1sg.B:
-    - kind: prefix
-      value: akw
+    - kind: rule
+      value: $pro_akw
       stage: pronominal
     1sg>3sg:
-    - kind: prefix
-      value: tsiy
+    - kind: rule
+      value: $pro_tsiy
       stage: pronominal
     2dl.A:
-    - kind: prefix
-      value: st
+    - kind: rule
+      value: $pro_st
       stage: pronominal
     2dl.B:
-    - kind: prefix
-      value: st
+    - kind: rule
+      value: $pro_st
       stage: pronominal
     2pl.A:
-    - kind: prefix
-      value: its
+    - kind: rule
+      value: $pro_its
       stage: pronominal
     2pl.B:
-    - kind: prefix
-      value: its
+    - kind: rule
+      value: $pro_its
       stage: pronominal
     2sg.A:
-    - kind: prefix
-      value: h
+    - kind: rule
+      value: $pro_h
       stage: pronominal
     2sg.B:
-    - kind: prefix
-      value: ts
+    - kind: rule
+      value: $pro_ts
       stage: pronominal
     2sg>3sg:
-    - kind: prefix
-      value: hiy
+    - kind: rule
+      value: $pro_hiy
       stage: pronominal
     3ns.A:
-    - kind: prefix
-      value: an
+    - kind: rule
+      value: $pro_an
       stage: pronominal
     3ns.B:
-    - kind: prefix
-      value: un
+    - kind: rule
+      value: $pro_un
       stage: pronominal
     3sg.A:
-    - kind: prefix
-      value: k
+    - kind: rule
+      value: $pro_k
       stage: pronominal
     3sg.B:
-    - kind: prefix
-      value: u
+    - kind: rule
+      value: $pro_u
       stage: pronominal
     Edl.A:
-    - kind: prefix
-      value: ost
+    - kind: rule
+      value: $pro_ost
       stage: pronominal
     Edl.B:
-    - kind: prefix
-      value: okin
+    - kind: rule
+      value: $pro_okin
       stage: pronominal
     Epl.A:
-    - kind: prefix
-      value: ots
+    - kind: rule
+      value: $pro_ots
       stage: pronominal
     Epl.B:
-    - kind: prefix
-      value: ok
+    - kind: rule
+      value: $pro_ok
       stage: pronominal
     Idl.A:
-    - kind: prefix
-      value: in
+    - kind: rule
+      value: $pro_in
       stage: pronominal
     Idl.B:
-    - kind: prefix
-      value: kin
+    - kind: rule
+      value: $pro_kin
       stage: pronominal
     Ipl.A:
-    - kind: prefix
-      value: it
+    - kind: rule
+      value: $pro_it
       stage: pronominal
     Ipl.B:
-    - kind: prefix
-      value: ik
+    - kind: rule
+      value: $pro_ik
       stage: pronominal
   r_stem:
     1sg.A:
-    - kind: prefix
-      value: tsi
+    - kind: rule
+      value: $pro_tsi
       stage: pronominal
     1sg.B:
-    - kind: prefix
-      value: aki
+    - kind: rule
+      value: $pro_aki
       stage: pronominal
     1sg>3sg:
-    - kind: prefix
-      value: tsi
+    - kind: rule
+      value: $pro_tsi
       stage: pronominal
     2dl.A:
-    - kind: prefix
-      value: sti
+    - kind: rule
+      value: $pro_sti
       stage: pronominal
     2dl.B:
-    - kind: prefix
-      value: sti
+    - kind: rule
+      value: $pro_sti
       stage: pronominal
     2pl.A:
-    - kind: prefix
-      value: itsi
+    - kind: rule
+      value: $pro_itsi
       stage: pronominal
     2pl.B:
-    - kind: prefix
-      value: itsi
+    - kind: rule
+      value: $pro_itsi
       stage: pronominal
     2sg.A:
-    - kind: prefix
-      value: hi
+    - kind: rule
+      value: $pro_hi
       stage: pronominal
     2sg.B:
-    - kind: prefix
-      value: tsa
+    - kind: rule
+      value: $pro_tsa
       stage: pronominal
     2sg>3sg:
-    - kind: prefix
-      value: hi
+    - kind: rule
+      value: $pro_hi
       stage: pronominal
     3ns.A:
-    - kind: prefix
-      value: ani
+    - kind: rule
+      value: $pro_ani
       stage: pronominal
     3ns.B:
-    - kind: prefix
-      value: uni
+    - kind: rule
+      value: $pro_uni
       stage: pronominal
     3sg.A:
-    - kind: prefix
-      value: ka
+    - kind: rule
+      value: $pro_ka
       stage: pronominal
     3sg.B:
-    - kind: prefix
-      value: u
+    - kind: rule
+      value: $pro_u
       stage: pronominal
     Edl.A:
-    - kind: prefix
-      value: osti
+    - kind: rule
+      value: $pro_osti
       stage: pronominal
     Edl.B:
-    - kind: prefix
-      value: okini
+    - kind: rule
+      value: $pro_okini
       stage: pronominal
     Epl.A:
-    - kind: prefix
-      value: otsi
+    - kind: rule
+      value: $pro_otsi
       stage: pronominal
     Epl.B:
-    - kind: prefix
-      value: oki
+    - kind: rule
+      value: $pro_oki
       stage: pronominal
     Idl.A:
-    - kind: prefix
-      value: ini
+    - kind: rule
+      value: $pro_ini
       stage: pronominal
     Idl.B:
-    - kind: prefix
-      value: kini
+    - kind: rule
+      value: $pro_kini
       stage: pronominal
     Ipl.A:
-    - kind: prefix
-      value: iti
+    - kind: rule
+      value: $pro_iti
       stage: pronominal
     Ipl.B:
-    - kind: prefix
-      value: iki
+    - kind: rule
+      value: $pro_iki
       stage: pronominal
   v_stem:
     1sg.A:
-    - kind: prefix
-      value: k
+    - kind: rule
+      value: $pro_k
       stage: pronominal
     1sg.B:
-    - kind: prefix
-      value: akw
+    - kind: rule
+      value: $pro_akw
       stage: pronominal
     1sg>3sg:
-    - kind: prefix
-      value: tsiy
+    - kind: rule
+      value: $pro_tsiy
       stage: pronominal
     2dl.A:
-    - kind: prefix
-      value: st
+    - kind: rule
+      value: $pro_st
       stage: pronominal
     2dl.B:
-    - kind: prefix
-      value: st
+    - kind: rule
+      value: $pro_st
       stage: pronominal
     2pl.A:
-    - kind: prefix
-      value: its
+    - kind: rule
+      value: $pro_its
       stage: pronominal
     2pl.B:
-    - kind: prefix
-      value: its
+    - kind: rule
+      value: $pro_its
       stage: pronominal
     2sg.A:
-    - kind: prefix
-      value: h
+    - kind: rule
+      value: $pro_h
       stage: pronominal
     2sg.B:
-    - kind: prefix
-      value: ts
+    - kind: rule
+      value: $pro_ts
       stage: pronominal
     2sg>3sg:
-    - kind: prefix
-      value: hiy
+    - kind: rule
+      value: $pro_hiy
       stage: pronominal
     3ns.A:
-    - kind: prefix
-      value: an
+    - kind: rule
+      value: $pro_an
       stage: pronominal
     3ns.B:
-    - kind: prefix
-      value: un
+    - kind: rule
+      value: $pro_un
       stage: pronominal
     3sg.A:
-    - kind: prefix
-      value: k
+    - kind: rule
+      value: $pro_k
       stage: pronominal
     3sg.B:
-    - kind: prefix
-      value: uwa
+    - kind: rule
+      value: $pro_uwa
       stage: pronominal
     - kind: rule
       value: $drop_stem_initial_v
       stage: drop_stem_initial_vowel
     Edl.A:
-    - kind: prefix
-      value: ost
+    - kind: rule
+      value: $pro_ost
       stage: pronominal
     Edl.B:
-    - kind: prefix
-      value: okin
+    - kind: rule
+      value: $pro_okin
       stage: pronominal
     Epl.A:
-    - kind: prefix
-      value: ots
+    - kind: rule
+      value: $pro_ots
       stage: pronominal
     Epl.B:
-    - kind: prefix
-      value: ok
+    - kind: rule
+      value: $pro_ok
       stage: pronominal
     Idl.A:
-    - kind: prefix
-      value: in
+    - kind: rule
+      value: $pro_in
       stage: pronominal
     Idl.B:
-    - kind: prefix
-      value: kin
+    - kind: rule
+      value: $pro_kin
       stage: pronominal
     Ipl.A:
-    - kind: prefix
-      value: it
+    - kind: rule
+      value: $pro_it
       stage: pronominal
     Ipl.B:
-    - kind: prefix
-      value: ik
+    - kind: rule
+      value: $pro_ik
       stage: pronominal
   vowel_stem:
     1sg.A:
-    - kind: prefix
-      value: k
+    - kind: rule
+      value: $pro_k
       stage: pronominal
     1sg.B:
-    - kind: prefix
-      value: akw
+    - kind: rule
+      value: $pro_akw
       stage: pronominal
     1sg>3sg:
-    - kind: prefix
-      value: tsiy
+    - kind: rule
+      value: $pro_tsiy
       stage: pronominal
     2dl.A:
-    - kind: prefix
-      value: st
+    - kind: rule
+      value: $pro_st
       stage: pronominal
     2dl.B:
-    - kind: prefix
-      value: st
+    - kind: rule
+      value: $pro_st
       stage: pronominal
     2pl.A:
-    - kind: prefix
-      value: its
+    - kind: rule
+      value: $pro_its
       stage: pronominal
     2pl.B:
-    - kind: prefix
-      value: its
+    - kind: rule
+      value: $pro_its
       stage: pronominal
     2sg.A:
-    - kind: prefix
-      value: h
+    - kind: rule
+      value: $pro_h
       stage: pronominal
     2sg.B:
-    - kind: prefix
-      value: ts
+    - kind: rule
+      value: $pro_ts
       stage: pronominal
     2sg>3sg:
-    - kind: prefix
-      value: hiy
+    - kind: rule
+      value: $pro_hiy
       stage: pronominal
     3ns.A:
-    - kind: prefix
-      value: an
+    - kind: rule
+      value: $pro_an
       stage: pronominal
     3ns.B:
-    - kind: prefix
-      value: un
+    - kind: rule
+      value: $pro_un
       stage: pronominal
     3sg.A:
-    - kind: prefix
-      value: k
+    - kind: rule
+      value: $pro_k
       stage: pronominal
     3sg.B:
-    - kind: prefix
-      value: uw
+    - kind: rule
+      value: $pro_uw
       stage: pronominal
     Edl.A:
-    - kind: prefix
-      value: ost
+    - kind: rule
+      value: $pro_ost
       stage: pronominal
     Edl.B:
-    - kind: prefix
-      value: okin
+    - kind: rule
+      value: $pro_okin
       stage: pronominal
     Epl.A:
-    - kind: prefix
-      value: ots
+    - kind: rule
+      value: $pro_ots
       stage: pronominal
     Epl.B:
-    - kind: prefix
-      value: ok
+    - kind: rule
+      value: $pro_ok
       stage: pronominal
     Idl.A:
-    - kind: prefix
-      value: in
+    - kind: rule
+      value: $pro_in
       stage: pronominal
     Idl.B:
-    - kind: prefix
-      value: kin
+    - kind: rule
+      value: $pro_kin
       stage: pronominal
     Ipl.A:
-    - kind: prefix
-      value: it
+    - kind: rule
+      value: $pro_it
       stage: pronominal
     Ipl.B:
-    - kind: prefix
-      value: ik
+    - kind: rule
+      value: $pro_ik
       stage: pronominal

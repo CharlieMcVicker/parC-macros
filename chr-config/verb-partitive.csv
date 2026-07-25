@@ -1,6 +1,0 @@
-# kind: prefix
-# stage: add_ni
-# feature: partitive
-# part_of_speech: $verb
-+,-
-[NI],[NI]

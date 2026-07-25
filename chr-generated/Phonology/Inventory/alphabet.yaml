@@ -21,8 +21,22 @@ data:
     phones: [a, e, i, o, u, v]
   - name: Temp Tags
     ref: <TempTags>
-    tags: ["[TEMP]", "[WI]", "[DIST]", "[NI]"]
-
+    tags: ["[TEMP]"]
+  - name: PPP
+    ref: <PPP>
+    tags: ["[WI]", "[DIST]"]
+  - name: Pro
+    ref: <Pro>
+    tags: ["[Pro]"]
+  - name: H_ALT
+    ref: <H_ALT>
+    tags: ["[H_ALT]"]
+  - name: Tense
+    ref: <Tense>
+    tags: ["[Tense]"]
+  - name: Aspect
+    ref: <Aspect>
+    tags: ["[Aspect]"]
 ## HELP FOR INVENTORY ##
 # The inventory is built as a nested tree
 # Each node of the tree contains either phones, tags, or other nodes

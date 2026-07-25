@@ -1,6 +1,0 @@
-# kind: prefix
-# stage: add_dist
-# feature: distributive
-# part_of_speech: $verb
-+,-
-[DIST],[DIST]

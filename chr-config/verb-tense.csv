@@ -1,4 +1,5 @@
-# kind: suffix
+# kind: morpheme_replace
+# morpheme_tag: [Tense]
 # stage: tense
 # feature: tense
 # part_of_speech: $verb

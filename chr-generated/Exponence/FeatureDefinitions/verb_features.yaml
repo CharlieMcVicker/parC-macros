@@ -2,6 +2,14 @@
 # Generated/Updated automatically from CSV
 kind: FeatureDefinitions
 features:
+  tense:
+  - present
+  - immediate
+  - habitual
+  - future_prog
+  - assertive
+  - reported
+  - infinitive
   pronominal:
   - 1sg.A
   - Edl.A
@@ -25,35 +33,37 @@ features:
   - 3ns.B
   - 1sg>3sg
   - 2sg>3sg
+  rules:
+  - +
   aspect:
   - present
   - immediate
   - incompletive
   - completive
   - infinitive
-  tense:
-  - assertive
-  - future_prog
-  - habitual
-  - immediate
-  - infinitive
-  - present
-  - reported
-  translocutive:
-  - +
-  - '-'
-  distributive:
-  - +
-  - '-'
-  partitive:
-  - +
-  - '-'
+  prefix_class:
+  - name: a_stem
+    acceptor: <Morpheme>*a<Phone>*<Morpheme>*
+  - name: cons_stem
+    acceptor: <Morpheme>*<C><Phone>*<Morpheme>*
+  - name: e_stem
+    acceptor: <Morpheme>*e<Phone>*<Morpheme>*
+  - name: k_a_stem
+    acceptor: <Morpheme>*a<Phone>*<Morpheme>*
+  - name: r_stem
+    acceptor: <Morpheme>*(<Son>|<N>)<Phone>*<Morpheme>*
+  - name: v_stem
+    acceptor: <Morpheme>*v<Phone>*<Morpheme>*
+  - name: vowel_stem
+    acceptor: <Morpheme>*<V><Phone>*<Morpheme>*
+  tense_present_class:
+  - a_present
+  - i_present
   aspect_class:
   - a
   - apl
   - apl-active
-  - name: apl-active-'
-    acceptor: (<Phone>*')
+  - apl-active-'
   - apl-active-a
   - apl-active-h
   - apl[imp2]
@@ -80,31 +90,19 @@ features:
   - go-in
   - go-in[perf2]
   - go[pres2]
-  - name: hih-hil
-    acceptor: (<Phone>*<C>)
-  - name: hih-hil[imp2]
-    acceptor: (<Phone>*<C>)
-  - name: hih-hilh
-    acceptor: (<Phone>*<C>)
-  - name: hih-lh
-    acceptor: (<Phone>*<V>)
-  - name: hih-lh[imp2]
-    acceptor: (<Phone>*<V>)
+  - hih-hil
+  - hih-hil[imp2]
+  - hih-hilh
+  - hih-lh
+  - hih-lh[imp2]
   - husk
-  - name: hvsk-han
-    acceptor: (<Phone>*<C>)
-  - name: hvsk-han[inf2]
-    acceptor: (<Phone>*<C>)
-  - name: hvsk-n
-    acceptor: (<Phone>*h)|(<Phone>*<V>)
-  - name: hvsk-nh
-    acceptor: (<Phone>*<V>)
-  - name: hvsk-nh[inf2]
-    acceptor: (<Phone>*<V>)
-  - name: hvsk-nh[inf3]
-    acceptor: (<Phone>*<V>)
-  - name: hvsk-nh[inf4]
-    acceptor: (<Phone>*<V>)
+  - hvsk-han
+  - hvsk-han[inf2]
+  - hvsk-n
+  - hvsk-nh
+  - hvsk-nh[inf2]
+  - hvsk-nh[inf3]
+  - hvsk-nh[inf4]
   - i-a-i
   - i-a-i[perf2]
   - i-a-ihsk
@@ -116,8 +114,7 @@ features:
   - ih-vh[imperf2]
   - ih-vh[inf2]
   - ko-kots
-  - name: o
-    acceptor: (<Phone>*<C>)
+  - o
   - oh-al
   - oh-al[imp2]
   - oh-ol
@@ -128,62 +125,30 @@ features:
   - rev-gi
   - rev-i
   - sk-h
-  - name: sk-h-yh
-    acceptor: (<Phone>*<V>)
+  - sk-h-yh
   - sk-h[imp2]
-  - name: sk-s-a
-    acceptor: (<Phone>*<C>)
-  - name: sk-s-a[inf2]
-    acceptor: (<Phone>*<C>)
+  - sk-s-a
+  - sk-s-a[inf2]
   - sk-s-hi-hihst
-  - name: sk-s-hst
-    acceptor: (<Phone>*<V>)
-  - name: sk-s-hst[imp2]
-    acceptor: (<Phone>*<V>)
-  - name: sk-s-la
-    acceptor: (<Phone>*<V>)
+  - sk-s-hst
+  - sk-s-hst[imp2]
+  - sk-s-la
   - stative
   - stative-a'
   - stative-eh
   - stative-h
   - stative-k
   - stative-s
-  - name: terminative
-    acceptor: (<Phone>*<C>)
-  - name: terminative-no-o
-    acceptor: (<Phone>*<V>)
-  - name: v-vhs
-    acceptor: (<Phone>*<C>)
+  - terminative
+  - terminative-no-o
+  - v-vhs
   - vnh-ih-a
   - vnh-vsk
   - vnh-vsk[inf2]
   - vnh-vsk[inf3]
   - vnh-vsk[inf4]
-  - name: vsk
-    acceptor: (<Phone>*<C>)
-  - name: vsk-long
-    acceptor: (<Phone>*<C>)
-  - name: vsk-long[imp2]
-    acceptor: (<Phone>*<C>)
-  - name: vsk-post-v
-    acceptor: (<Phone>*<V>)
-  - name: vsk[imp2]
-    acceptor: (<Phone>*<C>)
-  prefix_class:
-  - name: a_stem
-    acceptor: a<Phone>*
-  - name: cons_stem
-    acceptor: <C><Phone>*
-  - name: e_stem
-    acceptor: e<Phone>*
-  - name: k_a_stem
-    acceptor: a<Phone>*
-  - name: r_stem
-    acceptor: (<Son>|<N>)<Phone>*
-  - name: v_stem
-    acceptor: v<Phone>*
-  - name: vowel_stem
-    acceptor: <V><Phone>*
-  tense_present_class:
-  - a_present
-  - i_present
+  - vsk
+  - vsk-long
+  - vsk-long[imp2]
+  - vsk-post-v
+  - vsk[imp2]
