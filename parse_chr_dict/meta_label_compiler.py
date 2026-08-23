@@ -487,41 +487,66 @@ def derive_lexical_features_4step(
     lexical_features: Set[str],
 ) -> Set[Tuple[str, Tuple[Tuple[str, str], ...]]]:
     """
-    Executes the 4-step derivation algorithm:
+    Executes the 4-step derivation algorithm with dynamic meta-label propagation:
     Step 1 & 1a: Parse initial form with [FORM=...] flag and map meta label string to target label feature flags.
     Step 2: For each candidate derivation from the parse output graph, run the meta label FST backwards
             to get the possible metalabels.
-    Step 3: Create the restricted set of possible labels for non-FORM features (e.g. aspect_class, prefix_class, etc.).
-    Step 4: Parse each subsequent form using dynamic_constraints from discovered lexical features and parse via
-            build_query_lattice / FST composition.
+    Step 3: Create the restricted set of possible labels for non-FORM features and derive active meta-labels
+            (e.g., [PRONOUN_SET=A/B], [PLURAL=TRUE/FALSE]).
+    Step 4: Parse each subsequent form using dynamic_constraints from discovered lexical features and active meta-labels
+            via build_query_lattice / FST composition.
     """
     if not forms:
         return set()
+
+    # Helper mapping from meta_id -> FormParsingSpec
+    spec_by_meta = {p.meta_label_id: p for p in FORMS_TO_PARSE}
 
     # Step 1 & 1a: Initial form
     init_surface, init_meta_id = forms[0]
     init_parses = compiler.parse_with_lattice(init_surface, [init_meta_id])
 
-    # Step 2 & 3: For each candidate derivation, obtain possible metalabels and create restricted non-FORM feature set
+    # Step 2 & 3: Obtain possible metalabels and create restricted feature set + meta label candidates
     init_lexicals: Set[Tuple[str, Tuple[Tuple[str, str], ...]]] = set()
+    discovered_meta_labels: Set[str] = set()
+
+    init_spec = spec_by_meta.get(init_meta_id)
     for p in init_parses:
-        # Step 2: Metalabel backwards check
         metalabels = compiler.infer_meta_labels_from_parse(p)
         if init_meta_id in metalabels or not compiler.meta_registry.get(init_meta_id):
-            # Step 3: Extract non-FORM lexical features
             lex_item = str_to_lexical_hashable(p, lexical_features=lexical_features)
             init_lexicals.add(lex_item)
+
+            # Collect active meta-labels (PRONOUN_SET, PLURAL)
+            for m in metalabels:
+                if m.startswith("[PRONOUN_SET=") and init_spec and init_spec.allows_set_a:
+                    discovered_meta_labels.add(m)
+                elif m.startswith("[PLURAL="):
+                    discovered_meta_labels.add(m)
 
     if len(forms) == 1:
         return init_lexicals
 
-    # Step 4: Parse each subsequent form using dynamic constraints + lattice composition
+    # Step 4: Parse each subsequent form using dynamic constraints + meta-label propagation + lattice composition
     candidate_lexicals = init_lexicals
+    candidate_meta_labels = discovered_meta_labels
+
     for surface, meta_id in forms[1:]:
         if not surface:
             continue
 
-        # Construct dynamic constraints from currently discovered lexical features in candidate_lexicals
+        form_spec = spec_by_meta.get(meta_id)
+
+        # Assemble meta label IDs for this form
+        meta_ids_for_form = [meta_id]
+        for m in sorted(candidate_meta_labels):
+            if m.startswith("[PRONOUN_SET="):
+                if form_spec and form_spec.allows_set_a:
+                    meta_ids_for_form.append(m)
+            elif m.startswith("[PLURAL="):
+                meta_ids_for_form.append(m)
+
+        # Construct dynamic constraints from currently discovered lexical features
         dynamic_constraints = []
         for feat in sorted(lexical_features):
             vals = sorted(list(set(v for _, label_tuple in candidate_lexicals for s, v in label_tuple if s == feat)))
@@ -530,17 +555,25 @@ def derive_lexical_features_4step(
                 dynamic_constraints.append(FeatureConstraint(slot_name=feat, mode=mode, values=vals))
 
         subseq_parses = compiler.parse_with_lattice(
-            surface, [meta_id], dynamic_constraints=dynamic_constraints
+            surface, meta_ids_for_form, dynamic_constraints=dynamic_constraints
         )
 
         subseq_lexicals = set()
+        subseq_meta_labels = set()
         for p in subseq_parses:
             metalabels = compiler.infer_meta_labels_from_parse(p)
             if meta_id in metalabels or not compiler.meta_registry.get(meta_id):
                 lex_item = str_to_lexical_hashable(p, lexical_features=lexical_features)
                 subseq_lexicals.add(lex_item)
+                for m in metalabels:
+                    if m.startswith("[PRONOUN_SET=") and form_spec and form_spec.allows_set_a:
+                        subseq_meta_labels.add(m)
+                    elif m.startswith("[PLURAL="):
+                        subseq_meta_labels.add(m)
 
         candidate_lexicals = candidate_lexicals.intersection(subseq_lexicals)
+        if subseq_meta_labels:
+            candidate_meta_labels = candidate_meta_labels.intersection(subseq_meta_labels)
 
     return candidate_lexicals
 

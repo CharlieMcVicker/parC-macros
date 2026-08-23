@@ -102,3 +102,16 @@ def test_4step_derivation_flow_multi_form():
     res = derive_lexical_features_4step(forms, compiler, lexical_features)
     assert isinstance(res, set)
 
+
+def test_4step_meta_label_propagation():
+    compiler = MetaConstraintCompiler()
+    lexical_features = {"aspect_class", "prefix_class", "tense_present_class"}
+    # Multi-form derivation with valid surface form spellings
+    forms = [
+        ("atateka", "[FORM=3RD_PRES]"),
+        ("atatekaha", "[FORM=3RD_HABITUAL]"),
+        ("atatekea", "[FORM=3RD_COMPLETIVE]"), # allows_set_a = False, overrides to Set B
+    ]
+    res = derive_lexical_features_4step(forms, compiler, lexical_features)
+    assert isinstance(res, set)
+
