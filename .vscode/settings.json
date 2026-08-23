@@ -27,5 +27,6 @@
       "comments": false
     }
   },
-  "python.defaultInterpreterPath": "/opt/homebrew/Caskroom/miniconda/base/envs/parC-macros/bin/python"
+  "python.defaultInterpreterPath": "/opt/homebrew/Caskroom/miniconda/base/envs/parC-macros/bin/python",
+  "python-envs.defaultEnvManager": "ms-python.python:system"
 }

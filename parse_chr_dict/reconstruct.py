@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import json
 
-from parse_chr_dict.dict_structure import FORMS_TO_PARSE, EntryType, FormParsing
+from parse_chr_dict.meta_label_compiler import FORMS_TO_PARSE, EntryTypeSpec as EntryType, FormParsingSpec as FormParsing
 from parC.grammar.paradigm_compilation import inflect
 
 

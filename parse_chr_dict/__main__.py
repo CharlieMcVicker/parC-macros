@@ -3,10 +3,12 @@ from dataclasses import asdict
 from tqdm import tqdm
 
 from parse_chr_dict.create_aspect_class_csv import respell_consonants
-from parse_chr_dict.dict_structure import (
+from parse_chr_dict.meta_label_compiler import (
     FORMS_TO_PARSE,
     PRIMARY_ENTRY_TYPES,
     SHIM_ENTRY_TYPES,
+    MetaConstraintCompiler,
+    derive_lexical_features_4step,
 )
 from parse_chr_dict.parse import (
     get_roots_for_parses,
@@ -82,10 +84,6 @@ def write_shims(row, roots, form_parses, roots_writer):
 
 
 def main():
-
-    # 1. open csv
-    # 2. for each row create form and constraint list
-    # 3. output roots
     fieldnames = [
         "corpus_id",
         "entry_no",
@@ -98,11 +96,7 @@ def main():
         "infinitive",
     ]
 
-    # parse the words a bunch of different ways
-    # compare subsets of the parses
-    # two kinds of dataclasses
-    # 1. a parse to do
-    # 2. a group of parses to compare together (tied to parses on name)
+    compiler = MetaConstraintCompiler()
 
     with open("chr-corpus/corpus.csv") as f, open("errors.csv", "w+") as error_f, open(
         "roots.csv", "w+"
@@ -123,7 +117,7 @@ def main():
             forms = {
                 parsing.name: (
                     respell_consonants(row[parsing.corpus_key]),
-                    parsing.lexical_features,
+                    parsing.meta_label_id,
                 )
                 for parsing in FORMS_TO_PARSE
                 if row[parsing.corpus_key]
@@ -131,12 +125,13 @@ def main():
             if any(" " in f for f, _ in forms.values()):
                 continue
 
-            form_parses = {
-                name: (parses)
-                for name, parses in zip(
-                    forms.keys(), parses_by_form(forms.values(), LEXICAL_FEATURES)
-                )
-            }
+            form_parses = {}
+            for parsing in FORMS_TO_PARSE:
+                if parsing.name in forms:
+                    # Run 4-step derivation engine for this form
+                    surface, meta_id = forms[parsing.name]
+                    parses = derive_lexical_features_4step([(surface, meta_id)], compiler, LEXICAL_FEATURES)
+                    form_parses[parsing.name] = (surface, parses)
 
             row_written = False
             shims_generated = False
@@ -146,7 +141,6 @@ def main():
                     entry_type.get_forms_from_parses(form_parses)
                 )
 
-                # print(roots)
                 if len(roots):
                     row_written = True
                     if entry_type.name.startswith("Stative"):
