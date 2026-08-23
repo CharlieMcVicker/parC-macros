@@ -587,7 +587,31 @@ def derive_lexical_features_4step(
                 subseq_lexicals.add(lex_item)
                 subseq_meta_list.append(metalabels)
 
-        candidate_lexicals = candidate_lexicals.intersection(subseq_lexicals)
+        # Stem-class compatible intersection between candidate_lexicals and subseq_lexicals
+        def prefix_compat(p1: str, p2: str) -> bool:
+            return p1 == p2 or (p1 in ("k_a_stem", "a_stem") and p2 in ("k_a_stem", "a_stem"))
+
+        new_candidates = set()
+        for root1, labels1 in candidate_lexicals:
+            map1 = dict(labels1)
+            for root2, labels2 in subseq_lexicals:
+                if root1 == root2:
+                    map2 = dict(labels2)
+                    if (
+                        map1.get("aspect_class") == map2.get("aspect_class")
+                        and map1.get("tense_present_class") == map2.get("tense_present_class")
+                        and prefix_compat(map1.get("prefix_class", ""), map2.get("prefix_class", ""))
+                    ):
+                        # Retain canonical prefix_class
+                        canonical_prefix = map1.get("prefix_class") if map1.get("prefix_class") != "k_a_stem" else map2.get("prefix_class", "a_stem")
+                        merged_labels = (
+                            ("aspect_class", map1["aspect_class"]),
+                            ("prefix_class", canonical_prefix),
+                            ("tense_present_class", map1["tense_present_class"]),
+                        )
+                        new_candidates.add((root1, merged_labels))
+
+        candidate_lexicals = new_candidates
         if subseq_meta_list:
             parse_meta_list = subseq_meta_list
 

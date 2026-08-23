@@ -114,45 +114,27 @@ def main():
         rows = list(reader)
         # rows = rows[:10]
         for row in tqdm(rows):
-            forms = {
-                parsing.name: (
-                    respell_consonants(row[parsing.corpus_key]),
-                    parsing.meta_label_id,
-                )
-                for parsing in FORMS_TO_PARSE
-                if row[parsing.corpus_key]
-            }
-            if any(" " in f for f, _ in forms.values()):
-                continue
-
-            form_parses = {}
-            for parsing in FORMS_TO_PARSE:
-                if parsing.name in forms:
-                    surface, meta_id = forms[parsing.name]
-                    parses = derive_lexical_features_4step([(surface, meta_id)], compiler, LEXICAL_FEATURES)
-                    form_parses[parsing.name] = (surface, parses)
-
             row_written = False
-            shims_generated = False
 
+            # Run 4-step multi-form derivation per EntryTypeSpec form set
             for entry_type in PRIMARY_ENTRY_TYPES:
-                roots = get_roots_for_parses(
-                    entry_type.get_forms_from_parses(form_parses)
-                )
+                # Gather forms specific to this entry type
+                entry_forms = [
+                    (respell_consonants(row[parsing.corpus_key]), parsing.meta_label_id)
+                    for parsing in FORMS_TO_PARSE
+                    if parsing.name in entry_type.forms
+                    and row.get(parsing.corpus_key)
+                    and " " not in row[parsing.corpus_key]
+                ]
+                if not entry_forms:
+                    continue
 
-                if len(roots):
-                    row_written = True
-                    if entry_type.name.startswith("Stative"):
-                        roots = [
-                            (root, labels)
-                            for root, labels in roots
-                            if get_label(labels, "aspect_class").startswith("stative")
-                        ]
-                        if not shims_generated:
-                            shims_generated = True
-                            write_shims(row, roots, form_parses, roots_writer)
-
-                    write_roots(row, entry_type, roots, roots_writer)
+                derived_lexicals = derive_lexical_features_4step(entry_forms, compiler, LEXICAL_FEATURES)
+                if derived_lexicals:
+                    roots = get_roots_for_parses([list(derived_lexicals)])
+                    if len(roots):
+                        row_written = True
+                        write_roots(row, entry_type, roots, roots_writer)
 
             if not row_written:
                 error_writer.writerow(row)
