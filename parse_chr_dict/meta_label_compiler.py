@@ -564,10 +564,15 @@ def derive_lexical_features_4step(
         # Construct dynamic constraints from currently discovered lexical features
         dynamic_constraints = []
         for feat in sorted(lexical_features):
-            vals = sorted(list(set(v for _, label_tuple in candidate_lexicals for s, v in label_tuple if s == feat)))
-            if vals:
-                mode = MatchMode.EXACT if len(vals) == 1 else MatchMode.ONE_OF
-                dynamic_constraints.append(FeatureConstraint(slot_name=feat, mode=mode, values=vals))
+            vals = set(v for _, label_tuple in candidate_lexicals for s, v in label_tuple if s == feat)
+            if feat == "prefix_class":
+                if "k_a_stem" in vals or "a_stem" in vals:
+                    vals.add("k_a_stem")
+                    vals.add("a_stem")
+            sorted_vals = sorted(list(vals))
+            if sorted_vals:
+                mode = MatchMode.EXACT if len(sorted_vals) == 1 else MatchMode.ONE_OF
+                dynamic_constraints.append(FeatureConstraint(slot_name=feat, mode=mode, values=sorted_vals))
 
         subseq_parses = compiler.parse_with_lattice(
             surface, meta_ids_for_form, dynamic_constraints=dynamic_constraints
