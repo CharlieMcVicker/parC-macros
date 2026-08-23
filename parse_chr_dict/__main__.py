@@ -40,7 +40,7 @@ def labels_match(
         return a_val == b_val
 
 
-def write_roots(row, entry_type, roots, writer):
+def write_roots(row, entry_type, roots, writer, compiler=None):
     for r, label_values in sorted(roots, key=str):
         data = {**row}
         data["entry_type"] = entry_type.name
@@ -49,7 +49,7 @@ def write_roots(row, entry_type, roots, writer):
         for k, v in label_values:
             data[k] = v
 
-        specs = reconstruct_row(data, entry_type, LEXICAL_FEATURES)
+        specs = reconstruct_row(data, entry_type, LEXICAL_FEATURES, compiler=compiler)
         for spec in specs:
             row_data = {**data, **asdict(spec)}
             writer.writerow(row_data)
@@ -141,7 +141,8 @@ def main():
                             ]
                         if len(roots):
                             row_written = True
-                            write_roots(row, entry_type, roots, roots_writer)
+                            write_roots(row, entry_type, roots, roots_writer, compiler=compiler)
+                            break
 
             if not row_written:
                 error_writer.writerow(row)

@@ -362,14 +362,26 @@ class MetaConstraintCompiler:
         self.sigma_star = sigma_star if sigma_star is not None else get_sigma_star()
         self.meta_registry = meta_registry if meta_registry is not None else META_LABELS
         self.base_tag_acceptor = base_tag_acceptor.copy() if base_tag_acceptor is not None else None
+        self._slot_mask_cache: Dict[Tuple[str, MatchMode, Tuple[str, ...]], pynini.Fst] = {}
+        self._acceptor_cache: Dict[Tuple[Tuple[str, ...], Tuple], pynini.Fst] = {}
+        from parse_chr_dict.parse import get_parse_graph
+        self.parse_graph = get_parse_graph()
+        # Pre-compile static single meta-label acceptors
+        for meta_id in self.meta_registry:
+            self.compile_restricted_tag_acceptor([meta_id])
 
     def build_slot_mask(self, constraint: FeatureConstraint) -> pynini.Fst:
         """
         Compiles an unanchored feature-slot constraint acceptor:
         F_slot = Sigma* . [slot_name=value] . Sigma*
+        Memoized by (slot_name, mode, values tuple).
         """
         if not constraint.values:
             return pynini.Fst()
+
+        cache_key = (constraint.slot_name, constraint.mode, tuple(constraint.values))
+        if cache_key in self._slot_mask_cache:
+            return self._slot_mask_cache[cache_key]
 
         slot_patterns = [
             feature_tag(constraint.slot_name, val)
@@ -384,7 +396,9 @@ class MetaConstraintCompiler:
         else:
             target_fsa = pynini.union(*[pynini.accep(p, token_type=self.symbol_table) for p in slot_patterns])
 
-        return pynini.optimize(pynini.concat(self.sigma_star, pynini.concat(target_fsa, self.sigma_star)))
+        compiled_mask = pynini.optimize(pynini.concat(self.sigma_star, pynini.concat(target_fsa, self.sigma_star)))
+        self._slot_mask_cache[cache_key] = compiled_mask
+        return compiled_mask
 
     def compile_restricted_tag_acceptor(
         self,
@@ -396,6 +410,19 @@ class MetaConstraintCompiler:
         and optional dynamic constraints:
         L_restricted = L_base ∩ F_1 ∩ F_2 ∩ ... ∩ F_n ∩ F_dyn1 ∩ ...
         """
+        # Cache key based on sorted meta label IDs and dynamic constraint representations
+        dyn_tuple = ()
+        if dynamic_constraints:
+            dyn_tuple = tuple(
+                sorted(
+                    (c.slot_name, c.mode, tuple(c.values))
+                    for c in dynamic_constraints
+                )
+            )
+        cache_key = (tuple(sorted(meta_label_ids)), dyn_tuple)
+        if hasattr(self, "_acceptor_cache") and cache_key in self._acceptor_cache:
+            return self._acceptor_cache[cache_key]
+
         restricted_fsa = (
             self.base_tag_acceptor.copy()
             if self.base_tag_acceptor is not None
@@ -415,6 +442,9 @@ class MetaConstraintCompiler:
             restricted_fsa = pynini.intersect(restricted_fsa, slot_mask)
             restricted_fsa.optimize()
 
+        if not hasattr(self, "_acceptor_cache"):
+            self._acceptor_cache = {}
+        self._acceptor_cache[cache_key] = restricted_fsa
         return restricted_fsa
 
     def build_query_lattice(
@@ -425,12 +455,36 @@ class MetaConstraintCompiler:
     ) -> pynini.Fst:
         """
         Builds query lattice Q = surface_fsa . L_restricted
+        Memoized by (surface_form, sorted(meta_label_ids), dynamic_constraints).
         """
+        dyn_tuple = ()
+        if dynamic_constraints:
+            dyn_tuple = tuple(
+                sorted(
+                    (c.slot_name, c.mode, tuple(c.values))
+                    for c in dynamic_constraints
+                )
+            )
+        cache_key = (surface_form, tuple(sorted(meta_label_ids)), dyn_tuple)
+        if hasattr(self, "_query_lattice_cache") and cache_key in self._query_lattice_cache:
+            return self._query_lattice_cache[cache_key]
+
         L_restricted = self.compile_restricted_tag_acceptor(
             meta_label_ids, dynamic_constraints=dynamic_constraints
         )
-        surface_fsa = word_fsa(surface_form)
-        return pynini.optimize(pynini.concat(surface_fsa, L_restricted))
+        if not hasattr(self, "_surface_fsa_cache"):
+            self._surface_fsa_cache = {}
+        if surface_form in self._surface_fsa_cache:
+            surface_fsa = self._surface_fsa_cache[surface_form]
+        else:
+            surface_fsa = word_fsa(surface_form)
+            self._surface_fsa_cache[surface_form] = surface_fsa
+
+        Q = pynini.concat(surface_fsa, L_restricted)
+        if not hasattr(self, "_query_lattice_cache"):
+            self._query_lattice_cache = {}
+        self._query_lattice_cache[cache_key] = Q
+        return Q
 
     def parse_with_lattice(
         self,
@@ -445,8 +499,7 @@ class MetaConstraintCompiler:
         P = parse_graph (open parse graph)
         """
         if parse_graph is None:
-            from parse_chr_dict.parse import get_parse_graph
-            parse_graph = get_parse_graph()
+            parse_graph = self.parse_graph
 
         Q = self.build_query_lattice(
             surface_form, meta_label_ids, dynamic_constraints=dynamic_constraints
@@ -524,6 +577,8 @@ def derive_lexical_features_4step(
     # Step 1 & 1a: Initial form
     init_surface, init_meta_id = forms[0]
     init_parses = compiler.parse_with_lattice(init_surface, [init_meta_id])
+    if not init_parses:
+        return set()
 
     # Step 2 & 3: Obtain possible metalabels and create restricted feature set + meta label candidates
     init_lexicals: Set[Tuple[str, Tuple[Tuple[str, str], ...]]] = set()
@@ -537,6 +592,9 @@ def derive_lexical_features_4step(
             init_lexicals.add(lex_item)
             parse_meta_list.append(metalabels)
 
+    if not init_lexicals:
+        return set()
+
     if len(forms) == 1:
         return init_lexicals
 
@@ -546,6 +604,8 @@ def derive_lexical_features_4step(
     for surface, meta_id in forms[1:]:
         if not surface:
             continue
+        if not candidate_lexicals:
+            break
 
         form_spec = spec_by_meta.get(meta_id)
 

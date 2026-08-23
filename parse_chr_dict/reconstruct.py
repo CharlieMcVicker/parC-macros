@@ -110,8 +110,9 @@ class MetaLabelCombination:
 ReconstructionSpec = MetaLabelCombination
 
 
-def reconstruct_row(row, entry_type: EntryType, lexical_fields: list[str]):
-    compiler = MetaConstraintCompiler()
+def reconstruct_row(row, entry_type: EntryType, lexical_fields: list[str], compiler: Optional[MetaConstraintCompiler] = None):
+    if compiler is None:
+        compiler = MetaConstraintCompiler()
     passing_specs: list[MetaLabelCombination] = list()
     for spec in MetaLabelCombination.all_combinations():
         valid = True
