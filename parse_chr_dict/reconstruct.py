@@ -25,6 +25,10 @@ class MetaLabelCombination:
             labels.append("[PLURAL=TRUE]")
         else:
             labels.append("[PLURAL=FALSE]")
+        if self.animate_objects:
+            labels.append("[OBJECT_ANIMACY=ANIMATE]")
+        else:
+            labels.append("[OBJECT_ANIMACY=INANIMATE]")
         return labels
 
     def get_pronominal(self, person: str, allow_set_a: bool) -> str:

@@ -328,6 +328,20 @@ META_LABELS: Dict[str, MetaLabelDefinition] = {
             FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(number="sg")),
         ],
     ),
+    "[OBJECT_ANIMACY=ANIMATE]": MetaLabelDefinition(
+        id="[OBJECT_ANIMACY=ANIMATE]",
+        description="Transitive animate object pronominal forms (1sg>3sg, 2sg>3sg, etc.)",
+        constraints=[
+            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(pronoun_set="transitive")),
+        ],
+    ),
+    "[OBJECT_ANIMACY=INANIMATE]": MetaLabelDefinition(
+        id="[OBJECT_ANIMACY=INANIMATE]",
+        description="Inanimate object or intransitive pronominal forms",
+        constraints=[
+            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(exclude_transitive=True)),
+        ],
+    ),
 }
 
 
@@ -543,7 +557,7 @@ def derive_lexical_features_4step(
             if m.startswith("[PRONOUN_SET="):
                 if form_spec and form_spec.allows_set_a:
                     meta_ids_for_form.append(m)
-            elif m.startswith("[PLURAL="):
+            elif m.startswith("[PLURAL=") or m.startswith("[OBJECT_ANIMACY="):
                 meta_ids_for_form.append(m)
 
         # Construct dynamic constraints from currently discovered lexical features
