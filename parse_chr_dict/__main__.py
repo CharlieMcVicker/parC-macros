@@ -125,20 +125,12 @@ def main():
             if any(" " in f for f, _ in forms.values()):
                 continue
 
-            ordered_forms = [
-                forms[parsing.name]
-                for parsing in FORMS_TO_PARSE
-                if parsing.name in forms
-            ]
-            if not ordered_forms:
-                continue
-
-            joint_parses = derive_lexical_features_4step(ordered_forms, compiler, LEXICAL_FEATURES)
-            form_parses = {
-                parsing.name: (forms[parsing.name][0], joint_parses)
-                for parsing in FORMS_TO_PARSE
-                if parsing.name in forms
-            }
+            form_parses = {}
+            for parsing in FORMS_TO_PARSE:
+                if parsing.name in forms:
+                    surface, meta_id = forms[parsing.name]
+                    parses = derive_lexical_features_4step([(surface, meta_id)], compiler, LEXICAL_FEATURES)
+                    form_parses[parsing.name] = (surface, parses)
 
             row_written = False
             shims_generated = False
