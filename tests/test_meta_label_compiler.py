@@ -44,3 +44,40 @@ def test_4step_derivation_flow():
     res = derive_lexical_features_4step(forms, compiler, lexical_features)
     assert isinstance(res, set)
     assert len(res) > 0
+
+
+def test_dynamic_constraints_compilation():
+    compiler = MetaConstraintCompiler()
+    dyn_constraints = [
+        FeatureConstraint(slot_name="aspect_class", mode=MatchMode.ONE_OF, values=["go", "d_stem"]),
+        FeatureConstraint(slot_name="prefix_class", mode=MatchMode.EXACT, values=["a_stem"]),
+    ]
+    fsa = compiler.compile_restricted_tag_acceptor(["[FORM=3RD_PRES]"], dynamic_constraints=dyn_constraints)
+    assert fsa is not None
+    assert fsa.num_states() > 0
+
+
+def test_build_query_lattice_and_parse_with_lattice():
+    compiler = MetaConstraintCompiler()
+    surface = "atateka"
+    meta_ids = ["[FORM=3RD_PRES]"]
+    
+    Q = compiler.build_query_lattice(surface, meta_ids)
+    assert Q is not None
+    assert Q.num_states() > 0
+
+    parses = compiler.parse_with_lattice(surface, meta_ids)
+    assert isinstance(parses, list)
+    assert len(parses) > 0
+
+
+def test_4step_derivation_flow_multi_form():
+    compiler = MetaConstraintCompiler()
+    lexical_features = {"aspect_class", "prefix_class", "tense_present_class"}
+    forms = [
+        ("atateka", "[FORM=3RD_PRES]"),
+        ("atatekaha", "[FORM=3RD_HABITUAL]"),
+    ]
+    res = derive_lexical_features_4step(forms, compiler, lexical_features)
+    assert isinstance(res, set)
+

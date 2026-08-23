@@ -271,23 +271,33 @@ class MetaConstraintCompiler:
         Compiles an unanchored feature-slot constraint acceptor:
         F_slot = Sigma* . [slot_name=value] . Sigma*
         """
-        if constraint.mode == MatchMode.ONE_OF:
-            slot_patterns = [feature_tag(constraint.slot_name, val) for val in constraint.values]
-            target_fsa = pynini.union(*[pynini.accep(p, token_type=self.symbol_table) for p in slot_patterns])
-        elif constraint.mode == MatchMode.EXACT:
-            target_fsa = pynini.accep(
-                feature_tag(constraint.slot_name, constraint.values[0]),
-                token_type=self.symbol_table,
-            )
+        if not constraint.values:
+            return pynini.Fst()
+
+        slot_patterns = [
+            feature_tag(constraint.slot_name, val)
+            for val in constraint.values
+            if self.symbol_table.find(feature_tag(constraint.slot_name, val)) != -1
+        ]
+        if not slot_patterns:
+            return pynini.Fst()
+
+        if len(slot_patterns) == 1:
+            target_fsa = pynini.accep(slot_patterns[0], token_type=self.symbol_table)
         else:
-            raise NotImplementedError(f"Constraint mode {constraint.mode} not supported yet.")
+            target_fsa = pynini.union(*[pynini.accep(p, token_type=self.symbol_table) for p in slot_patterns])
 
         return pynini.optimize(pynini.concat(self.sigma_star, pynini.concat(target_fsa, self.sigma_star)))
 
-    def compile_restricted_tag_acceptor(self, meta_label_ids: List[str]) -> pynini.Fst:
+    def compile_restricted_tag_acceptor(
+        self,
+        meta_label_ids: List[str],
+        dynamic_constraints: Optional[List[FeatureConstraint]] = None,
+    ) -> pynini.Fst:
         """
-        Intersects parC's base morphotactic tag acceptor (or Sigma*) with active meta constraints:
-        L_restricted = L_base ∩ F_1 ∩ F_2 ∩ ... ∩ F_n
+        Intersects parC's base morphotactic tag acceptor (or Sigma*) with active meta constraints
+        and optional dynamic constraints:
+        L_restricted = L_base ∩ F_1 ∩ F_2 ∩ ... ∩ F_n ∩ F_dyn1 ∩ ...
         """
         restricted_fsa = (
             self.base_tag_acceptor.copy()
@@ -300,12 +310,53 @@ class MetaConstraintCompiler:
             if meta_id in self.meta_registry:
                 all_constraints.extend(self.meta_registry[meta_id].constraints)
 
+        if dynamic_constraints:
+            all_constraints.extend(dynamic_constraints)
+
         for constraint in all_constraints:
             slot_mask = self.build_slot_mask(constraint)
             restricted_fsa = pynini.intersect(restricted_fsa, slot_mask)
             restricted_fsa.optimize()
 
         return restricted_fsa
+
+    def build_query_lattice(
+        self,
+        surface_form: str,
+        meta_label_ids: List[str],
+        dynamic_constraints: Optional[List[FeatureConstraint]] = None,
+    ) -> pynini.Fst:
+        """
+        Builds query lattice Q = surface_fsa . L_restricted
+        """
+        L_restricted = self.compile_restricted_tag_acceptor(
+            meta_label_ids, dynamic_constraints=dynamic_constraints
+        )
+        surface_fsa = word_fsa(surface_form)
+        return pynini.optimize(pynini.concat(surface_fsa, L_restricted))
+
+    def parse_with_lattice(
+        self,
+        surface_form: str,
+        meta_label_ids: List[str],
+        dynamic_constraints: Optional[List[FeatureConstraint]] = None,
+        parse_graph: Optional[pynini.Fst] = None,
+    ) -> List[str]:
+        """
+        Executes Q o P composition directly via Pynini.
+        Q = surface_fsa . L_restricted
+        P = parse_graph (open parse graph)
+        """
+        if parse_graph is None:
+            from parse_chr_dict.parse import get_parse_graph
+            parse_graph = get_parse_graph()
+
+        Q = self.build_query_lattice(
+            surface_form, meta_label_ids, dynamic_constraints=dynamic_constraints
+        )
+        output_lattice = pynini.compose(Q, parse_graph).optimize()
+        output_lattice = pynini.project(output_lattice, project_type="output")
+        return fsm_strings(output_lattice, strip_all_tags=False)
 
     def get_feature_tuples_from_meta(self, meta_label_ids: List[str]) -> List[Tuple[str, str]]:
         """
@@ -363,18 +414,15 @@ def derive_lexical_features_4step(
     Step 2: For each candidate derivation from the parse output graph, run the meta label FST backwards
             to get the possible metalabels.
     Step 3: Create the restricted set of possible labels for non-FORM features (e.g. aspect_class, prefix_class, etc.).
-    Step 4: Parse each subsequent form using the restricted metalabels.
+    Step 4: Parse each subsequent form using dynamic_constraints from discovered lexical features and parse via
+            build_query_lattice / FST composition.
     """
     if not forms:
         return set()
 
     # Step 1 & 1a: Initial form
     init_surface, init_meta_id = forms[0]
-    init_target_labels = compiler.get_feature_tuples_from_meta([init_meta_id])
-    
-    # Parse initial form with target label feature flags
-    from parse_chr_dict.parse import parse
-    init_parses = parse(init_surface, labels=init_target_labels)
+    init_parses = compiler.parse_with_lattice(init_surface, [init_meta_id])
 
     # Step 2 & 3: For each candidate derivation, obtain possible metalabels and create restricted non-FORM feature set
     init_lexicals: Set[Tuple[str, Tuple[Tuple[str, str], ...]]] = set()
@@ -389,14 +437,24 @@ def derive_lexical_features_4step(
     if len(forms) == 1:
         return init_lexicals
 
-    # Step 4: Parse each subsequent form using the restricted metalabels
+    # Step 4: Parse each subsequent form using dynamic constraints + lattice composition
     candidate_lexicals = init_lexicals
     for surface, meta_id in forms[1:]:
         if not surface:
             continue
-        subseq_target_labels = compiler.get_feature_tuples_from_meta([meta_id])
-        subseq_parses = parse(surface, labels=subseq_target_labels)
-        
+
+        # Construct dynamic constraints from currently discovered lexical features in candidate_lexicals
+        dynamic_constraints = []
+        for feat in sorted(lexical_features):
+            vals = sorted(list(set(v for _, label_tuple in candidate_lexicals for s, v in label_tuple if s == feat)))
+            if vals:
+                mode = MatchMode.EXACT if len(vals) == 1 else MatchMode.ONE_OF
+                dynamic_constraints.append(FeatureConstraint(slot_name=feat, mode=mode, values=vals))
+
+        subseq_parses = compiler.parse_with_lattice(
+            surface, [meta_id], dynamic_constraints=dynamic_constraints
+        )
+
         subseq_lexicals = set()
         for p in subseq_parses:
             metalabels = compiler.infer_meta_labels_from_parse(p)
@@ -407,3 +465,4 @@ def derive_lexical_features_4step(
         candidate_lexicals = candidate_lexicals.intersection(subseq_lexicals)
 
     return candidate_lexicals
+
