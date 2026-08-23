@@ -77,19 +77,33 @@ class MetaLabelCombination:
             compiler = MetaConstraintCompiler()
         target_tuples = compiler.get_feature_tuples_from_meta([parsing_meta.meta_label_id])
         form_labels = dict(target_tuples)
-        form_labels["pronominal"] = self.get_pronominal(
-            person=parsing_meta.person, allow_set_a=parsing_meta.allows_set_a
-        )
+        
+        pronominal_candidates = [
+            self.get_pronominal(person=parsing_meta.person, allow_set_a=parsing_meta.allows_set_a)
+        ]
+        # For 2nd person animate imperative/prog forms (e.g. hatv'vka), allow fallbacks to 2sg.A/2sg.B
+        if self.animate_objects and parsing_meta.person == "2nd":
+            fallback_set = "A" if self.set_a and parsing_meta.allows_set_a else "B"
+            pronominal_candidates.append(f"2sg.{fallback_set}")
 
-        all_labels = {**labels, **form_labels}
-        surface_forms = inflect(
-            root,
-            feature_values=all_labels,
-            name="verb",
-            open_root=True,
-            infer_lexical_features=True,
-        )
-        return any(surface == reference_form for surface in surface_forms)
+        # Test candidate prefix_classes (including k_a_stem alias for a_stem)
+        prefix_candidates = [labels.get("prefix_class")]
+        if labels.get("prefix_class") == "a_stem":
+            prefix_candidates.append("k_a_stem")
+
+        for pro in pronominal_candidates:
+            for pref in prefix_candidates:
+                all_labels = {**labels, **form_labels, "pronominal": pro, "prefix_class": pref}
+                surface_forms = inflect(
+                    root,
+                    feature_values=all_labels,
+                    name="verb",
+                    open_root=True,
+                    infer_lexical_features=True,
+                )
+                if any(surface == reference_form for surface in surface_forms):
+                    return True
+        return False
 
 
 # Backward compatibility alias
