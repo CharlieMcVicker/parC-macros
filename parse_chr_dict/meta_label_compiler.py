@@ -46,13 +46,13 @@ class Pronominal:
 
         if prefix.startswith("1") or prefix.startswith("E"):
             person = "1st"
-            number = "sg" if prefix == "1sg" else "pl"
+            number = "sg" if prefix == "1sg" else "dl" if "dl" in prefix else "pl"
         elif prefix.startswith("2"):
             person = "2nd"
-            number = "sg" if prefix == "2sg" else "pl"
+            number = "sg" if prefix == "2sg" else "dl" if "dl" in prefix else "pl"
         elif prefix.startswith("3"):
             person = "3rd"
-            number = "sg" if "sg" in prefix else "ns" if "ns" in prefix else "pl"
+            number = "sg" if "sg" in prefix else "dl" if "dl" in prefix else "ns" if "ns" in prefix else "pl"
         else:
             person, number = "3rd", "sg"
 
@@ -62,8 +62,11 @@ class Pronominal:
 ALL_PRONOMINALS: List[Pronominal] = [
     Pronominal.from_tag(t) for t in [
         "3sg.A", "3sg.B", "1sg.A", "1sg.B", "2sg.A", "2sg.B",
-        "3ns.A", "3ns.B", "1pl.A", "1pl.B", "2pl.A", "2pl.B",
-        "E.A", "E.B", "Epl.A", "Epl.B", "1sg>3sg", "2sg>3sg",
+        "3ns.A", "3ns.B", "3dl.A", "3dl.B",
+        "1pl.A", "1pl.B", "1dl.A", "1dl.B",
+        "2pl.A", "2pl.B", "2dl.A", "2dl.B",
+        "E.A", "E.B", "Epl.A", "Epl.B", "Edl.A", "Edl.B",
+        "1sg>3sg", "2sg>3sg",
     ]
 ]
 
@@ -313,9 +316,9 @@ META_LABELS: Dict[str, MetaLabelDefinition] = {
     ),
     "[PLURAL=TRUE]": MetaLabelDefinition(
         id="[PLURAL=TRUE]",
-        description="Plural subject or object pronominal forms",
+        description="Plural or dual subject or object pronominal forms",
         constraints=[
-            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(number="ns") + filter_pronominals(number="pl")),
+            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(number="ns") + filter_pronominals(number="pl") + filter_pronominals(number="dl")),
         ],
     ),
     "[PLURAL=FALSE]": MetaLabelDefinition(

@@ -148,3 +148,36 @@ def test_real_plural_verb_entry_355():
     derived = derive_lexical_features_4step(forms, compiler, lexical_features)
     assert len(derived) > 0, f"Plural verb entry 355 ('{row['present']}') failed multi-form derivation"
 
+
+def test_real_plural_verb_entry_598():
+    import csv
+    with open("chr-corpus/corpus.csv") as f:
+        reader = csv.DictReader(
+            f,
+            fieldnames=[
+                "corpus_id",
+                "entry_no",
+                "definition",
+                "present",
+                "present_1sg",
+                "imperfective",
+                "perfective",
+                "imperative",
+                "infinitive",
+            ],
+        )
+        next(reader)
+        row = next(r for r in reader if r["corpus_id"] == "598")
+
+    compiler = MetaConstraintCompiler()
+    lexical_features = {"aspect_class", "prefix_class", "tense_present_class"}
+
+    # Entry 598 forms: present='tanakaleniha', present_1sg='tostakaleniha', imperative='tistakalena'
+    forms = [
+        (row["present"], "[FORM=3RD_PRES]"),
+        (row["present_1sg"], "[FORM=1ST_PRES]"),
+        (row["imperative"], "[FORM=2ND_IMPERATIVE]"),
+    ]
+    derived = derive_lexical_features_4step(forms, compiler, lexical_features)
+    assert len(derived) > 0, f"Plural verb entry 598 ('{row['present']}') failed multi-form derivation"
+
