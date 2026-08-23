@@ -18,6 +18,27 @@ def test_meta_label_definitions():
     assert "[FORM=3RD_PRES]" in compiler.meta_registry
     assert "[FORM=1ST_PRES]" in compiler.meta_registry
     assert "[PRONOUN_SET=A]" in compiler.meta_registry
+    assert "[PLURAL=TRUE]" in compiler.meta_registry
+    assert "[PLURAL=FALSE]" in compiler.meta_registry
+
+
+def test_pronominal_struct_and_filters():
+    from parse_chr_dict.meta_label_compiler import Pronominal, filter_pronominals
+    p = Pronominal.from_tag("3sg.A")
+    assert p.person == "3rd"
+    assert p.number == "sg"
+    assert p.pronoun_set == "A"
+
+    p_trans = Pronominal.from_tag("1sg>3sg")
+    assert p_trans.pronoun_set == "transitive"
+
+    sg_a = filter_pronominals(person="3rd", number="sg", pronoun_set="A")
+    assert sg_a == ["3sg.A"]
+
+    all_set_a = filter_pronominals(pronoun_set="A")
+    assert "3sg.A" in all_set_a
+    assert "1sg.A" in all_set_a
+    assert "3ns.A" in all_set_a
 
 
 def test_step1a_feature_tuples():

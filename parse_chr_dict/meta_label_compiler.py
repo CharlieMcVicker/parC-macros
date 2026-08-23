@@ -24,6 +24,70 @@ class MatchMode(str, Enum):
     EXCLUDE = "exclude"
 
 
+@dataclass(frozen=True)
+class Pronominal:
+    """Structured representation of a pronominal tag (e.g. 3sg.A, 1sg>3sg, 3ns.B)."""
+    tag: str
+    person: str        # "1st", "2nd", "3rd", "exclusive"
+    number: str        # "sg", "ns", "pl"
+    pronoun_set: str   # "A", "B", "transitive"
+
+    @classmethod
+    def from_tag(cls, tag: str) -> Pronominal:
+        if ">" in tag:
+            subj = tag.split(">")[0]
+            person = "1st" if subj.startswith("1") else "2nd" if subj.startswith("2") else "3rd"
+            return cls(tag=tag, person=person, number="sg", pronoun_set="transitive")
+
+        # Standard tags: 3sg.A, 1sg.B, 3ns.A, E.A, etc.
+        parts = tag.split(".")
+        prefix = parts[0]
+        pronoun_set = parts[1] if len(parts) > 1 else "A"
+
+        if prefix.startswith("1"):
+            person, number = "1st", "sg" if "sg" in prefix else "pl"
+        elif prefix.startswith("2"):
+            person, number = "2nd", "sg" if "sg" in prefix else "pl"
+        elif prefix.startswith("3"):
+            person, number = "3rd", "sg" if "sg" in prefix else "ns" if "ns" in prefix else "pl"
+        elif prefix.startswith("E"):
+            person, number = "exclusive", "pl"
+        else:
+            person, number = "3rd", "sg"
+
+        return cls(tag=tag, person=person, number=number, pronoun_set=pronoun_set)
+
+
+ALL_PRONOMINALS: List[Pronominal] = [
+    Pronominal.from_tag(t) for t in [
+        "3sg.A", "3sg.B", "1sg.A", "1sg.B", "2sg.A", "2sg.B",
+        "3ns.A", "3ns.B", "1pl.A", "1pl.B", "2pl.A", "2pl.B",
+        "E.A", "E.B", "1sg>3sg", "2sg>3sg",
+    ]
+]
+
+
+def filter_pronominals(
+    person: Optional[str] = None,
+    number: Optional[str] = None,
+    pronoun_set: Optional[str] = None,
+    exclude_transitive: bool = False,
+) -> List[str]:
+    """Filters PRONOMINAL tags using clean functional predicates."""
+    result = []
+    for p in ALL_PRONOMINALS:
+        if person is not None and p.person != person:
+            continue
+        if number is not None and p.number != number:
+            continue
+        if pronoun_set is not None and p.pronoun_set != pronoun_set:
+            continue
+        if exclude_transitive and p.pronoun_set == "transitive":
+            continue
+        result.append(p.tag)
+    return result
+
+
 @dataclass
 class FeatureConstraint:
     """Constraint on a single morphosyntactic or lexical slot."""
@@ -173,7 +237,7 @@ META_LABELS: Dict[str, MetaLabelDefinition] = {
         constraints=[
             FeatureConstraint(slot_name="tense", mode=MatchMode.EXACT, values=["present"]),
             FeatureConstraint(slot_name="aspect", mode=MatchMode.EXACT, values=["present"]),
-            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=["3sg.A", "3sg.B"]),
+            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(person="3rd", number="sg")),
         ],
     ),
     "[FORM=1ST_PRES]": MetaLabelDefinition(
@@ -182,7 +246,7 @@ META_LABELS: Dict[str, MetaLabelDefinition] = {
         constraints=[
             FeatureConstraint(slot_name="tense", mode=MatchMode.EXACT, values=["present"]),
             FeatureConstraint(slot_name="aspect", mode=MatchMode.EXACT, values=["present"]),
-            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=["1sg.A", "1sg.B", "1sg>3sg"]),
+            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(person="1st")),
         ],
     ),
     "[FORM=3RD_HABITUAL]": MetaLabelDefinition(
@@ -191,7 +255,7 @@ META_LABELS: Dict[str, MetaLabelDefinition] = {
         constraints=[
             FeatureConstraint(slot_name="tense", mode=MatchMode.EXACT, values=["habitual"]),
             FeatureConstraint(slot_name="aspect", mode=MatchMode.EXACT, values=["incompletive"]),
-            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=["3sg.A", "3sg.B"]),
+            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(person="3rd", number="sg")),
         ],
     ),
     "[FORM=3RD_COMPLETIVE]": MetaLabelDefinition(
@@ -209,7 +273,7 @@ META_LABELS: Dict[str, MetaLabelDefinition] = {
         constraints=[
             FeatureConstraint(slot_name="tense", mode=MatchMode.EXACT, values=["assertive"]),
             FeatureConstraint(slot_name="aspect", mode=MatchMode.EXACT, values=["incompletive"]),
-            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=["3sg.A", "3sg.B"]),
+            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(person="3rd", number="sg")),
         ],
     ),
     "[FORM=2ND_IMPERATIVE]": MetaLabelDefinition(
@@ -218,7 +282,7 @@ META_LABELS: Dict[str, MetaLabelDefinition] = {
         constraints=[
             FeatureConstraint(slot_name="tense", mode=MatchMode.EXACT, values=["immediate"]),
             FeatureConstraint(slot_name="aspect", mode=MatchMode.EXACT, values=["immediate"]),
-            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=["2sg.A", "2sg.B", "2sg>3sg"]),
+            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(person="2nd")),
         ],
     ),
     "[FORM=2ND_FUT_PROG]": MetaLabelDefinition(
@@ -227,7 +291,7 @@ META_LABELS: Dict[str, MetaLabelDefinition] = {
         constraints=[
             FeatureConstraint(slot_name="tense", mode=MatchMode.EXACT, values=["future_prog"]),
             FeatureConstraint(slot_name="aspect", mode=MatchMode.EXACT, values=["incompletive"]),
-            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=["2sg.A", "2sg.B", "2sg>3sg"]),
+            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(person="2nd")),
         ],
     ),
     "[FORM=3RD_INFINITIVE]": MetaLabelDefinition(
@@ -243,7 +307,21 @@ META_LABELS: Dict[str, MetaLabelDefinition] = {
         id="[PRONOUN_SET=A]",
         description="Pronoun Set A constraint",
         constraints=[
-            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=["3sg.A", "1sg.A", "2sg.A"]),
+            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(pronoun_set="A")),
+        ],
+    ),
+    "[PLURAL=TRUE]": MetaLabelDefinition(
+        id="[PLURAL=TRUE]",
+        description="Plural subject or object pronominal forms",
+        constraints=[
+            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(number="ns") + filter_pronominals(number="pl")),
+        ],
+    ),
+    "[PLURAL=FALSE]": MetaLabelDefinition(
+        id="[PLURAL=FALSE]",
+        description="Singular pronominal forms",
+        constraints=[
+            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(number="sg")),
         ],
     ),
 }

@@ -16,16 +16,22 @@ class ReconstructionSpec:
     animate_objects: bool
 
     def get_pronominal(self, person, allow_set_a):
-        set = "A" if self.set_a and allow_set_a else "B"
-        number = "sg" if not self.plural else "ns" if person == "3rd" else "pl"
-        short_person = person[0]
-        if short_person == "1" and self.plural:
-            short_person = "E"
+        from parse_chr_dict.meta_label_compiler import filter_pronominals
+        pronoun_set = "A" if self.set_a and allow_set_a else "B"
+        
+        if self.animate_objects and person in ["1st", "2nd"]:
+            tags = filter_pronominals(person=person, pronoun_set="transitive")
+            return tags[0] if tags else f"{person[0]}sg>3sg"
 
-        if self.animate_objects and short_person in ["1", "2"]:
-            return f"{short_person}sg>3sg"
-        else:
-            return f"{short_person}{number}.{set}"
+        number = "sg" if not self.plural else "ns" if person == "3rd" else "pl"
+        target_person = "exclusive" if person == "1st" and self.plural else person
+        tags = filter_pronominals(person=target_person, number=number, pronoun_set=pronoun_set)
+        if tags:
+            return tags[0]
+        
+        # Fallback string calculation
+        short_person = person[0] if person != "1st" or not self.plural else "E"
+        return f"{short_person}{number}.{pronoun_set}"
 
     @classmethod
     def all_specs(_cls):
