@@ -1,7 +1,11 @@
 from dataclasses import dataclass
-import json
-
-from parse_chr_dict.meta_label_compiler import FORMS_TO_PARSE, EntryTypeSpec as EntryType, FormParsingSpec as FormParsing
+from typing import Optional
+from parse_chr_dict.meta_label_compiler import (
+    FORMS_TO_PARSE,
+    EntryTypeSpec as EntryType,
+    FormParsingSpec as FormParsing,
+    MetaConstraintCompiler,
+)
 from parC.grammar.paradigm_compilation import inflect
 
 
@@ -36,23 +40,18 @@ class ReconstructionSpec:
     def fieldnames(_cls):
         return ["set_a", "plural", "animate_objects"]
 
-    def validate(self, *, root: str, reference_form: str, labels: dict[str, str], parsing_meta: FormParsing):
-        form_labels = {k: v for k, v in parsing_meta.lexical_features}
+    def validate(self, *, root: str, reference_form: str, labels: dict[str, str], parsing_meta: FormParsing, compiler: Optional[MetaConstraintCompiler] = None):
+        if compiler is None:
+            compiler = MetaConstraintCompiler()
+        target_tuples = compiler.get_feature_tuples_from_meta([parsing_meta.meta_label_id])
+        form_labels = dict(target_tuples)
         form_labels["pronominal"] = self.get_pronominal(
             person=parsing_meta.person, allow_set_a=parsing_meta.allows_set_a
         )
 
         all_labels = {**labels, **form_labels}
-        
-
-        # print("[DEBUG]", root, json.dumps(all_labels))
         surface_forms = inflect(root, feature_values=all_labels, name="verb", open_root=True, infer_lexical_features=True)
-        
-        # print(surface_forms)
-        if not any(surface == reference_form for surface in surface_forms):
-            return False
-
-        return True
+        return any(surface == reference_form for surface in surface_forms)
 
 def reconstruct_row(row, entry_type: EntryType, lexical_fields: list[str]):
     passing_specs: list[ReconstructionSpec] = list()
