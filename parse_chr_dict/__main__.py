@@ -133,8 +133,15 @@ def main():
                 if derived_lexicals:
                     roots = get_roots_for_parses([list(derived_lexicals)])
                     if len(roots):
-                        row_written = True
-                        write_roots(row, entry_type, roots, roots_writer)
+                        if entry_type.name.startswith("Stative"):
+                            roots = [
+                                (root, labels)
+                                for root, labels in roots
+                                if get_label(labels, "aspect_class").startswith("stative")
+                            ]
+                        if len(roots):
+                            row_written = True
+                            write_roots(row, entry_type, roots, roots_writer)
 
             if not row_written:
                 error_writer.writerow(row)
