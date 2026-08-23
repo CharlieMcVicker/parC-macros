@@ -181,3 +181,35 @@ def test_real_plural_verb_entry_598():
     derived = derive_lexical_features_4step(forms, compiler, lexical_features)
     assert len(derived) > 0, f"Plural verb entry 598 ('{row['present']}') failed multi-form derivation"
 
+
+def test_real_animate_verb_entry_788():
+    import csv
+    with open("chr-corpus/corpus.csv") as f:
+        reader = csv.DictReader(
+            f,
+            fieldnames=[
+                "corpus_id",
+                "entry_no",
+                "definition",
+                "present",
+                "present_1sg",
+                "imperfective",
+                "perfective",
+                "imperative",
+                "infinitive",
+            ],
+        )
+        next(reader)
+        row = next(r for r in reader if r["corpus_id"] == "788")
+
+    compiler = MetaConstraintCompiler()
+    lexical_features = {"aspect_class", "prefix_class", "tense_present_class"}
+
+    # Entry 788 forms: present="katv'vska", present_1sg="tsiyatv'vska"
+    forms = [
+        (row["present"], "[FORM=3RD_PRES]"),
+        (row["present_1sg"], "[FORM=1ST_PRES]"),
+    ]
+    derived = derive_lexical_features_4step(forms, compiler, lexical_features)
+    assert len(derived) > 0, f"Animate verb entry 788 ('{row['present']}') failed multi-form derivation"
+

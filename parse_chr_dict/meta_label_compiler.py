@@ -78,18 +78,19 @@ def filter_pronominals(
     exclude_transitive: bool = False,
 ) -> List[str]:
     """Filters PRONOMINAL tags using clean functional predicates."""
-    result = []
-    for p in ALL_PRONOMINALS:
-        if person is not None and p.person != person:
-            continue
-        if number is not None and p.number != number:
-            continue
-        if pronoun_set is not None and p.pronoun_set != pronoun_set:
-            continue
-        if exclude_transitive and p.pronoun_set == "transitive":
-            continue
-        result.append(p.tag)
-    return result
+    res = ALL_PRONOMINALS
+    if person is not None:
+        res = [p for p in res if p.person == person]
+    if number is not None:
+        res = [p for p in res if p.number == number]
+    if pronoun_set is not None:
+        if pronoun_set == "A":
+            res = [p for p in res if p.pronoun_set in ("A", "transitive")]
+        else:
+            res = [p for p in res if p.pronoun_set == pronoun_set]
+    if exclude_transitive:
+        res = [p for p in res if p.pronoun_set != "transitive"]
+    return [p.tag for p in res]
 
 
 @dataclass
@@ -557,7 +558,7 @@ def derive_lexical_features_4step(
             if m.startswith("[PRONOUN_SET="):
                 if form_spec and form_spec.allows_set_a:
                     meta_ids_for_form.append(m)
-            elif m.startswith("[PLURAL=") or m.startswith("[OBJECT_ANIMACY="):
+            elif m.startswith("[PLURAL="):
                 meta_ids_for_form.append(m)
 
         # Construct dynamic constraints from currently discovered lexical features
