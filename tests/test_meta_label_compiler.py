@@ -115,3 +115,36 @@ def test_4step_meta_label_propagation():
     res = derive_lexical_features_4step(forms, compiler, lexical_features)
     assert isinstance(res, set)
 
+
+def test_real_plural_verb_entry_355():
+    import csv
+    with open("chr-corpus/corpus.csv") as f:
+        reader = csv.DictReader(
+            f,
+            fieldnames=[
+                "corpus_id",
+                "entry_no",
+                "definition",
+                "present",
+                "present_1sg",
+                "imperfective",
+                "perfective",
+                "imperative",
+                "infinitive",
+            ],
+        )
+        next(reader)
+        row = next(r for r in reader if r["corpus_id"] == "355")
+
+    compiler = MetaConstraintCompiler()
+    lexical_features = {"aspect_class", "prefix_class", "tense_present_class"}
+
+    # Entry 355 forms: present='anatalhisiha', present_1sg='otsatalhisiha'
+    forms = [
+        (row["present"], "[FORM=3RD_PRES]"),
+        (row["present_1sg"], "[FORM=1ST_PRES]"),
+        (row["imperfective"], "[FORM=3RD_HABITUAL]"),
+    ]
+    derived = derive_lexical_features_4step(forms, compiler, lexical_features)
+    assert len(derived) > 0, f"Plural verb entry 355 ('{row['present']}') failed multi-form derivation"
+

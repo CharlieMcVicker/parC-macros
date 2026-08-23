@@ -28,7 +28,7 @@ class MatchMode(str, Enum):
 class Pronominal:
     """Structured representation of a pronominal tag (e.g. 3sg.A, 1sg>3sg, 3ns.B)."""
     tag: str
-    person: str        # "1st", "2nd", "3rd", "exclusive"
+    person: str        # "1st", "2nd", "3rd"
     number: str        # "sg", "ns", "pl"
     pronoun_set: str   # "A", "B", "transitive"
 
@@ -39,19 +39,20 @@ class Pronominal:
             person = "1st" if subj.startswith("1") else "2nd" if subj.startswith("2") else "3rd"
             return cls(tag=tag, person=person, number="sg", pronoun_set="transitive")
 
-        # Standard tags: 3sg.A, 1sg.B, 3ns.A, E.A, etc.
+        # Standard tags: 3sg.A, 1sg.B, 3ns.A, E.A, Epl.A, etc.
         parts = tag.split(".")
         prefix = parts[0]
         pronoun_set = parts[1] if len(parts) > 1 else "A"
 
-        if prefix.startswith("1"):
-            person, number = "1st", "sg" if "sg" in prefix else "pl"
+        if prefix.startswith("1") or prefix.startswith("E"):
+            person = "1st"
+            number = "sg" if prefix == "1sg" else "pl"
         elif prefix.startswith("2"):
-            person, number = "2nd", "sg" if "sg" in prefix else "pl"
+            person = "2nd"
+            number = "sg" if prefix == "2sg" else "pl"
         elif prefix.startswith("3"):
-            person, number = "3rd", "sg" if "sg" in prefix else "ns" if "ns" in prefix else "pl"
-        elif prefix.startswith("E"):
-            person, number = "exclusive", "pl"
+            person = "3rd"
+            number = "sg" if "sg" in prefix else "ns" if "ns" in prefix else "pl"
         else:
             person, number = "3rd", "sg"
 
@@ -62,7 +63,7 @@ ALL_PRONOMINALS: List[Pronominal] = [
     Pronominal.from_tag(t) for t in [
         "3sg.A", "3sg.B", "1sg.A", "1sg.B", "2sg.A", "2sg.B",
         "3ns.A", "3ns.B", "1pl.A", "1pl.B", "2pl.A", "2pl.B",
-        "E.A", "E.B", "1sg>3sg", "2sg>3sg",
+        "E.A", "E.B", "Epl.A", "Epl.B", "1sg>3sg", "2sg>3sg",
     ]
 ]
 
@@ -237,7 +238,7 @@ META_LABELS: Dict[str, MetaLabelDefinition] = {
         constraints=[
             FeatureConstraint(slot_name="tense", mode=MatchMode.EXACT, values=["present"]),
             FeatureConstraint(slot_name="aspect", mode=MatchMode.EXACT, values=["present"]),
-            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(person="3rd", number="sg")),
+            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(person="3rd")),
         ],
     ),
     "[FORM=1ST_PRES]": MetaLabelDefinition(
@@ -255,7 +256,7 @@ META_LABELS: Dict[str, MetaLabelDefinition] = {
         constraints=[
             FeatureConstraint(slot_name="tense", mode=MatchMode.EXACT, values=["habitual"]),
             FeatureConstraint(slot_name="aspect", mode=MatchMode.EXACT, values=["incompletive"]),
-            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(person="3rd", number="sg")),
+            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(person="3rd")),
         ],
     ),
     "[FORM=3RD_COMPLETIVE]": MetaLabelDefinition(
@@ -264,7 +265,7 @@ META_LABELS: Dict[str, MetaLabelDefinition] = {
         constraints=[
             FeatureConstraint(slot_name="tense", mode=MatchMode.EXACT, values=["assertive"]),
             FeatureConstraint(slot_name="aspect", mode=MatchMode.EXACT, values=["completive"]),
-            FeatureConstraint(slot_name="pronominal", mode=MatchMode.EXACT, values=["3sg.B"]),
+            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=["3sg.B", "3ns.B"]),
         ],
     ),
     "[FORM=3RD_INCOMPLETIVE_ASSERTIVE]": MetaLabelDefinition(
@@ -273,7 +274,7 @@ META_LABELS: Dict[str, MetaLabelDefinition] = {
         constraints=[
             FeatureConstraint(slot_name="tense", mode=MatchMode.EXACT, values=["assertive"]),
             FeatureConstraint(slot_name="aspect", mode=MatchMode.EXACT, values=["incompletive"]),
-            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(person="3rd", number="sg")),
+            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(person="3rd")),
         ],
     ),
     "[FORM=2ND_IMPERATIVE]": MetaLabelDefinition(
@@ -300,7 +301,7 @@ META_LABELS: Dict[str, MetaLabelDefinition] = {
         constraints=[
             FeatureConstraint(slot_name="tense", mode=MatchMode.EXACT, values=["infinitive"]),
             FeatureConstraint(slot_name="aspect", mode=MatchMode.EXACT, values=["infinitive"]),
-            FeatureConstraint(slot_name="pronominal", mode=MatchMode.EXACT, values=["3sg.B"]),
+            FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=["3sg.B", "3ns.B"]),
         ],
     ),
     "[PRONOUN_SET=A]": MetaLabelDefinition(
@@ -508,28 +509,21 @@ def derive_lexical_features_4step(
 
     # Step 2 & 3: Obtain possible metalabels and create restricted feature set + meta label candidates
     init_lexicals: Set[Tuple[str, Tuple[Tuple[str, str], ...]]] = set()
-    discovered_meta_labels: Set[str] = set()
+    parse_meta_list: List[Set[str]] = []
 
     init_spec = spec_by_meta.get(init_meta_id)
     for p in init_parses:
-        metalabels = compiler.infer_meta_labels_from_parse(p)
+        metalabels = set(compiler.infer_meta_labels_from_parse(p))
         if init_meta_id in metalabels or not compiler.meta_registry.get(init_meta_id):
             lex_item = str_to_lexical_hashable(p, lexical_features=lexical_features)
             init_lexicals.add(lex_item)
-
-            # Collect active meta-labels (PRONOUN_SET, PLURAL)
-            for m in metalabels:
-                if m.startswith("[PRONOUN_SET=") and init_spec and init_spec.allows_set_a:
-                    discovered_meta_labels.add(m)
-                elif m.startswith("[PLURAL="):
-                    discovered_meta_labels.add(m)
+            parse_meta_list.append(metalabels)
 
     if len(forms) == 1:
         return init_lexicals
 
     # Step 4: Parse each subsequent form using dynamic constraints + meta-label propagation + lattice composition
     candidate_lexicals = init_lexicals
-    candidate_meta_labels = discovered_meta_labels
 
     for surface, meta_id in forms[1:]:
         if not surface:
@@ -537,9 +531,12 @@ def derive_lexical_features_4step(
 
         form_spec = spec_by_meta.get(meta_id)
 
+        # Infer unambiguous meta-labels from current parse candidates (labels common to all parses)
+        unambiguous_meta: Set[str] = set.intersection(*parse_meta_list) if parse_meta_list else set()
+
         # Assemble meta label IDs for this form
         meta_ids_for_form = [meta_id]
-        for m in sorted(candidate_meta_labels):
+        for m in sorted(unambiguous_meta):
             if m.startswith("[PRONOUN_SET="):
                 if form_spec and form_spec.allows_set_a:
                     meta_ids_for_form.append(m)
@@ -559,21 +556,17 @@ def derive_lexical_features_4step(
         )
 
         subseq_lexicals = set()
-        subseq_meta_labels = set()
+        subseq_meta_list = []
         for p in subseq_parses:
-            metalabels = compiler.infer_meta_labels_from_parse(p)
+            metalabels = set(compiler.infer_meta_labels_from_parse(p))
             if meta_id in metalabels or not compiler.meta_registry.get(meta_id):
                 lex_item = str_to_lexical_hashable(p, lexical_features=lexical_features)
                 subseq_lexicals.add(lex_item)
-                for m in metalabels:
-                    if m.startswith("[PRONOUN_SET=") and form_spec and form_spec.allows_set_a:
-                        subseq_meta_labels.add(m)
-                    elif m.startswith("[PLURAL="):
-                        subseq_meta_labels.add(m)
+                subseq_meta_list.append(metalabels)
 
         candidate_lexicals = candidate_lexicals.intersection(subseq_lexicals)
-        if subseq_meta_labels:
-            candidate_meta_labels = candidate_meta_labels.intersection(subseq_meta_labels)
+        if subseq_meta_list:
+            parse_meta_list = subseq_meta_list
 
     return candidate_lexicals
 
