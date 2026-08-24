@@ -683,6 +683,7 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 1642,1708,he/she has a liquid,uneha,akineha,uneho'i,unehv'i,tsanehesti,unehti,StativeFutProg,[Pro]neh[Aspect][Tense],stative,r_stem,a_present,False,False,False
 1646,1712,he/she knows it,unhtha,akwanhtha,unhtho'i,unhthv'i,tsanhthesti,,StativeFutProg,[Pro]anhth[Aspect][Tense],stative,a_stem,a_present,False,False,False
 1677,1743,he/she is wearing pants,usula,akwasula,usulo'i,usulv'i,tsasulesti,,StativeFutProg,[Pro]asul[Aspect][Tense],stative,a_stem,a_present,False,False,False
+1693,1759,he/she is listening to him/her,uthvtasti,tsiyathvtasti,uthvtasto'i,uthvtastv'i,hiyathvtastesti,uthvtastohti,StativeFutProg,[Pro]athvtast[Aspect][Tense],stative,a_stem,i_present,False,False,True
 1698,1764,he/she is forgetting it,uwakhewhska,akwvkhewhska,uwakhewhsko'i,uwakhewhsv'i,witsvkhewa,uwakhewhisti,StativeNoImp,[Pro]vkhewhs[Aspect][Tense],stative-k,v_stem,a_present,False,False,False
 1704,1770,he/she is in a hurry,uwanvka,akwvnvka,uwanvko'i,uwanvkv'i,tsvnvki,uwanvsti,StativeNoImp,[Pro]vnvk[Aspect][Tense],stative,v_stem,a_present,False,False,False
 1709,1775,he/she has an object (refers to a long object),uwaya,akwvya,uwayo'i,uwayv'i,tsvyesti,,StativeFutProg,[Pro]vy[Aspect][Tense],stative,v_stem,a_present,False,False,False

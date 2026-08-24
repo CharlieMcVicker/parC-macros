@@ -846,7 +846,7 @@ def derive_hypotheses_for_forms(
                 if p_plural != hyp.plural:
                     continue
 
-                if form_spec.allows_set_a:
+                if form_spec.allows_set_a and not p_trans:
                     if p_set_a != hyp.set_a:
                         continue
 

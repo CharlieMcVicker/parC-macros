@@ -441,4 +441,32 @@ def test_hypothesis_pruning_efficiency():
     assert len(bad_hyps) == 0
 
 
+def test_entry_1759_derivation_and_validation():
+    from parse_chr_dict.meta_label_compiler import derive_hypotheses_for_forms, DerivationHypothesis
 
+    compiler = MetaConstraintCompiler()
+    row = {
+        "present": "uthvtasti",
+        "present_1sg": "tsiyathvtasti",
+        "imperfective": "uthvtasto'i",
+        "perfective": "uthvtastv'i",
+        "imperative": "hiyathvtastesti",
+        "infinitive": "uthvtastohti",
+    }
+    spec_by_name = {p.name: p for p in FORMS_TO_PARSE}
+    entry_type = PRIMARY_ENTRY_TYPES[1]  # StativeFutProg
+    forms = [(row[spec_by_name[fn].corpus_key], spec_by_name[fn]) for fn in entry_type.forms]
+
+    hyps = derive_hypotheses_for_forms(forms, compiler)
+    assert len(hyps) == 1
+    hyp = next(iter(hyps))
+    assert hyp.root == "[Pro]athvtast[Aspect][Tense]"
+    assert hyp.prefix_class == "a_stem"
+    assert hyp.aspect_class == "stative"
+    assert hyp.tense_present_class == "i_present"
+    assert hyp.set_a is False
+    assert hyp.plural is False
+    assert hyp.animate_objects is True
+
+    # Validate against full row under StativeFutProg
+    assert hyp.validate(row, entry_type, compiler=compiler)
