@@ -7,59 +7,59 @@ features:
 markers:
   a_present:
     assertive:
-    - kind: rule
-      value: $tense_v_i
+    - kind: suffix
+      value: v'i
       stage: tense
     future_prog:
-    - kind: rule
-      value: $tense_esti
+    - kind: suffix
+      value: esti
       stage: tense
     habitual:
-    - kind: rule
-      value: $tense_o_i
+    - kind: suffix
+      value: o'i
       stage: tense
     immediate:
-    - kind: rule
-      value: $tense_empty
+    - kind: suffix
+      value: ''
       stage: tense
     infinitive:
-    - kind: rule
-      value: $tense_i
+    - kind: suffix
+      value: i
       stage: tense
     present:
-    - kind: rule
-      value: $tense_a
+    - kind: suffix
+      value: a
       stage: tense
     reported:
-    - kind: rule
-      value: $tense_e_i
+    - kind: suffix
+      value: e'i
       stage: tense
   i_present:
     assertive:
-    - kind: rule
-      value: $tense_v_i
+    - kind: suffix
+      value: v'i
       stage: tense
     future_prog:
-    - kind: rule
-      value: $tense_esti
+    - kind: suffix
+      value: esti
       stage: tense
     habitual:
-    - kind: rule
-      value: $tense_o_i
+    - kind: suffix
+      value: o'i
       stage: tense
     immediate:
-    - kind: rule
-      value: $tense_empty
+    - kind: suffix
+      value: ''
       stage: tense
     infinitive:
-    - kind: rule
-      value: $tense_i
+    - kind: suffix
+      value: i
       stage: tense
     present:
-    - kind: rule
-      value: $tense_i
+    - kind: suffix
+      value: i
       stage: tense
     reported:
-    - kind: rule
-      value: $tense_e_i
+    - kind: suffix
+      value: e'i
       stage: tense

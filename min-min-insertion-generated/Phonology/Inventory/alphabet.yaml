@@ -28,6 +28,9 @@ data:
   - name: Pro
     ref: <Pro>
     tags: ["[Pro]"]
+  - name: H_ALT
+    ref: <H_ALT>
+    tags: ["[H_ALT]"]
   - name: Tense
     ref: <Tense>
     tags: ["[Tense]"]

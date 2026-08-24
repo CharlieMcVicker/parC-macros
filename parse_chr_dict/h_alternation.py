@@ -16,6 +16,17 @@ def is_h_alternation_trigger(pronominal: str) -> bool:
     return pronominal in H_ALTERNATION_TRIGGER_PRONOMINALS
 
 
+def validate_h_alternation_trigger(pronominal: str, has_h_alt: bool) -> bool:
+    """
+    Validates that [H_ALT] or H-alternation rule application co-occurs strictly
+    with H-alternating trigger prefixes (1sg>3sg, 2sg>3sg, 1sg.A).
+    Returns False if has_h_alt is True but pronominal is not a trigger.
+    """
+    if has_h_alt and not is_h_alternation_trigger(pronominal):
+        return False
+    return True
+
+
 def _drop_first_h(h_grade: str) -> str:
     idx = h_grade.find("h")
     if idx != -1:

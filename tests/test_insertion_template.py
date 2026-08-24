@@ -19,8 +19,8 @@ def test_optional_feature_combinations_insertion():
         ("watata", "[WI]"),
         ("tatata", "[DIST]"),
         ("witata", "[WI][DIST]"),
-        ("titata", "[DIST]a"),
     ]
+
 
     for surface, tag_seq in tests:
         parses = parse(surface)

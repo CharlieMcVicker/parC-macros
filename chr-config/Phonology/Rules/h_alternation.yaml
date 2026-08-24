@@ -1,0 +1,26 @@
+# This is a Rules config file
+# Define context-sensitive phonological rules.
+kind: Rules
+rules:
+  - name: h_alternation_mutations
+    description: >
+      branching /h/ alternation mutations following [H_ALT]
+    string_map:
+      - [lh, tl]
+      - [h, ""]
+      - [h, "'"]
+    left_context: "[H_ALT]"
+
+  - name: delete_h_alt_marker
+    description: >
+      delete the temporary [H_ALT] tag
+    input_pattern: "[H_ALT]"
+    output_pattern: ""
+
+  - name: h_alternation
+    description: >
+      apply branching /h/ alternation mutations and delete [H_ALT] marker
+    rule_sequence:
+      - $h_alternation_mutations
+      - $delete_h_alt_marker
+

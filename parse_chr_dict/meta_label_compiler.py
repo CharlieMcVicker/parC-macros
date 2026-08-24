@@ -17,6 +17,7 @@ from parC.grammar.acceptor_compilation import fsm_strings
 from parse_chr_dict.parse import feature_tag, read_labels, str_to_lexical_hashable
 from parse_chr_dict.h_alternation import (
     is_h_alternation_trigger,
+    validate_h_alternation_trigger,
     grades_are_compatible,
 )
 

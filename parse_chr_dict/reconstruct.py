@@ -1,7 +1,10 @@
 from dataclasses import dataclass
 from typing import Optional
 from parse_chr_dict.create_aspect_class_csv import respell_consonants
-from parse_chr_dict.h_alternation import is_h_alternation_trigger
+from parse_chr_dict.h_alternation import (
+    is_h_alternation_trigger,
+    validate_h_alternation_trigger,
+)
 from parse_chr_dict.meta_label_compiler import (
     FORMS_TO_PARSE,
     EntryTypeSpec as EntryType,

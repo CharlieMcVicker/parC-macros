@@ -492,3 +492,58 @@ def test_h_alternation_verb_derivation():
     hyps = derive_hypotheses_for_forms(forms, compiler)
     assert len(hyps) > 0
     assert any(h.h_root == "[Pro]atat[Aspect][Tense]" and h.glottal_root is not None for h in hyps)
+
+
+def test_h_alternation_trigger_external_validation():
+    from parse_chr_dict.h_alternation import validate_h_alternation_trigger, is_h_alternation_trigger
+    from parse_chr_dict.meta_label_compiler import DerivationHypothesis, PRIMARY_ENTRY_TYPES
+    from parse_chr_dict.reconstruct import validate_hypothesis, reconstruct_row
+
+    # Test standalone trigger validation logic
+    assert validate_h_alternation_trigger("1sg>3sg", has_h_alt=True) is True
+    assert validate_h_alternation_trigger("2sg>3sg", has_h_alt=True) is True
+    assert validate_h_alternation_trigger("1sg.A", has_h_alt=True) is True
+    assert validate_h_alternation_trigger("3sg.A", has_h_alt=True) is False
+    assert validate_h_alternation_trigger("3sg.B", has_h_alt=True) is False
+    assert validate_h_alternation_trigger("1sg.B", has_h_alt=True) is False
+    assert validate_h_alternation_trigger("3sg.A", has_h_alt=False) is True
+
+    # Test integration with validate_hypothesis and reconstruct_row
+    compiler = MetaConstraintCompiler()
+    entry_type = PRIMARY_ENTRY_TYPES[0]  # PrimaryPresent
+    row = {
+        "present": "atateka",
+        "present_1sg": "katateka",
+        "imperfective": "atateko'i",
+        "perfective": "utatinvsv'i",
+        "imperative": "hatatuka",
+        "infinitive": "utatinvti",
+    }
+    hyp = DerivationHypothesis(
+        h_root="[Pro]atat[Aspect][Tense]",
+        glottal_root="[Pro]atat[Aspect][Tense]",
+        prefix_class="a_stem",
+        aspect_class="go-in",
+        tense_present_class="a_present",
+        set_a=True,
+        plural=False,
+        animate_objects=False,
+    )
+    assert validate_hypothesis(hyp, row, entry_type, compiler=compiler) is True
+
+    # Row reconstruction with H-alternation fields
+    row_with_roots = {
+        **row,
+        "h_root": "[Pro]atat[Aspect][Tense]",
+        "glottal_root": "[Pro]atat[Aspect][Tense]",
+        "prefix_class": "a_stem",
+        "aspect_class": "go-in",
+        "tense_present_class": "a_present",
+    }
+    specs = reconstruct_row(
+        row_with_roots,
+        entry_type,
+        ["prefix_class", "aspect_class", "tense_present_class"],
+        compiler=compiler,
+    )
+    assert len(specs) > 0

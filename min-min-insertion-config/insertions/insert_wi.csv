@@ -1,0 +1,5 @@
+# kind: insertion
+# rule: insert_WI
+tag,rule_name,l_context,r_context,content
+[WI],insert_wi_v_h,,"<V>|h",w
+[WI],insert_wi_default,,,wi
