@@ -8,13 +8,18 @@ from parse_chr_dict.meta_label_compiler import (
     PRIMARY_ENTRY_TYPES,
     SHIM_ENTRY_TYPES,
     MetaConstraintCompiler,
-    derive_lexical_features_4step,
+    derive_hypotheses_for_forms,
+    DerivationHypothesis,
 )
 from parse_chr_dict.parse import (
     get_roots_for_parses,
     parses_by_form,
 )
-from parse_chr_dict.reconstruct import ReconstructionSpec, reconstruct_row
+from parse_chr_dict.reconstruct import (
+    ReconstructionSpec,
+    reconstruct_row,
+    validate_hypothesis,
+)
 
 LEXICAL_FEATURES = {
     "aspect_class",
@@ -116,11 +121,11 @@ def main():
         for row in tqdm(rows):
             row_written = False
 
-            # Run 4-step multi-form derivation per EntryTypeSpec form set
+            # Run derivation & validation per EntryTypeSpec in priority order
             for entry_type in PRIMARY_ENTRY_TYPES:
                 # Gather forms specific to this entry type
                 entry_forms = [
-                    (respell_consonants(row[parsing.corpus_key]), parsing.meta_label_id)
+                    (respell_consonants(row[parsing.corpus_key]), parsing)
                     for parsing in FORMS_TO_PARSE
                     if parsing.name in entry_type.forms
                     and row.get(parsing.corpus_key)
@@ -129,20 +134,42 @@ def main():
                 if not entry_forms:
                     continue
 
-                derived_lexicals = derive_lexical_features_4step(entry_forms, compiler, LEXICAL_FEATURES)
-                if derived_lexicals:
-                    roots = get_roots_for_parses([list(derived_lexicals)])
-                    if len(roots):
-                        if entry_type.name.startswith("Stative"):
-                            roots = [
-                                (root, labels)
-                                for root, labels in roots
-                                if get_label(labels, "aspect_class").startswith("stative")
-                            ]
-                        if len(roots):
-                            row_written = True
-                            write_roots(row, entry_type, roots, roots_writer, compiler=compiler)
-                            break
+                derived_hypotheses = derive_hypotheses_for_forms(entry_forms, compiler)
+                if not derived_hypotheses:
+                    continue
+
+                if entry_type.name.startswith("Stative"):
+                    derived_hypotheses = {
+                        h for h in derived_hypotheses if h.aspect_class.startswith("stative")
+                    }
+
+                # Validate each candidate hypothesis against full row reconstruction
+                valid_hypotheses = [
+                    h for h in derived_hypotheses
+                    if validate_hypothesis(h, row, entry_type, compiler=compiler)
+                ]
+
+                if valid_hypotheses:
+                    row_written = True
+                    for h in sorted(
+                        valid_hypotheses,
+                        key=lambda x: (
+                            x.root,
+                            x.aspect_class,
+                            x.prefix_class,
+                            x.tense_present_class,
+                            x.set_a,
+                            x.plural,
+                            x.animate_objects,
+                        ),
+                    ):
+                        row_data = {
+                            **row,
+                            "entry_type": entry_type.name,
+                            **h.to_dict(),
+                        }
+                        roots_writer.writerow(row_data)
+                    break
 
             if not row_written:
                 error_writer.writerow(row)
@@ -150,3 +177,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

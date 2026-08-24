@@ -1,8 +1,7 @@
 import csv
 from tqdm import tqdm
 
-from parse_chr_dict.create_aspect_class_csv import respell_consonants
-from parse_chr_dict.parse import get_roots_for_forms, parse
+from parse_chr_dict.parse import parse
 
 
 def main():

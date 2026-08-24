@@ -246,3 +246,129 @@ def test_real_animate_verb_entry_788():
     derived = derive_lexical_features_4step(forms, compiler, lexical_features)
     assert len(derived) > 0, f"Animate verb entry 788 ('{row['present']}') failed multi-form derivation"
 
+
+def test_derivation_hypothesis_dataclass_and_aliases():
+    from parse_chr_dict.meta_label_compiler import (
+        DerivationHypothesis,
+        LexicalVerbHypothesis,
+        LexicalVerbEntry,
+    )
+    assert LexicalVerbHypothesis is DerivationHypothesis
+    assert LexicalVerbEntry is DerivationHypothesis
+
+    hyp = DerivationHypothesis(
+        root="[Pro]atat[Aspect][Tense]",
+        prefix_class="a_stem",
+        aspect_class="go-in",
+        tense_present_class="a_present",
+        set_a=True,
+        plural=False,
+        animate_objects=False,
+    )
+    assert hyp.root == "[Pro]atat[Aspect][Tense]"
+    assert hyp.prefix_class == "a_stem"
+    assert hyp.aspect_class == "go-in"
+    assert hyp.tense_present_class == "a_present"
+    assert hyp.set_a is True
+    assert hyp.plural is False
+    assert hyp.animate_objects is False
+
+    d = hyp.to_dict()
+    assert d["root"] == "[Pro]atat[Aspect][Tense]"
+    assert d["prefix_class"] == "a_stem"
+    assert d["aspect_class"] == "go-in"
+    assert d["tense_present_class"] == "a_present"
+    assert d["set_a"] is True
+    assert d["plural"] is False
+    assert d["animate_objects"] is False
+
+    lex_labels = hyp.lexical_labels()
+    assert lex_labels == {
+        "aspect_class": "go-in",
+        "prefix_class": "a_stem",
+        "tense_present_class": "a_present",
+    }
+
+    lex_tup = hyp.lexical_tuple()
+    assert lex_tup[0] == "[Pro]atat[Aspect][Tense]"
+    assert ("aspect_class", "go-in") in lex_tup[1]
+    assert ("prefix_class", "a_stem") in lex_tup[1]
+    assert ("tense_present_class", "a_present") in lex_tup[1]
+
+    meta_comb = hyp.to_meta_combination()
+    assert meta_comb.set_a is True
+    assert meta_comb.plural is False
+    assert meta_comb.animate_objects is False
+
+
+def test_derive_hypotheses_for_forms_direct():
+    from parse_chr_dict.meta_label_compiler import derive_hypotheses_for_forms, DerivationHypothesis
+    from parse_chr_dict.create_aspect_class_csv import respell_consonants
+
+    compiler = MetaConstraintCompiler()
+    forms = [
+        (respell_consonants("atateka"), "[FORM=3RD_PRES]"),
+        (respell_consonants("katateka"), "[FORM=1ST_PRES]"),
+        (respell_consonants("atateko'i"), "[FORM=3RD_HABITUAL]"),
+        (respell_consonants("utatinvsv'i"), "[FORM=3RD_COMPLETIVE]"),
+    ]
+    hyps = derive_hypotheses_for_forms(forms, compiler)
+    assert isinstance(hyps, set)
+    assert len(hyps) > 0
+    assert all(isinstance(h, DerivationHypothesis) for h in hyps)
+    assert any(h.root == "[Pro]atat[Aspect][Tense]" and h.aspect_class == "go-in" for h in hyps)
+
+
+def test_validate_hypothesis_and_row_reconstruction():
+    from parse_chr_dict.meta_label_compiler import DerivationHypothesis
+    from parse_chr_dict.reconstruct import validate_hypothesis
+    compiler = MetaConstraintCompiler()
+
+    row = {
+        "corpus_id": "4",
+        "entry_no": "8",
+        "definition": "it’s bouncing",
+        "present": "atateka",
+        "present_1sg": "katateka",
+        "imperfective": "atateko'i",
+        "perfective": "utatinvsv'i",
+        "imperative": "hatatuka",
+        "infinitive": "utatinvti",
+    }
+    valid_hyp = DerivationHypothesis(
+        root="[Pro]atat[Aspect][Tense]",
+        prefix_class="a_stem",
+        aspect_class="go-in",
+        tense_present_class="a_present",
+        set_a=True,
+        plural=False,
+        animate_objects=False,
+    )
+    assert validate_hypothesis(valid_hyp, row, PRIMARY_ENTRY_TYPES[0], compiler=compiler) is True
+    assert valid_hyp.validate(row, PRIMARY_ENTRY_TYPES[0], compiler=compiler) is True
+
+    # Invalid hypothesis (unknown aspect_class) should fail validation safely
+    invalid_hyp = DerivationHypothesis(
+        root="[Pro]atat[Aspect][Tense]",
+        prefix_class="a_stem",
+        aspect_class="wrong_aspect",
+        tense_present_class="a_present",
+        set_a=True,
+        plural=False,
+        animate_objects=False,
+    )
+    assert validate_hypothesis(invalid_hyp, row, PRIMARY_ENTRY_TYPES[0], compiler=compiler) is False
+
+    # Mismatched valid aspect_class should fail validation
+    mismatched_hyp = DerivationHypothesis(
+        root="[Pro]atat[Aspect][Tense]",
+        prefix_class="a_stem",
+        aspect_class="become",
+        tense_present_class="a_present",
+        set_a=True,
+        plural=False,
+        animate_objects=False,
+    )
+    assert validate_hypothesis(mismatched_hyp, row, PRIMARY_ENTRY_TYPES[0], compiler=compiler) is False
+
+

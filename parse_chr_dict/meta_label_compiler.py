@@ -553,6 +553,290 @@ class MetaConstraintCompiler:
         return matched_meta
 
 
+@dataclass(frozen=True)
+class DerivationHypothesis:
+    """
+    Represents a candidate lexical verb entry hypothesis with morphological root,
+    lexical inflection classes, and meta-label traits.
+    """
+    root: str
+    prefix_class: str
+    aspect_class: str
+    tense_present_class: str
+    set_a: bool = True
+    plural: bool = False
+    animate_objects: bool = False
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "root": self.root,
+            "prefix_class": self.prefix_class,
+            "aspect_class": self.aspect_class,
+            "tense_present_class": self.tense_present_class,
+            "set_a": self.set_a,
+            "plural": self.plural,
+            "animate_objects": self.animate_objects,
+        }
+
+    def lexical_labels(self) -> Dict[str, str]:
+        return {
+            "aspect_class": self.aspect_class,
+            "prefix_class": self.prefix_class,
+            "tense_present_class": self.tense_present_class,
+        }
+
+    def lexical_tuple(self) -> Tuple[str, Tuple[Tuple[str, str], ...]]:
+        return (
+            self.root,
+            (
+                ("aspect_class", self.aspect_class),
+                ("prefix_class", self.prefix_class),
+                ("tense_present_class", self.tense_present_class),
+            ),
+        )
+
+    def to_meta_combination(self):
+        from parse_chr_dict.reconstruct import MetaLabelCombination
+        return MetaLabelCombination(
+            set_a=self.set_a,
+            plural=self.plural,
+            animate_objects=self.animate_objects,
+        )
+
+    def get_dynamic_constraints(self, form_spec: Optional[FormParsingSpec] = None) -> List[FeatureConstraint]:
+        constraints = [
+            FeatureConstraint(slot_name="aspect_class", mode=MatchMode.EXACT, values=[self.aspect_class]),
+            FeatureConstraint(slot_name="tense_present_class", mode=MatchMode.EXACT, values=[self.tense_present_class]),
+        ]
+        if self.prefix_class in ("a_stem", "k_a_stem"):
+            constraints.append(FeatureConstraint(slot_name="prefix_class", mode=MatchMode.ONE_OF, values=["a_stem", "k_a_stem"]))
+        else:
+            constraints.append(FeatureConstraint(slot_name="prefix_class", mode=MatchMode.EXACT, values=[self.prefix_class]))
+        return constraints
+
+    def get_meta_label_ids(self, form_spec: FormParsingSpec) -> List[str]:
+        meta_ids = [form_spec.meta_label_id]
+        if form_spec.allows_set_a:
+            if self.set_a:
+                meta_ids.append("[PRONOUN_SET=A]")
+
+        if self.plural:
+            meta_ids.append("[PLURAL=TRUE]")
+        else:
+            meta_ids.append("[PLURAL=FALSE]")
+
+        if form_spec.person in ("1st", "2nd"):
+            if self.animate_objects:
+                meta_ids.append("[OBJECT_ANIMACY=ANIMATE]")
+            else:
+                meta_ids.append("[OBJECT_ANIMACY=INANIMATE]")
+
+        return meta_ids
+
+    def validate(
+        self,
+        row: Dict[str, str],
+        entry_type: EntryTypeSpec,
+        compiler: Optional[MetaConstraintCompiler] = None,
+    ) -> bool:
+        from parse_chr_dict.reconstruct import validate_hypothesis
+        return validate_hypothesis(self, row, entry_type, compiler=compiler)
+
+
+LexicalVerbHypothesis = DerivationHypothesis
+LexicalVerbEntry = DerivationHypothesis
+
+
+def derive_hypotheses_for_forms(
+    forms: List[Tuple[str, FormParsingSpec | str]],
+    compiler: MetaConstraintCompiler,
+    lexical_features: Optional[Set[str]] = None,
+) -> Set[DerivationHypothesis]:
+    """
+    Derives and iteratively narrows candidate LexicalVerbEntry / DerivationHypothesis objects
+    form-by-form across a row:
+    1. Parse the initial form with its meta-label to generate candidate hypotheses
+       (root, prefix_class, aspect_class, tense_present_class, set_a, plural, animate_objects).
+    2. For each subsequent form, parse using the specific constraints of each hypothesis
+       to filter/prune the candidate set.
+    """
+    if not forms:
+        return set()
+
+    spec_by_meta = {p.meta_label_id: p for p in FORMS_TO_PARSE}
+
+    # Normalize forms to List[Tuple[str, FormParsingSpec]]
+    normalized_forms: List[Tuple[str, FormParsingSpec]] = []
+    for surface, spec_or_id in forms:
+        if isinstance(spec_or_id, FormParsingSpec):
+            spec = spec_or_id
+        else:
+            spec = spec_by_meta.get(spec_or_id)
+            if spec is None:
+                spec = FormParsingSpec(
+                    corpus_key="",
+                    name=spec_or_id,
+                    meta_label_id=spec_or_id,
+                    person="3rd",
+                    allows_set_a=True,
+                )
+        normalized_forms.append((surface, spec))
+
+    # Step 1: Initial form
+    init_surface, init_spec = normalized_forms[0]
+    if not init_surface:
+        return set()
+
+    init_parses = compiler.parse_with_lattice(init_surface, [init_spec.meta_label_id])
+    if not init_parses:
+        return set()
+
+    candidate_hypotheses: Set[DerivationHypothesis] = set()
+
+    for p in init_parses:
+        root, labels = read_labels(p)
+        pref = labels.get("prefix_class")
+        asp = labels.get("aspect_class")
+        t_pres = labels.get("tense_present_class")
+        pro_tag = labels.get("pronominal")
+        if not pref or not asp or not t_pres or not pro_tag:
+            continue
+
+        pro = Pronominal.from_tag(pro_tag)
+        is_plural = pro.number in ("ns", "pl", "dl")
+        is_transitive = pro.pronoun_set == "transitive"
+        is_set_a = pro.pronoun_set in ("A", "transitive")
+
+        # Set A candidate values
+        if init_spec.allows_set_a:
+            set_a_options = [is_set_a]
+        else:
+            set_a_options = [True, False]
+
+        # Plural candidate values
+        plural_options = [is_plural]
+
+        # Animate object candidate values
+        if is_plural:
+            animate_options = [False]
+        elif is_transitive:
+            animate_options = [True]
+        elif init_spec.person == "3rd":
+            animate_options = [False, True]
+        else:
+            animate_options = [False]
+
+        for sa in set_a_options:
+            for pl in plural_options:
+                for anim in animate_options:
+                    candidate_hypotheses.add(
+                        DerivationHypothesis(
+                            root=root,
+                            prefix_class=pref,
+                            aspect_class=asp,
+                            tense_present_class=t_pres,
+                            set_a=sa,
+                            plural=pl,
+                            animate_objects=anim,
+                        )
+                    )
+
+    if not candidate_hypotheses or len(normalized_forms) == 1:
+        return candidate_hypotheses
+
+    # Step 2: Form-by-form refinement
+    def prefix_compat(p1: str, p2: str) -> bool:
+        return p1 == p2 or (p1 in ("k_a_stem", "a_stem") and p2 in ("k_a_stem", "a_stem"))
+
+    for surface, form_spec in normalized_forms[1:]:
+        if not surface:
+            continue
+        if not candidate_hypotheses:
+            break
+
+        active_aspects = sorted(list({h.aspect_class for h in candidate_hypotheses}))
+        active_prefixes = set()
+        for h in candidate_hypotheses:
+            if h.prefix_class in ("a_stem", "k_a_stem"):
+                active_prefixes.add("a_stem")
+                active_prefixes.add("k_a_stem")
+            else:
+                active_prefixes.add(h.prefix_class)
+        active_prefixes = sorted(list(active_prefixes))
+        active_t_pres = sorted(list({h.tense_present_class for h in candidate_hypotheses}))
+
+        dyn_constraints = [
+            FeatureConstraint("aspect_class", MatchMode.EXACT if len(active_aspects) == 1 else MatchMode.ONE_OF, active_aspects),
+            FeatureConstraint("prefix_class", MatchMode.EXACT if len(active_prefixes) == 1 else MatchMode.ONE_OF, active_prefixes),
+            FeatureConstraint("tense_present_class", MatchMode.EXACT if len(active_t_pres) == 1 else MatchMode.ONE_OF, active_t_pres),
+        ]
+        meta_ids = [form_spec.meta_label_id]
+        if len({h.set_a for h in candidate_hypotheses}) == 1:
+            if next(iter(candidate_hypotheses)).set_a and form_spec.allows_set_a:
+                meta_ids.append("[PRONOUN_SET=A]")
+        if len({h.plural for h in candidate_hypotheses}) == 1:
+            meta_ids.append("[PLURAL=TRUE]" if next(iter(candidate_hypotheses)).plural else "[PLURAL=FALSE]")
+
+        parses = compiler.parse_with_lattice(surface, meta_ids, dynamic_constraints=dyn_constraints)
+        parsed_items = []
+        for p in parses:
+            p_root, p_labels = read_labels(p)
+            pro = Pronominal.from_tag(p_labels.get("pronominal", ""))
+            parsed_items.append((p_root, p_labels, pro))
+
+        surviving: Set[DerivationHypothesis] = set()
+
+        for hyp in candidate_hypotheses:
+            for p_root, p_labels, pro in parsed_items:
+                if p_root != hyp.root:
+                    continue
+                if p_labels.get("aspect_class") != hyp.aspect_class:
+                    continue
+                if p_labels.get("tense_present_class") != hyp.tense_present_class:
+                    continue
+                p_pref = p_labels.get("prefix_class", "")
+                if not prefix_compat(hyp.prefix_class, p_pref):
+                    continue
+
+                p_plural = pro.number in ("ns", "pl", "dl")
+                if p_plural != hyp.plural:
+                    continue
+
+                if form_spec.allows_set_a:
+                    p_set_a = pro.pronoun_set in ("A", "transitive")
+                    if p_set_a != hyp.set_a:
+                        continue
+
+                if form_spec.person in ("1st", "2nd"):
+                    p_trans = pro.pronoun_set == "transitive"
+                    if hyp.animate_objects:
+                        # Allow fallback for 2nd person imperative if transitive not available
+                        if not p_trans and not (form_spec.person == "2nd" and form_spec.corpus_key == "imperative"):
+                            continue
+                    else:
+                        if p_trans:
+                            continue
+
+                # Determine canonical prefix class
+                canon_pref = hyp.prefix_class if hyp.prefix_class != "k_a_stem" else (p_pref if p_pref != "k_a_stem" else "a_stem")
+                surviving.add(
+                    DerivationHypothesis(
+                        root=hyp.root,
+                        prefix_class=canon_pref,
+                        aspect_class=hyp.aspect_class,
+                        tense_present_class=hyp.tense_present_class,
+                        set_a=hyp.set_a,
+                        plural=hyp.plural,
+                        animate_objects=hyp.animate_objects,
+                    )
+                )
+                break
+
+        candidate_hypotheses = surviving
+
+    return candidate_hypotheses
+
+
 def derive_lexical_features_4step(
     forms: List[Tuple[str, str]],
     compiler: MetaConstraintCompiler,
@@ -568,112 +852,7 @@ def derive_lexical_features_4step(
     Step 4: Parse each subsequent form using dynamic_constraints from discovered lexical features and active meta-labels
             via build_query_lattice / FST composition.
     """
-    if not forms:
-        return set()
+    hypotheses = derive_hypotheses_for_forms(forms, compiler, lexical_features)
+    return {h.lexical_tuple() for h in hypotheses}
 
-    # Helper mapping from meta_id -> FormParsingSpec
-    spec_by_meta = {p.meta_label_id: p for p in FORMS_TO_PARSE}
-
-    # Step 1 & 1a: Initial form
-    init_surface, init_meta_id = forms[0]
-    init_parses = compiler.parse_with_lattice(init_surface, [init_meta_id])
-    if not init_parses:
-        return set()
-
-    # Step 2 & 3: Obtain possible metalabels and create restricted feature set + meta label candidates
-    init_lexicals: Set[Tuple[str, Tuple[Tuple[str, str], ...]]] = set()
-    parse_meta_list: List[Set[str]] = []
-
-    init_spec = spec_by_meta.get(init_meta_id)
-    for p in init_parses:
-        metalabels = set(compiler.infer_meta_labels_from_parse(p))
-        if init_meta_id in metalabels or not compiler.meta_registry.get(init_meta_id):
-            lex_item = str_to_lexical_hashable(p, lexical_features=lexical_features)
-            init_lexicals.add(lex_item)
-            parse_meta_list.append(metalabels)
-
-    if not init_lexicals:
-        return set()
-
-    if len(forms) == 1:
-        return init_lexicals
-
-    # Step 4: Parse each subsequent form using dynamic constraints + meta-label propagation + lattice composition
-    candidate_lexicals = init_lexicals
-
-    for surface, meta_id in forms[1:]:
-        if not surface:
-            continue
-        if not candidate_lexicals:
-            break
-
-        form_spec = spec_by_meta.get(meta_id)
-
-        # Infer unambiguous meta-labels from current parse candidates (labels common to all parses)
-        unambiguous_meta: Set[str] = set.intersection(*parse_meta_list) if parse_meta_list else set()
-
-        # Assemble meta label IDs for this form
-        meta_ids_for_form = [meta_id]
-        for m in sorted(unambiguous_meta):
-            if m.startswith("[PRONOUN_SET="):
-                if form_spec and form_spec.allows_set_a:
-                    meta_ids_for_form.append(m)
-            elif m.startswith("[PLURAL="):
-                meta_ids_for_form.append(m)
-
-        # Construct dynamic constraints from currently discovered lexical features
-        dynamic_constraints = []
-        for feat in sorted(lexical_features):
-            vals = set(v for _, label_tuple in candidate_lexicals for s, v in label_tuple if s == feat)
-            if feat == "prefix_class":
-                if "k_a_stem" in vals or "a_stem" in vals:
-                    vals.add("k_a_stem")
-                    vals.add("a_stem")
-            sorted_vals = sorted(list(vals))
-            if sorted_vals:
-                mode = MatchMode.EXACT if len(sorted_vals) == 1 else MatchMode.ONE_OF
-                dynamic_constraints.append(FeatureConstraint(slot_name=feat, mode=mode, values=sorted_vals))
-
-        subseq_parses = compiler.parse_with_lattice(
-            surface, meta_ids_for_form, dynamic_constraints=dynamic_constraints
-        )
-
-        subseq_lexicals = set()
-        subseq_meta_list = []
-        for p in subseq_parses:
-            metalabels = set(compiler.infer_meta_labels_from_parse(p))
-            if meta_id in metalabels or not compiler.meta_registry.get(meta_id):
-                lex_item = str_to_lexical_hashable(p, lexical_features=lexical_features)
-                subseq_lexicals.add(lex_item)
-                subseq_meta_list.append(metalabels)
-
-        # Stem-class compatible intersection between candidate_lexicals and subseq_lexicals
-        def prefix_compat(p1: str, p2: str) -> bool:
-            return p1 == p2 or (p1 in ("k_a_stem", "a_stem") and p2 in ("k_a_stem", "a_stem"))
-
-        new_candidates = set()
-        for root1, labels1 in candidate_lexicals:
-            map1 = dict(labels1)
-            for root2, labels2 in subseq_lexicals:
-                if root1 == root2:
-                    map2 = dict(labels2)
-                    if (
-                        map1.get("aspect_class") == map2.get("aspect_class")
-                        and map1.get("tense_present_class") == map2.get("tense_present_class")
-                        and prefix_compat(map1.get("prefix_class", ""), map2.get("prefix_class", ""))
-                    ):
-                        # Retain canonical prefix_class
-                        canonical_prefix = map1.get("prefix_class") if map1.get("prefix_class") != "k_a_stem" else map2.get("prefix_class", "a_stem")
-                        merged_labels = (
-                            ("aspect_class", map1["aspect_class"]),
-                            ("prefix_class", canonical_prefix),
-                            ("tense_present_class", map1["tense_present_class"]),
-                        )
-                        new_candidates.add((root1, merged_labels))
-
-        candidate_lexicals = new_candidates
-        if subseq_meta_list:
-            parse_meta_list = subseq_meta_list
-
-    return candidate_lexicals
 

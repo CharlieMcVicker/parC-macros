@@ -100,3 +100,43 @@ def test_parse_sample_cherokee():
     assert isinstance(parses, list)
     assert len(parses) > 0
     assert any("[BOW]" in p and "[EOW]" in p for p in parses)
+
+
+def test_derivation_pipeline_hypothesis_refinement():
+    from parse_chr_dict.meta_label_compiler import derive_hypotheses_for_forms, DerivationHypothesis
+    from parse_chr_dict.reconstruct import validate_hypothesis
+    compiler = MetaConstraintCompiler()
+
+    # Multi-form row
+    forms = [
+        ("atateka", "[FORM=3RD_PRES]"),
+        ("katateka", "[FORM=1ST_PRES]"),
+        ("atateko'i", "[FORM=3RD_HABITUAL]"),
+        ("utatinvsv'i", "[FORM=3RD_COMPLETIVE]"),
+    ]
+    hyps = derive_hypotheses_for_forms(forms, compiler)
+    assert len(hyps) > 0
+    for h in hyps:
+        assert isinstance(h, DerivationHypothesis)
+        assert h.set_a is True
+        assert h.plural is False
+
+    row = {
+        "present": "atateka",
+        "present_1sg": "katateka",
+        "imperfective": "atateko'i",
+        "perfective": "utatinvsv'i",
+        "imperative": "hatatuka",
+        "infinitive": "utatinvti",
+    }
+    validated = [h for h in hyps if validate_hypothesis(h, row, PRIMARY_ENTRY_TYPES[0], compiler=compiler)]
+    assert len(validated) > 0
+    val_hyp = validated[0]
+    assert val_hyp.root == "[Pro]atat[Aspect][Tense]"
+    assert val_hyp.aspect_class == "go-in"
+    assert val_hyp.prefix_class == "a_stem"
+    assert val_hyp.tense_present_class == "a_present"
+    assert val_hyp.set_a is True
+    assert val_hyp.plural is False
+    assert val_hyp.animate_objects is False
+
