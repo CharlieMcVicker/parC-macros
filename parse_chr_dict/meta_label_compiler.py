@@ -15,6 +15,10 @@ from parC.grammar.paradigm_compilation import (
 )
 from parC.grammar.acceptor_compilation import fsm_strings
 from parse_chr_dict.parse import feature_tag, read_labels, str_to_lexical_hashable
+from parse_chr_dict.h_alternation import (
+    is_h_alternation_trigger,
+    grades_are_compatible,
+)
 
 
 class MatchMode(str, Enum):
@@ -41,12 +45,12 @@ class Pronominal:
             person = "1st" if subj.startswith("1") else "2nd" if subj.startswith("2") else "3rd"
             return cls(tag=tag, person=person, number="sg", pronoun_set="transitive")
 
-        # Standard tags: 3sg.A, 1sg.B, 3ns.A, E.A, Epl.A, etc.
+        # Standard tags: 3sg.A, 1sg.B, 3ns.A, Epl.A, etc.
         parts = tag.split(".")
         prefix = parts[0]
         pronoun_set = parts[1] if len(parts) > 1 else "A"
 
-        if prefix.startswith("1") or prefix.startswith("E"):
+        if prefix.startswith("1") or prefix.startswith("E") or prefix.startswith("I"):
             person = "1st"
             number = "sg" if prefix == "1sg" else "dl" if "dl" in prefix else "pl"
         elif prefix.startswith("2"):
@@ -67,7 +71,8 @@ ALL_PRONOMINALS: List[Pronominal] = [
         "3ns.A", "3ns.B", "3dl.A", "3dl.B",
         "1pl.A", "1pl.B", "1dl.A", "1dl.B",
         "2pl.A", "2pl.B", "2dl.A", "2dl.B",
-        "E.A", "E.B", "Epl.A", "Epl.B", "Edl.A", "Edl.B",
+        "Epl.A", "Epl.B", "Edl.A", "Edl.B",
+        "Ipl.A", "Ipl.B", "Idl.A", "Idl.B",
         "1sg>3sg", "2sg>3sg",
     ]
 ]
@@ -589,20 +594,22 @@ class MetaConstraintCompiler:
 @dataclass(frozen=True)
 class DerivationHypothesis:
     """
-    Represents a candidate lexical verb entry hypothesis with morphological root,
+    Represents a candidate lexical verb entry hypothesis with morphological root grades (h_root, glottal_root),
     lexical inflection classes, and meta-label traits.
     """
-    root: str
-    prefix_class: str
-    aspect_class: str
-    tense_present_class: str
+    h_root: str
+    glottal_root: Optional[str] = None
+    prefix_class: str = ""
+    aspect_class: str = ""
+    tense_present_class: str = ""
     set_a: bool = True
     plural: bool = False
     animate_objects: bool = False
 
     def to_dict(self) -> Dict[str, Any]:
         return {
-            "root": self.root,
+            "h_root": self.h_root,
+            "glottal_root": self.glottal_root if self.glottal_root is not None else "",
             "prefix_class": self.prefix_class,
             "aspect_class": self.aspect_class,
             "tense_present_class": self.tense_present_class,
@@ -618,9 +625,10 @@ class DerivationHypothesis:
             "tense_present_class": self.tense_present_class,
         }
 
-    def lexical_tuple(self) -> Tuple[str, Tuple[Tuple[str, str], ...]]:
+    def lexical_tuple(self) -> Tuple[str, Optional[str], Tuple[Tuple[str, str], ...]]:
         return (
-            self.root,
+            self.h_root,
+            self.glottal_root,
             (
                 ("aspect_class", self.aspect_class),
                 ("prefix_class", self.prefix_class),
@@ -689,9 +697,9 @@ def derive_hypotheses_for_forms(
     Derives and iteratively narrows candidate LexicalVerbEntry / DerivationHypothesis objects
     form-by-form across a row:
     1. Parse the initial form with its meta-label to generate candidate hypotheses
-       (root, prefix_class, aspect_class, tense_present_class, set_a, plural, animate_objects).
+       (h_root, glottal_root, prefix_class, aspect_class, tense_present_class, set_a, plural, animate_objects).
     2. For each subsequent form, parse using the specific constraints of each hypothesis
-       to filter/prune the candidate set.
+       to filter/prune the candidate set and check H-alternation compatibility.
     """
     if not forms:
         return set()
@@ -739,6 +747,7 @@ def derive_hypotheses_for_forms(
         is_plural = pro.number in ("ns", "pl", "dl")
         is_transitive = pro.pronoun_set == "transitive"
         is_set_a = pro.pronoun_set in ("A", "transitive")
+        is_glottal = is_h_alternation_trigger(pro_tag)
 
         # Set A candidate values
         if init_spec.allows_set_a:
@@ -764,7 +773,8 @@ def derive_hypotheses_for_forms(
                 for anim in animate_options:
                     candidate_hypotheses.add(
                         DerivationHypothesis(
-                            root=root,
+                            h_root=root,
+                            glottal_root=root if is_glottal else None,
                             prefix_class=pref,
                             aspect_class=asp,
                             tense_present_class=t_pres,
@@ -814,8 +824,8 @@ def derive_hypotheses_for_forms(
         if not parses:
             return set()
 
-        # Group parses by (p_root, p_asp, p_t_pres) for fast O(1) lookup
-        parsed_by_key: Dict[Tuple[str, str, str], List[Tuple[str, bool, bool, bool]]] = {}
+        # Group parses by (p_asp, p_t_pres)
+        parsed_by_asp_tense: Dict[Tuple[str, str], List[Tuple[str, str, str, bool, bool, bool, bool]]] = {}
         for p in parses:
             p_root, p_labels = read_labels(p)
             p_pref = p_labels.get("prefix_class", "")
@@ -826,20 +836,21 @@ def derive_hypotheses_for_forms(
             p_plural = pro.number in ("ns", "pl", "dl")
             p_set_a = pro.pronoun_set in ("A", "transitive")
             p_trans = pro.pronoun_set == "transitive"
+            p_is_glottal = is_h_alternation_trigger(pro_tag)
 
-            key = (p_root, p_asp, p_t_pres)
-            if key not in parsed_by_key:
-                parsed_by_key[key] = []
-            parsed_by_key[key].append((p_pref, p_plural, p_set_a, p_trans))
+            key = (p_asp, p_t_pres)
+            if key not in parsed_by_asp_tense:
+                parsed_by_asp_tense[key] = []
+            parsed_by_asp_tense[key].append((p_root, p_pref, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal))
 
         surviving: Set[DerivationHypothesis] = set()
 
         for hyp in candidate_hypotheses:
-            matching_items = parsed_by_key.get((hyp.root, hyp.aspect_class, hyp.tense_present_class))
+            matching_items = parsed_by_asp_tense.get((hyp.aspect_class, hyp.tense_present_class))
             if not matching_items:
                 continue
 
-            for p_pref, p_plural, p_set_a, p_trans in matching_items:
+            for p_root, p_pref, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal in matching_items:
                 if not prefix_compat(hyp.prefix_class, p_pref):
                     continue
 
@@ -859,11 +870,27 @@ def derive_hypotheses_for_forms(
                         if p_trans:
                             continue
 
+                # Root compatibility check
+                if p_is_glottal:
+                    if hyp.glottal_root is not None:
+                        if p_root != hyp.glottal_root:
+                            continue
+                        new_glottal = hyp.glottal_root
+                    else:
+                        if not grades_are_compatible(h=hyp.h_root, glottal=p_root):
+                            continue
+                        new_glottal = p_root
+                else:
+                    if p_root != hyp.h_root:
+                        continue
+                    new_glottal = hyp.glottal_root
+
                 # Determine canonical prefix class
                 canon_pref = hyp.prefix_class if hyp.prefix_class != "k_a_stem" else (p_pref if p_pref != "k_a_stem" else "a_stem")
                 surviving.add(
                     DerivationHypothesis(
-                        root=hyp.root,
+                        h_root=hyp.h_root,
+                        glottal_root=new_glottal,
                         prefix_class=canon_pref,
                         aspect_class=hyp.aspect_class,
                         tense_present_class=hyp.tense_present_class,
@@ -872,7 +899,6 @@ def derive_hypotheses_for_forms(
                         animate_objects=hyp.animate_objects,
                     )
                 )
-                break
 
         candidate_hypotheses = surviving
 

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 from parse_chr_dict.create_aspect_class_csv import respell_consonants
+from parse_chr_dict.h_alternation import is_h_alternation_trigger
 from parse_chr_dict.meta_label_compiler import (
     FORMS_TO_PARSE,
     EntryTypeSpec as EntryType,
@@ -129,7 +130,8 @@ class MetaLabelCombination:
     def validate(
         self,
         *,
-        root: str,
+        h_root: str,
+        glottal_root: Optional[str] = None,
         reference_form: str,
         labels: dict[str, str],
         parsing_meta: FormParsing,
@@ -148,10 +150,17 @@ class MetaLabelCombination:
         prefix_candidates = (pref, "k_a_stem") if pref == "a_stem" else (pref,)
 
         for pro in pronominal_candidates:
+            if is_h_alternation_trigger(pro):
+                if glottal_root is None:
+                    continue
+                active_root = glottal_root
+            else:
+                active_root = h_root
+
             for p_cand in prefix_candidates:
                 all_labels = {**labels, **form_labels, "pronominal": pro, "prefix_class": p_cand}
                 surface_forms = memoized_inflect(
-                    root,
+                    active_root,
                     feature_values=all_labels,
                     name="verb",
                     open_root=True,
@@ -195,7 +204,8 @@ def validate_hypothesis(
         if reference_form and " " not in reference_form:
             ref_surface = respell_consonants(reference_form)
             if not meta_comb.validate(
-                root=hypothesis.root,
+                h_root=hypothesis.h_root,
+                glottal_root=hypothesis.glottal_root,
                 reference_form=ref_surface,
                 labels=labels,
                 parsing_meta=parsing_meta,
@@ -220,7 +230,8 @@ def reconstruct_row(row, entry_type: EntryType, lexical_fields: list[str], compi
                 labels = {k: row[k] for k in lexical_fields if k in row}
                 labels["rules"] = "+"
                 if not spec.validate(
-                    root=row["root"],
+                    h_root=row["h_root"],
+                    glottal_root=row.get("glottal_root") or None,
                     reference_form=reference_form,
                     labels=labels,
                     parsing_meta=parsing_meta,

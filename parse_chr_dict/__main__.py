@@ -51,10 +51,15 @@ def labels_match(
 
 
 def write_roots(row, entry_type, roots, writer, compiler=None):
-    for r, label_values in sorted(roots, key=str):
+    for entry, label_values in sorted(roots, key=str):
         data = {**row}
         data["entry_type"] = entry_type.name
-        data["root"] = r
+        if isinstance(entry, tuple):
+            data["h_root"] = entry[0]
+            data["glottal_root"] = entry[1] or ""
+        else:
+            data["h_root"] = entry
+            data["glottal_root"] = ""
 
         for k, v in label_values:
             data[k] = v
@@ -116,7 +121,7 @@ def main():
         error_writer.writeheader()
         roots_writer = csv.DictWriter(
             roots_f,
-            fieldnames=fieldnames + ["entry_type", "root"] + sorted(LEXICAL_FEATURES) + ReconstructionSpec.fieldnames(),
+            fieldnames=fieldnames + ["entry_type", "h_root", "glottal_root"] + sorted(LEXICAL_FEATURES) + ReconstructionSpec.fieldnames(),
         )
         roots_writer.writeheader()
 
@@ -158,7 +163,8 @@ def main():
                     for h in sorted(
                         valid_hypotheses,
                         key=lambda x: (
-                            x.root,
+                            x.h_root,
+                            x.glottal_root or "",
                             x.aspect_class,
                             x.prefix_class,
                             x.tense_present_class,
