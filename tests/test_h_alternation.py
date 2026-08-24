@@ -1,4 +1,9 @@
+from __future__ import annotations
+import csv
+from pathlib import Path
 import pytest
+import pynini
+
 from parse_chr_dict.h_alternation import (
     is_h_alternation_trigger,
     grades_are_compatible,
@@ -10,64 +15,210 @@ from parse_chr_dict.h_alternation import (
     _drop_h_in_deaffricated_lateral,
     _is_compatible_with_vowel_restoration,
 )
+from parse_chr_dict.h_alternation_fst import (
+    build_drop_first_h_fst,
+    build_first_h_to_glottal_fst,
+    build_drop_h_in_deaffricated_lateral_fst,
+    build_prevent_c_glottal_cluster_fst,
+    build_recreate_c_glottal_clusters_fst,
+    build_possible_alternates_fst,
+    build_vowel_restoration_fst,
+    build_grades_compatible_fst,
+    fst_possible_alternates,
+    fst_prevent_c_glottal_cluster,
+    fst_recreate_c_glottal_clusters,
+    fst_grades_are_compatible,
+)
+
+DATA_DIR = Path(__file__).parent / "data"
 
 
-def test_h_alternation_triggers():
-    assert is_h_alternation_trigger("1sg>3sg") is True
-    assert is_h_alternation_trigger("2sg>3sg") is True
-    assert is_h_alternation_trigger("1sg.A") is True
-
-    # Other pronominals do not trigger H-alternation
-    assert is_h_alternation_trigger("3sg.A") is False
-    assert is_h_alternation_trigger("2sg.A") is False
-    assert is_h_alternation_trigger("3ns.A") is False
-    assert is_h_alternation_trigger("1sg.B") is False
-    assert is_h_alternation_trigger("2sg.B") is False
-    assert is_h_alternation_trigger("3sg.B") is False
-    assert is_h_alternation_trigger("3ns.B") is False
-    assert is_h_alternation_trigger("Epl.A") is False
-    assert is_h_alternation_trigger("Edl.A") is False
+def load_csv_rows(filename: str) -> list[dict[str, str]]:
+    with open(DATA_DIR / filename, "r", encoding="utf-8") as f:
+        return list(csv.DictReader(f))
 
 
-def test_drop_first_h():
-    assert _drop_first_h("ahne") == "ane"
-    assert _drop_first_h("noh") == "no"
-    assert _drop_first_h("gawoniha") == "gawonia"
-    assert _drop_first_h("atat") == "atat"
+def _run_fst_output(fst: pynini.Fst, text: str) -> list[str]:
+    res = pynini.compose(pynini.accep(text), fst)
+    if res.num_states() == 0:
+        return []
+    out = pynini.project(res, "output").optimize()
+    return [item[1] for item in out.paths().items()]
 
 
-def test_first_h_to_glottal():
-    assert _first_h_to_glottal("ahne") == "a'ne"
-    assert _first_h_to_glottal("noh") == "no'"
-    assert _first_h_to_glottal("atat") == "atat"
+# Load CSV datasets
+TRIGGERS_DATA = load_csv_rows("h_alternation_triggers.csv")
+PHONOLOGY_RULES_DATA = load_csv_rows("h_alternation_phonology_rules.csv")
+VOWEL_RESTORATION_DATA = load_csv_rows("h_alternation_vowel_restoration.csv")
+POSSIBLE_ALTERNATES_DATA = load_csv_rows("h_alternation_possible_alternates.csv")
+GRADES_COMPATIBLE_DATA = load_csv_rows("h_alternation_grades_compatible.csv")
 
 
-def test_drop_h_in_deaffricated_lateral():
-    assert _drop_h_in_deaffricated_lateral("alhis") == "atlis"
-    assert _drop_h_in_deaffricated_lateral("atat") == "atat"
+@pytest.mark.parametrize(
+    "row",
+    TRIGGERS_DATA,
+    ids=[r["pronominal"] for r in TRIGGERS_DATA],
+)
+def test_h_alternation_triggers_from_csv(row: dict[str, str]):
+    pronominal = row["pronominal"]
+    expected = row["is_trigger"].lower() == "true"
+    assert is_h_alternation_trigger(pronominal) is expected
 
 
-def test_prevent_and_recreate_glottal_clusters():
-    # Sequence of consonant + glottal stop turned into glottal stop + consonant
-    assert prevent_C_glottal_cluster("at'") == "a't"
-    assert prevent_C_glottal_cluster("ats'") == "a'ts"
-    assert recreate_C_glottal_clusters("a't") == "at'"
-    assert recreate_C_glottal_clusters("a'ts") == "ats'"
+@pytest.mark.parametrize(
+    "row",
+    [r for r in PHONOLOGY_RULES_DATA if r["rule_name"] == "drop_first_h"],
+    ids=[f"drop_first_h_{r['input_str']}" for r in PHONOLOGY_RULES_DATA if r["rule_name"] == "drop_first_h"],
+)
+def test_drop_first_h_from_csv(row: dict[str, str]):
+    input_str = row["input_str"]
+    expected = row["expected_output"]
+
+    # Python
+    py_res = _drop_first_h(input_str)
+    assert py_res == expected
+
+    # FST
+    fst = build_drop_first_h_fst()
+    fst_outputs = _run_fst_output(fst, input_str)
+    assert expected in fst_outputs
+    assert py_res in fst_outputs
 
 
-def test_grades_are_compatible():
-    # Direct match
-    assert grades_are_compatible(h="atat", glottal="atat") is True
+@pytest.mark.parametrize(
+    "row",
+    [r for r in PHONOLOGY_RULES_DATA if r["rule_name"] == "first_h_to_glottal"],
+    ids=[f"first_h_to_glottal_{r['input_str']}" for r in PHONOLOGY_RULES_DATA if r["rule_name"] == "first_h_to_glottal"],
+)
+def test_first_h_to_glottal_from_csv(row: dict[str, str]):
+    input_str = row["input_str"]
+    expected = row["expected_output"]
 
-    # Drop h
-    assert grades_are_compatible(h="ahne", glottal="ane") is True
+    # Python
+    py_res = _first_h_to_glottal(input_str)
+    assert py_res == expected
 
-    # H to glottal
-    assert grades_are_compatible(h="ahne", glottal="a'ne") is True
+    # FST
+    fst = build_first_h_to_glottal_fst()
+    fst_outputs = _run_fst_output(fst, input_str)
+    assert expected in fst_outputs
+    assert py_res in fst_outputs
 
-    # Lateral deaffrication
-    assert grades_are_compatible(h="alhis", glottal="atlis") is True
 
-    # Incompatible stems
-    assert grades_are_compatible(h="atat", glottal="kanestalat") is False
-    assert grades_are_compatible(h="gawoniha", glottal="tsuni") is False
+@pytest.mark.parametrize(
+    "row",
+    [r for r in PHONOLOGY_RULES_DATA if r["rule_name"] == "drop_h_in_deaffricated_lateral"],
+    ids=[f"drop_lateral_{r['input_str']}" for r in PHONOLOGY_RULES_DATA if r["rule_name"] == "drop_h_in_deaffricated_lateral"],
+)
+def test_drop_h_in_deaffricated_lateral_from_csv(row: dict[str, str]):
+    input_str = row["input_str"]
+    expected = row["expected_output"]
+
+    # Python
+    py_res = _drop_h_in_deaffricated_lateral(input_str)
+    assert py_res == expected
+
+    # FST
+    fst = build_drop_h_in_deaffricated_lateral_fst()
+    fst_outputs = _run_fst_output(fst, input_str)
+    assert expected in fst_outputs
+    assert py_res in fst_outputs
+
+
+@pytest.mark.parametrize(
+    "row",
+    [r for r in PHONOLOGY_RULES_DATA if r["rule_name"] == "prevent_c_glottal_cluster"],
+    ids=[f"prevent_{r['input_str']}" for r in PHONOLOGY_RULES_DATA if r["rule_name"] == "prevent_c_glottal_cluster"],
+)
+def test_prevent_c_glottal_cluster_from_csv(row: dict[str, str]):
+    form = row["input_str"]
+    prevented = row["expected_output"]
+
+    # Python
+    py_res = prevent_C_glottal_cluster(form)
+    assert py_res == prevented
+
+    # FST
+    fst_res = fst_prevent_c_glottal_cluster(form)
+    assert fst_res == prevented
+
+
+@pytest.mark.parametrize(
+    "row",
+    [r for r in PHONOLOGY_RULES_DATA if r["rule_name"] == "recreate_c_glottal_clusters"],
+    ids=[f"recreate_{r['input_str']}" for r in PHONOLOGY_RULES_DATA if r["rule_name"] == "recreate_c_glottal_clusters"],
+)
+def test_recreate_c_glottal_clusters_from_csv(row: dict[str, str]):
+    surface = row["input_str"]
+    recreated = row["expected_output"]
+
+    # Python
+    py_res = recreate_C_glottal_clusters(surface)
+    assert py_res == recreated
+
+    # FST
+    fst_res = fst_recreate_c_glottal_clusters(surface)
+    assert fst_res == recreated
+
+
+@pytest.mark.parametrize(
+    "row",
+    VOWEL_RESTORATION_DATA,
+    ids=[f"restoration_{r['restored']}_vs_{r['syncopated']}" for r in VOWEL_RESTORATION_DATA],
+)
+def test_is_compatible_with_vowel_restoration_from_csv(row: dict[str, str]):
+    restored = row["restored"]
+    syncopated = row["syncopated"]
+    expected = row["is_compatible"].lower() == "true"
+
+    py_res = _is_compatible_with_vowel_restoration(restored=restored, syncopated=syncopated)
+    assert py_res is expected
+
+
+@pytest.mark.parametrize(
+    "row",
+    POSSIBLE_ALTERNATES_DATA,
+    ids=[f"alt_{r['h_form']}_fix_{r['fix_clusters']}" for r in POSSIBLE_ALTERNATES_DATA],
+)
+def test_possible_alternates_from_csv(row: dict[str, str]):
+    h_form = row["h_form"]
+    fix_clusters = row["fix_clusters"].lower() == "true"
+    expected_set = set(row["expected_alternates"].split("|")) if row["expected_alternates"] else set()
+
+    py_set = set(possible_alternates(h_form, fix_clusters=fix_clusters))
+    fst_set = fst_possible_alternates(h_form, fix_clusters=fix_clusters)
+
+    assert py_set == fst_set
+    assert py_set == expected_set
+
+
+@pytest.mark.parametrize(
+    "row",
+    GRADES_COMPATIBLE_DATA,
+    ids=[f"grades_{r['h_form']}_{r['glottal_form']}" for r in GRADES_COMPATIBLE_DATA],
+)
+def test_grades_are_compatible_from_csv(row: dict[str, str]):
+    h_form = row["h_form"]
+    glottal_form = row["glottal_form"]
+    expected = row["is_compatible"].lower() == "true"
+
+    py_res = grades_are_compatible(h=h_form, glottal=glottal_form)
+    fst_res = fst_grades_are_compatible(h=h_form, glottal=glottal_form)
+
+    assert py_res is expected
+    assert fst_res is expected
+
+
+def test_fst_grades_compatible_transducer_structure():
+    fst = build_grades_compatible_fst()
+    assert fst.num_states() > 0
+
+    input_fsa = pynini.accep("ahne")
+    composed = pynini.compose(input_fsa, fst)
+    assert composed.num_states() > 0
+    projected = pynini.project(composed, "output").optimize()
+    outputs = {item[1] for item in projected.paths().items()}
+
+    assert "ane" in outputs
+    assert "a'ne" in outputs
+    assert "ahne" in outputs

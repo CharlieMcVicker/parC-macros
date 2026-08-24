@@ -1,0 +1,15 @@
+pronominal,is_trigger
+1sg>3sg,True
+2sg>3sg,True
+1sg.A,True
+3sg.A,False
+2sg.A,False
+3ns.A,False
+1sg.B,False
+2sg.B,False
+3sg.B,False
+3ns.B,False
+Epl.A,False
+Edl.A,False
+1pl.A,False
+3pl>3sg,False

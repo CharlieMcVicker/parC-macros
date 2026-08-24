@@ -120,3 +120,21 @@ def grades_are_compatible(*, h: str, glottal: str) -> bool:
             return True
 
     return False
+
+
+# Re-export FST-based implementations
+from parse_chr_dict.h_alternation_fst import (
+    build_drop_first_h_fst,
+    build_first_h_to_glottal_fst,
+    build_drop_h_in_deaffricated_lateral_fst,
+    build_prevent_c_glottal_cluster_fst,
+    build_recreate_c_glottal_clusters_fst,
+    build_possible_alternates_fst,
+    build_vowel_restoration_fst,
+    build_grades_compatible_fst,
+    fst_possible_alternates,
+    fst_prevent_c_glottal_cluster,
+    fst_recreate_c_glottal_clusters,
+    fst_grades_are_compatible,
+)
+

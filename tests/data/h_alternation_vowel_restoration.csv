@@ -1,0 +1,15 @@
+restored,syncopated,is_compatible,notes
+atat,atat,False,exact match handled by identity outside of restoration
+alihwo,alahwo,True,clothing words quality shift i -> a
+ilihwo,alahwo,True,multiple a -> i quality shifts
+akalo,aklo,True,single medial vowel dropped
+akalo,kalo,True,single initial vowel dropped
+akalo,akal,True,single final vowel dropped
+tsiyathvtastiha,tsiyathvtstha,False,two vowels dropped (len diff = 2)
+tsihsgo,tsgo,True,s + V + hs restoration
+tsahsgo,tsgo,True,s + V + hs restoration with a
+asvhsde,asde,True,s + V + hs restoration with v
+kanestalat,atat,False,incompatible stems
+atat,kanestalat,False,incompatible stems
+gawoniha,tsuni,False,incompatible stems
+akalo,akto,False,consonant mismatch
