@@ -121,9 +121,10 @@ def main():
         error_writer.writeheader()
         roots_writer = csv.DictWriter(
             roots_f,
-            fieldnames=fieldnames + ["entry_type", "h_root", "glottal_root"] + sorted(LEXICAL_FEATURES) + ReconstructionSpec.fieldnames(),
+            fieldnames=fieldnames + ["entry_type", "h_root", "glottal_root", "h_alt_tag"] + sorted(LEXICAL_FEATURES) + ReconstructionSpec.fieldnames(),
         )
         roots_writer.writeheader()
+
 
         next(reader)
         rows = list(reader)

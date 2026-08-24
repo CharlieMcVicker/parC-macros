@@ -8,6 +8,9 @@ patterns:
 - name: Consonants
   pattern: <Stops>|<Frc>|<Son>|<N>
   ref: <C>
+- name: H_ALT
+  pattern: <H_ALT>
+  ref: <H_ALT>
 
 ## HELP FOR PATTERNS ##
 # List of pattern definitions.

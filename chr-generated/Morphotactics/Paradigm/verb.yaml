@@ -20,4 +20,4 @@ stage_order:
 - tense
 - insert_dist
 - insert_wi
-open_root_template: '[WI]?[DIST]?[Pro][H_ALT]?<V>?(<C>+<V>)*<C>*[Aspect][Tense]'
+open_root_template: '[WI]?[DIST]?[Pro]<H_ALT>?<V>?(<C>+<V>)*<C>*[Aspect][Tense]'

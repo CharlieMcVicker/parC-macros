@@ -16,10 +16,24 @@ from parC.grammar.paradigm_compilation import (
 from parC.grammar.acceptor_compilation import fsm_strings
 from parse_chr_dict.parse import feature_tag, read_labels, str_to_lexical_hashable
 from parse_chr_dict.h_alternation import (
+    H_ALT_TAGS,
     is_h_alternation_trigger,
     validate_h_alternation_trigger,
     grades_are_compatible,
 )
+
+
+def extract_h_alt_tag_from_root(root: str) -> Tuple[str, Optional[str]]:
+    """
+    Extracts fine-grained H-alternation tag ([H_DROP], [H_GLOT], [H_LAT], [H_NONE])
+    from the root string if present.
+    Returns (cleaned_root, h_alt_tag).
+    """
+    for tag in H_ALT_TAGS:
+        if tag in root:
+            cleaned = root.replace(tag, "")
+            return cleaned, tag
+    return root, None
 
 
 class MatchMode(str, Enum):
@@ -596,10 +610,11 @@ class MetaConstraintCompiler:
 class DerivationHypothesis:
     """
     Represents a candidate lexical verb entry hypothesis with morphological root grades (h_root, glottal_root),
-    lexical inflection classes, and meta-label traits.
+    fine-grained H-alternation tag (h_alt_tag), lexical inflection classes, and meta-label traits.
     """
     h_root: str
     glottal_root: Optional[str] = None
+    h_alt_tag: Optional[str] = None
     prefix_class: str = ""
     aspect_class: str = ""
     tense_present_class: str = ""
@@ -611,6 +626,7 @@ class DerivationHypothesis:
         return {
             "h_root": self.h_root,
             "glottal_root": self.glottal_root if self.glottal_root is not None else "",
+            "h_alt_tag": self.h_alt_tag if self.h_alt_tag is not None else "",
             "prefix_class": self.prefix_class,
             "aspect_class": self.aspect_class,
             "tense_present_class": self.tense_present_class,
@@ -626,10 +642,11 @@ class DerivationHypothesis:
             "tense_present_class": self.tense_present_class,
         }
 
-    def lexical_tuple(self) -> Tuple[str, Optional[str], Tuple[Tuple[str, str], ...]]:
+    def lexical_tuple(self) -> Tuple[str, Optional[str], Optional[str], Tuple[Tuple[str, str], ...]]:
         return (
             self.h_root,
             self.glottal_root,
+            self.h_alt_tag,
             (
                 ("aspect_class", self.aspect_class),
                 ("prefix_class", self.prefix_class),
@@ -736,7 +753,8 @@ def derive_hypotheses_for_forms(
     candidate_hypotheses: Set[DerivationHypothesis] = set()
 
     for p in init_parses:
-        root, labels = read_labels(p)
+        raw_root, labels = read_labels(p)
+        root, h_alt_tag = extract_h_alt_tag_from_root(raw_root)
         pref = labels.get("prefix_class")
         asp = labels.get("aspect_class")
         t_pres = labels.get("tense_present_class")
@@ -749,6 +767,10 @@ def derive_hypotheses_for_forms(
         is_transitive = pro.pronoun_set == "transitive"
         is_set_a = pro.pronoun_set in ("A", "transitive")
         is_glottal = is_h_alternation_trigger(pro_tag)
+
+        # Validate trigger if mutation tag is present
+        if not validate_h_alternation_trigger(pro_tag, h_alt_tag):
+            continue
 
         # Set A candidate values
         if init_spec.allows_set_a:
@@ -776,6 +798,7 @@ def derive_hypotheses_for_forms(
                         DerivationHypothesis(
                             h_root=root,
                             glottal_root=root if is_glottal else None,
+                            h_alt_tag=h_alt_tag,
                             prefix_class=pref,
                             aspect_class=asp,
                             tense_present_class=t_pres,
@@ -826,9 +849,10 @@ def derive_hypotheses_for_forms(
             return set()
 
         # Group parses by (p_asp, p_t_pres)
-        parsed_by_asp_tense: Dict[Tuple[str, str], List[Tuple[str, str, str, bool, bool, bool, bool]]] = {}
+        parsed_by_asp_tense: Dict[Tuple[str, str], List[Tuple[str, Optional[str], str, str, bool, bool, bool, bool]]] = {}
         for p in parses:
-            p_root, p_labels = read_labels(p)
+            raw_p_root, p_labels = read_labels(p)
+            p_root, p_h_alt_tag = extract_h_alt_tag_from_root(raw_p_root)
             p_pref = p_labels.get("prefix_class", "")
             p_asp = p_labels.get("aspect_class", "")
             p_t_pres = p_labels.get("tense_present_class", "")
@@ -839,10 +863,13 @@ def derive_hypotheses_for_forms(
             p_trans = pro.pronoun_set == "transitive"
             p_is_glottal = is_h_alternation_trigger(pro_tag)
 
+            if not validate_h_alternation_trigger(pro_tag, p_h_alt_tag):
+                continue
+
             key = (p_asp, p_t_pres)
             if key not in parsed_by_asp_tense:
                 parsed_by_asp_tense[key] = []
-            parsed_by_asp_tense[key].append((p_root, p_pref, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal))
+            parsed_by_asp_tense[key].append((p_root, p_h_alt_tag, p_pref, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal))
 
         surviving: Set[DerivationHypothesis] = set()
 
@@ -851,7 +878,7 @@ def derive_hypotheses_for_forms(
             if not matching_items:
                 continue
 
-            for p_root, p_pref, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal in matching_items:
+            for p_root, p_h_alt_tag, p_pref, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal in matching_items:
                 if not prefix_compat(hyp.prefix_class, p_pref):
                     continue
 
@@ -870,6 +897,14 @@ def derive_hypotheses_for_forms(
                     else:
                         if p_trans:
                             continue
+
+                # Lock in or verify fine-grained h_alt_tag
+                if p_h_alt_tag is not None:
+                    if hyp.h_alt_tag is not None and hyp.h_alt_tag != p_h_alt_tag:
+                        continue
+                    new_h_alt_tag = p_h_alt_tag
+                else:
+                    new_h_alt_tag = hyp.h_alt_tag
 
                 # Root compatibility check
                 if p_is_glottal:
@@ -892,6 +927,7 @@ def derive_hypotheses_for_forms(
                     DerivationHypothesis(
                         h_root=hyp.h_root,
                         glottal_root=new_glottal,
+                        h_alt_tag=new_h_alt_tag,
                         prefix_class=canon_pref,
                         aspect_class=hyp.aspect_class,
                         tense_present_class=hyp.tense_present_class,

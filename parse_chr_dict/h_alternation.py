@@ -11,18 +11,39 @@ H_ALTERNATION_TRIGGER_PRONOMINALS: Set[str] = {
 }
 
 
+H_ALT_TAGS: Set[str] = {
+    "[H_DROP]",
+    "[H_GLOT]",
+    "[H_LAT]",
+    "[H_NONE]",
+}
+
+
 def is_h_alternation_trigger(pronominal: str) -> bool:
     """Returns True if the pronominal triggers H-alternation (glottal grade)."""
     return pronominal in H_ALTERNATION_TRIGGER_PRONOMINALS
 
 
-def validate_h_alternation_trigger(pronominal: str, has_h_alt: bool) -> bool:
+def validate_h_alternation_trigger(
+    pronominal: str,
+    h_alt_tag: Optional[str] | bool = None,
+    has_h_alt: Optional[bool] = None,
+) -> bool:
     """
-    Validates that [H_ALT] or H-alternation rule application co-occurs strictly
-    with H-alternating trigger prefixes (1sg>3sg, 2sg>3sg, 1sg.A).
-    Returns False if has_h_alt is True but pronominal is not a trigger.
+    Validates that fine-grained mutation tags ([H_DROP], [H_GLOT], [H_LAT]) or has_h_alt flag
+    co-occur strictly with H-alternating trigger prefixes (1sg>3sg, 2sg>3sg, 1sg.A).
+    Returns False if mutation tag / has_h_alt is present but pronominal is not a trigger.
     """
-    if has_h_alt and not is_h_alternation_trigger(pronominal):
+    if has_h_alt is not None:
+        has_mutation = has_h_alt
+    elif isinstance(h_alt_tag, bool):
+        has_mutation = h_alt_tag
+    elif isinstance(h_alt_tag, str):
+        has_mutation = h_alt_tag in {"[H_DROP]", "[H_GLOT]", "[H_LAT]"}
+    else:
+        has_mutation = False
+
+    if has_mutation and not is_h_alternation_trigger(pronominal):
         return False
     return True
 

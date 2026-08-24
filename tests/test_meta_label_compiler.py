@@ -259,6 +259,7 @@ def test_derivation_hypothesis_dataclass_and_aliases():
     hyp = DerivationHypothesis(
         h_root="[Pro]atat[Aspect][Tense]",
         glottal_root=None,
+        h_alt_tag="[H_DROP]",
         prefix_class="a_stem",
         aspect_class="go-in",
         tense_present_class="a_present",
@@ -268,6 +269,7 @@ def test_derivation_hypothesis_dataclass_and_aliases():
     )
     assert hyp.h_root == "[Pro]atat[Aspect][Tense]"
     assert hyp.glottal_root is None
+    assert hyp.h_alt_tag == "[H_DROP]"
     assert hyp.prefix_class == "a_stem"
     assert hyp.aspect_class == "go-in"
     assert hyp.tense_present_class == "a_present"
@@ -278,6 +280,7 @@ def test_derivation_hypothesis_dataclass_and_aliases():
     d = hyp.to_dict()
     assert d["h_root"] == "[Pro]atat[Aspect][Tense]"
     assert d["glottal_root"] == ""
+    assert d["h_alt_tag"] == "[H_DROP]"
     assert d["prefix_class"] == "a_stem"
     assert d["aspect_class"] == "go-in"
     assert d["tense_present_class"] == "a_present"
@@ -295,9 +298,10 @@ def test_derivation_hypothesis_dataclass_and_aliases():
     lex_tup = hyp.lexical_tuple()
     assert lex_tup[0] == "[Pro]atat[Aspect][Tense]"
     assert lex_tup[1] is None
-    assert ("aspect_class", "go-in") in lex_tup[2]
-    assert ("prefix_class", "a_stem") in lex_tup[2]
-    assert ("tense_present_class", "a_present") in lex_tup[2]
+    assert lex_tup[2] == "[H_DROP]"
+    assert ("aspect_class", "go-in") in lex_tup[3]
+    assert ("prefix_class", "a_stem") in lex_tup[3]
+    assert ("tense_present_class", "a_present") in lex_tup[3]
 
     meta_comb = hyp.to_meta_combination()
     assert meta_comb.set_a is True
@@ -536,6 +540,7 @@ def test_h_alternation_trigger_external_validation():
         **row,
         "h_root": "[Pro]atat[Aspect][Tense]",
         "glottal_root": "[Pro]atat[Aspect][Tense]",
+        "h_alt_tag": None,
         "prefix_class": "a_stem",
         "aspect_class": "go-in",
         "tense_present_class": "a_present",
@@ -547,3 +552,34 @@ def test_h_alternation_trigger_external_validation():
         compiler=compiler,
     )
     assert len(specs) > 0
+
+
+def test_fine_grained_h_alternation_tag_helpers_and_validation():
+    from parse_chr_dict.h_alternation import H_ALT_TAGS, validate_h_alternation_trigger
+    from parse_chr_dict.meta_label_compiler import extract_h_alt_tag_from_root
+
+    # 1. H_ALT_TAGS constant
+    assert H_ALT_TAGS == {"[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_NONE]"}
+
+    # 2. extract_h_alt_tag_from_root
+    cleaned, tag = extract_h_alt_tag_from_root("[Pro][H_DROP]atanhoy[Aspect][Tense]")
+    assert cleaned == "[Pro]atanhoy[Aspect][Tense]"
+    assert tag == "[H_DROP]"
+
+    cleaned_none, tag_none = extract_h_alt_tag_from_root("[Pro][H_NONE]atanhoy[Aspect][Tense]")
+    assert cleaned_none == "[Pro]atanhoy[Aspect][Tense]"
+    assert tag_none == "[H_NONE]"
+
+    cleaned_raw, tag_raw = extract_h_alt_tag_from_root("[Pro]atanhoy[Aspect][Tense]")
+    assert cleaned_raw == "[Pro]atanhoy[Aspect][Tense]"
+    assert tag_raw is None
+
+    # 3. validate_h_alternation_trigger with fine-grained tags
+    assert validate_h_alternation_trigger("1sg>3sg", "[H_DROP]") is True
+    assert validate_h_alternation_trigger("2sg>3sg", "[H_GLOT]") is True
+    assert validate_h_alternation_trigger("1sg.A", "[H_LAT]") is True
+    assert validate_h_alternation_trigger("3sg.A", "[H_DROP]") is False
+    assert validate_h_alternation_trigger("3sg.B", "[H_GLOT]") is False
+    assert validate_h_alternation_trigger("1sg.B", "[H_LAT]") is False
+    assert validate_h_alternation_trigger("3sg.A", "[H_NONE]") is True
+    assert validate_h_alternation_trigger("3sg.A", None) is True

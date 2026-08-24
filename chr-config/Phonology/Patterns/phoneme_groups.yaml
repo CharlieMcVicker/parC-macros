@@ -10,6 +10,9 @@ patterns:
   - name: Morpheme
     pattern: <Pro>|<PPP>|<Aspect>|<Tense>
     ref: <Morpheme>
+  - name: H_ALT
+    pattern: <H_ALT>
+    ref: <H_ALT>
 
 ## HELP FOR PATTERNS ##
 # List of pattern definitions.

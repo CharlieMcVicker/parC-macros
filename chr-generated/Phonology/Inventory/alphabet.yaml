@@ -30,7 +30,7 @@ data:
     tags: ["[Pro]"]
   - name: H_ALT
     ref: <H_ALT>
-    tags: ["[H_ALT]"]
+    tags: ["[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_NONE]"]
   - name: Tense
     ref: <Tense>
     tags: ["[Tense]"]
