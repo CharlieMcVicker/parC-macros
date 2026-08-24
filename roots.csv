@@ -34,6 +34,7 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 61,65,he/she is embarrassing him/her,atehohistiha,tsiyate'ohistiha,atehohistisko'i,utehohisthanv'i,hiyate'ohista,utehohistohti,Eventful,[Pro]atehohist[Aspect][Tense],[Pro]ate'ohist[Aspect][Tense],cause,a_stem,a_present,True,False,True
 62,66,he/she is embarrassed,atehoska,kate'oska,atehosko'i,utehosv'i,hatehohi,utehohisti,Eventful,[Pro]ateho[Aspect][Tense],[Pro]ate'o[Aspect][Tense],sk-s-hi-hihst,a_stem,a_present,True,False,False
 67,71,he/she is finding it out,atelohoska,katelo'oska,atelohosko'i,utelohosv'i,hatelohohi,utelohohisti,Eventful,[Pro]ateloho[Aspect][Tense],[Pro]atelo'o[Aspect][Tense],sk-s-hi-hihst,a_stem,a_present,True,False,False
+70,74,he/she is going around a curve,ateyoha,kateyoha,ateyoho'i,uteyolv'i,hateyaka,uteyhsti,Eventful,[Pro]atey[Aspect][Tense],[Pro]atey[Aspect][Tense],oh-ol[inf2],a_stem,a_present,True,False,False
 72,76,he/she is laying it down (refers to a long object),ati'a,tsiti'a,atisko'i,utv'i,hita,utisti,Eventful,[Pro]t[Aspect][Tense],[Pro]t[Aspect][Tense],i-a-i,cons_stem,a_present,True,False,False
 72,76,he/she is laying it down (refers to a long object),ati'a,tsiti'a,atisko'i,utv'i,hita,utisti,Eventful,[Pro]t[Aspect][Tense],[Pro]t[Aspect][Tense],i-a-i,cons_stem,a_present,True,False,True
 74,78,he/she is scattering it,atikaleya'a,katikaleya'a,atikaleyasko'i,utikaleyv'i,hatikaleya,utikaleyasti,Eventful,[Pro]atikaley[Aspect][Tense],[Pro]atikaley[Aspect][Tense],a,a_stem,a_present,True,False,False
@@ -41,6 +42,7 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,Eventful,[Pro]atikaleyo[Aspect][Tense],,become[inf3],a_stem,a_present,True,False,True
 75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,Eventful,[Pro]tikaleyo[Aspect][Tense],,become[inf3],cons_stem,a_present,True,False,False
 75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,Eventful,[Pro]tikaleyo[Aspect][Tense],,become[inf3],cons_stem,a_present,True,False,True
+76,80,he/she is spinning,atikwalvteyoha,katikwalvteyoha,atikwalvteyoho'i,utikwalvteyolv'i,hatikwalvteyaka,utikwalvteyhsti,Eventful,[Pro]atikwalvtey[Aspect][Tense],[Pro]atikwalvtey[Aspect][Tense],oh-ol[inf2],a_stem,a_present,True,False,False
 78,82,he/she is running over him/her,atinvtiha,tsiyatinvtiha,atinvtisko'i,utinvthanv'i,hiyatinvta,utinvtohti,Eventful,[Pro]atinvt[Aspect][Tense],[Pro]atinvt[Aspect][Tense],cause,a_stem,a_present,True,False,True
 79,83,he/she is hiding,atiskalhvska,katiskalhvska,atiskalhvsko'i,utiskalhanv'i,hatiskalhvka,utiskalhti,Eventful,[Pro]atiskal[Aspect][Tense],[Pro]atiskal[Aspect][Tense],hvsk-han,a_stem,a_present,True,False,False
 80,84,he/she is leaving it behind (refers to a long object),atisiya'a,tsitisiya'a,atisiyasko'i,utisiyv'i,hitisiya,utisiyasti,Eventful,[Pro]tisiy[Aspect][Tense],[Pro]tisiy[Aspect][Tense],a,cons_stem,a_present,True,False,False
