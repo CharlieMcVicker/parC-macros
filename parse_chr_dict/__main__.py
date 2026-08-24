@@ -27,6 +27,11 @@ LEXICAL_FEATURES = {
     "tense_present_class",
 }
 
+ENTRY_TYPE_FORMS = {
+    entry_type.name: [parsing for parsing in FORMS_TO_PARSE if parsing.name in entry_type.forms]
+    for entry_type in PRIMARY_ENTRY_TYPES
+}
+
 
 def get_label(a: list[tuple[str, str]], key: str):
     return next((v for l, v in a if l == key), None)
@@ -126,9 +131,8 @@ def main():
                 # Gather forms specific to this entry type
                 entry_forms = [
                     (respell_consonants(row[parsing.corpus_key]), parsing)
-                    for parsing in FORMS_TO_PARSE
-                    if parsing.name in entry_type.forms
-                    and row.get(parsing.corpus_key)
+                    for parsing in ENTRY_TYPE_FORMS[entry_type.name]
+                    if row.get(parsing.corpus_key)
                     and " " not in row[parsing.corpus_key]
                 ]
                 if not entry_forms:

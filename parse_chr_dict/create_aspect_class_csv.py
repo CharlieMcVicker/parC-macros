@@ -4,6 +4,7 @@ import json
 from typing import IO
 
 from csv import DictWriter, DictReader
+import functools
 import re
 
 DATA_COLS = {
@@ -15,6 +16,7 @@ DATA_COLS = {
 }
 
 
+@functools.lru_cache(maxsize=1024)
 def respell_consonants(s):
     s = re.sub("([aeiouv])hs", "\\1s", s)
     if s.startswith("hs"):

@@ -1,12 +1,56 @@
 from dataclasses import dataclass
 from typing import Optional
+from parse_chr_dict.create_aspect_class_csv import respell_consonants
 from parse_chr_dict.meta_label_compiler import (
     FORMS_TO_PARSE,
     EntryTypeSpec as EntryType,
     FormParsingSpec as FormParsing,
     MetaConstraintCompiler,
+    filter_pronominals,
 )
 from parC.grammar.paradigm_compilation import inflect
+
+FORMS_BY_NAME: dict[str, FormParsing] = {p.name: p for p in FORMS_TO_PARSE}
+
+_INFLECT_CACHE: dict[tuple[str, frozenset[tuple[str, str]], str, bool, bool], list[str]] = {}
+_PRONOMINAL_CANDIDATE_CACHE: dict[tuple[bool, bool, bool, str, bool], list[str]] = {}
+
+
+def memoized_inflect(
+    root: str,
+    feature_values: dict[str, str] | frozenset[tuple[str, str]] | set[tuple[str, str]],
+    name: str = "verb",
+    open_root: bool = True,
+    infer_lexical_features: bool = True,
+) -> list[str]:
+    """
+    Memoized wrapper around inflect() to avoid repeated FST operations
+    for identical root and feature configurations.
+    """
+    if isinstance(feature_values, dict):
+        feat_key = frozenset(feature_values.items())
+    elif isinstance(feature_values, (set, frozenset)):
+        feat_key = frozenset(feature_values)
+    else:
+        feat_key = frozenset(feature_values)
+
+    cache_key = (root, feat_key, name, open_root, infer_lexical_features)
+    if cache_key in _INFLECT_CACHE:
+        return _INFLECT_CACHE[cache_key]
+
+    try:
+        res = inflect(
+            root,
+            feature_values=dict(feat_key),
+            name=name,
+            open_root=open_root,
+            infer_lexical_features=infer_lexical_features,
+        )
+    except (ValueError, KeyError):
+        res = []
+
+    _INFLECT_CACHE[cache_key] = res
+    return res
 
 
 @dataclass
@@ -32,24 +76,34 @@ class MetaLabelCombination:
         return labels
 
     def get_pronominal_candidates(self, person: str, allow_set_a: bool) -> list[str]:
-        from parse_chr_dict.meta_label_compiler import filter_pronominals
+        key = (self.set_a, self.plural, self.animate_objects, person, allow_set_a)
+        cached = _PRONOMINAL_CANDIDATE_CACHE.get(key)
+        if cached is not None:
+            return cached
+
         pronoun_set = "A" if self.set_a and allow_set_a else "B"
         if self.animate_objects and person in ["1st", "2nd"]:
             tags = filter_pronominals(person=person, pronoun_set="transitive")
             candidates = list(tags) if tags else [f"{person[0]}sg>3sg"]
             if person == "2nd":
                 candidates.append(f"2sg.{pronoun_set}")
+            _PRONOMINAL_CANDIDATE_CACHE[key] = candidates
             return candidates
 
         if self.plural:
             if person == "3rd":
-                return [f"3ns.{pronoun_set}", f"3dl.{pronoun_set}"]
+                candidates = [f"3ns.{pronoun_set}", f"3dl.{pronoun_set}"]
             elif person == "1st":
-                return [f"Epl.{pronoun_set}", f"Edl.{pronoun_set}", f"1pl.{pronoun_set}", f"1dl.{pronoun_set}"]
+                candidates = [f"Epl.{pronoun_set}", f"Edl.{pronoun_set}", f"1pl.{pronoun_set}", f"1dl.{pronoun_set}"]
             elif person == "2nd":
-                return [f"2pl.{pronoun_set}", f"2dl.{pronoun_set}"]
+                candidates = [f"2pl.{pronoun_set}", f"2dl.{pronoun_set}"]
+            else:
+                candidates = [f"{person[0]}sg.{pronoun_set}"]
+        else:
+            candidates = [f"{person[0]}sg.{pronoun_set}"]
 
-        return [f"{person[0]}sg.{pronoun_set}"]
+        _PRONOMINAL_CANDIDATE_CACHE[key] = candidates
+        return candidates
 
     def get_pronominal(self, person: str, allow_set_a: bool) -> str:
         candidates = self.get_pronominal_candidates(person, allow_set_a)
@@ -90,30 +144,27 @@ class MetaLabelCombination:
             person=parsing_meta.person, allow_set_a=parsing_meta.allows_set_a
         )
 
-        prefix_candidates = [labels.get("prefix_class")]
-        if labels.get("prefix_class") == "a_stem":
-            prefix_candidates.append("k_a_stem")
+        pref = labels.get("prefix_class")
+        prefix_candidates = (pref, "k_a_stem") if pref == "a_stem" else (pref,)
 
         for pro in pronominal_candidates:
-            for pref in prefix_candidates:
-                all_labels = {**labels, **form_labels, "pronominal": pro, "prefix_class": pref}
-                try:
-                    surface_forms = inflect(
-                        root,
-                        feature_values=all_labels,
-                        name="verb",
-                        open_root=True,
-                        infer_lexical_features=True,
-                    )
-                    if any(surface == reference_form for surface in surface_forms):
-                        return True
-                except (ValueError, KeyError):
-                    continue
+            for p_cand in prefix_candidates:
+                all_labels = {**labels, **form_labels, "pronominal": pro, "prefix_class": p_cand}
+                surface_forms = memoized_inflect(
+                    root,
+                    feature_values=all_labels,
+                    name="verb",
+                    open_root=True,
+                    infer_lexical_features=True,
+                )
+                if reference_form in surface_forms:
+                    return True
         return False
 
 
 # Backward compatibility alias
 ReconstructionSpec = MetaLabelCombination
+ALL_META_COMBINATIONS = list(MetaLabelCombination.all_combinations())
 
 
 def validate_hypothesis(
@@ -125,6 +176,7 @@ def validate_hypothesis(
     """
     Validates a DerivationHypothesis against all non-empty forms in a row.
     Returns True if every non-empty form in the row reconstructs to the exact surface form.
+    Fails fast immediately if any form fails.
     """
     if compiler is None:
         compiler = MetaConstraintCompiler()
@@ -136,12 +188,11 @@ def validate_hypothesis(
     }
 
     for form_name in entry_type.forms:
-        parsing_meta = next((p for p in FORMS_TO_PARSE if p.name == form_name), None)
+        parsing_meta = FORMS_BY_NAME.get(form_name)
         if not parsing_meta:
             continue
         reference_form = row.get(parsing_meta.corpus_key)
         if reference_form and " " not in reference_form:
-            from parse_chr_dict.create_aspect_class_csv import respell_consonants
             ref_surface = respell_consonants(reference_form)
             if not meta_comb.validate(
                 root=hypothesis.root,
@@ -158,10 +209,12 @@ def reconstruct_row(row, entry_type: EntryType, lexical_fields: list[str], compi
     if compiler is None:
         compiler = MetaConstraintCompiler()
     passing_specs: list[MetaLabelCombination] = list()
-    for spec in MetaLabelCombination.all_combinations():
+    for spec in ALL_META_COMBINATIONS:
         valid = True
         for parsing in entry_type.forms:
-            parsing_meta = next(p for p in FORMS_TO_PARSE if p.name == parsing)
+            parsing_meta = FORMS_BY_NAME.get(parsing)
+            if not parsing_meta:
+                continue
             reference_form = row.get(parsing_meta.corpus_key)
             if reference_form:
                 labels = {k: row[k] for k in lexical_fields if k in row}

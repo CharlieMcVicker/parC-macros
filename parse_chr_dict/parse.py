@@ -53,11 +53,20 @@ def feature_tag(feature, value):
     return f"[{feature}={value}]"
 
 
+_READ_LABELS_CACHE: dict[str, tuple[str, dict[str, str]]] = {}
+
+
 def read_labels(s: str):
+    cached = _READ_LABELS_CACHE.get(s)
+    if cached is not None:
+        form, labels_dict = cached
+        return form, dict(labels_dict)
+
     # s is a str like [BOW]foo[EOW][label=value][label2=value2]
     # we will return [BOW]foo[EOW] and {label: value, label2: value2} as a dict
     match = re.match(r"\[BOW\](.*)\[EOW\](.*)", s)
     if not match:
+        _READ_LABELS_CACHE[s] = (s, {})
         return s, {}
 
     form = match.group(1)
@@ -89,7 +98,8 @@ def read_labels(s: str):
 
         pos = i
 
-    return form, labels_dict
+    _READ_LABELS_CACHE[s] = (form, labels_dict)
+    return form, dict(labels_dict)
 
 
 def str_to_lexical_hashable(parse_str: str, lexical_features: set[str]):

@@ -2,6 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List, Optional, Set, Tuple
+import functools
 import re
 
 import pynini
@@ -33,6 +34,7 @@ class Pronominal:
     pronoun_set: str   # "A", "B", "transitive"
 
     @classmethod
+    @functools.lru_cache(maxsize=256)
     def from_tag(cls, tag: str) -> Pronominal:
         if ">" in tag:
             subj = tag.split(">")[0]
@@ -362,8 +364,12 @@ class MetaConstraintCompiler:
         self.sigma_star = sigma_star if sigma_star is not None else get_sigma_star()
         self.meta_registry = meta_registry if meta_registry is not None else META_LABELS
         self.base_tag_acceptor = base_tag_acceptor.copy() if base_tag_acceptor is not None else None
-        self._slot_mask_cache: Dict[Tuple[str, MatchMode, Tuple[str, ...]], pynini.Fst] = {}
+        self._slot_mask_cache: Dict[Tuple[str, MatchMode | str, Tuple[str, ...]], pynini.Fst] = {}
         self._acceptor_cache: Dict[Tuple[Tuple[str, ...], Tuple], pynini.Fst] = {}
+        self._surface_fsa_cache: Dict[str, pynini.Fst] = {}
+        self._query_lattice_cache: Dict[Tuple[str, Tuple[str, ...], Tuple], pynini.Fst] = {}
+        self._parse_cache: Dict[Tuple[str, Tuple[str, ...], Tuple], List[str]] = {}
+        self._feature_tuples_cache: Dict[Tuple[str, ...], List[Tuple[str, str]]] = {}
         from parse_chr_dict.parse import get_parse_graph
         self.parse_graph = get_parse_graph()
         # Pre-compile static single meta-label acceptors
@@ -379,7 +385,8 @@ class MetaConstraintCompiler:
         if not constraint.values:
             return pynini.Fst()
 
-        cache_key = (constraint.slot_name, constraint.mode, tuple(constraint.values))
+        mode_val = constraint.mode if isinstance(constraint.mode, str) else constraint.mode.value
+        cache_key = (constraint.slot_name, mode_val, tuple(constraint.values))
         if cache_key in self._slot_mask_cache:
             return self._slot_mask_cache[cache_key]
 
@@ -415,7 +422,7 @@ class MetaConstraintCompiler:
         if dynamic_constraints:
             dyn_tuple = tuple(
                 sorted(
-                    (c.slot_name, c.mode, tuple(c.values))
+                    (c.slot_name, c.mode if isinstance(c.mode, str) else c.mode.value, tuple(c.values))
                     for c in dynamic_constraints
                 )
             )
@@ -461,7 +468,7 @@ class MetaConstraintCompiler:
         if dynamic_constraints:
             dyn_tuple = tuple(
                 sorted(
-                    (c.slot_name, c.mode, tuple(c.values))
+                    (c.slot_name, c.mode if isinstance(c.mode, str) else c.mode.value, tuple(c.values))
                     for c in dynamic_constraints
                 )
             )
@@ -497,7 +504,22 @@ class MetaConstraintCompiler:
         Executes Q o P composition directly via Pynini.
         Q = surface_fsa . L_restricted
         P = parse_graph (open parse graph)
+        Memoized by (surface_form, sorted(meta_label_ids), dynamic_constraints)
+        for identical parse graph lookups.
         """
+        dyn_tuple = ()
+        if dynamic_constraints:
+            dyn_tuple = tuple(
+                sorted(
+                    (c.slot_name, c.mode if isinstance(c.mode, str) else c.mode.value, tuple(c.values))
+                    for c in dynamic_constraints
+                )
+            )
+        cache_key = (surface_form, tuple(sorted(meta_label_ids)), dyn_tuple)
+        if (parse_graph is None or parse_graph is self.parse_graph) and hasattr(self, "_parse_cache"):
+            if cache_key in self._parse_cache:
+                return self._parse_cache[cache_key]
+
         if parse_graph is None:
             parse_graph = self.parse_graph
 
@@ -506,18 +528,29 @@ class MetaConstraintCompiler:
         )
         output_lattice = pynini.compose(Q, parse_graph).optimize()
         output_lattice = pynini.project(output_lattice, project_type="output")
-        return fsm_strings(output_lattice, strip_all_tags=False)
+        results = fsm_strings(output_lattice, strip_all_tags=False)
+
+        if (parse_graph is self.parse_graph or parse_graph is None) and hasattr(self, "_parse_cache"):
+            self._parse_cache[cache_key] = results
+        return results
 
     def get_feature_tuples_from_meta(self, meta_label_ids: List[str]) -> List[Tuple[str, str]]:
         """
         Maps meta label strings to target feature label flag tuples (Step 1a).
         """
+        key = tuple(sorted(meta_label_ids))
+        if hasattr(self, "_feature_tuples_cache") and key in self._feature_tuples_cache:
+            return self._feature_tuples_cache[key]
+
         tuples = []
         for meta_id in meta_label_ids:
             if meta_id in self.meta_registry:
                 for c in self.meta_registry[meta_id].constraints:
                     if c.mode == MatchMode.EXACT and len(c.values) == 1:
                         tuples.append((c.slot_name, c.values[0]))
+
+        if hasattr(self, "_feature_tuples_cache"):
+            self._feature_tuples_cache[key] = tuples
         return tuples
 
     def infer_meta_labels_from_parse(self, parse_str: str) -> List[str]:
@@ -778,37 +811,46 @@ def derive_hypotheses_for_forms(
             meta_ids.append("[PLURAL=TRUE]" if next(iter(candidate_hypotheses)).plural else "[PLURAL=FALSE]")
 
         parses = compiler.parse_with_lattice(surface, meta_ids, dynamic_constraints=dyn_constraints)
-        parsed_items = []
+        if not parses:
+            return set()
+
+        # Group parses by (p_root, p_asp, p_t_pres) for fast O(1) lookup
+        parsed_by_key: Dict[Tuple[str, str, str], List[Tuple[str, bool, bool, bool]]] = {}
         for p in parses:
             p_root, p_labels = read_labels(p)
-            pro = Pronominal.from_tag(p_labels.get("pronominal", ""))
-            parsed_items.append((p_root, p_labels, pro))
+            p_pref = p_labels.get("prefix_class", "")
+            p_asp = p_labels.get("aspect_class", "")
+            p_t_pres = p_labels.get("tense_present_class", "")
+            pro_tag = p_labels.get("pronominal", "")
+            pro = Pronominal.from_tag(pro_tag)
+            p_plural = pro.number in ("ns", "pl", "dl")
+            p_set_a = pro.pronoun_set in ("A", "transitive")
+            p_trans = pro.pronoun_set == "transitive"
+
+            key = (p_root, p_asp, p_t_pres)
+            if key not in parsed_by_key:
+                parsed_by_key[key] = []
+            parsed_by_key[key].append((p_pref, p_plural, p_set_a, p_trans))
 
         surviving: Set[DerivationHypothesis] = set()
 
         for hyp in candidate_hypotheses:
-            for p_root, p_labels, pro in parsed_items:
-                if p_root != hyp.root:
-                    continue
-                if p_labels.get("aspect_class") != hyp.aspect_class:
-                    continue
-                if p_labels.get("tense_present_class") != hyp.tense_present_class:
-                    continue
-                p_pref = p_labels.get("prefix_class", "")
+            matching_items = parsed_by_key.get((hyp.root, hyp.aspect_class, hyp.tense_present_class))
+            if not matching_items:
+                continue
+
+            for p_pref, p_plural, p_set_a, p_trans in matching_items:
                 if not prefix_compat(hyp.prefix_class, p_pref):
                     continue
 
-                p_plural = pro.number in ("ns", "pl", "dl")
                 if p_plural != hyp.plural:
                     continue
 
                 if form_spec.allows_set_a:
-                    p_set_a = pro.pronoun_set in ("A", "transitive")
                     if p_set_a != hyp.set_a:
                         continue
 
                 if form_spec.person in ("1st", "2nd"):
-                    p_trans = pro.pronoun_set == "transitive"
                     if hyp.animate_objects:
                         # Allow fallback for 2nd person imperative if transitive not available
                         if not p_trans and not (form_spec.person == "2nd" and form_spec.corpus_key == "imperative"):

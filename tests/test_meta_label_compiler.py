@@ -372,3 +372,73 @@ def test_validate_hypothesis_and_row_reconstruction():
     assert validate_hypothesis(mismatched_hyp, row, PRIMARY_ENTRY_TYPES[0], compiler=compiler) is False
 
 
+def test_parse_with_lattice_caching():
+    compiler = MetaConstraintCompiler()
+    surface = "atateka"
+    meta_ids = ["[FORM=3RD_PRES]"]
+
+    # Initial parse
+    parses_1 = compiler.parse_with_lattice(surface, meta_ids)
+    assert len(parses_1) > 0
+
+    # Cache hit check
+    cache_key = (surface, tuple(sorted(meta_ids)), ())
+    assert cache_key in compiler._parse_cache
+    assert compiler._parse_cache[cache_key] is parses_1
+
+    # Second call returns cached list
+    parses_2 = compiler.parse_with_lattice(surface, meta_ids)
+    assert parses_2 is parses_1
+
+
+def test_memoized_inflect_caching():
+    from parse_chr_dict.reconstruct import memoized_inflect, _INFLECT_CACHE
+
+    root = "[Pro]atat[Aspect][Tense]"
+    features = {
+        "aspect": "present",
+        "tense": "present",
+        "pronominal": "3sg.A",
+        "aspect_class": "go-in",
+        "prefix_class": "a_stem",
+        "tense_present_class": "a_present",
+        "rules": "+",
+    }
+
+    # Initial call
+    res_1 = memoized_inflect(root, features)
+    assert "atateka" in res_1
+
+    # Verify cache key exists
+    feat_key = frozenset(features.items())
+    cache_key = (root, feat_key, "verb", True, True)
+    assert cache_key in _INFLECT_CACHE
+
+    # Second call hits cache
+    res_2 = memoized_inflect(root, features)
+    assert res_2 is res_1
+
+
+def test_hypothesis_pruning_efficiency():
+    from parse_chr_dict.meta_label_compiler import derive_hypotheses_for_forms, DerivationHypothesis
+
+    compiler = MetaConstraintCompiler()
+    # Provide 4 consistent forms
+    forms = [
+        ("atateka", "[FORM=3RD_PRES]"),
+        ("katateka", "[FORM=1ST_PRES]"),
+        ("atateko'i", "[FORM=3RD_HABITUAL]"),
+        ("utatinvsv'i", "[FORM=3RD_COMPLETIVE]"),
+    ]
+    hyps = derive_hypotheses_for_forms(forms, compiler)
+    assert len(hyps) > 0
+    # Provide an incompatible form sequence (atateka + kanestalatisko'i from a different root)
+    bad_forms = [
+        ("atateka", "[FORM=3RD_PRES]"),
+        ("kanestalatisko'i", "[FORM=3RD_HABITUAL]"),
+    ]
+    bad_hyps = derive_hypotheses_for_forms(bad_forms, compiler)
+    assert len(bad_hyps) == 0
+
+
+
