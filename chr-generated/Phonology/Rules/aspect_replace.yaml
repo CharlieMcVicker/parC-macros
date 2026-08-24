@@ -170,6 +170,10 @@ rules:
   string_map:
   - - '[Aspect]'
     - hoh
+- name: aspect_hst
+  string_map:
+  - - '[Aspect]'
+    - hst
 - name: aspect_ht
   string_map:
   - - '[Aspect]'

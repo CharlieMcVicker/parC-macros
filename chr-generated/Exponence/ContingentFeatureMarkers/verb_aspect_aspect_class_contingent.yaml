@@ -1253,7 +1253,7 @@ markers:
       stage: aspect_suffix
     infinitive:
     - kind: rule
-      value: $aspect_st
+      value: $aspect_hst
       stage: aspect_suffix
     present:
     - kind: rule
