@@ -590,3 +590,33 @@ def test_fine_grained_h_alternation_tag_helpers_and_validation():
     assert validate_h_alternation_trigger("3sg.A", "[H_NONE]") is True
     assert validate_h_alternation_trigger("3sg.A", None) is True
 
+
+def test_strict_h_alternation_trigger_rejection():
+    """Verify that when a trigger form shows H-mutation, unmutated [H_NONE] fallbacks for that root are pruned."""
+    from parse_chr_dict.meta_label_compiler import derive_hypotheses_for_forms
+    from parse_chr_dict.create_aspect_class_csv import respell_consonants
+
+    compiler = MetaConstraintCompiler()
+    # atanhoyeha (3sg) + katanoyeha (1sg trigger with H_DROP mutation)
+    forms_mutating = [
+        (respell_consonants("atanhoyeha"), "[FORM=3RD_PRES]"),
+        (respell_consonants("katanoyeha"), "[FORM=1ST_PRES]"),
+    ]
+    hyps_mut = derive_hypotheses_for_forms(forms_mutating, compiler)
+    assert len(hyps_mut) > 0
+    # Every surviving hypothesis for the alternating root [Pro]atanhoy... must have an active glottal_root mutation
+    for h in hyps_mut:
+        assert h.glottal_root != h.h_root
+        assert any(tag in h.glottal_root for tag in ("[H_DROP]", "[H_GLOT]", "[H_LAT]"))
+
+    # atateka (3sg) + katateka (1sg trigger without H-mutation)
+    forms_non_mutating = [
+        (respell_consonants("atateka"), "[FORM=3RD_PRES]"),
+        (respell_consonants("katateka"), "[FORM=1ST_PRES]"),
+    ]
+    hyps_non_mut = derive_hypotheses_for_forms(forms_non_mutating, compiler)
+    assert len(hyps_non_mut) > 0
+    for h in hyps_non_mut:
+        assert h.glottal_root == h.h_root
+
+

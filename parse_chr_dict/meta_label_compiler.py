@@ -782,14 +782,13 @@ def derive_hypotheses_for_forms(
     if not init_surface:
         return set()
 
-    init_raw_parses = compiler.parse_surface(init_surface)
-    if not init_raw_parses:
+    init_parses = compiler.parse_with_lattice(init_surface, [init_spec.meta_label_id])
+    if not init_parses:
         return set()
 
-    init_meta_def = compiler.meta_registry.get(init_spec.meta_label_id)
     candidate_hypotheses: Set[DerivationHypothesis] = set()
 
-    for p in init_raw_parses:
+    for p in init_parses:
         root, labels = read_labels(p)
         pref = labels.get("prefix_class")
         asp = labels.get("aspect_class")
@@ -797,16 +796,6 @@ def derive_hypotheses_for_forms(
         pro_tag = labels.get("pronominal")
         if not pref or not asp or not t_pres or not pro_tag:
             continue
-
-        if init_meta_def:
-            mismatch = False
-            for c in init_meta_def.constraints:
-                val = labels.get(c.slot_name)
-                if val is None or (c.mode == MatchMode.EXACT and val != c.values[0]) or (c.mode == MatchMode.ONE_OF and val not in c.values):
-                    mismatch = True
-                    break
-            if mismatch:
-                continue
 
         pro = Pronominal.from_tag(pro_tag)
         is_plural = pro.number in ("ns", "pl", "dl")
@@ -870,26 +859,37 @@ def derive_hypotheses_for_forms(
         if not candidate_hypotheses:
             break
 
-        form_parses = compiler.parse_surface(surface)
-        if not form_parses:
+        active_aspects = sorted(list({h.aspect_class for h in candidate_hypotheses}))
+        active_prefixes = set()
+        for h in candidate_hypotheses:
+            if h.prefix_class in ("a_stem", "k_a_stem"):
+                active_prefixes.add("a_stem")
+                active_prefixes.add("k_a_stem")
+            else:
+                active_prefixes.add(h.prefix_class)
+        active_prefixes = sorted(list(active_prefixes))
+        active_t_pres = sorted(list({h.tense_present_class for h in candidate_hypotheses}))
+
+        dyn_constraints = [
+            FeatureConstraint("aspect_class", MatchMode.EXACT if len(active_aspects) == 1 else MatchMode.ONE_OF, active_aspects),
+            FeatureConstraint("prefix_class", MatchMode.EXACT if len(active_prefixes) == 1 else MatchMode.ONE_OF, active_prefixes),
+            FeatureConstraint("tense_present_class", MatchMode.EXACT if len(active_t_pres) == 1 else MatchMode.ONE_OF, active_t_pres),
+        ]
+        meta_ids = [form_spec.meta_label_id]
+        if len({h.set_a for h in candidate_hypotheses}) == 1:
+            if next(iter(candidate_hypotheses)).set_a and form_spec.allows_set_a:
+                meta_ids.append("[PRONOUN_SET=A]")
+        if len({h.plural for h in candidate_hypotheses}) == 1:
+            meta_ids.append("[PLURAL=TRUE]" if next(iter(candidate_hypotheses)).plural else "[PLURAL=FALSE]")
+
+        parses = compiler.parse_with_lattice(surface, meta_ids, dynamic_constraints=dyn_constraints)
+        if not parses:
             return set()
 
-        form_meta_def = compiler.meta_registry.get(form_spec.meta_label_id)
-
-        # Pre-filter form_parses by form_meta_def and group by (p_asp, p_t_pres)
+        # Group parses by (p_asp, p_t_pres)
         parsed_by_asp_tense: Dict[Tuple[str, str], List[Tuple[str, str, str, bool, bool, bool, bool]]] = {}
-        for p in form_parses:
+        for p in parses:
             p_root, p_labels = read_labels(p)
-            if form_meta_def:
-                mismatch = False
-                for c in form_meta_def.constraints:
-                    val = p_labels.get(c.slot_name)
-                    if val is None or (c.mode == MatchMode.EXACT and val != c.values[0]) or (c.mode == MatchMode.ONE_OF and val not in c.values):
-                        mismatch = True
-                        break
-                if mismatch:
-                    continue
-
             p_pref = p_labels.get("prefix_class", "")
             p_asp = p_labels.get("aspect_class", "")
             p_t_pres = p_labels.get("tense_present_class", "")
@@ -944,12 +944,18 @@ def derive_hypotheses_for_forms(
                     compatible_glottal = determine_h_alt_glottal_root(hyp.h_root, p_root)
                     if compatible_glottal is None:
                         continue
-                    if hyp.glottal_root is not None:
-                        if compatible_glottal != hyp.glottal_root:
+                    # Tighten H-alternation trigger matching:
+                    # If this trigger form proves that the root undergoes mutation (i.e. compatible_glottal != hyp.h_root),
+                    # do NOT allow non-mutated [H_NONE] / unmutated fallback hypotheses to survive.
+                    if compatible_glottal != hyp.h_root:
+                        if hyp.glottal_root is not None and hyp.glottal_root != compatible_glottal:
                             continue
-                        new_glottal = hyp.glottal_root
-                    else:
                         new_glottal = compatible_glottal
+                    else:
+                        # No mutation occurred on trigger form -> must strictly be non-mutating [H_NONE] (glottal_root == h_root)
+                        if hyp.glottal_root is not None and hyp.glottal_root != hyp.h_root:
+                            continue
+                        new_glottal = hyp.h_root
                 else:
                     if strip_h_alt_tags(p_root) != hyp.h_root:
                         continue
@@ -969,6 +975,11 @@ def derive_hypotheses_for_forms(
                         animate_objects=hyp.animate_objects,
                     )
                 )
+
+        # If any hypotheses underwent actual H-mutation on a trigger form, reject unmutated fallbacks for the same root
+        mutated_h_roots = {h.h_root for h in surviving if h.glottal_root is not None and h.glottal_root != h.h_root}
+        if mutated_h_roots:
+            surviving = {h for h in surviving if not (h.h_root in mutated_h_roots and h.glottal_root == h.h_root)}
 
         candidate_hypotheses = surviving
 
