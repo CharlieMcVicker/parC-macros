@@ -68,40 +68,20 @@ def read_labels(s: str):
         return form, dict(labels_dict)
 
     # s is a str like [BOW]foo[EOW][label=value][label2=value2]
-    # we will return [BOW]foo[EOW] and {label: value, label2: value2} as a dict
-    match = re.match(r"\[BOW\](.*)\[EOW\](.*)", s)
-    if not match:
+    eow_idx = s.find("[EOW]")
+    if eow_idx == -1 or not s.startswith("[BOW]"):
         _READ_LABELS_CACHE[s] = (s, {})
         return s, {}
 
-    form = match.group(1)
-    labels_str = match.group(2)
+    form = s[5:eow_idx]
+    labels_str = s[eow_idx + 5 :]
 
     labels_dict = {}
-    pos = 0
-    while pos < len(labels_str):
-        if labels_str[pos] != "[":
-            pos += 1
-            continue
-
-        depth = 1
-        i = pos + 1
-        while i < len(labels_str) and depth > 0:
-            if labels_str[i] == "[":
-                depth += 1
-            elif labels_str[i] == "]":
-                depth -= 1
-            i += 1
-
-        if depth != 0:
-            break
-
-        label_content = labels_str[pos + 1 : i - 1]
-        if "=" in label_content:
-            key, value = label_content.split("=", 1)
-            labels_dict[key] = value
-
-        pos = i
+    if labels_str and labels_str.startswith("[") and labels_str.endswith("]"):
+        for chunk in labels_str[1:-1].split("]["):
+            eq_idx = chunk.find("=")
+            if eq_idx != -1:
+                labels_dict[chunk[:eq_idx]] = chunk[eq_idx + 1 :]
 
     _READ_LABELS_CACHE[s] = (form, labels_dict)
     return form, dict(labels_dict)

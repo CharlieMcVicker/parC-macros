@@ -92,6 +92,17 @@ def test_build_query_lattice_and_parse_with_lattice():
     assert len(parses) > 0
 
 
+def test_parse_surface_bare():
+    compiler = MetaConstraintCompiler()
+    surface = "atateka"
+    parses = compiler.parse_surface(surface)
+    assert isinstance(parses, list)
+    assert len(parses) > 0
+    # Hit cache
+    parses_cached = compiler.parse_surface(surface)
+    assert parses_cached is parses
+
+
 def test_4step_derivation_flow_multi_form():
     compiler = MetaConstraintCompiler()
     lexical_features = {"aspect_class", "prefix_class", "tense_present_class"}

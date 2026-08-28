@@ -377,6 +377,7 @@ class MetaConstraintCompiler:
         self._slot_mask_cache: Dict[Tuple[str, MatchMode | str, Tuple[str, ...]], pynini.Fst] = {}
         self._acceptor_cache: Dict[Tuple[Tuple[str, ...], Tuple], pynini.Fst] = {}
         self._surface_fsa_cache: Dict[str, pynini.Fst] = {}
+        self._surface_parse_cache: Dict[Tuple[str, Optional[int]], List[str]] = {}
         self._query_lattice_cache: Dict[Tuple[str, Tuple[str, ...], Tuple], pynini.Fst] = {}
         self._parse_cache: Dict[Tuple[str, Tuple[str, ...], Tuple], List[str]] = {}
         self._feature_tuples_cache: Dict[Tuple[str, ...], List[Tuple[str, str]]] = {}
@@ -385,6 +386,48 @@ class MetaConstraintCompiler:
         # Pre-compile static single meta-label acceptors
         for meta_id in self.meta_registry:
             self.compile_restricted_tag_acceptor([meta_id])
+
+    def parse_surface(
+        self,
+        surface: str,
+        parse_graph: Optional[pynini.Fst] = None,
+    ) -> List[str]:
+        """
+        Parses a bare surface form without input tag acceptors by executing
+        pynini.compose(linear_surface_fsa, parse_graph).
+        Memoized by (surface, id(parse_graph)).
+        """
+        if not surface:
+            return []
+
+        graph = parse_graph if parse_graph is not None else self.parse_graph
+        graph_key = id(parse_graph) if parse_graph is not None else None
+        cache_key = (surface, graph_key)
+
+        if hasattr(self, "_surface_parse_cache") and cache_key in self._surface_parse_cache:
+            return self._surface_parse_cache[cache_key]
+
+        if not hasattr(self, "_surface_fsa_cache"):
+            self._surface_fsa_cache = {}
+
+        if surface in self._surface_fsa_cache:
+            surface_fsa = self._surface_fsa_cache[surface]
+        else:
+            surface_fsa = word_fsa(surface)
+            self._surface_fsa_cache[surface] = surface_fsa
+
+        output_lattice = pynini.compose(surface_fsa, graph).optimize()
+        output_lattice = pynini.project(output_lattice, project_type="output")
+        output_lattice = pynini.rmepsilon(output_lattice).optimize()
+        if output_lattice.properties(pynini.CYCLIC, True) == pynini.CYCLIC:
+            output_lattice = pynini.shortestpath(output_lattice, nshortest=2000).optimize()
+
+        results = fsm_strings(output_lattice, strip_all_tags=False)
+
+        if not hasattr(self, "_surface_parse_cache"):
+            self._surface_parse_cache = {}
+        self._surface_parse_cache[cache_key] = results
+        return results
 
     def build_slot_mask(self, constraint: FeatureConstraint) -> pynini.Fst:
         """
@@ -739,13 +782,14 @@ def derive_hypotheses_for_forms(
     if not init_surface:
         return set()
 
-    init_parses = compiler.parse_with_lattice(init_surface, [init_spec.meta_label_id])
-    if not init_parses:
+    init_raw_parses = compiler.parse_surface(init_surface)
+    if not init_raw_parses:
         return set()
 
+    init_meta_def = compiler.meta_registry.get(init_spec.meta_label_id)
     candidate_hypotheses: Set[DerivationHypothesis] = set()
 
-    for p in init_parses:
+    for p in init_raw_parses:
         root, labels = read_labels(p)
         pref = labels.get("prefix_class")
         asp = labels.get("aspect_class")
@@ -753,6 +797,16 @@ def derive_hypotheses_for_forms(
         pro_tag = labels.get("pronominal")
         if not pref or not asp or not t_pres or not pro_tag:
             continue
+
+        if init_meta_def:
+            mismatch = False
+            for c in init_meta_def.constraints:
+                val = labels.get(c.slot_name)
+                if val is None or (c.mode == MatchMode.EXACT and val != c.values[0]) or (c.mode == MatchMode.ONE_OF and val not in c.values):
+                    mismatch = True
+                    break
+            if mismatch:
+                continue
 
         pro = Pronominal.from_tag(pro_tag)
         is_plural = pro.number in ("ns", "pl", "dl")
@@ -787,7 +841,6 @@ def derive_hypotheses_for_forms(
         h_root_val = strip_h_alt_tags(root)
         glottal_root_val = root if is_glottal else None
 
-
         for sa in set_a_options:
             for pl in plural_options:
                 for anim in animate_options:
@@ -817,41 +870,33 @@ def derive_hypotheses_for_forms(
         if not candidate_hypotheses:
             break
 
-        active_aspects = sorted(list({h.aspect_class for h in candidate_hypotheses}))
-        active_prefixes = set()
-        for h in candidate_hypotheses:
-            if h.prefix_class in ("a_stem", "k_a_stem"):
-                active_prefixes.add("a_stem")
-                active_prefixes.add("k_a_stem")
-            else:
-                active_prefixes.add(h.prefix_class)
-        active_prefixes = sorted(list(active_prefixes))
-        active_t_pres = sorted(list({h.tense_present_class for h in candidate_hypotheses}))
-
-        dyn_constraints = [
-            FeatureConstraint("aspect_class", MatchMode.EXACT if len(active_aspects) == 1 else MatchMode.ONE_OF, active_aspects),
-            FeatureConstraint("prefix_class", MatchMode.EXACT if len(active_prefixes) == 1 else MatchMode.ONE_OF, active_prefixes),
-            FeatureConstraint("tense_present_class", MatchMode.EXACT if len(active_t_pres) == 1 else MatchMode.ONE_OF, active_t_pres),
-        ]
-        meta_ids = [form_spec.meta_label_id]
-        if len({h.set_a for h in candidate_hypotheses}) == 1:
-            if next(iter(candidate_hypotheses)).set_a and form_spec.allows_set_a:
-                meta_ids.append("[PRONOUN_SET=A]")
-        if len({h.plural for h in candidate_hypotheses}) == 1:
-            meta_ids.append("[PLURAL=TRUE]" if next(iter(candidate_hypotheses)).plural else "[PLURAL=FALSE]")
-
-        parses = compiler.parse_with_lattice(surface, meta_ids, dynamic_constraints=dyn_constraints)
-        if not parses:
+        form_parses = compiler.parse_surface(surface)
+        if not form_parses:
             return set()
 
-        # Group parses by (p_asp, p_t_pres)
+        form_meta_def = compiler.meta_registry.get(form_spec.meta_label_id)
+
+        # Pre-filter form_parses by form_meta_def and group by (p_asp, p_t_pres)
         parsed_by_asp_tense: Dict[Tuple[str, str], List[Tuple[str, str, str, bool, bool, bool, bool]]] = {}
-        for p in parses:
+        for p in form_parses:
             p_root, p_labels = read_labels(p)
+            if form_meta_def:
+                mismatch = False
+                for c in form_meta_def.constraints:
+                    val = p_labels.get(c.slot_name)
+                    if val is None or (c.mode == MatchMode.EXACT and val != c.values[0]) or (c.mode == MatchMode.ONE_OF and val not in c.values):
+                        mismatch = True
+                        break
+                if mismatch:
+                    continue
+
             p_pref = p_labels.get("prefix_class", "")
             p_asp = p_labels.get("aspect_class", "")
             p_t_pres = p_labels.get("tense_present_class", "")
             pro_tag = p_labels.get("pronominal", "")
+            if not p_pref or not p_asp or not p_t_pres or not pro_tag:
+                continue
+
             pro = Pronominal.from_tag(pro_tag)
             p_plural = pro.number in ("ns", "pl", "dl")
             p_set_a = pro.pronoun_set in ("A", "transitive")
@@ -909,8 +954,6 @@ def derive_hypotheses_for_forms(
                     if strip_h_alt_tags(p_root) != hyp.h_root:
                         continue
                     new_glottal = hyp.glottal_root
-
-
 
                 # Determine canonical prefix class
                 canon_pref = hyp.prefix_class if hyp.prefix_class != "k_a_stem" else (p_pref if p_pref != "k_a_stem" else "a_stem")
