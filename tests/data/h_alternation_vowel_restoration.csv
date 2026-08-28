@@ -1,5 +1,6 @@
 restored,syncopated,is_compatible,notes
-atat,atat,False,exact match handled by identity outside of restoration
+atat,atat,True,exact match handled by identity
+
 alihwo,alahwo,True,clothing words quality shift i -> a
 ilihwo,alahwo,True,multiple a -> i quality shifts
 akalo,aklo,True,single medial vowel dropped

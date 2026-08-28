@@ -8,11 +8,16 @@ patterns:
     pattern: <Stops>|<Frc>|<Son>|<N>
     ref: <C>
   - name: Morpheme
-    pattern: <Pro>|<PPP>|<Aspect>|<Tense>
+    pattern: <Pro>|<PPP>|<Aspect>|<Tense>|<H_ALT>|[WI]|[DIST]
     ref: <Morpheme>
+
   - name: H_ALT
     pattern: <H_ALT>
     ref: <H_ALT>
+  - name: NotH
+    pattern: "{tki'mnslywaeiouv}"
+    ref: <NotH>
+
 
 ## HELP FOR PATTERNS ##
 # List of pattern definitions.

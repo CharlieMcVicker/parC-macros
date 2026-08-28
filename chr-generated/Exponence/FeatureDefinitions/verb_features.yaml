@@ -41,9 +41,6 @@ features:
   - incompletive
   - completive
   - infinitive
-  tense_present_class:
-  - a_present
-  - i_present
   prefix_class:
   - name: a_stem
     acceptor: <Morpheme>*a<Phone>*<Morpheme>*
@@ -152,3 +149,6 @@ features:
   - vsk-long[imp2]
   - vsk-post-v
   - vsk[imp2]
+  tense_present_class:
+  - a_present
+  - i_present

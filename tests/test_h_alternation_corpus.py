@@ -3,7 +3,6 @@ import csv
 from pathlib import Path
 import pytest
 
-from parse_chr_dict.h_alternation import grades_are_compatible
 from parse_chr_dict.h_alternation_fst import fst_grades_are_compatible
 
 CORPUS_CSV_PATH = Path(__file__).parent / "data" / "h_alternation_test_corpus.csv"
@@ -34,16 +33,10 @@ def test_corpus_entry_h_alternation_compatibility(row: dict[str, str]):
     h_stem = row["h_stem"]
     g_stem = row["glottal_stem"]
 
-    # 1. Python consistency checker
-    py_result = grades_are_compatible(h=h_stem, glottal=g_stem)
-    assert py_result is True, f"Python checker failed for entry {row['entry_no']} ({h_stem} vs {g_stem})"
-
-    # 2. FST transducer port
+    # FST transducer checker
     fst_result = fst_grades_are_compatible(h=h_stem, glottal=g_stem)
     assert fst_result is True, f"FST checker failed for entry {row['entry_no']} ({h_stem} vs {g_stem})"
 
-    # 3. Parity between Python and FST
-    assert py_result == fst_result
 
 
 def test_alternation_type_subsets():
@@ -70,9 +63,6 @@ def test_corpus_negative_controls():
         # Offset by half the corpus to guarantee unrelated roots
         g_stem_other = CORPUS_ENTRIES[(i + num_entries // 2) % num_entries]["glottal_stem"]
 
-        py_compat = grades_are_compatible(h=h_stem, glottal=g_stem_other)
         fst_compat = fst_grades_are_compatible(h=h_stem, glottal=g_stem_other)
+        assert fst_compat is False
 
-        # Both Python and FST must agree on rejection
-        assert py_compat == fst_compat
-        assert py_compat is False

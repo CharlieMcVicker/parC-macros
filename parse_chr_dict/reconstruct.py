@@ -135,7 +135,6 @@ class MetaLabelCombination:
         *,
         h_root: str,
         glottal_root: Optional[str] = None,
-        h_alt_tag: Optional[str] = None,
         reference_form: str,
         labels: dict[str, str],
         parsing_meta: FormParsing,
@@ -158,8 +157,6 @@ class MetaLabelCombination:
                 if glottal_root is None:
                     continue
                 active_root = glottal_root
-                if h_alt_tag and h_alt_tag not in active_root and active_root.startswith("[Pro]"):
-                    active_root = f"[Pro]{h_alt_tag}{active_root[len('[Pro]'):]}"
             else:
                 active_root = h_root
 
@@ -212,7 +209,6 @@ def validate_hypothesis(
             if not meta_comb.validate(
                 h_root=hypothesis.h_root,
                 glottal_root=hypothesis.glottal_root,
-                h_alt_tag=getattr(hypothesis, "h_alt_tag", None),
                 reference_form=ref_surface,
                 labels=labels,
                 parsing_meta=parsing_meta,
@@ -220,6 +216,7 @@ def validate_hypothesis(
             ):
                 return False
     return True
+
 
 
 def reconstruct_row(row, entry_type: EntryType, lexical_fields: list[str], compiler: Optional[MetaConstraintCompiler] = None):
@@ -239,12 +236,12 @@ def reconstruct_row(row, entry_type: EntryType, lexical_fields: list[str], compi
                 if not spec.validate(
                     h_root=row["h_root"],
                     glottal_root=row.get("glottal_root") or None,
-                    h_alt_tag=row.get("h_alt_tag") or None,
                     reference_form=reference_form,
                     labels=labels,
                     parsing_meta=parsing_meta,
                     compiler=compiler,
                 ):
+
                     valid = False
                     break
 

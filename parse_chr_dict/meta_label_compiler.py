@@ -19,21 +19,11 @@ from parse_chr_dict.h_alternation import (
     H_ALT_TAGS,
     is_h_alternation_trigger,
     validate_h_alternation_trigger,
-    grades_are_compatible,
+    strip_h_alt_tags,
+    determine_h_alt_glottal_root,
 )
 
 
-def extract_h_alt_tag_from_root(root: str) -> Tuple[str, Optional[str]]:
-    """
-    Extracts fine-grained H-alternation tag ([H_DROP], [H_GLOT], [H_LAT], [H_NONE])
-    from the root string if present.
-    Returns (cleaned_root, h_alt_tag).
-    """
-    for tag in H_ALT_TAGS:
-        if tag in root:
-            cleaned = root.replace(tag, "")
-            return cleaned, tag
-    return root, None
 
 
 class MatchMode(str, Enum):
@@ -548,7 +538,12 @@ class MetaConstraintCompiler:
         )
         output_lattice = pynini.compose(Q, parse_graph).optimize()
         output_lattice = pynini.project(output_lattice, project_type="output")
+        output_lattice = pynini.rmepsilon(output_lattice).optimize()
+        if output_lattice.properties(pynini.CYCLIC, True) == pynini.CYCLIC:
+            output_lattice = pynini.shortestpath(output_lattice, nshortest=2000).optimize()
+
         results = fsm_strings(output_lattice, strip_all_tags=False)
+
 
         if (parse_graph is self.parse_graph or parse_graph is None) and hasattr(self, "_parse_cache"):
             self._parse_cache[cache_key] = results
@@ -614,7 +609,6 @@ class DerivationHypothesis:
     """
     h_root: str
     glottal_root: Optional[str] = None
-    h_alt_tag: Optional[str] = None
     prefix_class: str = ""
     aspect_class: str = ""
     tense_present_class: str = ""
@@ -626,7 +620,6 @@ class DerivationHypothesis:
         return {
             "h_root": self.h_root,
             "glottal_root": self.glottal_root if self.glottal_root is not None else "",
-            "h_alt_tag": self.h_alt_tag if self.h_alt_tag is not None else "",
             "prefix_class": self.prefix_class,
             "aspect_class": self.aspect_class,
             "tense_present_class": self.tense_present_class,
@@ -642,17 +635,17 @@ class DerivationHypothesis:
             "tense_present_class": self.tense_present_class,
         }
 
-    def lexical_tuple(self) -> Tuple[str, Optional[str], Optional[str], Tuple[Tuple[str, str], ...]]:
+    def lexical_tuple(self) -> Tuple[str, Optional[str], Tuple[Tuple[str, str], ...]]:
         return (
             self.h_root,
             self.glottal_root,
-            self.h_alt_tag,
             (
                 ("aspect_class", self.aspect_class),
                 ("prefix_class", self.prefix_class),
                 ("tense_present_class", self.tense_present_class),
             ),
         )
+
 
     def to_meta_combination(self):
         from parse_chr_dict.reconstruct import MetaLabelCombination
@@ -753,8 +746,7 @@ def derive_hypotheses_for_forms(
     candidate_hypotheses: Set[DerivationHypothesis] = set()
 
     for p in init_parses:
-        raw_root, labels = read_labels(p)
-        root, h_alt_tag = extract_h_alt_tag_from_root(raw_root)
+        root, labels = read_labels(p)
         pref = labels.get("prefix_class")
         asp = labels.get("aspect_class")
         t_pres = labels.get("tense_present_class")
@@ -769,7 +761,8 @@ def derive_hypotheses_for_forms(
         is_glottal = is_h_alternation_trigger(pro_tag)
 
         # Validate trigger if mutation tag is present
-        if not validate_h_alternation_trigger(pro_tag, h_alt_tag):
+        has_mutation = any(tag in root for tag in H_ALT_TAGS if tag != "[H_NONE]")
+        if not validate_h_alternation_trigger(pro_tag, has_h_alt=has_mutation):
             continue
 
         # Set A candidate values
@@ -791,14 +784,17 @@ def derive_hypotheses_for_forms(
         else:
             animate_options = [False]
 
+        h_root_val = strip_h_alt_tags(root)
+        glottal_root_val = root if is_glottal else None
+
+
         for sa in set_a_options:
             for pl in plural_options:
                 for anim in animate_options:
                     candidate_hypotheses.add(
                         DerivationHypothesis(
-                            h_root=root,
-                            glottal_root=root if is_glottal else None,
-                            h_alt_tag=h_alt_tag,
+                            h_root=h_root_val,
+                            glottal_root=glottal_root_val,
                             prefix_class=pref,
                             aspect_class=asp,
                             tense_present_class=t_pres,
@@ -849,10 +845,9 @@ def derive_hypotheses_for_forms(
             return set()
 
         # Group parses by (p_asp, p_t_pres)
-        parsed_by_asp_tense: Dict[Tuple[str, str], List[Tuple[str, Optional[str], str, str, bool, bool, bool, bool]]] = {}
+        parsed_by_asp_tense: Dict[Tuple[str, str], List[Tuple[str, str, str, bool, bool, bool, bool]]] = {}
         for p in parses:
-            raw_p_root, p_labels = read_labels(p)
-            p_root, p_h_alt_tag = extract_h_alt_tag_from_root(raw_p_root)
+            p_root, p_labels = read_labels(p)
             p_pref = p_labels.get("prefix_class", "")
             p_asp = p_labels.get("aspect_class", "")
             p_t_pres = p_labels.get("tense_present_class", "")
@@ -863,13 +858,14 @@ def derive_hypotheses_for_forms(
             p_trans = pro.pronoun_set == "transitive"
             p_is_glottal = is_h_alternation_trigger(pro_tag)
 
-            if not validate_h_alternation_trigger(pro_tag, p_h_alt_tag):
+            has_mutation = any(tag in p_root for tag in H_ALT_TAGS if tag != "[H_NONE]")
+            if not validate_h_alternation_trigger(pro_tag, has_h_alt=has_mutation):
                 continue
 
             key = (p_asp, p_t_pres)
             if key not in parsed_by_asp_tense:
                 parsed_by_asp_tense[key] = []
-            parsed_by_asp_tense[key].append((p_root, p_h_alt_tag, p_pref, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal))
+            parsed_by_asp_tense[key].append((p_root, p_pref, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal))
 
         surviving: Set[DerivationHypothesis] = set()
 
@@ -878,7 +874,7 @@ def derive_hypotheses_for_forms(
             if not matching_items:
                 continue
 
-            for p_root, p_h_alt_tag, p_pref, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal in matching_items:
+            for p_root, p_pref, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal in matching_items:
                 if not prefix_compat(hyp.prefix_class, p_pref):
                     continue
 
@@ -898,28 +894,23 @@ def derive_hypotheses_for_forms(
                         if p_trans:
                             continue
 
-                # Lock in or verify fine-grained h_alt_tag
-                if p_h_alt_tag is not None:
-                    if hyp.h_alt_tag is not None and hyp.h_alt_tag != p_h_alt_tag:
-                        continue
-                    new_h_alt_tag = p_h_alt_tag
-                else:
-                    new_h_alt_tag = hyp.h_alt_tag
-
                 # Root compatibility check
                 if p_is_glottal:
+                    compatible_glottal = determine_h_alt_glottal_root(hyp.h_root, p_root)
+                    if compatible_glottal is None:
+                        continue
                     if hyp.glottal_root is not None:
-                        if p_root != hyp.glottal_root:
+                        if compatible_glottal != hyp.glottal_root:
                             continue
                         new_glottal = hyp.glottal_root
                     else:
-                        if not grades_are_compatible(h=hyp.h_root, glottal=p_root):
-                            continue
-                        new_glottal = p_root
+                        new_glottal = compatible_glottal
                 else:
-                    if p_root != hyp.h_root:
+                    if strip_h_alt_tags(p_root) != hyp.h_root:
                         continue
                     new_glottal = hyp.glottal_root
+
+
 
                 # Determine canonical prefix class
                 canon_pref = hyp.prefix_class if hyp.prefix_class != "k_a_stem" else (p_pref if p_pref != "k_a_stem" else "a_stem")
@@ -927,7 +918,6 @@ def derive_hypotheses_for_forms(
                     DerivationHypothesis(
                         h_root=hyp.h_root,
                         glottal_root=new_glottal,
-                        h_alt_tag=new_h_alt_tag,
                         prefix_class=canon_pref,
                         aspect_class=hyp.aspect_class,
                         tense_present_class=hyp.tense_present_class,

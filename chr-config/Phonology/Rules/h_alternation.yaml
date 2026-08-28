@@ -1,30 +1,56 @@
-# This is a Rules config file
-# Define context-sensitive phonological rules.
 kind: Rules
 rules:
-  - name: h_alternation_drop
+  - name: h_alternation_drop_init
     string_map:
       - [h, ""]
     left_context: "[H_DROP]"
+    right_context: "<V>"
 
-  - name: h_alternation_glot
+
+  - name: h_alternation_drop_medial
+    string_map:
+      - [nh, n]
+      - [lh, l]
+      - [yh, y]
+      - [wh, w]
+      - [mh, m]
+    left_context: "[H_DROP]<NotH>*"
+
+  - name: h_alternation_glot_init
     string_map:
       - [h, "'"]
     left_context: "[H_GLOT]"
+    right_context: "<V>"
+
+
+  - name: h_alternation_glot_medial
+    string_map:
+      - [nh, "n'"]
+      - [lh, "l'"]
+      - [yh, "y'"]
+      - [wh, "w'"]
+      - [mh, "m'"]
+    left_context: "[H_GLOT]<NotH>*"
 
   - name: h_alternation_lat
     string_map:
       - [lh, tl]
-    left_context: "[H_LAT]"
+    left_context: "[H_LAT]<NotH>*"
 
   - name: delete_h_alt_tags
     input_pattern: "<H_ALT>"
     output_pattern: ""
+    left_context: "[Pro]"
+    right_context: "<V>|<C>"
+
 
   - name: h_alternation
     rule_sequence:
-      - $h_alternation_drop
-      - $h_alternation_glot
+      - $h_alternation_drop_init
+      - $h_alternation_drop_medial
+      - $h_alternation_glot_init
+      - $h_alternation_glot_medial
       - $h_alternation_lat
       - $delete_h_alt_tags
+
 

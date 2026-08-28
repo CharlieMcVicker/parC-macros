@@ -48,110 +48,79 @@ def validate_h_alternation_trigger(
     return True
 
 
-def _drop_first_h(h_grade: str) -> str:
-    idx = h_grade.find("h")
-    if idx != -1:
-        return h_grade[:idx] + h_grade[idx + 1 :]
-    return h_grade
+def strip_h_alt_tags(root: str) -> str:
+    """Strips fine-grained H-alternation tags ([H_DROP], [H_GLOT], [H_LAT], [H_NONE], [H_ALT]) from a root."""
+    for tag in ("[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_NONE]", "[H_ALT]"):
+        root = root.replace(tag, "")
+    return root
 
 
-def _first_h_to_glottal(h_grade: str) -> str:
-    idx = h_grade.find("h")
-    if idx != -1:
-        return h_grade[:idx] + "'" + h_grade[idx + 1 :]
-    return h_grade
+def determine_h_alt_glottal_root(h_root: str, p_root: str) -> Optional[str]:
+    """
+    Determines the glottal_root carrying the appropriate [H_ALT] morphotactic tag
+    by checking whether p_root (from a trigger form) is compatible with h_root.
+    Returns:
+    - h_root if p_root == h_root (non-alternating verb)
+    - h_root with [H_DROP] embedded after [Pro] if h drops
+    - h_root with [H_GLOT] embedded after [Pro] if h becomes glottal
+    - h_root with [H_LAT] embedded after [Pro] if lh becomes tl
+    - None if incompatible
+    """
+    import pynini
+    from parse_chr_dict.h_alternation_fst import (
+        build_drop_first_h_fst,
+        build_first_h_to_glottal_fst,
+        build_drop_h_in_deaffricated_lateral_fst,
+        fst_grades_are_compatible,
+    )
+
+    clean_h = strip_h_alt_tags(h_root)
+    clean_p = strip_h_alt_tags(p_root)
+    if clean_h == clean_p:
+        return h_root
+
+    h_stem = re.sub(r"\[.*?\]", "", clean_h)
+    p_stem = re.sub(r"\[.*?\]", "", clean_p)
+    if h_stem == p_stem:
+        return clean_h
+
+    # 1. Check lateral deaffrication (lh -> tl)
+    f_lat = build_drop_h_in_deaffricated_lateral_fst()
+    lat_res = pynini.compose(pynini.accep(h_stem), f_lat)
+    if lat_res.num_states() > 0:
+        lat_outs = {item[1] for item in pynini.project(lat_res, "output").optimize().paths().items()}
+        if p_stem in lat_outs and p_stem != h_stem:
+            return clean_h.replace("[Pro]", "[Pro][H_LAT]", 1) if "[Pro]" in clean_h else f"[H_LAT]{clean_h}"
+
+    # 2. Check first h to glottal (h -> ')
+    f_glot = build_first_h_to_glottal_fst()
+    glot_res = pynini.compose(pynini.accep(h_stem), f_glot)
+    if glot_res.num_states() > 0:
+        glot_outs = {item[1] for item in pynini.project(glot_res, "output").optimize().paths().items()}
+        if p_stem in glot_outs and p_stem != h_stem:
+            return clean_h.replace("[Pro]", "[Pro][H_GLOT]", 1) if "[Pro]" in clean_h else f"[H_GLOT]{clean_h}"
+
+    # 3. Check drop first h (h -> "")
+    f_drop = build_drop_first_h_fst()
+    drop_res = pynini.compose(pynini.accep(h_stem), f_drop)
+    if drop_res.num_states() > 0:
+        drop_outs = {item[1] for item in pynini.project(drop_res, "output").optimize().paths().items()}
+        if p_stem in drop_outs and p_stem != h_stem:
+            return clean_h.replace("[Pro]", "[Pro][H_DROP]", 1) if "[Pro]" in clean_h else f"[H_DROP]{clean_h}"
+
+    # 4. Check general FST compatibility (vowel restoration / syncopation)
+    if fst_grades_are_compatible(h=h_stem, glottal=p_stem):
+        if "h" in h_stem and "h" not in p_stem:
+            return clean_h.replace("[Pro]", "[Pro][H_DROP]", 1) if "[Pro]" in clean_h else f"[H_DROP]{clean_h}"
+        elif "'" in p_stem and "'" not in h_stem:
+            return clean_h.replace("[Pro]", "[Pro][H_GLOT]", 1) if "[Pro]" in clean_h else f"[H_GLOT]{clean_h}"
+        elif "tl" in p_stem and "lh" in h_stem:
+            return clean_h.replace("[Pro]", "[Pro][H_LAT]", 1) if "[Pro]" in clean_h else f"[H_LAT]{clean_h}"
+        return clean_h
+
+    return None
 
 
-def prevent_C_glottal_cluster(form: str) -> str:
-    # turn all sequences of (C+)' into '(C+)
-    # capture consonants as [^aeiouv']
-    return re.sub(r"([^aeiouv']+)'", r"'\1", form)
-
-
-def recreate_C_glottal_clusters(surface: str) -> str:
-    return re.sub(r"'([^aeiouv']+)", r"\1'", surface)
-
-
-def _is_compatible_with_vowel_restoration(restored: str, syncopated: str) -> bool:
-    if len(restored) - len(syncopated) not in [0, 1, 3]:
-        return False
-    i = 0
-    j = 0
-    quality_shift = False
-    skipped = False
-    skipped_idx = -1
-    while i < len(restored) and j < len(syncopated):
-        if restored[i] == syncopated[j]:
-            i += 1
-            j += 1
-        elif restored[i] == "i" and syncopated[j] == "a":
-            # clothing words
-            quality_shift = True
-            i += 1
-            j += 1
-        else:
-            if skipped:
-                if (
-                    # sometimes we will have a case like
-                    #               1234
-                    # syncopated:   tsgo
-                    #                 ___
-                    # restored:     tsihsgo
-                    #               1234567
-                    skipped_idx == i - 1
-                    and restored[skipped_idx - 1] == "s"
-                    and restored[i] == "h"
-                    and restored[i + 1] == "s"
-                ):
-                    i += 2
-                else:
-                    return False
-            elif restored[i] in VOWEL_SET:
-                skipped = True
-                skipped_idx = i
-                i += 1
-            else:
-                return False
-    if quality_shift:
-        # can't handle this case
-        if skipped:
-            print("[WARNING] didn't plan for this case")
-
-        return not skipped
-
-    if not skipped:
-        return i == len(restored) - 1 and restored[i] in VOWEL_SET
-
-    return True
-
-
-def _drop_h_in_deaffricated_lateral(h_grade: str) -> str:
-    return h_grade.replace("lh", "tl", 1)
-
-
-def possible_alternates(h_form: str, fix_clusters: bool = True) -> List[str]:
-    ways_to_drop: List[Callable[[str], str]] = [
-        lambda x: x,
-        _drop_h_in_deaffricated_lateral,
-        _drop_first_h,
-        _first_h_to_glottal,
-    ]
-
-    return [
-        prevent_C_glottal_cluster(way(h_form)) if fix_clusters else way(h_form)
-        for way in ways_to_drop
-    ]
-
-
-def grades_are_compatible(*, h: str, glottal: str) -> bool:
-    """Checks if `h` and `glottal` could be respective grades of the same stem or root"""
-    for h_dropped in possible_alternates(h):
-        if h_dropped == glottal:
-            return True
-        if _is_compatible_with_vowel_restoration(glottal, h_dropped):
-            return True
-
-    return False
 
 
 # Re-export FST-based implementations

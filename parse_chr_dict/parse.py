@@ -40,7 +40,12 @@ def parse(surface: str, labels: list[tuple[str, str]] = None) -> list[str]:
     output_lattice_with_tag = pynini.project(
         output_lattice_with_tag, project_type="output"
     )
+    output_lattice_with_tag = pynini.rmepsilon(output_lattice_with_tag).optimize()
+    if output_lattice_with_tag.properties(pynini.CYCLIC, True) == pynini.CYCLIC:
+        output_lattice_with_tag = pynini.shortestpath(output_lattice_with_tag, nshortest=5000).optimize()
     return fsm_strings(output_lattice_with_tag, strip_all_tags=False)
+
+
 
 
 def get_inflect_graph():

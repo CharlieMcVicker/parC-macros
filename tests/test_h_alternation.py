@@ -6,14 +6,9 @@ import pynini
 
 from parse_chr_dict.h_alternation import (
     is_h_alternation_trigger,
-    grades_are_compatible,
-    possible_alternates,
-    prevent_C_glottal_cluster,
-    recreate_C_glottal_clusters,
-    _drop_first_h,
-    _first_h_to_glottal,
-    _drop_h_in_deaffricated_lateral,
-    _is_compatible_with_vowel_restoration,
+    strip_h_alt_tags,
+    validate_h_alternation_trigger,
+    H_ALT_TAGS,
 )
 from parse_chr_dict.h_alternation_fst import (
     build_drop_first_h_fst,
@@ -29,6 +24,7 @@ from parse_chr_dict.h_alternation_fst import (
     fst_recreate_c_glottal_clusters,
     fst_grades_are_compatible,
 )
+
 
 DATA_DIR = Path(__file__).parent / "data"
 
@@ -74,15 +70,10 @@ def test_drop_first_h_from_csv(row: dict[str, str]):
     input_str = row["input_str"]
     expected = row["expected_output"]
 
-    # Python
-    py_res = _drop_first_h(input_str)
-    assert py_res == expected
-
     # FST
     fst = build_drop_first_h_fst()
     fst_outputs = _run_fst_output(fst, input_str)
     assert expected in fst_outputs
-    assert py_res in fst_outputs
 
 
 @pytest.mark.parametrize(
@@ -94,15 +85,10 @@ def test_first_h_to_glottal_from_csv(row: dict[str, str]):
     input_str = row["input_str"]
     expected = row["expected_output"]
 
-    # Python
-    py_res = _first_h_to_glottal(input_str)
-    assert py_res == expected
-
     # FST
     fst = build_first_h_to_glottal_fst()
     fst_outputs = _run_fst_output(fst, input_str)
     assert expected in fst_outputs
-    assert py_res in fst_outputs
 
 
 @pytest.mark.parametrize(
@@ -114,15 +100,10 @@ def test_drop_h_in_deaffricated_lateral_from_csv(row: dict[str, str]):
     input_str = row["input_str"]
     expected = row["expected_output"]
 
-    # Python
-    py_res = _drop_h_in_deaffricated_lateral(input_str)
-    assert py_res == expected
-
     # FST
     fst = build_drop_h_in_deaffricated_lateral_fst()
     fst_outputs = _run_fst_output(fst, input_str)
     assert expected in fst_outputs
-    assert py_res in fst_outputs
 
 
 @pytest.mark.parametrize(
@@ -133,10 +114,6 @@ def test_drop_h_in_deaffricated_lateral_from_csv(row: dict[str, str]):
 def test_prevent_c_glottal_cluster_from_csv(row: dict[str, str]):
     form = row["input_str"]
     prevented = row["expected_output"]
-
-    # Python
-    py_res = prevent_C_glottal_cluster(form)
-    assert py_res == prevented
 
     # FST
     fst_res = fst_prevent_c_glottal_cluster(form)
@@ -151,10 +128,6 @@ def test_prevent_c_glottal_cluster_from_csv(row: dict[str, str]):
 def test_recreate_c_glottal_clusters_from_csv(row: dict[str, str]):
     surface = row["input_str"]
     recreated = row["expected_output"]
-
-    # Python
-    py_res = recreate_C_glottal_clusters(surface)
-    assert py_res == recreated
 
     # FST
     fst_res = fst_recreate_c_glottal_clusters(surface)
@@ -171,8 +144,9 @@ def test_is_compatible_with_vowel_restoration_from_csv(row: dict[str, str]):
     syncopated = row["syncopated"]
     expected = row["is_compatible"].lower() == "true"
 
-    py_res = _is_compatible_with_vowel_restoration(restored=restored, syncopated=syncopated)
-    assert py_res is expected
+    fst = build_vowel_restoration_fst()
+    outputs = _run_fst_output(fst, syncopated)
+    assert (restored in outputs) is expected
 
 
 @pytest.mark.parametrize(
@@ -185,11 +159,8 @@ def test_possible_alternates_from_csv(row: dict[str, str]):
     fix_clusters = row["fix_clusters"].lower() == "true"
     expected_set = set(row["expected_alternates"].split("|")) if row["expected_alternates"] else set()
 
-    py_set = set(possible_alternates(h_form, fix_clusters=fix_clusters))
     fst_set = fst_possible_alternates(h_form, fix_clusters=fix_clusters)
-
-    assert py_set == fst_set
-    assert py_set == expected_set
+    assert fst_set == expected_set
 
 
 @pytest.mark.parametrize(
@@ -202,11 +173,9 @@ def test_grades_are_compatible_from_csv(row: dict[str, str]):
     glottal_form = row["glottal_form"]
     expected = row["is_compatible"].lower() == "true"
 
-    py_res = grades_are_compatible(h=h_form, glottal=glottal_form)
     fst_res = fst_grades_are_compatible(h=h_form, glottal=glottal_form)
-
-    assert py_res is expected
     assert fst_res is expected
+
 
 
 def test_fst_grades_compatible_transducer_structure():
