@@ -1,11 +1,25 @@
 kind: Rules
 rules:
+  - name: mark_h_lat
+    input_pattern: "[H_LAT]"
+    output_pattern: "[TEMP]"
+    right_context: "<NotLar>*lh"
+
+  - name: h_alternation_lat
+    string_map:
+      - [lh, tl]
+    left_context: "[TEMP]<NotLar>*"
+
+  - name: mark_h_drop
+    input_pattern: "[H_DROP]"
+    output_pattern: "[TEMP]"
+    right_context: "<NotLar>*<HTarget>"
+
   - name: h_alternation_drop_init
     string_map:
       - [h, ""]
-    left_context: "[H_DROP]"
+    left_context: "[TEMP]<NotLar>*"
     right_context: "<V>"
-
 
   - name: h_alternation_drop_medial
     string_map:
@@ -14,43 +28,48 @@ rules:
       - [yh, y]
       - [wh, w]
       - [mh, m]
-    left_context: "[H_DROP]<NotH>*"
+    left_context: "[TEMP]<NotLar>*"
+
+  - name: mark_h_glot
+    input_pattern: "[H_GLOT]"
+    output_pattern: "[TEMP]"
+    right_context: "<NotLar>*<HTarget>"
 
   - name: h_alternation_glot_init
     string_map:
       - [h, "'"]
-    left_context: "[H_GLOT]"
+    left_context: "[TEMP]<NotLar>*"
     right_context: "<V>"
-
 
   - name: h_alternation_glot_medial
     string_map:
-      - [nh, "n'"]
-      - [lh, "l'"]
-      - [yh, "y'"]
-      - [wh, "w'"]
-      - [mh, "m'"]
-    left_context: "[H_GLOT]<NotH>*"
+      - [nh, "'n"]
+      - [lh, "'l"]
+      - [yh, "'y"]
+      - [wh, "'w"]
+      - [mh, "'m"]
+    left_context: "[TEMP]<NotLar>*"
 
-  - name: h_alternation_lat
-    string_map:
-      - [lh, tl]
-    left_context: "[H_LAT]<NotH>*"
-
-  - name: delete_h_alt_tags
-    input_pattern: "<H_ALT>"
+  - name: delete_h_none
+    input_pattern: "[H_NONE]"
     output_pattern: ""
     left_context: "[Pro]"
-    right_context: "<V>|<C>"
 
+  - name: delete_temp_tags
+    input_pattern: "<TempTags>"
+    output_pattern: ""
 
   - name: h_alternation
     rule_sequence:
+      - $mark_h_lat
+      - $h_alternation_lat
+      - $mark_h_drop
       - $h_alternation_drop_init
       - $h_alternation_drop_medial
+      - $mark_h_glot
       - $h_alternation_glot_init
       - $h_alternation_glot_medial
-      - $h_alternation_lat
-      - $delete_h_alt_tags
+      - $delete_h_none
+      - $delete_temp_tags
 
 

@@ -59,66 +59,20 @@ def determine_h_alt_glottal_root(h_root: str, p_root: str) -> Optional[str]:
     """
     Determines the glottal_root carrying the appropriate [H_ALT] morphotactic tag
     by checking whether p_root (from a trigger form) is compatible with h_root.
+    Relying purely on parC's built-in H-alternation resolution, this checks that
+    glottal root p_root differs from h_root only by an optional [H_ALT] tag.
     Returns:
-    - h_root if p_root == h_root (non-alternating verb)
-    - h_root with [H_DROP] embedded after [Pro] if h drops
-    - h_root with [H_GLOT] embedded after [Pro] if h becomes glottal
-    - h_root with [H_LAT] embedded after [Pro] if lh becomes tl
+    - p_root if p_root carries an active mutation tag ([H_DROP], [H_GLOT], [H_LAT])
+    - clean_h if non-alternating ([H_NONE] or tagless)
     - None if incompatible
     """
-    import pynini
-    from parse_chr_dict.h_alternation_fst import (
-        build_drop_first_h_fst,
-        build_first_h_to_glottal_fst,
-        build_drop_h_in_deaffricated_lateral_fst,
-        fst_grades_are_compatible,
-    )
-
     clean_h = strip_h_alt_tags(h_root)
     clean_p = strip_h_alt_tags(p_root)
-    if clean_h == clean_p:
-        return h_root
-
-    h_stem = re.sub(r"\[.*?\]", "", clean_h)
-    p_stem = re.sub(r"\[.*?\]", "", clean_p)
-    if h_stem == p_stem:
-        return clean_h
-
-    # 1. Check lateral deaffrication (lh -> tl)
-    f_lat = build_drop_h_in_deaffricated_lateral_fst()
-    lat_res = pynini.compose(pynini.accep(h_stem), f_lat)
-    if lat_res.num_states() > 0:
-        lat_outs = {item[1] for item in pynini.project(lat_res, "output").optimize().paths().items()}
-        if p_stem in lat_outs and p_stem != h_stem:
-            return clean_h.replace("[Pro]", "[Pro][H_LAT]", 1) if "[Pro]" in clean_h else f"[H_LAT]{clean_h}"
-
-    # 2. Check first h to glottal (h -> ')
-    f_glot = build_first_h_to_glottal_fst()
-    glot_res = pynini.compose(pynini.accep(h_stem), f_glot)
-    if glot_res.num_states() > 0:
-        glot_outs = {item[1] for item in pynini.project(glot_res, "output").optimize().paths().items()}
-        if p_stem in glot_outs and p_stem != h_stem:
-            return clean_h.replace("[Pro]", "[Pro][H_GLOT]", 1) if "[Pro]" in clean_h else f"[H_GLOT]{clean_h}"
-
-    # 3. Check drop first h (h -> "")
-    f_drop = build_drop_first_h_fst()
-    drop_res = pynini.compose(pynini.accep(h_stem), f_drop)
-    if drop_res.num_states() > 0:
-        drop_outs = {item[1] for item in pynini.project(drop_res, "output").optimize().paths().items()}
-        if p_stem in drop_outs and p_stem != h_stem:
-            return clean_h.replace("[Pro]", "[Pro][H_DROP]", 1) if "[Pro]" in clean_h else f"[H_DROP]{clean_h}"
-
-    # 4. Check general FST compatibility (vowel restoration / syncopation)
-    if fst_grades_are_compatible(h=h_stem, glottal=p_stem):
-        if "h" in h_stem and "h" not in p_stem:
-            return clean_h.replace("[Pro]", "[Pro][H_DROP]", 1) if "[Pro]" in clean_h else f"[H_DROP]{clean_h}"
-        elif "'" in p_stem and "'" not in h_stem:
-            return clean_h.replace("[Pro]", "[Pro][H_GLOT]", 1) if "[Pro]" in clean_h else f"[H_GLOT]{clean_h}"
-        elif "tl" in p_stem and "lh" in h_stem:
-            return clean_h.replace("[Pro]", "[Pro][H_LAT]", 1) if "[Pro]" in clean_h else f"[H_LAT]{clean_h}"
-        return clean_h
-
-    return None
+    if clean_h != clean_p:
+        return None
+    if any(tag in p_root for tag in ("[H_DROP]", "[H_GLOT]", "[H_LAT]")):
+        return p_root
+    return clean_h
 
 
 

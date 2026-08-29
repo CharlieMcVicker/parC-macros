@@ -14,9 +14,15 @@ patterns:
   - name: H_ALT
     pattern: <H_ALT>
     ref: <H_ALT>
-  - name: NotH
-    pattern: "{tki'mnslywaeiouv}"
-    ref: <NotH>
+  - name: NotLar
+    pattern: "{tkmnslyw}|<V>"
+    ref: <NotLar>
+  - name: SonH
+    pattern: "nh|lh|yh|wh|mh"
+    ref: <SonH>
+  - name: HTarget
+    pattern: "h<V>|<SonH>"
+    ref: <HTarget>
 
 
 ## HELP FOR PATTERNS ##
