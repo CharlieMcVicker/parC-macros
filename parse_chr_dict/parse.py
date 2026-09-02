@@ -58,6 +58,16 @@ def feature_tag(feature, value):
     return f"[{feature}={value}]"
 
 
+INPLACE_SLOT_TAG_MAP: dict[str, str] = {
+    "PrefixClass": "prefix_class",
+    "Pro": "pronominal",
+    "AspectClass": "aspect_class",
+    "Aspect": "aspect",
+    "TenseClass": "tense_present_class",
+    "Tense": "tense",
+}
+
+_INPLACE_TAG_RE = re.compile(r"\[([A-Za-z0-9_]+)=([^\]]+)\]")
 _READ_LABELS_CACHE: dict[str, tuple[str, dict[str, str]]] = {}
 
 
@@ -82,6 +92,16 @@ def read_labels(s: str):
             eq_idx = chunk.find("=")
             if eq_idx != -1:
                 labels_dict[chunk[:eq_idx]] = chunk[eq_idx + 1 :]
+
+    # Extract in-place slot tags from form (e.g. [PrefixClass=...], [Pro=...], [AspectClass=...], etc.)
+    if "[" in form and "=" in form:
+        def _extract_tag(m: re.Match) -> str:
+            k, v = m.group(1), m.group(2)
+            mapped_k = INPLACE_SLOT_TAG_MAP.get(k, k)
+            labels_dict[mapped_k] = v
+            return ""
+
+        form = _INPLACE_TAG_RE.sub(_extract_tag, form)
 
     _READ_LABELS_CACHE[s] = (form, labels_dict)
     return form, dict(labels_dict)

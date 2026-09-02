@@ -1,0 +1,302 @@
+{
+  "environment": {
+    "python_path": "/opt/homebrew/Caskroom/miniconda/base/envs/parC/bin/python",
+    "python_version": "3.10.20",
+    "platform": "macOS-14.3.1-arm64-arm-64bit",
+    "git_commit": "f741bb85a456ffc86c49a6e8bcbb10828bff0f11",
+    "git_branch": "inplace-gloss-template",
+    "timestamp": "2026-09-02T15:50:41-0500",
+    "baseline_grammar_dir": "/Users/julietmcvicker/code/parC-macros/chr-generated",
+    "inplace_grammar_dir": "/Users/julietmcvicker/code/parC-macros/chr-inplace-generated"
+  },
+  "summary_gains": {
+    "states_reduction_percentage": 99.83,
+    "arcs_reduction_percentage": 99.24,
+    "disk_size_reduction_percentage": 99.33,
+    "cold_compilation_speedup_factor": 74.79,
+    "inversion_speedup_factor": 212.85,
+    "cached_load_speedup_factor": 233.25,
+    "corpus_parse_all_forms_reduction_percentage": 4.91,
+    "corpus_parse_all_forms_speedup_factor": 1.05,
+    "corpus_parse_primary_reduction_percentage": 38.25,
+    "corpus_parse_primary_speedup_factor": 1.62
+  },
+  "graph_comparisons": {
+    "open_inflect_standard": {
+      "states": {
+        "baseline": 578015,
+        "inplace": 956,
+        "absolute_difference": 577059,
+        "reduction_percentage": 99.83,
+        "speedup_factor": 604.62
+      },
+      "arcs": {
+        "baseline": 1963760,
+        "inplace": 19029,
+        "absolute_difference": 1944731,
+        "reduction_percentage": 99.03,
+        "speedup_factor": 103.2
+      },
+      "file_size_bytes": {
+        "baseline": 38356406,
+        "inplace": 316002,
+        "absolute_difference": 38040404,
+        "reduction_percentage": 99.18,
+        "speedup_factor": 121.38
+      },
+      "file_size_mb": {
+        "baseline": 36.58,
+        "inplace": 0.3,
+        "absolute_difference": 36.28,
+        "reduction_percentage": 99.18,
+        "speedup_factor": 121.93
+      },
+      "cold_compilation_seconds": {
+        "baseline": 3.1286,
+        "inplace": 0.0598,
+        "absolute_difference": 3.0688,
+        "reduction_percentage": 98.09,
+        "speedup_factor": 52.32
+      },
+      "cached_load_seconds": {
+        "baseline": 0.1541,
+        "inplace": 0.0009,
+        "absolute_difference": 0.1532,
+        "reduction_percentage": 99.42,
+        "speedup_factor": 171.22
+      }
+    },
+    "open_inflect_nd_cleanup": {
+      "states": {
+        "baseline": 578015,
+        "inplace": 956,
+        "absolute_difference": 577059,
+        "reduction_percentage": 99.83,
+        "speedup_factor": 604.62
+      },
+      "arcs": {
+        "baseline": 2527626,
+        "inplace": 19130,
+        "absolute_difference": 2508496,
+        "reduction_percentage": 99.24,
+        "speedup_factor": 132.13
+      },
+      "file_size_bytes": {
+        "baseline": 47378262,
+        "inplace": 317618,
+        "absolute_difference": 47060644,
+        "reduction_percentage": 99.33,
+        "speedup_factor": 149.17
+      },
+      "file_size_mb": {
+        "baseline": 45.18,
+        "inplace": 0.3,
+        "absolute_difference": 44.88,
+        "reduction_percentage": 99.34,
+        "speedup_factor": 150.6
+      },
+      "cold_compilation_seconds": {
+        "baseline": 3.4451,
+        "inplace": 0.0603,
+        "absolute_difference": 3.3848,
+        "reduction_percentage": 98.25,
+        "speedup_factor": 57.13
+      },
+      "cached_load_seconds": {
+        "baseline": 0.1833,
+        "inplace": 0.0008,
+        "absolute_difference": 0.1825,
+        "reduction_percentage": 99.56,
+        "speedup_factor": 229.12
+      }
+    },
+    "open_parse_nd_cleanup": {
+      "states": {
+        "baseline": 578015,
+        "inplace": 956,
+        "absolute_difference": 577059,
+        "reduction_percentage": 99.83,
+        "speedup_factor": 604.62
+      },
+      "arcs": {
+        "baseline": 2527626,
+        "inplace": 19130,
+        "absolute_difference": 2508496,
+        "reduction_percentage": 99.24,
+        "speedup_factor": 132.13
+      },
+      "file_size_bytes": {
+        "baseline": 47378262,
+        "inplace": 317618,
+        "absolute_difference": 47060644,
+        "reduction_percentage": 99.33,
+        "speedup_factor": 149.17
+      },
+      "file_size_mb": {
+        "baseline": 45.18,
+        "inplace": 0.3,
+        "absolute_difference": 44.88,
+        "reduction_percentage": 99.34,
+        "speedup_factor": 150.6
+      },
+      "inversion_seconds": {
+        "baseline": 2.1498,
+        "inplace": 0.0101,
+        "absolute_difference": 2.1397,
+        "reduction_percentage": 99.53,
+        "speedup_factor": 212.85
+      },
+      "cold_compilation_seconds": {
+        "baseline": 5.5347,
+        "inplace": 0.074,
+        "absolute_difference": 5.4607,
+        "reduction_percentage": 98.66,
+        "speedup_factor": 74.79
+      },
+      "cached_load_seconds": {
+        "baseline": 0.1866,
+        "inplace": 0.0008,
+        "absolute_difference": 0.1858,
+        "reduction_percentage": 99.57,
+        "speedup_factor": 233.25
+      }
+    },
+    "open_parse_standard": {
+      "states": {
+        "baseline": 578015,
+        "inplace": 956,
+        "absolute_difference": 577059,
+        "reduction_percentage": 99.83,
+        "speedup_factor": 604.62
+      },
+      "arcs": {
+        "baseline": 1963760,
+        "inplace": 19029,
+        "absolute_difference": 1944731,
+        "reduction_percentage": 99.03,
+        "speedup_factor": 103.2
+      },
+      "file_size_bytes": {
+        "baseline": 38356406,
+        "inplace": 316002,
+        "absolute_difference": 38040404,
+        "reduction_percentage": 99.18,
+        "speedup_factor": 121.38
+      },
+      "file_size_mb": {
+        "baseline": 36.58,
+        "inplace": 0.3,
+        "absolute_difference": 36.28,
+        "reduction_percentage": 99.18,
+        "speedup_factor": 121.93
+      },
+      "cold_compilation_seconds": {
+        "baseline": 4.6497,
+        "inplace": 0.0696,
+        "absolute_difference": 4.5801,
+        "reduction_percentage": 98.5,
+        "speedup_factor": 66.81
+      },
+      "cached_load_seconds": {
+        "baseline": 0.1575,
+        "inplace": 0.0008,
+        "absolute_difference": 0.1567,
+        "reduction_percentage": 99.49,
+        "speedup_factor": 196.88
+      }
+    }
+  },
+  "parse_runtime_comparison": {
+    "valid_rows_count": 100,
+    "total_forms_count": 581,
+    "init_comparison": {
+      "baseline_init_seconds": 0.5395,
+      "inplace_init_seconds": 0.0877,
+      "init_speedup": 6.15
+    },
+    "primary_100_forms": {
+      "baseline_total_seconds": 0.0678,
+      "inplace_total_seconds": 0.0419,
+      "baseline_mean_ms": 0.68,
+      "inplace_mean_ms": 0.42,
+      "baseline_median_ms": 0.43,
+      "inplace_median_ms": 0.38,
+      "baseline_throughput_fps": 1475.32,
+      "inplace_throughput_fps": 2389.25,
+      "reduction_percentage": 38.25,
+      "speedup_factor": 1.62
+    },
+    "all_581_forms_across_100_rows": {
+      "total_forms": 581,
+      "baseline_total_seconds": 0.4052,
+      "inplace_total_seconds": 0.3853,
+      "baseline_mean_ms_per_row": 4.05,
+      "inplace_mean_ms_per_row": 3.85,
+      "baseline_median_ms_per_row": 3.87,
+      "inplace_median_ms_per_row": 3.78,
+      "baseline_throughput_rows_sec": 246.82,
+      "inplace_throughput_rows_sec": 259.56,
+      "baseline_throughput_forms_sec": 1434.01,
+      "inplace_throughput_forms_sec": 1508.06,
+      "reduction_percentage": 4.91,
+      "speedup_factor": 1.05
+    },
+    "baseline_reconstruction_pipeline_reference": {
+      "total_parse_seconds": 30.8009,
+      "mean_ms_per_valid_row": 288.52,
+      "throughput_rows_per_second": 3.25
+    }
+  },
+  "inplace_raw_metrics": {
+    "open_inflect_standard": {
+      "paradigm": "verb",
+      "infer_lexical_features": true,
+      "non_deterministic_cleanup": false,
+      "states": 956,
+      "arcs": 19029,
+      "cold_compilation_seconds": 0.0598,
+      "cached_load_seconds": 0.0009,
+      "file_size_bytes": 316002,
+      "file_size_mb": 0.3,
+      "file_path": "/Users/julietmcvicker/code/parC-macros/chr-inplace-generated/.cache/de37ae58e2bfd0fa2508d09eddd806b1a08212a1adb91cd8f4ccc7b0d50646bb_open_inflect_infer.fst"
+    },
+    "open_inflect_nd_cleanup": {
+      "paradigm": "verb",
+      "infer_lexical_features": true,
+      "non_deterministic_cleanup": true,
+      "states": 956,
+      "arcs": 19130,
+      "cold_compilation_seconds": 0.0603,
+      "cached_load_seconds": 0.0008,
+      "file_size_bytes": 317618,
+      "file_size_mb": 0.3,
+      "file_path": "/Users/julietmcvicker/code/parC-macros/chr-inplace-generated/.cache/de37ae58e2bfd0fa2508d09eddd806b1a08212a1adb91cd8f4ccc7b0d50646bb_open_inflect_infer_nd_cleanup.fst"
+    },
+    "open_parse_nd_cleanup": {
+      "paradigm": "verb",
+      "infer_lexical_features": true,
+      "non_deterministic_cleanup": true,
+      "states": 956,
+      "arcs": 19130,
+      "inversion_seconds": 0.0101,
+      "cold_compilation_seconds": 0.074,
+      "cached_load_seconds": 0.0008,
+      "file_size_bytes": 317618,
+      "file_size_mb": 0.3,
+      "file_path": "/Users/julietmcvicker/code/parC-macros/chr-inplace-generated/.cache/de37ae58e2bfd0fa2508d09eddd806b1a08212a1adb91cd8f4ccc7b0d50646bb_open_parse_infer_nd_cleanup.fst"
+    },
+    "open_parse_standard": {
+      "paradigm": "verb",
+      "infer_lexical_features": true,
+      "non_deterministic_cleanup": false,
+      "states": 956,
+      "arcs": 19029,
+      "inversion_seconds": 0.0099,
+      "cold_compilation_seconds": 0.0696,
+      "cached_load_seconds": 0.0008,
+      "file_size_bytes": 316002,
+      "file_size_mb": 0.3,
+      "file_path": "/Users/julietmcvicker/code/parC-macros/chr-inplace-generated/.cache/de37ae58e2bfd0fa2508d09eddd806b1a08212a1adb91cd8f4ccc7b0d50646bb_open_parse_infer.fst"
+    }
+  }
+}

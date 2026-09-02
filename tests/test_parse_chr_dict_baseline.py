@@ -68,10 +68,40 @@ def test_derive_lexical_features_4step():
 
 
 def test_read_labels():
+    # Legacy trailing-tag format
     raw_str = "[BOW]gawoniha[EOW][tense=present][aspect=present]"
     form, labels = read_labels(raw_str)
     assert form == "gawoniha"
     assert labels == {"tense": "present", "aspect": "present"}
+
+    # In-place slot tags format
+    inplace_str = (
+        "[BOW][PrefixClass=a_stem][Pro=1sg.A]atat[AspectClass=a][Aspect=present]"
+        "[TenseClass=a_present][Tense=present][EOW][aspect_class=a][prefix_class=a_stem][tense_present_class=a_present]"
+    )
+    form_ip, labels_ip = read_labels(inplace_str)
+    assert form_ip == "atat"
+    assert labels_ip["prefix_class"] == "a_stem"
+    assert labels_ip["pronominal"] == "1sg.A"
+    assert labels_ip["aspect_class"] == "a"
+    assert labels_ip["aspect"] == "present"
+    assert labels_ip["tense_present_class"] == "a_present"
+    assert labels_ip["tense"] == "present"
+
+    # In-place format with root mutation tag preserved
+    mutation_str = (
+        "[BOW][PrefixClass=cons_stem][Pro=3sg.A]a[H_NONE]li[AspectClass=go]"
+        "[Aspect=present][TenseClass=a_present][Tense=present][EOW]"
+    )
+    form_mut, labels_mut = read_labels(mutation_str)
+    assert form_mut == "a[H_NONE]li"
+    assert labels_mut["prefix_class"] == "cons_stem"
+    assert labels_mut["pronominal"] == "3sg.A"
+    assert labels_mut["aspect_class"] == "go"
+    assert labels_mut["aspect"] == "present"
+    assert labels_mut["tense_present_class"] == "a_present"
+    assert labels_mut["tense"] == "present"
+
 
 
 def test_str_to_lexical_hashable():
