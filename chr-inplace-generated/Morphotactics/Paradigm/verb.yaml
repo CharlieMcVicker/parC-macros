@@ -1,0 +1,39 @@
+# This is a Paradigm config file
+# Generated automatically from CSVs (in-place morphemes)
+kind: Paradigm
+part_of_speech: $verb
+stage_order:
+- final_dropping
+- aspect_suffix
+- h_alternation
+- drop_stem_initial_vowel
+- pronominal
+- tense
+- insert_dist
+- insert_wi
+global_markers:
+- kind: rule
+  stage: final_dropping
+  value: $drop_root_final
+- kind: rule
+  stage: aspect_suffix
+  value: $aspect_replace
+- kind: rule
+  stage: h_alternation
+  value: $h_alternation
+- kind: rule
+  stage: drop_stem_initial_vowel
+  value: $drop_stem_initial_vowel
+- kind: rule
+  stage: pronominal
+  value: $pro_replace
+- kind: rule
+  stage: tense
+  value: $tense_replace
+- kind: rule
+  stage: insert_dist
+  value: $insert_DIST1
+- kind: rule
+  stage: insert_wi
+  value: $insert_WI
+open_root_template: <PrepronominalPrefixes><PrefixClass><Pro><H_ALT>?<Root><AspectClass><Aspect><TenseClass><Tense>

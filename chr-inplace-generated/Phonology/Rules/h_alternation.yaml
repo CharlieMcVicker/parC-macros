@@ -1,0 +1,88 @@
+kind: Rules
+rules:
+- name: mark_h_vowel
+  input_pattern: '[H_VOWEL]'
+  output_pattern: '[TEMP_VOWEL]'
+  right_context: <NotLar>*<C>h<C>
+- name: h_alternation_vowel
+  input_pattern: h
+  output_pattern: <V>
+  left_context: '[TEMP_VOWEL]<NotLar>*<C>'
+  right_context: <C>
+- name: mark_h_lat
+  input_pattern: '[H_LAT]'
+  output_pattern: '[TEMP_LAT]'
+  right_context: <NotLar>*lh
+- name: h_alternation_lat
+  string_map:
+  - - lh
+    - tl
+  left_context: '[TEMP_LAT]<NotLar>*'
+- name: mark_h_drop
+  input_pattern: '[H_DROP]'
+  output_pattern: '[TEMP_DROP]'
+  right_context: <NotLar>*<HTarget>
+- name: h_alternation_drop_init
+  string_map:
+  - - h
+    - ''
+  left_context: '[TEMP_DROP]<NotLar>*'
+  right_context: <V>
+- name: h_alternation_drop_medial
+  string_map:
+  - - nh
+    - n
+  - - lh
+    - l
+  - - yh
+    - y
+  - - wh
+    - w
+  - - mh
+    - m
+  left_context: '[TEMP_DROP]<NotLar>*'
+- name: mark_h_glot
+  input_pattern: '[H_GLOT]'
+  output_pattern: '[TEMP_GLOT]'
+  right_context: <NotLar>*<HTarget>
+- name: h_alternation_glot_init
+  string_map:
+  - - h
+    - ''''
+  left_context: '[TEMP_GLOT]<NotLar>*'
+  right_context: <V>
+- name: h_alternation_glot_medial
+  string_map:
+  - - nh
+    - '''n'
+  - - lh
+    - '''l'
+  - - yh
+    - '''y'
+  - - wh
+    - '''w'
+  - - mh
+    - '''m'
+  left_context: '[TEMP_GLOT]<NotLar>*'
+- name: delete_h_none
+  input_pattern: '[H_NONE]'
+  output_pattern: ''
+  left_context: <Pro>|[Pro]
+- name: delete_temp_tags
+  input_pattern: <TempTags>
+  output_pattern: ''
+  left_context: <Pro>|[Pro]
+- name: h_alternation
+  rule_sequence:
+  - $mark_h_vowel
+  - $h_alternation_vowel
+  - $mark_h_lat
+  - $h_alternation_lat
+  - $mark_h_drop
+  - $h_alternation_drop_init
+  - $h_alternation_drop_medial
+  - $mark_h_glot
+  - $h_alternation_glot_init
+  - $h_alternation_glot_medial
+  - $delete_h_none
+  - $delete_temp_tags

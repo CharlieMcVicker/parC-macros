@@ -108,3 +108,27 @@ def test_chr_inplace_config_yamls():
     assert len(inv_map["<TenseClass>"]) == 2
     assert len(inv_map["<Tense>"]) == 7
 
+
+def test_chr_inplace_generated_yamls():
+    from pathlib import Path
+    import yaml
+    from parc_macros.yaml_validation import validate_yaml_file
+
+    gen_dir = Path(__file__).parent.parent / "chr-inplace-generated"
+    assert gen_dir.exists(), "chr-inplace-generated directory must exist"
+
+    yaml_files = list(gen_dir.glob("**/*.yaml"))
+    assert len(yaml_files) >= 14, f"Expected at least 14 YAML files in chr-inplace-generated, found {len(yaml_files)}"
+
+    for yf in sorted(yaml_files):
+        assert validate_yaml_file(yf) is True, f"Schema validation failed for {yf}"
+
+    # Verify paradigm
+    paradigm_path = gen_dir / "Morphotactics/Paradigm/verb.yaml"
+    assert paradigm_path.exists()
+    with open(paradigm_path, "r", encoding="utf-8") as f:
+        pdata = yaml.safe_load(f)
+    assert pdata["kind"] == "Paradigm"
+    assert "global_markers" in pdata
+    assert "open_root_template" in pdata
+

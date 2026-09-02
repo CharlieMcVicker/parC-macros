@@ -1,0 +1,927 @@
+# This is a Rules config file
+# Generated automatically by generate_morpheme_replace_rules.py (in-place)
+kind: Rules
+rules:
+- name: aspect_replace
+  description: In-place morpheme replacement rule for [Aspect]
+  string_map:
+  - - '[AspectClass=a][Aspect=completive]'
+    - ''
+  - - '[AspectClass=a][Aspect=immediate]'
+    - a
+  - - '[AspectClass=a][Aspect=incompletive]'
+    - ask
+  - - '[AspectClass=a][Aspect=infinitive]'
+    - ast
+  - - '[AspectClass=a][Aspect=present]'
+    - a'
+  - - '[AspectClass=apl-active-''][Aspect=completive]'
+    - elh
+  - - '[AspectClass=apl-active-''][Aspect=immediate]'
+    - vla
+  - - '[AspectClass=apl-active-''][Aspect=incompletive]'
+    - esk
+  - - '[AspectClass=apl-active-''][Aspect=infinitive]'
+    - eht
+  - - '[AspectClass=apl-active-''][Aspect=present]'
+    - eh
+  - - '[AspectClass=apl-active-a][Aspect=completive]'
+    - eh
+  - - '[AspectClass=apl-active-a][Aspect=immediate]'
+    - a
+  - - '[AspectClass=apl-active-a][Aspect=incompletive]'
+    - esk
+  - - '[AspectClass=apl-active-a][Aspect=infinitive]'
+    - ht
+  - - '[AspectClass=apl-active-a][Aspect=present]'
+    - eh
+  - - '[AspectClass=apl-active-h][Aspect=completive]'
+    - helh
+  - - '[AspectClass=apl-active-h][Aspect=immediate]'
+    - hvla
+  - - '[AspectClass=apl-active-h][Aspect=incompletive]'
+    - hesk
+  - - '[AspectClass=apl-active-h][Aspect=infinitive]'
+    - heht
+  - - '[AspectClass=apl-active-h][Aspect=present]'
+    - heh
+  - - '[AspectClass=apl-active][Aspect=completive]'
+    - eh
+  - - '[AspectClass=apl-active][Aspect=immediate]'
+    - vla
+  - - '[AspectClass=apl-active][Aspect=incompletive]'
+    - esk
+  - - '[AspectClass=apl-active][Aspect=infinitive]'
+    - eht
+  - - '[AspectClass=apl-active][Aspect=present]'
+    - eh
+  - - '[AspectClass=apl[imp2]][Aspect=completive]'
+    - el
+  - - '[AspectClass=apl[imp2]][Aspect=immediate]'
+    - si
+  - - '[AspectClass=apl[imp2]][Aspect=incompletive]'
+    - eh
+  - - '[AspectClass=apl[imp2]][Aspect=infinitive]'
+    - eht
+  - - '[AspectClass=apl[imp2]][Aspect=present]'
+    - eh
+  - - '[AspectClass=apl[imp3]][Aspect=completive]'
+    - el
+  - - '[AspectClass=apl[imp3]][Aspect=immediate]'
+    - isi
+  - - '[AspectClass=apl[imp3]][Aspect=incompletive]'
+    - eh
+  - - '[AspectClass=apl[imp3]][Aspect=infinitive]'
+    - eht
+  - - '[AspectClass=apl[imp3]][Aspect=present]'
+    - eh
+  - - '[AspectClass=apl[imp4]][Aspect=completive]'
+    - el
+  - - '[AspectClass=apl[imp4]][Aspect=immediate]'
+    - vla
+  - - '[AspectClass=apl[imp4]][Aspect=incompletive]'
+    - eh
+  - - '[AspectClass=apl[imp4]][Aspect=infinitive]'
+    - eht
+  - - '[AspectClass=apl[imp4]][Aspect=present]'
+    - eh
+  - - '[AspectClass=apl][Aspect=completive]'
+    - el
+  - - '[AspectClass=apl][Aspect=immediate]'
+    - si
+  - - '[AspectClass=apl][Aspect=incompletive]'
+    - eh
+  - - '[AspectClass=apl][Aspect=infinitive]'
+    - eht
+  - - '[AspectClass=apl][Aspect=present]'
+    - eh
+  - - '[AspectClass=be-at][Aspect=completive]'
+    - ol
+  - - '[AspectClass=be-at][Aspect=immediate]'
+    - a
+  - - '[AspectClass=be-at][Aspect=incompletive]'
+    - oh
+  - - '[AspectClass=be-at][Aspect=infinitive]'
+    - ast
+  - - '[AspectClass=be-at][Aspect=present]'
+    - oh
+  - - '[AspectClass=become[inf2]][Aspect=completive]'
+    - ts
+  - - '[AspectClass=become[inf2]][Aspect=immediate]'
+    - ki
+  - - '[AspectClass=become[inf2]][Aspect=incompletive]'
+    - k
+  - - '[AspectClass=become[inf2]][Aspect=infinitive]'
+    - '''ist'
+  - - '[AspectClass=become[inf2]][Aspect=present]'
+    - k
+  - - '[AspectClass=become[inf3]][Aspect=completive]'
+    - ts
+  - - '[AspectClass=become[inf3]][Aspect=immediate]'
+    - ki
+  - - '[AspectClass=become[inf3]][Aspect=incompletive]'
+    - k
+  - - '[AspectClass=become[inf3]][Aspect=infinitive]'
+    - yhst
+  - - '[AspectClass=become[inf3]][Aspect=present]'
+    - k
+  - - '[AspectClass=become[inf4]][Aspect=completive]'
+    - ts
+  - - '[AspectClass=become[inf4]][Aspect=immediate]'
+    - ki
+  - - '[AspectClass=become[inf4]][Aspect=incompletive]'
+    - k
+  - - '[AspectClass=become[inf4]][Aspect=infinitive]'
+    - ist
+  - - '[AspectClass=become[inf4]][Aspect=present]'
+    - k
+  - - '[AspectClass=become][Aspect=completive]'
+    - ts
+  - - '[AspectClass=become][Aspect=immediate]'
+    - ki
+  - - '[AspectClass=become][Aspect=incompletive]'
+    - k
+  - - '[AspectClass=become][Aspect=infinitive]'
+    - st
+  - - '[AspectClass=become][Aspect=present]'
+    - k
+  - - '[AspectClass=cause[perf2]][Aspect=completive]'
+    - anh
+  - - '[AspectClass=cause[perf2]][Aspect=immediate]'
+    - a
+  - - '[AspectClass=cause[perf2]][Aspect=incompletive]'
+    - isk
+  - - '[AspectClass=cause[perf2]][Aspect=infinitive]'
+    - oht
+  - - '[AspectClass=cause[perf2]][Aspect=present]'
+    - ih
+  - - '[AspectClass=cause[perf3]][Aspect=completive]'
+    - an
+  - - '[AspectClass=cause[perf3]][Aspect=immediate]'
+    - a
+  - - '[AspectClass=cause[perf3]][Aspect=incompletive]'
+    - isk
+  - - '[AspectClass=cause[perf3]][Aspect=infinitive]'
+    - oht
+  - - '[AspectClass=cause[perf3]][Aspect=present]'
+    - ih
+  - - '[AspectClass=cause[pres2-perf2]][Aspect=completive]'
+    - anh
+  - - '[AspectClass=cause[pres2-perf2]][Aspect=immediate]'
+    - a
+  - - '[AspectClass=cause[pres2-perf2]][Aspect=incompletive]'
+    - isk
+  - - '[AspectClass=cause[pres2-perf2]][Aspect=infinitive]'
+    - oht
+  - - '[AspectClass=cause[pres2-perf2]][Aspect=present]'
+    - ''
+  - - '[AspectClass=cause[pres2-perf3]][Aspect=completive]'
+    - an
+  - - '[AspectClass=cause[pres2-perf3]][Aspect=immediate]'
+    - a
+  - - '[AspectClass=cause[pres2-perf3]][Aspect=incompletive]'
+    - isk
+  - - '[AspectClass=cause[pres2-perf3]][Aspect=infinitive]'
+    - oht
+  - - '[AspectClass=cause[pres2-perf3]][Aspect=present]'
+    - ''
+  - - '[AspectClass=cause[pres2]][Aspect=completive]'
+    - han
+  - - '[AspectClass=cause[pres2]][Aspect=immediate]'
+    - a
+  - - '[AspectClass=cause[pres2]][Aspect=incompletive]'
+    - isk
+  - - '[AspectClass=cause[pres2]][Aspect=infinitive]'
+    - oht
+  - - '[AspectClass=cause[pres2]][Aspect=present]'
+    - ''
+  - - '[AspectClass=cause][Aspect=completive]'
+    - han
+  - - '[AspectClass=cause][Aspect=immediate]'
+    - a
+  - - '[AspectClass=cause][Aspect=incompletive]'
+    - isk
+  - - '[AspectClass=cause][Aspect=infinitive]'
+    - oht
+  - - '[AspectClass=cause][Aspect=present]'
+    - ih
+  - - '[AspectClass=e-a][Aspect=completive]'
+    - e'
+  - - '[AspectClass=e-a][Aspect=immediate]'
+    - a
+  - - '[AspectClass=e-a][Aspect=incompletive]'
+    - esk
+  - - '[AspectClass=e-a][Aspect=infinitive]'
+    - et
+  - - '[AspectClass=e-a][Aspect=present]'
+    - e'
+  - - '[AspectClass=e-aka][Aspect=completive]'
+    - a'
+  - - '[AspectClass=e-aka][Aspect=immediate]'
+    - aka
+  - - '[AspectClass=e-aka][Aspect=incompletive]'
+    - esk
+  - - '[AspectClass=e-aka][Aspect=infinitive]'
+    - est
+  - - '[AspectClass=e-aka][Aspect=present]'
+    - e'
+  - - '[AspectClass=episodic[imp2-inf2]][Aspect=completive]'
+    - vnh
+  - - '[AspectClass=episodic[imp2-inf2]][Aspect=immediate]'
+    - vna
+  - - '[AspectClass=episodic[imp2-inf2]][Aspect=incompletive]'
+    - vhvsk
+  - - '[AspectClass=episodic[imp2-inf2]][Aspect=infinitive]'
+    - vhvst
+  - - '[AspectClass=episodic[imp2-inf2]][Aspect=present]'
+    - vhvsk
+  - - '[AspectClass=episodic[imp2]][Aspect=completive]'
+    - vnh
+  - - '[AspectClass=episodic[imp2]][Aspect=immediate]'
+    - vna
+  - - '[AspectClass=episodic[imp2]][Aspect=incompletive]'
+    - vhvsk
+  - - '[AspectClass=episodic[imp2]][Aspect=infinitive]'
+    - ht
+  - - '[AspectClass=episodic[imp2]][Aspect=present]'
+    - vhvsk
+  - - '[AspectClass=episodic[inf2]][Aspect=completive]'
+    - vnh
+  - - '[AspectClass=episodic[inf2]][Aspect=immediate]'
+    - vhvka
+  - - '[AspectClass=episodic[inf2]][Aspect=incompletive]'
+    - vhvsk
+  - - '[AspectClass=episodic[inf2]][Aspect=infinitive]'
+    - vhvst
+  - - '[AspectClass=episodic[inf2]][Aspect=present]'
+    - vhvsk
+  - - '[AspectClass=episodic][Aspect=completive]'
+    - vnh
+  - - '[AspectClass=episodic][Aspect=immediate]'
+    - vhvka
+  - - '[AspectClass=episodic][Aspect=incompletive]'
+    - vhvsk
+  - - '[AspectClass=episodic][Aspect=infinitive]'
+    - ht
+  - - '[AspectClass=episodic][Aspect=present]'
+    - vhvsk
+  - - '[AspectClass=go-in[perf2]][Aspect=completive]'
+    - es
+  - - '[AspectClass=go-in[perf2]][Aspect=immediate]'
+    - uka
+  - - '[AspectClass=go-in[perf2]][Aspect=incompletive]'
+    - ek
+  - - '[AspectClass=go-in[perf2]][Aspect=infinitive]'
+    - invt
+  - - '[AspectClass=go-in[perf2]][Aspect=present]'
+    - ek
+  - - '[AspectClass=go-in][Aspect=completive]'
+    - invs
+  - - '[AspectClass=go-in][Aspect=immediate]'
+    - uka
+  - - '[AspectClass=go-in][Aspect=incompletive]'
+    - ek
+  - - '[AspectClass=go-in][Aspect=infinitive]'
+    - invt
+  - - '[AspectClass=go-in][Aspect=present]'
+    - ek
+  - - '[AspectClass=go[pres2]][Aspect=completive]'
+    - vs
+  - - '[AspectClass=go[pres2]][Aspect=immediate]'
+    - uka
+  - - '[AspectClass=go[pres2]][Aspect=incompletive]'
+    - ek
+  - - '[AspectClass=go[pres2]][Aspect=infinitive]'
+    - vst
+  - - '[AspectClass=go[pres2]][Aspect=present]'
+    - ''
+  - - '[AspectClass=go][Aspect=completive]'
+    - vs
+  - - '[AspectClass=go][Aspect=immediate]'
+    - uka
+  - - '[AspectClass=go][Aspect=incompletive]'
+    - ek
+  - - '[AspectClass=go][Aspect=infinitive]'
+    - vst
+  - - '[AspectClass=go][Aspect=present]'
+    - ek
+  - - '[AspectClass=hih-hil[imp2]][Aspect=completive]'
+    - hil
+  - - '[AspectClass=hih-hil[imp2]][Aspect=immediate]'
+    - hika
+  - - '[AspectClass=hih-hil[imp2]][Aspect=incompletive]'
+    - hih
+  - - '[AspectClass=hih-hil[imp2]][Aspect=infinitive]'
+    - st
+  - - '[AspectClass=hih-hil[imp2]][Aspect=present]'
+    - hih
+  - - '[AspectClass=hih-hil][Aspect=completive]'
+    - hil
+  - - '[AspectClass=hih-hil][Aspect=immediate]'
+    - hka
+  - - '[AspectClass=hih-hil][Aspect=incompletive]'
+    - hih
+  - - '[AspectClass=hih-hil][Aspect=infinitive]'
+    - st
+  - - '[AspectClass=hih-hil][Aspect=present]'
+    - hih
+  - - '[AspectClass=hih-hilh][Aspect=completive]'
+    - hilh
+  - - '[AspectClass=hih-hilh][Aspect=immediate]'
+    - hika
+  - - '[AspectClass=hih-hilh][Aspect=incompletive]'
+    - hih
+  - - '[AspectClass=hih-hilh][Aspect=infinitive]'
+    - hist
+  - - '[AspectClass=hih-hilh][Aspect=present]'
+    - hih
+  - - '[AspectClass=hih-lh[imp2]][Aspect=completive]'
+    - lh
+  - - '[AspectClass=hih-lh[imp2]][Aspect=immediate]'
+    - ha
+  - - '[AspectClass=hih-lh[imp2]][Aspect=incompletive]'
+    - hih
+  - - '[AspectClass=hih-lh[imp2]][Aspect=infinitive]'
+    - st
+  - - '[AspectClass=hih-lh[imp2]][Aspect=present]'
+    - hih
+  - - '[AspectClass=hih-lh][Aspect=completive]'
+    - lh
+  - - '[AspectClass=hih-lh][Aspect=immediate]'
+    - ka
+  - - '[AspectClass=hih-lh][Aspect=incompletive]'
+    - hih
+  - - '[AspectClass=hih-lh][Aspect=infinitive]'
+    - st
+  - - '[AspectClass=hih-lh][Aspect=present]'
+    - hih
+  - - '[AspectClass=husk][Aspect=completive]'
+    - hun
+  - - '[AspectClass=husk][Aspect=immediate]'
+    - huka
+  - - '[AspectClass=husk][Aspect=incompletive]'
+    - husk
+  - - '[AspectClass=husk][Aspect=infinitive]'
+    - hust
+  - - '[AspectClass=husk][Aspect=present]'
+    - husk
+  - - '[AspectClass=hvsk-han[inf2]][Aspect=completive]'
+    - han
+  - - '[AspectClass=hvsk-han[inf2]][Aspect=immediate]'
+    - hvka
+  - - '[AspectClass=hvsk-han[inf2]][Aspect=incompletive]'
+    - hvsk
+  - - '[AspectClass=hvsk-han[inf2]][Aspect=infinitive]'
+    - hvst
+  - - '[AspectClass=hvsk-han[inf2]][Aspect=present]'
+    - hvsk
+  - - '[AspectClass=hvsk-han][Aspect=completive]'
+    - han
+  - - '[AspectClass=hvsk-han][Aspect=immediate]'
+    - hvka
+  - - '[AspectClass=hvsk-han][Aspect=incompletive]'
+    - hvsk
+  - - '[AspectClass=hvsk-han][Aspect=infinitive]'
+    - ht
+  - - '[AspectClass=hvsk-han][Aspect=present]'
+    - hvsk
+  - - '[AspectClass=hvsk-n][Aspect=completive]'
+    - n
+  - - '[AspectClass=hvsk-n][Aspect=immediate]'
+    - hvka
+  - - '[AspectClass=hvsk-n][Aspect=incompletive]'
+    - hvsk
+  - - '[AspectClass=hvsk-n][Aspect=infinitive]'
+    - oht
+  - - '[AspectClass=hvsk-n][Aspect=present]'
+    - hvsk
+  - - '[AspectClass=hvsk-nh[inf2]][Aspect=completive]'
+    - nh
+  - - '[AspectClass=hvsk-nh[inf2]][Aspect=immediate]'
+    - hvka
+  - - '[AspectClass=hvsk-nh[inf2]][Aspect=incompletive]'
+    - hvsk
+  - - '[AspectClass=hvsk-nh[inf2]][Aspect=infinitive]'
+    - ht
+  - - '[AspectClass=hvsk-nh[inf2]][Aspect=present]'
+    - hvsk
+  - - '[AspectClass=hvsk-nh[inf3]][Aspect=completive]'
+    - nh
+  - - '[AspectClass=hvsk-nh[inf3]][Aspect=immediate]'
+    - hvka
+  - - '[AspectClass=hvsk-nh[inf3]][Aspect=incompletive]'
+    - hvsk
+  - - '[AspectClass=hvsk-nh[inf3]][Aspect=infinitive]'
+    - hvst
+  - - '[AspectClass=hvsk-nh[inf3]][Aspect=present]'
+    - hvsk
+  - - '[AspectClass=hvsk-nh[inf4]][Aspect=completive]'
+    - nh
+  - - '[AspectClass=hvsk-nh[inf4]][Aspect=immediate]'
+    - hvka
+  - - '[AspectClass=hvsk-nh[inf4]][Aspect=incompletive]'
+    - hvsk
+  - - '[AspectClass=hvsk-nh[inf4]][Aspect=infinitive]'
+    - oht
+  - - '[AspectClass=hvsk-nh[inf4]][Aspect=present]'
+    - hvsk
+  - - '[AspectClass=hvsk-nh][Aspect=completive]'
+    - nh
+  - - '[AspectClass=hvsk-nh][Aspect=immediate]'
+    - hvka
+  - - '[AspectClass=hvsk-nh][Aspect=incompletive]'
+    - hvsk
+  - - '[AspectClass=hvsk-nh][Aspect=infinitive]'
+    - ht
+  - - '[AspectClass=hvsk-nh][Aspect=present]'
+    - hvsk
+  - - '[AspectClass=i-a-i[perf2]][Aspect=completive]'
+    - is
+  - - '[AspectClass=i-a-i[perf2]][Aspect=immediate]'
+    - a
+  - - '[AspectClass=i-a-i[perf2]][Aspect=incompletive]'
+    - isk
+  - - '[AspectClass=i-a-i[perf2]][Aspect=infinitive]'
+    - ist
+  - - '[AspectClass=i-a-i[perf2]][Aspect=present]'
+    - i'
+  - - '[AspectClass=i-a-i][Aspect=completive]'
+    - ''
+  - - '[AspectClass=i-a-i][Aspect=immediate]'
+    - a
+  - - '[AspectClass=i-a-i][Aspect=incompletive]'
+    - isk
+  - - '[AspectClass=i-a-i][Aspect=infinitive]'
+    - ist
+  - - '[AspectClass=i-a-i][Aspect=present]'
+    - i'
+  - - '[AspectClass=i-a-ihsk][Aspect=completive]'
+    - is
+  - - '[AspectClass=i-a-ihsk][Aspect=immediate]'
+    - a
+  - - '[AspectClass=i-a-ihsk][Aspect=incompletive]'
+    - isk
+  - - '[AspectClass=i-a-ihsk][Aspect=infinitive]'
+    - ist
+  - - '[AspectClass=i-a-ihsk][Aspect=present]'
+    - isk
+  - - '[AspectClass=i-vka][Aspect=completive]'
+    - an
+  - - '[AspectClass=i-vka][Aspect=immediate]'
+    - vka
+  - - '[AspectClass=i-vka][Aspect=incompletive]'
+    - isk
+  - - '[AspectClass=i-vka][Aspect=infinitive]'
+    - ot
+  - - '[AspectClass=i-vka][Aspect=present]'
+    - i'
+  - - '[AspectClass=ih-ihi][Aspect=completive]'
+    - is
+  - - '[AspectClass=ih-ihi][Aspect=immediate]'
+    - ihi
+  - - '[AspectClass=ih-ihi][Aspect=incompletive]'
+    - isk
+  - - '[AspectClass=ih-ihi][Aspect=infinitive]'
+    - ihist
+  - - '[AspectClass=ih-ihi][Aspect=present]'
+    - ih
+  - - '[AspectClass=ih-il][Aspect=completive]'
+    - il
+  - - '[AspectClass=ih-il][Aspect=immediate]'
+    - ika
+  - - '[AspectClass=ih-il][Aspect=incompletive]'
+    - ih
+  - - '[AspectClass=ih-il][Aspect=infinitive]'
+    - ist
+  - - '[AspectClass=ih-il][Aspect=present]'
+    - ih
+  - - '[AspectClass=ih-vh[imperf2-inf2]][Aspect=completive]'
+    - vh
+  - - '[AspectClass=ih-vh[imperf2-inf2]][Aspect=immediate]'
+    - a
+  - - '[AspectClass=ih-vh[imperf2-inf2]][Aspect=incompletive]'
+    - ih
+  - - '[AspectClass=ih-vh[imperf2-inf2]][Aspect=infinitive]'
+    - vht
+  - - '[AspectClass=ih-vh[imperf2-inf2]][Aspect=present]'
+    - ih
+  - - '[AspectClass=ih-vh[imperf2]][Aspect=completive]'
+    - vh
+  - - '[AspectClass=ih-vh[imperf2]][Aspect=immediate]'
+    - a
+  - - '[AspectClass=ih-vh[imperf2]][Aspect=incompletive]'
+    - ih
+  - - '[AspectClass=ih-vh[imperf2]][Aspect=infinitive]'
+    - ht
+  - - '[AspectClass=ih-vh[imperf2]][Aspect=present]'
+    - ih
+  - - '[AspectClass=ih-vh[inf2]][Aspect=completive]'
+    - vh
+  - - '[AspectClass=ih-vh[inf2]][Aspect=immediate]'
+    - a
+  - - '[AspectClass=ih-vh[inf2]][Aspect=incompletive]'
+    - isk
+  - - '[AspectClass=ih-vh[inf2]][Aspect=infinitive]'
+    - vht
+  - - '[AspectClass=ih-vh[inf2]][Aspect=present]'
+    - ih
+  - - '[AspectClass=ih-vh][Aspect=completive]'
+    - vh
+  - - '[AspectClass=ih-vh][Aspect=immediate]'
+    - a
+  - - '[AspectClass=ih-vh][Aspect=incompletive]'
+    - isk
+  - - '[AspectClass=ih-vh][Aspect=infinitive]'
+    - ht
+  - - '[AspectClass=ih-vh][Aspect=present]'
+    - ih
+  - - '[AspectClass=ko-kots][Aspect=completive]'
+    - kots
+  - - '[AspectClass=ko-kots][Aspect=immediate]'
+    - ko'i
+  - - '[AspectClass=ko-kots][Aspect=incompletive]'
+    - kok
+  - - '[AspectClass=ko-kots][Aspect=infinitive]'
+    - kost
+  - - '[AspectClass=ko-kots][Aspect=present]'
+    - kok
+  - - '[AspectClass=o][Aspect=completive]'
+    - o'
+  - - '[AspectClass=o][Aspect=immediate]'
+    - otsa
+  - - '[AspectClass=o][Aspect=incompletive]'
+    - osk
+  - - '[AspectClass=o][Aspect=infinitive]'
+    - ost
+  - - '[AspectClass=o][Aspect=present]'
+    - o'
+  - - '[AspectClass=oh-al[imp2]][Aspect=completive]'
+    - hal
+  - - '[AspectClass=oh-al[imp2]][Aspect=immediate]'
+    - aka
+  - - '[AspectClass=oh-al[imp2]][Aspect=incompletive]'
+    - hoh
+  - - '[AspectClass=oh-al[imp2]][Aspect=infinitive]'
+    - st
+  - - '[AspectClass=oh-al[imp2]][Aspect=present]'
+    - hoh
+  - - '[AspectClass=oh-al][Aspect=completive]'
+    - hal
+  - - '[AspectClass=oh-al][Aspect=immediate]'
+    - hka
+  - - '[AspectClass=oh-al][Aspect=incompletive]'
+    - hoh
+  - - '[AspectClass=oh-al][Aspect=infinitive]'
+    - st
+  - - '[AspectClass=oh-al][Aspect=present]'
+    - hoh
+  - - '[AspectClass=oh-ol[inf2]][Aspect=completive]'
+    - ol
+  - - '[AspectClass=oh-ol[inf2]][Aspect=immediate]'
+    - aka
+  - - '[AspectClass=oh-ol[inf2]][Aspect=incompletive]'
+    - oh
+  - - '[AspectClass=oh-ol[inf2]][Aspect=infinitive]'
+    - hst
+  - - '[AspectClass=oh-ol[inf2]][Aspect=present]'
+    - oh
+  - - '[AspectClass=oh-ol[inf3]][Aspect=completive]'
+    - ol
+  - - '[AspectClass=oh-ol[inf3]][Aspect=immediate]'
+    - aka
+  - - '[AspectClass=oh-ol[inf3]][Aspect=incompletive]'
+    - oh
+  - - '[AspectClass=oh-ol[inf3]][Aspect=infinitive]'
+    - ast
+  - - '[AspectClass=oh-ol[inf3]][Aspect=present]'
+    - oh
+  - - '[AspectClass=oh-ol][Aspect=completive]'
+    - ol
+  - - '[AspectClass=oh-ol][Aspect=immediate]'
+    - aka
+  - - '[AspectClass=oh-ol][Aspect=incompletive]'
+    - oh
+  - - '[AspectClass=oh-ol][Aspect=infinitive]'
+    - ot
+  - - '[AspectClass=oh-ol][Aspect=present]'
+    - oh
+  - - '[AspectClass=rev-''i][Aspect=completive]'
+    - '''is'
+  - - '[AspectClass=rev-''i][Aspect=immediate]'
+    - '''i'
+  - - '[AspectClass=rev-''i][Aspect=incompletive]'
+    - '''isk'
+  - - '[AspectClass=rev-''i][Aspect=infinitive]'
+    - '''ist'
+  - - '[AspectClass=rev-''i][Aspect=present]'
+    - '''i'''
+  - - '[AspectClass=rev-e][Aspect=completive]'
+    - es
+  - - '[AspectClass=rev-e][Aspect=immediate]'
+    - aki
+  - - '[AspectClass=rev-e][Aspect=incompletive]'
+    - esk
+  - - '[AspectClass=rev-e][Aspect=infinitive]'
+    - est
+  - - '[AspectClass=rev-e][Aspect=present]'
+    - e'
+  - - '[AspectClass=rev-gi][Aspect=completive]'
+    - kis
+  - - '[AspectClass=rev-gi][Aspect=immediate]'
+    - ki
+  - - '[AspectClass=rev-gi][Aspect=incompletive]'
+    - kisk
+  - - '[AspectClass=rev-gi][Aspect=infinitive]'
+    - kist
+  - - '[AspectClass=rev-gi][Aspect=present]'
+    - ki'
+  - - '[AspectClass=rev-i][Aspect=completive]'
+    - is
+  - - '[AspectClass=rev-i][Aspect=immediate]'
+    - i
+  - - '[AspectClass=rev-i][Aspect=incompletive]'
+    - isk
+  - - '[AspectClass=rev-i][Aspect=infinitive]'
+    - ist
+  - - '[AspectClass=rev-i][Aspect=present]'
+    - i'
+  - - '[AspectClass=sk-h-yh][Aspect=completive]'
+    - yh
+  - - '[AspectClass=sk-h-yh][Aspect=immediate]'
+    - yha
+  - - '[AspectClass=sk-h-yh][Aspect=incompletive]'
+    - sk
+  - - '[AspectClass=sk-h-yh][Aspect=infinitive]'
+    - st
+  - - '[AspectClass=sk-h-yh][Aspect=present]'
+    - sk
+  - - '[AspectClass=sk-h[imp2]][Aspect=completive]'
+    - h
+  - - '[AspectClass=sk-h[imp2]][Aspect=immediate]'
+    - ''
+  - - '[AspectClass=sk-h[imp2]][Aspect=incompletive]'
+    - sk
+  - - '[AspectClass=sk-h[imp2]][Aspect=infinitive]'
+    - st
+  - - '[AspectClass=sk-h[imp2]][Aspect=present]'
+    - sk
+  - - '[AspectClass=sk-h][Aspect=completive]'
+    - h
+  - - '[AspectClass=sk-h][Aspect=immediate]'
+    - ha
+  - - '[AspectClass=sk-h][Aspect=incompletive]'
+    - sk
+  - - '[AspectClass=sk-h][Aspect=infinitive]'
+    - st
+  - - '[AspectClass=sk-h][Aspect=present]'
+    - sk
+  - - '[AspectClass=sk-s-a[inf2]][Aspect=completive]'
+    - s
+  - - '[AspectClass=sk-s-a[inf2]][Aspect=immediate]'
+    - a
+  - - '[AspectClass=sk-s-a[inf2]][Aspect=incompletive]'
+    - sk
+  - - '[AspectClass=sk-s-a[inf2]][Aspect=infinitive]'
+    - st
+  - - '[AspectClass=sk-s-a[inf2]][Aspect=present]'
+    - sk
+  - - '[AspectClass=sk-s-a][Aspect=completive]'
+    - s
+  - - '[AspectClass=sk-s-a][Aspect=immediate]'
+    - a
+  - - '[AspectClass=sk-s-a][Aspect=incompletive]'
+    - sk
+  - - '[AspectClass=sk-s-a][Aspect=infinitive]'
+    - hist
+  - - '[AspectClass=sk-s-a][Aspect=present]'
+    - sk
+  - - '[AspectClass=sk-s-hi-hihst][Aspect=completive]'
+    - s
+  - - '[AspectClass=sk-s-hi-hihst][Aspect=immediate]'
+    - hi
+  - - '[AspectClass=sk-s-hi-hihst][Aspect=incompletive]'
+    - sk
+  - - '[AspectClass=sk-s-hi-hihst][Aspect=infinitive]'
+    - hist
+  - - '[AspectClass=sk-s-hi-hihst][Aspect=present]'
+    - sk
+  - - '[AspectClass=sk-s-hst[imp2]][Aspect=completive]'
+    - s
+  - - '[AspectClass=sk-s-hst[imp2]][Aspect=immediate]'
+    - hi
+  - - '[AspectClass=sk-s-hst[imp2]][Aspect=incompletive]'
+    - sk
+  - - '[AspectClass=sk-s-hst[imp2]][Aspect=infinitive]'
+    - st
+  - - '[AspectClass=sk-s-hst[imp2]][Aspect=present]'
+    - sk
+  - - '[AspectClass=sk-s-hst][Aspect=completive]'
+    - s
+  - - '[AspectClass=sk-s-hst][Aspect=immediate]'
+    - ''
+  - - '[AspectClass=sk-s-hst][Aspect=incompletive]'
+    - sk
+  - - '[AspectClass=sk-s-hst][Aspect=infinitive]'
+    - st
+  - - '[AspectClass=sk-s-hst][Aspect=present]'
+    - sk
+  - - '[AspectClass=sk-s-la][Aspect=completive]'
+    - s
+  - - '[AspectClass=sk-s-la][Aspect=immediate]'
+    - la
+  - - '[AspectClass=sk-s-la][Aspect=incompletive]'
+    - sk
+  - - '[AspectClass=sk-s-la][Aspect=infinitive]'
+    - st
+  - - '[AspectClass=sk-s-la][Aspect=present]'
+    - sk
+  - - '[AspectClass=stative-a''][Aspect=completive]'
+    - ''
+  - - '[AspectClass=stative-a''][Aspect=immediate]'
+    - ''
+  - - '[AspectClass=stative-a''][Aspect=incompletive]'
+    - a'
+  - - '[AspectClass=stative-a''][Aspect=infinitive]'
+    - ''
+  - - '[AspectClass=stative-a''][Aspect=present]'
+    - a'
+  - - '[AspectClass=stative-eh][Aspect=completive]'
+    - ''
+  - - '[AspectClass=stative-eh][Aspect=immediate]'
+    - ''
+  - - '[AspectClass=stative-eh][Aspect=incompletive]'
+    - eh
+  - - '[AspectClass=stative-eh][Aspect=infinitive]'
+    - ''
+  - - '[AspectClass=stative-eh][Aspect=present]'
+    - eh
+  - - '[AspectClass=stative-h][Aspect=completive]'
+    - ''
+  - - '[AspectClass=stative-h][Aspect=immediate]'
+    - ''
+  - - '[AspectClass=stative-h][Aspect=incompletive]'
+    - h
+  - - '[AspectClass=stative-h][Aspect=infinitive]'
+    - ''
+  - - '[AspectClass=stative-h][Aspect=present]'
+    - h
+  - - '[AspectClass=stative-k][Aspect=completive]'
+    - ''
+  - - '[AspectClass=stative-k][Aspect=immediate]'
+    - ''
+  - - '[AspectClass=stative-k][Aspect=incompletive]'
+    - k
+  - - '[AspectClass=stative-k][Aspect=infinitive]'
+    - ''
+  - - '[AspectClass=stative-k][Aspect=present]'
+    - k
+  - - '[AspectClass=stative-s][Aspect=completive]'
+    - ''
+  - - '[AspectClass=stative-s][Aspect=immediate]'
+    - ''
+  - - '[AspectClass=stative-s][Aspect=incompletive]'
+    - s
+  - - '[AspectClass=stative-s][Aspect=infinitive]'
+    - ''
+  - - '[AspectClass=stative-s][Aspect=present]'
+    - h
+  - - '[AspectClass=stative][Aspect=completive]'
+    - ''
+  - - '[AspectClass=stative][Aspect=immediate]'
+    - ''
+  - - '[AspectClass=stative][Aspect=incompletive]'
+    - ''
+  - - '[AspectClass=stative][Aspect=infinitive]'
+    - ''
+  - - '[AspectClass=stative][Aspect=present]'
+    - ''
+  - - '[AspectClass=terminative-no-o][Aspect=completive]'
+    - nh
+  - - '[AspectClass=terminative-no-o][Aspect=immediate]'
+    - nha
+  - - '[AspectClass=terminative-no-o][Aspect=incompletive]'
+    - hvsk
+  - - '[AspectClass=terminative-no-o][Aspect=infinitive]'
+    - hvst
+  - - '[AspectClass=terminative-no-o][Aspect=present]'
+    - hvsk
+  - - '[AspectClass=terminative][Aspect=completive]'
+    - onh
+  - - '[AspectClass=terminative][Aspect=immediate]'
+    - onha
+  - - '[AspectClass=terminative][Aspect=incompletive]'
+    - ohvsk
+  - - '[AspectClass=terminative][Aspect=infinitive]'
+    - ohvst
+  - - '[AspectClass=terminative][Aspect=present]'
+    - ohvsk
+  - - '[AspectClass=v-vhs][Aspect=completive]'
+    - vs
+  - - '[AspectClass=v-vhs][Aspect=immediate]'
+    - vna
+  - - '[AspectClass=v-vhs][Aspect=incompletive]'
+    - vsk
+  - - '[AspectClass=v-vhs][Aspect=infinitive]'
+    - vst
+  - - '[AspectClass=v-vhs][Aspect=present]'
+    - v'
+  - - '[AspectClass=vnh-ih-a][Aspect=completive]'
+    - vnh
+  - - '[AspectClass=vnh-ih-a][Aspect=immediate]'
+    - a
+  - - '[AspectClass=vnh-ih-a][Aspect=incompletive]'
+    - isk
+  - - '[AspectClass=vnh-ih-a][Aspect=infinitive]'
+    - ht
+  - - '[AspectClass=vnh-ih-a][Aspect=present]'
+    - ih
+  - - '[AspectClass=vnh-vsk[inf2]][Aspect=completive]'
+    - vnh
+  - - '[AspectClass=vnh-vsk[inf2]][Aspect=immediate]'
+    - vna
+  - - '[AspectClass=vnh-vsk[inf2]][Aspect=incompletive]'
+    - vsk
+  - - '[AspectClass=vnh-vsk[inf2]][Aspect=infinitive]'
+    - vht
+  - - '[AspectClass=vnh-vsk[inf2]][Aspect=present]'
+    - vsk
+  - - '[AspectClass=vnh-vsk[inf3]][Aspect=completive]'
+    - vnh
+  - - '[AspectClass=vnh-vsk[inf3]][Aspect=immediate]'
+    - vna
+  - - '[AspectClass=vnh-vsk[inf3]][Aspect=incompletive]'
+    - vsk
+  - - '[AspectClass=vnh-vsk[inf3]][Aspect=infinitive]'
+    - vnht
+  - - '[AspectClass=vnh-vsk[inf3]][Aspect=present]'
+    - vsk
+  - - '[AspectClass=vnh-vsk[inf4]][Aspect=completive]'
+    - vnh
+  - - '[AspectClass=vnh-vsk[inf4]][Aspect=immediate]'
+    - vna
+  - - '[AspectClass=vnh-vsk[inf4]][Aspect=incompletive]'
+    - vsk
+  - - '[AspectClass=vnh-vsk[inf4]][Aspect=infinitive]'
+    - vst
+  - - '[AspectClass=vnh-vsk[inf4]][Aspect=present]'
+    - vsk
+  - - '[AspectClass=vnh-vsk][Aspect=completive]'
+    - vnh
+  - - '[AspectClass=vnh-vsk][Aspect=immediate]'
+    - vna
+  - - '[AspectClass=vnh-vsk][Aspect=incompletive]'
+    - vsk
+  - - '[AspectClass=vnh-vsk][Aspect=infinitive]'
+    - ht
+  - - '[AspectClass=vnh-vsk][Aspect=present]'
+    - vsk
+  - - '[AspectClass=vsk-long[imp2]][Aspect=completive]'
+    - vn
+  - - '[AspectClass=vsk-long[imp2]][Aspect=immediate]'
+    - v'vka
+  - - '[AspectClass=vsk-long[imp2]][Aspect=incompletive]'
+    - v'vsk
+  - - '[AspectClass=vsk-long[imp2]][Aspect=infinitive]'
+    - vt
+  - - '[AspectClass=vsk-long[imp2]][Aspect=present]'
+    - v'vsk
+  - - '[AspectClass=vsk-long][Aspect=completive]'
+    - vn
+  - - '[AspectClass=vsk-long][Aspect=immediate]'
+    - vka
+  - - '[AspectClass=vsk-long][Aspect=incompletive]'
+    - v'vsk
+  - - '[AspectClass=vsk-long][Aspect=infinitive]'
+    - vt
+  - - '[AspectClass=vsk-long][Aspect=present]'
+    - v'vsk
+  - - '[AspectClass=vsk-post-v][Aspect=completive]'
+    - n
+  - - '[AspectClass=vsk-post-v][Aspect=immediate]'
+    - '''vka'
+  - - '[AspectClass=vsk-post-v][Aspect=incompletive]'
+    - '''vsk'
+  - - '[AspectClass=vsk-post-v][Aspect=infinitive]'
+    - t
+  - - '[AspectClass=vsk-post-v][Aspect=present]'
+    - '''vsk'
+  - - '[AspectClass=vsk[imp2]][Aspect=completive]'
+    - vn
+  - - '[AspectClass=vsk[imp2]][Aspect=immediate]'
+    - v'vka
+  - - '[AspectClass=vsk[imp2]][Aspect=incompletive]'
+    - vsk
+  - - '[AspectClass=vsk[imp2]][Aspect=infinitive]'
+    - vt
+  - - '[AspectClass=vsk[imp2]][Aspect=present]'
+    - vsk
+  - - '[AspectClass=vsk][Aspect=completive]'
+    - vn
+  - - '[AspectClass=vsk][Aspect=immediate]'
+    - vka
+  - - '[AspectClass=vsk][Aspect=incompletive]'
+    - vsk
+  - - '[AspectClass=vsk][Aspect=infinitive]'
+    - vt
+  - - '[AspectClass=vsk][Aspect=present]'
+    - vsk

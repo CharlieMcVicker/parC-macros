@@ -1,0 +1,22 @@
+# This is a Rules config file
+# Generated automatically by generate_insertion_rules.py
+kind: Rules
+rules:
+- name: insert_dist1_i
+  string_map:
+  - - '[DIST]i'
+    - t
+- name: insert_dist1_v_h
+  string_map:
+  - - '[DIST]'
+    - t
+  right_context: <V>
+- name: insert_dist1_default
+  string_map:
+  - - '[DIST]'
+    - te
+- name: insert_DIST1
+  rule_sequence:
+  - $insert_dist1_i
+  - $insert_dist1_v_h
+  - $insert_dist1_default
