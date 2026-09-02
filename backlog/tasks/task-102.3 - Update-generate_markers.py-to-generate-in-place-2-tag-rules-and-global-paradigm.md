@@ -3,11 +3,11 @@ id: TASK-102.3
 title: >-
   Update generate_markers.py to generate in-place 2-tag rules and global
   paradigm
-status: In Progress
+status: Done
 assignee:
   - '@subagent'
 created_date: '2026-09-02 19:51'
-updated_date: '2026-09-02 20:34'
+updated_date: '2026-09-02 20:35'
 labels: []
 dependencies:
   - TASK-102.2

@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@antigravity'
 created_date: '2026-09-02 19:51'
-updated_date: '2026-09-02 20:25'
+updated_date: '2026-09-02 20:35'
 labels: []
 dependencies: []
 documentation:
@@ -27,7 +27,7 @@ Comprehensive architectural initiative to migrate Cherokee verb grammar from tra
 <!-- AC:BEGIN -->
 - [x] #1 Record baseline FST metrics for chr-generated
 - [x] #2 Configure chr-inplace-config with in-place tags and patterns
-- [ ] #3 Update generate_markers.py to generate in-place string_map rules and global_markers paradigm
+- [x] #3 Update generate_markers.py to generate in-place string_map rules and global_markers paradigm
 - [ ] #4 Generate chr-inplace-generated and compile open inflect/parse FSTs
 - [ ] #5 Benchmark in-place FST size and compilation gains against baseline
 - [ ] #6 Verify 100% dictionary parsing parity on chr-corpus/corpus.csv
