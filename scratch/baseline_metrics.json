@@ -1,0 +1,896 @@
+{
+  "environment": {
+    "python_path": "/opt/homebrew/Caskroom/miniconda/base/envs/parC/bin/python",
+    "python_version": "3.10.20",
+    "platform": "macOS-14.3.1-arm64-arm-64bit",
+    "git_commit": "b1c721f878beb75f30ecd543aa8a654c3e7c77df",
+    "git_branch": "subagent-Baseline-Metrics-Benchmark-Subagent-self-bf14b2ff",
+    "timestamp": "2026-09-02T15:12:59-0500",
+    "grammar_dir": "/Users/julietmcvicker/.gemini/antigravity-cli/brain/95c8b51d-d909-490b-a7d4-5b4da2c3c440/.system_generated/worktrees/subagent-Baseline-Metrics-Benchmark-Subagent-self-bf14b2ff/chr-generated"
+  },
+  "graphs": {
+    "open_inflect_standard": {
+      "paradigm": "verb",
+      "infer_lexical_features": true,
+      "non_deterministic_cleanup": false,
+      "states": 578015,
+      "arcs": 1963760,
+      "cold_compilation_seconds": 3.1286,
+      "cached_load_seconds": 0.1541,
+      "file_path": "/Users/julietmcvicker/.gemini/antigravity-cli/brain/95c8b51d-d909-490b-a7d4-5b4da2c3c440/.system_generated/worktrees/subagent-Baseline-Metrics-Benchmark-Subagent-self-bf14b2ff/chr-generated/.cache/0681833b49d5cd8b06bb51ffc55ceaf6c448e5b71fd48c3f2e4187e663ed4c7f_open_inflect_infer.fst",
+      "file_size_bytes": 38356406,
+      "file_size_mb": 36.58,
+      "cache_key": "0681833b49d5cd8b06bb51ffc55ceaf6c448e5b71fd48c3f2e4187e663ed4c7f_open_inflect_infer"
+    },
+    "open_inflect_nd_cleanup": {
+      "paradigm": "verb",
+      "infer_lexical_features": true,
+      "non_deterministic_cleanup": true,
+      "states": 578015,
+      "arcs": 2527626,
+      "cold_compilation_seconds": 3.4451,
+      "cached_load_seconds": 0.1833,
+      "file_path": "/Users/julietmcvicker/.gemini/antigravity-cli/brain/95c8b51d-d909-490b-a7d4-5b4da2c3c440/.system_generated/worktrees/subagent-Baseline-Metrics-Benchmark-Subagent-self-bf14b2ff/chr-generated/.cache/0681833b49d5cd8b06bb51ffc55ceaf6c448e5b71fd48c3f2e4187e663ed4c7f_open_inflect_infer_nd_cleanup.fst",
+      "file_size_bytes": 47378262,
+      "file_size_mb": 45.18,
+      "cache_key": "0681833b49d5cd8b06bb51ffc55ceaf6c448e5b71fd48c3f2e4187e663ed4c7f_open_inflect_infer_nd_cleanup"
+    },
+    "open_parse_nd_cleanup": {
+      "paradigm": "verb",
+      "infer_lexical_features": true,
+      "non_deterministic_cleanup": true,
+      "states": 578015,
+      "arcs": 2527626,
+      "inversion_seconds": 2.1498,
+      "cold_compilation_seconds": 5.5347,
+      "cached_load_seconds": 0.1866,
+      "file_path": "/Users/julietmcvicker/.gemini/antigravity-cli/brain/95c8b51d-d909-490b-a7d4-5b4da2c3c440/.system_generated/worktrees/subagent-Baseline-Metrics-Benchmark-Subagent-self-bf14b2ff/chr-generated/.cache/0681833b49d5cd8b06bb51ffc55ceaf6c448e5b71fd48c3f2e4187e663ed4c7f_open_parse_infer_nd_cleanup.fst",
+      "file_size_bytes": 47378262,
+      "file_size_mb": 45.18,
+      "cache_key": "0681833b49d5cd8b06bb51ffc55ceaf6c448e5b71fd48c3f2e4187e663ed4c7f_open_parse_infer_nd_cleanup"
+    },
+    "open_parse_standard": {
+      "paradigm": "verb",
+      "infer_lexical_features": true,
+      "non_deterministic_cleanup": false,
+      "states": 578015,
+      "arcs": 1963760,
+      "inversion_seconds": 1.7096,
+      "cold_compilation_seconds": 4.6497,
+      "cached_load_seconds": 0.1575,
+      "file_path": "/Users/julietmcvicker/.gemini/antigravity-cli/brain/95c8b51d-d909-490b-a7d4-5b4da2c3c440/.system_generated/worktrees/subagent-Baseline-Metrics-Benchmark-Subagent-self-bf14b2ff/chr-generated/.cache/0681833b49d5cd8b06bb51ffc55ceaf6c448e5b71fd48c3f2e4187e663ed4c7f_open_parse_infer.fst",
+      "file_size_bytes": 38356406,
+      "file_size_mb": 36.58,
+      "cache_key": "0681833b49d5cd8b06bb51ffc55ceaf6c448e5b71fd48c3f2e4187e663ed4c7f_open_parse_infer"
+    }
+  },
+  "corpus_benchmark": {
+    "target_valid_rows": 100,
+    "valid_rows_parsed": 100,
+    "total_corpus_rows_examined": 131,
+    "compiler_initialization_seconds": 0.237,
+    "total_parse_seconds": 30.8009,
+    "total_elapsed_with_init_seconds": 31.0379,
+    "mean_ms_per_valid_row": 288.52,
+    "median_ms_per_valid_row": 260.84,
+    "min_ms_per_valid_row": 110.52,
+    "max_ms_per_valid_row": 681.39,
+    "throughput_rows_per_second": 3.25,
+    "first_5_entries": [
+      "#8 (it\u2019s bouncing)",
+      "#9 (he/she is limping)",
+      "#10 (he/she is bouncing it)",
+      "#11 (he/she is putting on a belt)",
+      "#14 (he/she is praying)"
+    ],
+    "last_5_entries": [
+      "#222 (he/she is taking it somewhere by hand)",
+      "#224 (he/she is quilting it)",
+      "#226 (he/she is imitating him/her)",
+      "#229 (he/she is swimming (refers to propelling oneself through the water))",
+      "#230 (it\u2019s thundering)"
+    ],
+    "parsed_entries": [
+      {
+        "row_index": 0,
+        "entry_no": "8",
+        "definition": "it\u2019s bouncing",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 681.39
+      },
+      {
+        "row_index": 1,
+        "entry_no": "9",
+        "definition": "he/she is limping",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 242.97
+      },
+      {
+        "row_index": 2,
+        "entry_no": "10",
+        "definition": "he/she is bouncing it",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 500.64
+      },
+      {
+        "row_index": 3,
+        "entry_no": "11",
+        "definition": "he/she is putting on a belt",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 477.69
+      },
+      {
+        "row_index": 4,
+        "entry_no": "14",
+        "definition": "he/she is praying",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 159.37
+      },
+      {
+        "row_index": 5,
+        "entry_no": "20",
+        "definition": "he/she is fanning himself/herself",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 474.82
+      },
+      {
+        "row_index": 6,
+        "entry_no": "22",
+        "definition": "he/she is visiting",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 473.11
+      },
+      {
+        "row_index": 7,
+        "entry_no": "23",
+        "definition": "he/she is stretching",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 133.03
+      },
+      {
+        "row_index": 9,
+        "entry_no": "26",
+        "definition": "he/she is committing adultery",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 306.2
+      },
+      {
+        "row_index": 11,
+        "entry_no": "31",
+        "definition": "he/she is looking at himself/herself in a mirror",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 338.74
+      },
+      {
+        "row_index": 12,
+        "entry_no": "33",
+        "definition": "it\u2019s beginning",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 4,
+        "parse_time_ms": 326.36
+      },
+      {
+        "row_index": 13,
+        "entry_no": "34",
+        "definition": "he/she is shopping",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 674.01
+      },
+      {
+        "row_index": 14,
+        "entry_no": "36",
+        "definition": "he/she is taking off running",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 134.56
+      },
+      {
+        "row_index": 15,
+        "entry_no": "37",
+        "definition": "he/she is changing",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 481.38
+      },
+      {
+        "row_index": 16,
+        "entry_no": "38",
+        "definition": "he/she is taking turns with him/her",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 201.78
+      },
+      {
+        "row_index": 17,
+        "entry_no": "43",
+        "definition": "he/she is thinking",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 376.23
+      },
+      {
+        "row_index": 18,
+        "entry_no": "45",
+        "definition": "he/she is pondering",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 466.95
+      },
+      {
+        "row_index": 19,
+        "entry_no": "46",
+        "definition": "he/she is making noise",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 167.72
+      },
+      {
+        "row_index": 20,
+        "entry_no": "47",
+        "definition": "he/she is crawling",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 467.15
+      },
+      {
+        "row_index": 21,
+        "entry_no": "48",
+        "definition": "it\u2019s twisting",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 178.07
+      },
+      {
+        "row_index": 23,
+        "entry_no": "50",
+        "definition": "he/she is ordering it",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 493.94
+      },
+      {
+        "row_index": 24,
+        "entry_no": "52",
+        "definition": "he/she is cooking a meal",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 279.95
+      },
+      {
+        "row_index": 25,
+        "entry_no": "55",
+        "definition": "it\u2019s burning (refers to flames)",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 490.82
+      },
+      {
+        "row_index": 26,
+        "entry_no": "58",
+        "definition": "he/she is resting",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 197.15
+      },
+      {
+        "row_index": 27,
+        "entry_no": "60",
+        "definition": "he/she is bathing",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 133.57
+      },
+      {
+        "row_index": 28,
+        "entry_no": "63",
+        "definition": "he/she is giving him/her it (refers to a long object)",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 408.09
+      },
+      {
+        "row_index": 30,
+        "entry_no": "65",
+        "definition": "he/she is embarrassing him/her",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 159.76
+      },
+      {
+        "row_index": 31,
+        "entry_no": "66",
+        "definition": "he/she is embarrassed",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 396.09
+      },
+      {
+        "row_index": 32,
+        "entry_no": "67",
+        "definition": "he/she is being born",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 491.83
+      },
+      {
+        "row_index": 33,
+        "entry_no": "71",
+        "definition": "he/she is finding it out",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 144.56
+      },
+      {
+        "row_index": 35,
+        "entry_no": "74",
+        "definition": "he/she is going around a curve",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 135.23
+      },
+      {
+        "row_index": 36,
+        "entry_no": "76",
+        "definition": "he/she is laying it down (refers to a long object)",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 475.77
+      },
+      {
+        "row_index": 38,
+        "entry_no": "78",
+        "definition": "he/she is scattering it",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 267.23
+      },
+      {
+        "row_index": 39,
+        "entry_no": "79",
+        "definition": "it\u2019s scattering",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 4,
+        "parse_time_ms": 345.65
+      },
+      {
+        "row_index": 40,
+        "entry_no": "80",
+        "definition": "he/she is spinning",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 187.77
+      },
+      {
+        "row_index": 42,
+        "entry_no": "82",
+        "definition": "he/she is running over him/her",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 156.99
+      },
+      {
+        "row_index": 43,
+        "entry_no": "83",
+        "definition": "he/she is hiding",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 275.58
+      },
+      {
+        "row_index": 44,
+        "entry_no": "84",
+        "definition": "he/she is leaving it behind (refers to a long object)",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 395.32
+      },
+      {
+        "row_index": 45,
+        "entry_no": "86",
+        "definition": "he/she is drinking it",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 260.45
+      },
+      {
+        "row_index": 46,
+        "entry_no": "89",
+        "definition": "he/she is scratching",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 135.78
+      },
+      {
+        "row_index": 47,
+        "entry_no": "91",
+        "definition": "he/she is turning off the road",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 466.26
+      },
+      {
+        "row_index": 48,
+        "entry_no": "92",
+        "definition": "he/she is taking revenge against him/her",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 195.3
+      },
+      {
+        "row_index": 50,
+        "entry_no": "98",
+        "definition": "it\u2019s pouring into a container (refers to liquid)",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 4,
+        "parse_time_ms": 151.81
+      },
+      {
+        "row_index": 52,
+        "entry_no": "100",
+        "definition": "he/she is pouring a liquid into a container",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 402.81
+      },
+      {
+        "row_index": 54,
+        "entry_no": "103",
+        "definition": "he/she is getting off",
+        "entry_type": "StativeNoImp",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 181.17
+      },
+      {
+        "row_index": 55,
+        "entry_no": "104",
+        "definition": "he/she is bragging",
+        "entry_type": "StativeNoImp",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 146.04
+      },
+      {
+        "row_index": 56,
+        "entry_no": "105",
+        "definition": "he/she is catching up with him/her",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 140.28
+      },
+      {
+        "row_index": 58,
+        "entry_no": "111",
+        "definition": "he/she is acting silly",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 280.65
+      },
+      {
+        "row_index": 59,
+        "entry_no": "113",
+        "definition": "he/she is preparing it",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 144.94
+      },
+      {
+        "row_index": 60,
+        "entry_no": "116",
+        "definition": "it is shining (refers to sun or moon)",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 4,
+        "parse_time_ms": 203.01
+      },
+      {
+        "row_index": 61,
+        "entry_no": "117",
+        "definition": "he/she is breaking it (refers to a flexible object)",
+        "entry_type": "StativeNoImp",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 391.27
+      },
+      {
+        "row_index": 62,
+        "entry_no": "119",
+        "definition": "he/she is licking it",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 147.6
+      },
+      {
+        "row_index": 63,
+        "entry_no": "121",
+        "definition": "he/she is warming it",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 159.76
+      },
+      {
+        "row_index": 64,
+        "entry_no": "122",
+        "definition": "it\u2019s getting warm",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 8,
+        "parse_time_ms": 499.53
+      },
+      {
+        "row_index": 66,
+        "entry_no": "132",
+        "definition": "he/she is eating it (refers to a single solid food)",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 140.01
+      },
+      {
+        "row_index": 67,
+        "entry_no": "133",
+        "definition": "he/she is picking it up",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 259.25
+      },
+      {
+        "row_index": 68,
+        "entry_no": "135",
+        "definition": "he/she is in agony",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 477.4
+      },
+      {
+        "row_index": 69,
+        "entry_no": "138",
+        "definition": "he/she is chewing it",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 387.11
+      },
+      {
+        "row_index": 70,
+        "entry_no": "140",
+        "definition": "he/she is burning him/her",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 139.98
+      },
+      {
+        "row_index": 71,
+        "entry_no": "141",
+        "definition": "it\u2019s burning",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 614.73
+      },
+      {
+        "row_index": 72,
+        "entry_no": "143",
+        "definition": "he/she is reading",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 398.59
+      },
+      {
+        "row_index": 73,
+        "entry_no": "145",
+        "definition": "he/she is target practicing",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 257.49
+      },
+      {
+        "row_index": 75,
+        "entry_no": "150",
+        "definition": "he/she is showing it to him/her",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 142.67
+      },
+      {
+        "row_index": 76,
+        "entry_no": "153",
+        "definition": "he/she is cutting it",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 274.02
+      },
+      {
+        "row_index": 78,
+        "entry_no": "157",
+        "definition": "he/she is scolding him/her",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 417.29
+      },
+      {
+        "row_index": 79,
+        "entry_no": "158",
+        "definition": "he/she is washing his face",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 155.43
+      },
+      {
+        "row_index": 80,
+        "entry_no": "161",
+        "definition": "he/she is diverting him/her",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 464.04
+      },
+      {
+        "row_index": 81,
+        "entry_no": "164",
+        "definition": "he/she is smothering him/her",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 110.52
+      },
+      {
+        "row_index": 82,
+        "entry_no": "166",
+        "definition": "he/she is handling it",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 389.08
+      },
+      {
+        "row_index": 86,
+        "entry_no": "171",
+        "definition": "he/she is leaving it behind",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 146.46
+      },
+      {
+        "row_index": 87,
+        "entry_no": "172",
+        "definition": "he/she is placing it on something",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 405.75
+      },
+      {
+        "row_index": 88,
+        "entry_no": "173",
+        "definition": "he/she is taking off flying",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 134.18
+      },
+      {
+        "row_index": 89,
+        "entry_no": "175",
+        "definition": "he/she is making him/her fly",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 267.09
+      },
+      {
+        "row_index": 90,
+        "entry_no": "177",
+        "definition": "he/she is having a nightmare",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 381.77
+      },
+      {
+        "row_index": 91,
+        "entry_no": "178",
+        "definition": "it\u2019s taking time",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 8,
+        "parse_time_ms": 471.57
+      },
+      {
+        "row_index": 92,
+        "entry_no": "179",
+        "definition": "he/she is measuring it",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 125.77
+      },
+      {
+        "row_index": 93,
+        "entry_no": "181",
+        "definition": "it\u2019s bending",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 8,
+        "parse_time_ms": 482.64
+      },
+      {
+        "row_index": 95,
+        "entry_no": "183",
+        "definition": "he/she is preaching",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 148.03
+      },
+      {
+        "row_index": 96,
+        "entry_no": "185",
+        "definition": "it\u2019s shattering",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 16,
+        "parse_time_ms": 461.15
+      },
+      {
+        "row_index": 97,
+        "entry_no": "186",
+        "definition": "he/she is shattering it",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 136.92
+      },
+      {
+        "row_index": 98,
+        "entry_no": "188",
+        "definition": "he/she is beating him/her at a game",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 190.69
+      },
+      {
+        "row_index": 99,
+        "entry_no": "189",
+        "definition": "he/she is combing his/her hair",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 135.59
+      },
+      {
+        "row_index": 100,
+        "entry_no": "191",
+        "definition": "he/she is moving (without changing location)",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 262.4
+      },
+      {
+        "row_index": 105,
+        "entry_no": "197",
+        "definition": "he/she is wrestling",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 137.6
+      },
+      {
+        "row_index": 108,
+        "entry_no": "201",
+        "definition": "he/she is building a house",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 135.14
+      },
+      {
+        "row_index": 109,
+        "entry_no": "202",
+        "definition": "he/she is leaving",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 252.06
+      },
+      {
+        "row_index": 110,
+        "entry_no": "203",
+        "definition": "he/she is starting it",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 141.62
+      },
+      {
+        "row_index": 112,
+        "entry_no": "206",
+        "definition": "he/she is putting it in liquid (refers to a long object)",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 142.46
+      },
+      {
+        "row_index": 113,
+        "entry_no": "210",
+        "definition": "he/she is hitting him/her on the mouth",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 241.03
+      },
+      {
+        "row_index": 114,
+        "entry_no": "211",
+        "definition": "he/she is moving it from one place to another",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 400.38
+      },
+      {
+        "row_index": 116,
+        "entry_no": "213",
+        "definition": "he/she is finding him/her",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 125.71
+      },
+      {
+        "row_index": 117,
+        "entry_no": "214",
+        "definition": "he/she is visiting him/her",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 119.75
+      },
+      {
+        "row_index": 119,
+        "entry_no": "216",
+        "definition": "he/she is planting it",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 507.19
+      },
+      {
+        "row_index": 120,
+        "entry_no": "218",
+        "definition": "he/she is peeling it",
+        "entry_type": "StativeNoImp",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 114.34
+      },
+      {
+        "row_index": 122,
+        "entry_no": "221",
+        "definition": "he/she is calling him/her",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 118.3
+      },
+      {
+        "row_index": 123,
+        "entry_no": "222",
+        "definition": "he/she is taking it somewhere by hand",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 403.89
+      },
+      {
+        "row_index": 125,
+        "entry_no": "224",
+        "definition": "he/she is quilting it",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 2,
+        "parse_time_ms": 286.04
+      },
+      {
+        "row_index": 127,
+        "entry_no": "226",
+        "definition": "he/she is imitating him/her",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 158.71
+      },
+      {
+        "row_index": 129,
+        "entry_no": "229",
+        "definition": "he/she is swimming (refers to propelling oneself through the water)",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 1,
+        "parse_time_ms": 261.22
+      },
+      {
+        "row_index": 130,
+        "entry_no": "230",
+        "definition": "it\u2019s thundering",
+        "entry_type": "Eventful",
+        "valid_hypotheses": 4,
+        "parse_time_ms": 324.91
+      }
+    ]
+  }
+}
