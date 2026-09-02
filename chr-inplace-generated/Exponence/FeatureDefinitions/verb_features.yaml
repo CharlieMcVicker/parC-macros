@@ -41,24 +41,6 @@ features:
   - incompletive
   - completive
   - infinitive
-  tense_present_class:
-  - a_present
-  - i_present
-  prefix_class:
-  - name: a_stem
-    acceptor: <Morpheme>*a<Phone>*<Morpheme>*
-  - name: cons_stem
-    acceptor: <Morpheme>*<C><Phone>*<Morpheme>*
-  - name: e_stem
-    acceptor: <Morpheme>*e<Phone>*<Morpheme>*
-  - name: k_a_stem
-    acceptor: <Morpheme>*a<Phone>*<Morpheme>*
-  - name: r_stem
-    acceptor: <Morpheme>*(<Son>|<N>)<Phone>*<Morpheme>*
-  - name: v_stem
-    acceptor: <Morpheme>*v<Phone>*<Morpheme>*
-  - name: vowel_stem
-    acceptor: <Morpheme>*<V><Phone>*<Morpheme>*
   aspect_class:
   - a
   - apl
@@ -152,3 +134,21 @@ features:
   - vsk-long[imp2]
   - vsk-post-v
   - vsk[imp2]
+  prefix_class:
+  - name: a_stem
+    acceptor: <Morpheme>*a<Phone>*<Morpheme>*
+  - name: cons_stem
+    acceptor: <Morpheme>*<C><Phone>*<Morpheme>*
+  - name: e_stem
+    acceptor: <Morpheme>*e<Phone>*<Morpheme>*
+  - name: k_a_stem
+    acceptor: <Morpheme>*a<Phone>*<Morpheme>*
+  - name: r_stem
+    acceptor: <Morpheme>*(<Son>|<N>)<Phone>*<Morpheme>*
+  - name: v_stem
+    acceptor: <Morpheme>*v<Phone>*<Morpheme>*
+  - name: vowel_stem
+    acceptor: <Morpheme>*<V><Phone>*<Morpheme>*
+  tense_present_class:
+  - a_present
+  - i_present

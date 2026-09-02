@@ -785,7 +785,7 @@ def update_feature_definitions(
             feature_acceptors.keys()
         )
 
-        for cf in update_targets:
+        for cf in sorted(update_targets):
             if cf not in fd_content["features"]:
                 fd_content["features"][cf] = []
 
