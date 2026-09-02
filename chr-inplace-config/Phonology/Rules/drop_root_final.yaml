@@ -1,0 +1,30 @@
+kind: Rules
+rules:
+- name: mark_final
+  description: mark the final phone for deletion based on in-place aspect triggers
+  string_map:
+  - - <Phone>
+    - '[TEMP]'
+  right_context: '[AspectClass=hvsk-nh[inf2]][Aspect=infinitive]|[AspectClass=hvsk-nh[inf4]][Aspect=infinitive]|[AspectClass=hvsk-n][Aspect=infinitive]|[AspectClass=apl][Aspect=immediate]'
+- name: mark_final_two
+  description: mark the final two phones for deletion based on in-place aspect triggers
+  string_map:
+  - - <Phone><Phone>?
+    - '[TEMP]'
+  right_context: '[AspectClass=apl[imp2]][Aspect=immediate]'
+- name: drop_final
+  description: drop final phone
+  rule_sequence:
+  - $mark_final
+  - $delete_temp_marker
+- name: drop_final_two
+  description: drop final two phones
+  rule_sequence:
+  - $mark_final_two
+  - $delete_temp_marker
+- name: drop_root_final
+  description: drop final root phone(s) conditioned on in-place aspect class and aspect
+    tags
+  rule_sequence:
+  - $drop_final_two
+  - $drop_final
