@@ -568,11 +568,14 @@ def test_fine_grained_h_alternation_tag_helpers_and_validation():
     from parse_chr_dict.h_alternation import H_ALT_TAGS, validate_h_alternation_trigger, strip_h_alt_tags
 
     # 1. H_ALT_TAGS constant
-    assert H_ALT_TAGS == {"[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_NONE]"}
+    assert H_ALT_TAGS == {"[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_NONE]", "[H_VOWEL]"}
 
     # 2. strip_h_alt_tags
     cleaned = strip_h_alt_tags("[Pro][H_DROP]atanhoy[Aspect][Tense]")
     assert cleaned == "[Pro]atanhoy[Aspect][Tense]"
+
+    cleaned_vowel = strip_h_alt_tags("[Pro][H_VOWEL]atanhth[Aspect][Tense]")
+    assert cleaned_vowel == "[Pro]atanhth[Aspect][Tense]"
 
     cleaned_none = strip_h_alt_tags("[Pro][H_NONE]atanhoy[Aspect][Tense]")
     assert cleaned_none == "[Pro]atanhoy[Aspect][Tense]"
@@ -584,9 +587,11 @@ def test_fine_grained_h_alternation_tag_helpers_and_validation():
     assert validate_h_alternation_trigger("1sg>3sg", "[H_DROP]") is True
     assert validate_h_alternation_trigger("2sg>3sg", "[H_GLOT]") is True
     assert validate_h_alternation_trigger("1sg.A", "[H_LAT]") is True
+    assert validate_h_alternation_trigger("1sg.A", "[H_VOWEL]") is True
     assert validate_h_alternation_trigger("3sg.A", "[H_DROP]") is False
     assert validate_h_alternation_trigger("3sg.B", "[H_GLOT]") is False
     assert validate_h_alternation_trigger("1sg.B", "[H_LAT]") is False
+    assert validate_h_alternation_trigger("3sg.A", "[H_VOWEL]") is False
     assert validate_h_alternation_trigger("3sg.A", "[H_NONE]") is True
     assert validate_h_alternation_trigger("3sg.A", None) is True
 
@@ -618,5 +623,24 @@ def test_strict_h_alternation_trigger_rejection():
     assert len(hyps_non_mut) > 0
     for h in hyps_non_mut:
         assert h.glottal_root == h.h_root
+
+
+def test_h_vowel_row_39_43_thinking_derivation():
+    """Verify that row 39,43 ('he/she is thinking') matches and derives hypotheses containing [H_VOWEL]."""
+    from parse_chr_dict.meta_label_compiler import derive_hypotheses_for_forms, MetaConstraintCompiler
+    from parse_chr_dict.create_aspect_class_csv import respell_consonants
+
+    compiler = MetaConstraintCompiler()
+    forms = [
+        (respell_consonants("atanhtheha"), "[FORM=3RD_PRES]"),
+        (respell_consonants("katanvtheha"), "[FORM=1ST_PRES]"),
+    ]
+    hyps = derive_hypotheses_for_forms(forms, compiler)
+    assert len(hyps) > 0
+    h_vowel_hyps = [h for h in hyps if "[H_VOWEL]" in (h.glottal_root or "")]
+    assert len(h_vowel_hyps) > 0, "Expected at least one hypothesis with [H_VOWEL]"
+    for h in h_vowel_hyps:
+        assert "[H_VOWEL]" in h.glottal_root
+        assert "atanh" in h.h_root
 
 

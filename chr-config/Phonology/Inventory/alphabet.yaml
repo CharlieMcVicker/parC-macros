@@ -21,7 +21,7 @@ data:
     phones: [a, e, i, o, u, v]
   - name: Temp Tags
     ref: <TempTags>
-    tags: ["[TEMP]"]
+    tags: ["[TEMP]", "[TEMP_VOWEL]", "[TEMP_LAT]", "[TEMP_DROP]", "[TEMP_GLOT]"]
   - name: PPP
     ref: <PPP>
     tags: ["[WI]", "[DIST]"]
@@ -30,7 +30,7 @@ data:
     tags: ["[Pro]"]
   - name: H_ALT
     ref: <H_ALT>
-    tags: ["[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_NONE]"]
+    tags: ["[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_NONE]", "[H_VOWEL]"]
   - name: Tense
     ref: <Tense>
     tags: ["[Tense]"]

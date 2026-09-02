@@ -16,6 +16,7 @@ H_ALT_TAGS: Set[str] = {
     "[H_GLOT]",
     "[H_LAT]",
     "[H_NONE]",
+    "[H_VOWEL]"
 }
 
 
@@ -39,7 +40,7 @@ def validate_h_alternation_trigger(
     elif isinstance(h_alt_tag, bool):
         has_mutation = h_alt_tag
     elif isinstance(h_alt_tag, str):
-        has_mutation = h_alt_tag in {"[H_DROP]", "[H_GLOT]", "[H_LAT]"}
+        has_mutation = h_alt_tag != "[H_NONE]" and h_alt_tag in H_ALT_TAGS
     else:
         has_mutation = False
 
@@ -50,7 +51,7 @@ def validate_h_alternation_trigger(
 
 def strip_h_alt_tags(root: str) -> str:
     """Strips fine-grained H-alternation tags ([H_DROP], [H_GLOT], [H_LAT], [H_NONE], [H_ALT]) from a root."""
-    for tag in ("[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_NONE]", "[H_ALT]"):
+    for tag in H_ALT_TAGS:
         root = root.replace(tag, "")
     return root
 
@@ -70,7 +71,7 @@ def determine_h_alt_glottal_root(h_root: str, p_root: str) -> Optional[str]:
     clean_p = strip_h_alt_tags(p_root)
     if clean_h != clean_p:
         return None
-    if any(tag in p_root for tag in ("[H_DROP]", "[H_GLOT]", "[H_LAT]")):
+    if any(tag in p_root for tag in ("[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_VOWEL]")):
         return p_root
     return clean_h
 
