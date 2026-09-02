@@ -1,11 +1,21 @@
+import sys
+from pathlib import Path
+_root = str(Path(__file__).parent.parent.resolve())
+if _root not in sys.path:
+    sys.path.insert(0, _root)
 #!/usr/bin/env python3
 import csv
 import os
 import shutil
 import sys
 import yaml
+import re
 from parc_macros.generate_insertion_rules import generate_insertion_rules
-from parc_macros.generate_morpheme_replace_rules import generate_morpheme_replace_rules, sanitize_rule_name
+from parc_macros.generate_morpheme_replace_rules import (
+    generate_morpheme_replace_rules,
+    sanitize_rule_name,
+    is_in_place_mode,
+)
 
 
 
@@ -558,6 +568,130 @@ def generate_contingent_configs(
     print(f"Generated Paradigm: {paradigm_file}")
 
 
+def generate_inplace_paradigm_config(
+    pos_name,
+    verb_config,
+    stage_order,
+    mapped_results,
+    output_dir,
+    open_root_template,
+):
+    """
+    Generates a lean unified Paradigm config using global_markers without ContingentFeatureMarkers
+    for in-place morpheme architectures (as specified in doc-1 section 4.3).
+    """
+    paradigm_config = verb_config.get("paradigm", {})
+    paradigm_dir = os.path.join(output_dir, "Morphotactics", "Paradigm")
+    os.makedirs(paradigm_dir, exist_ok=True)
+    paradigm_file = os.path.join(paradigm_dir, f"{pos_name}.yaml")
+
+    # If global_markers is explicitly configured in verb.yaml, use it
+    if "global_markers" in paradigm_config:
+        raw_gm = paradigm_config["global_markers"]
+        global_markers = []
+        for item in raw_gm:
+            m = dict(item)
+            if "kind" not in m and str(m.get("value", "")).startswith("$"):
+                m["kind"] = "rule"
+            global_markers.append(m)
+    else:
+        # Map of stage -> rule value
+        stage_to_rule = {}
+        for res in mapped_results:
+            meta = res.get("metadata", {})
+            stg = meta.get("stage")
+            if not stg:
+                continue
+            if meta.get("kind") == "morpheme_replace":
+                morpheme_tag = meta.get("morpheme_tag", "")
+                tag_slug = re.sub(r"[\[\]]", "", morpheme_tag).lower()
+                stage_to_rule[stg] = f"${tag_slug}_replace"
+            elif meta.get("rule"):
+                r = meta["rule"]
+                if not r.startswith("$"):
+                    r = f"${r}"
+                stage_to_rule[stg] = r
+
+        # Default rules for well-known stages
+        standard_stage_rules = {
+            "final_dropping": "$drop_root_final",
+            "drop_stem_initial_vowel": "$drop_stem_initial_vowel",
+            "h_alternation": "$h_alternation",
+            "insert_dist": "$insert_di",
+            "insert_wi": "$insert_wi",
+        }
+        for stg, r in standard_stage_rules.items():
+            if stg not in stage_to_rule:
+                stage_to_rule[stg] = r
+
+        # Check existing rules in output_dir/Phonology/Rules
+        rules_dir = os.path.join(output_dir, "Phonology", "Rules")
+        if os.path.exists(rules_dir):
+            available_rules = set()
+            for rf in os.listdir(rules_dir):
+                if rf.endswith(".yaml"):
+                    r_path = os.path.join(rules_dir, rf)
+                    try:
+                        with open(r_path, "r", encoding="utf-8") as f:
+                            r_data = yaml.safe_load(f) or {}
+                            for r in r_data.get("rules", []):
+                                if "name" in r:
+                                    available_rules.add(r["name"])
+                    except Exception:
+                        pass
+            preferred_stage_rules = {
+                "final_dropping": "drop_root_final",
+                "drop_stem_initial_vowel": "drop_stem_initial_vowel",
+                "h_alternation": "h_alternation",
+            }
+            for stg, pref in preferred_stage_rules.items():
+                if pref in available_rules:
+                    stage_to_rule[stg] = "$" + pref
+
+            if "insert_di" not in available_rules:
+                for candidate in ("insert_DIST1", "insert_di1", "insert_DIST"):
+                    if candidate in available_rules:
+                        stage_to_rule["insert_dist"] = f"${candidate}"
+                        break
+            if "insert_wi" not in available_rules and "insert_WI" in available_rules:
+                stage_to_rule["insert_wi"] = "$insert_WI"
+
+        global_markers = []
+        if stage_order:
+            for stg in stage_order:
+                if stg in stage_to_rule:
+                    global_markers.append({
+                        "kind": "rule",
+                        "stage": stg,
+                        "value": stage_to_rule[stg],
+                    })
+
+    paradigm_content = {
+        "kind": "Paradigm",
+        "part_of_speech": f"${pos_name}",
+    }
+    if stage_order:
+        paradigm_content["stage_order"] = stage_order
+
+    paradigm_content["global_markers"] = global_markers
+
+    if open_root_template:
+        paradigm_content["open_root_template"] = open_root_template
+
+    with open(paradigm_file, "w", encoding="utf-8") as f:
+        f.write("# This is a Paradigm config file\n")
+        f.write("# Generated automatically from CSVs (in-place morphemes)\n")
+        yaml.dump(
+            paradigm_content,
+            f,
+            Dumper=Dumper,
+            default_flow_style=False,
+            allow_unicode=True,
+            sort_keys=False,
+        )
+    print(f"Generated In-Place Paradigm: {paradigm_file}")
+
+
 def update_feature_definitions(
     output_dir, pos_name, verb_config, class_features_paradigms, config_path=None
 ):
@@ -763,21 +897,11 @@ def generate_part_of_speech_config(output_dir, pos_name, verb_config):
     print(f"Generated PartOfSpeech: {pos_file}")
 
 
-def main():
+def generate_markers(config_path: str, output_dir: str, in_place: bool | None = None) -> None:
     """
-    Main entry point for generator. Orchestrates loading base configurations,
-    mapping CSV files to individual paradigm metadata/markers, reducing those mapping results,
-    generating FeatureMarkers and Paradigm configs, and writing global definitions.
+    Main orchestrator for generating marker and paradigm configs from CSVs.
+    Supports both in-place mode and standard trailing-label configs.
     """
-    if len(sys.argv) < 3:
-        print(
-            "Usage: python generate_markers.py <path_to_config_dir_or_csv> <output_dir>"
-        )
-        sys.exit(1)
-
-    config_path = sys.argv[1]
-    output_dir = sys.argv[2]
-
     if not os.path.exists(config_path):
         print(f"Error: Config path not found at {config_path}")
         sys.exit(1)
@@ -829,13 +953,7 @@ def main():
                 shutil.rmtree(dest_phonology)
             shutil.copytree(phonology_dir, dest_phonology)
 
-    # Generate insertion rules from insertions/*.csv into Phonology/Rules/
-    if os.path.isdir(config_path):
-        generate_insertion_rules(config_path, output_dir)
-        generate_morpheme_replace_rules(config_path, output_dir)
-
-
-    # 1. Determine all CSVs and verb.yaml
+    # Determine all CSVs and verb.yaml
     csv_files = []
     spec_path = None
     if os.path.isdir(config_path):
@@ -849,7 +967,6 @@ def main():
     else:
         # Fallback to single csv compatibility
         csv_files.append(config_path)
-        # Try to look for verb.yaml or verb_spec.yaml in the same directory
         parent_dir = os.path.dirname(config_path)
         possible_spec = os.path.join(parent_dir, "verb.yaml")
         if os.path.exists(possible_spec):
@@ -882,6 +999,15 @@ def main():
     feature_markers_keys = paradigm_config.get("feature_markers_keys", [])
     filename_suffix_keys = paradigm_config.get("filename_suffix_keys", [])
 
+    # Check in-place mode
+    if in_place is None:
+        in_place = is_in_place_mode(verb_config)
+
+    # Generate insertion rules and morpheme replace rules
+    if os.path.isdir(config_path):
+        generate_insertion_rules(config_path, output_dir)
+        generate_morpheme_replace_rules(config_path, output_dir, in_place=in_place)
+
     # Identify optional features and modify verb_config['features'] in-place
     optional_features = []
     if "features" in verb_config:
@@ -897,7 +1023,6 @@ def main():
     mapped_results = [
         r for r in mapped_results if not r["metadata"].get("inactive", False)
     ]
-    print(len(mapped_results))
 
     # Reduce Step: Aggregate paradigm metadata, markers, and class associations
     paradigms_metadata, paradigms_markers, class_features_paradigms = (
@@ -914,7 +1039,16 @@ def main():
     open_root_template = paradigm_config.get("open_root_template", None)
 
     # Output paradigm files
-    if use_contingent_features:
+    if in_place:
+        generate_inplace_paradigm_config(
+            pos_name=pos_name,
+            verb_config=verb_config,
+            stage_order=stage_order,
+            mapped_results=mapped_results,
+            output_dir=output_dir,
+            open_root_template=open_root_template,
+        )
+    elif use_contingent_features:
         generate_contingent_configs(
             mapped_results=mapped_results,
             pos_name=pos_name,
@@ -923,7 +1057,6 @@ def main():
             open_root_template=open_root_template,
             optional_features=optional_features,
         )
-
     else:
         for paradigm_name, meta in paradigms_metadata.items():
             markers = paradigms_markers.get(paradigm_name, {})
@@ -954,6 +1087,20 @@ def main():
         pos_name=pos_name,
         verb_config=verb_config,
     )
+
+
+def main():
+    args = [a for a in sys.argv[1:] if a not in ("--in-place", "--inplace")]
+    explicit_inplace = len(args) < len(sys.argv[1:])
+    if len(args) < 2:
+        print(
+            "Usage: python generate_markers.py <path_to_config_dir_or_csv> <output_dir> [--in-place]"
+        )
+        sys.exit(1)
+
+    config_path = args[0]
+    output_dir = args[1]
+    generate_markers(config_path, output_dir, in_place=True if explicit_inplace else None)
 
 
 if __name__ == "__main__":
