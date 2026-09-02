@@ -1,7 +1,7 @@
 ---
 id: TASK-102.4
 title: Generate chr-inplace-generated and compile open inflect/parse FSTs
-status: In Progress
+status: Done
 assignee:
   - '@subagent'
 created_date: '2026-09-02 19:51'
