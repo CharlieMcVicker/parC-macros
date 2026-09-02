@@ -1,7 +1,7 @@
 ---
 id: TASK-102.5
 title: Benchmark in-place FST size and compilation gains against baseline
-status: In Progress
+status: Done
 assignee:
   - '@subagent'
 created_date: '2026-09-02 19:51'
