@@ -3,11 +3,11 @@ id: TASK-102.2
 title: >-
   Configure chr-inplace-config with in-place tags, patterns, and open root
   template
-status: In Progress
+status: Done
 assignee:
   - '@subagent'
 created_date: '2026-09-02 19:51'
-updated_date: '2026-09-02 20:24'
+updated_date: '2026-09-02 20:25'
 labels: []
 dependencies:
   - TASK-102.1
