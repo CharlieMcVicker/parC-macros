@@ -1,7 +1,7 @@
 ---
 id: TASK-102.1
 title: Measure and record baseline FST metrics for chr-generated
-status: In Progress
+status: Done
 assignee:
   - '@subagent'
 created_date: '2026-09-02 19:51'
