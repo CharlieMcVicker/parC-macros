@@ -11,6 +11,23 @@ dependencies:
   - TASK-102.3
 modified_files:
   - parc_macros/generate_markers.py
+  - tests/test_inplace_compilation.py
+  - tests/test_yaml_validation.py
+  - chr-inplace-generated/Exponence/FeatureDefinitions/verb_features.yaml
+  - chr-inplace-generated/Lexicon/PartOfSpeech/verb.yaml
+  - chr-inplace-generated/Lexicon/Wordlists/verb.csv
+  - chr-inplace-generated/Morphotactics/Paradigm/verb.yaml
+  - chr-inplace-generated/Phonology/Inventory/alphabet.yaml
+  - chr-inplace-generated/Phonology/Patterns/phoneme_groups.yaml
+  - chr-inplace-generated/Phonology/Rules/aspect_replace.yaml
+  - chr-inplace-generated/Phonology/Rules/drop_root_final.yaml
+  - chr-inplace-generated/Phonology/Rules/drop_stem_initial_vowel.yaml
+  - chr-inplace-generated/Phonology/Rules/h_alternation.yaml
+  - chr-inplace-generated/Phonology/Rules/insert_di1.yaml
+  - chr-inplace-generated/Phonology/Rules/insert_di2.yaml
+  - chr-inplace-generated/Phonology/Rules/insert_wi.yaml
+  - chr-inplace-generated/Phonology/Rules/pro_replace.yaml
+  - chr-inplace-generated/Phonology/Rules/tense_replace.yaml
 parent_task_id: TASK-102
 priority: high
 type: task
