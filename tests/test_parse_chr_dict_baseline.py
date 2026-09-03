@@ -170,3 +170,38 @@ def test_derivation_pipeline_hypothesis_refinement():
     assert val_hyp.plural is False
     assert val_hyp.animate_objects is False
 
+
+def test_read_inplace_parse_shared_domain():
+    from parse_chr_dict.parse import InPlaceParseConfig, read_inplace_parse
+
+    s = (
+        "[BOW][WI][DIST][PrefixClass=a_stem][Pro=3sg.A]a[H_NONE]li"
+        "[AspectClass=become[inf2]][Aspect=completive][TenseClass=a_present][Tense=immediate][EOW][rules=+]"
+    )
+    cfg = read_inplace_parse(s)
+    assert isinstance(cfg, InPlaceParseConfig)
+    assert cfg.root == "a[H_NONE]li"
+    assert cfg.prefix_class == "a_stem"
+    assert cfg.pronominal == "3sg.A"
+    assert cfg.aspect_class == "become[inf2]"
+    assert cfg.aspect == "completive"
+    assert cfg.tense_present_class == "a_present"
+    assert cfg.tense == "immediate"
+    assert cfg.rules == "+"
+    assert "[WI]" in cfg.prepronominal_prefixes
+    assert "[DIST]" in cfg.prepronominal_prefixes
+
+    labels = cfg.to_labels_dict()
+    assert labels["prefix_class"] == "a_stem"
+    assert labels["pronominal"] == "3sg.A"
+    assert labels["aspect_class"] == "become[inf2]"
+    assert labels["aspect"] == "completive"
+    assert labels["tense_present_class"] == "a_present"
+    assert labels["tense"] == "immediate"
+    assert labels["translocutive"] == "+"
+    assert labels["distributive"] == "+"
+    assert labels["rules"] == "+"
+
+    # Verify canonical wrapped root
+    assert cfg.canonical_root == "[Pro]a[H_NONE]li[Aspect][Tense]"
+

@@ -84,7 +84,7 @@ def test_compile_open_inflect_graph_ac3():
     inflect_infer = get_open_inflect_graph("verb", infer_lexical_features=True)
     assert inflect_infer is not None
     assert inflect_infer.num_states() > 0
-    assert inflect_infer.num_states() == 956
+    assert inflect_infer.num_states() == 953
 
 
 def test_compile_open_parse_graph_ac4():
@@ -105,7 +105,7 @@ def test_compile_open_parse_graph_ac4():
     )
     assert parse_infer is not None
     assert parse_infer.num_states() > 0
-    assert parse_infer.num_states() == 956
+    assert parse_infer.num_states() == 953
 
 
 def test_inplace_inflection_and_parse_roundtrip():

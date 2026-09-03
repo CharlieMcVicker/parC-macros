@@ -693,7 +693,7 @@ def generate_inplace_paradigm_config(
 
 
 def update_feature_definitions(
-    output_dir, pos_name, verb_config, class_features_paradigms, config_path=None
+    output_dir, pos_name, verb_config, class_features_paradigms, config_path=None, in_place=False
 ):
     """
     Updates the global FeatureDefinitions configuration file with the dynamically
@@ -709,6 +709,7 @@ def update_feature_definitions(
         verb_config (dict): Global configuration dictionary.
         class_features_paradigms (dict): Map of class features to set of paradigm values.
         config_path (str, optional): Path to the config directory.
+        in_place (bool): Whether in-place mode is active.
     """
     fd_file = os.path.join(
         output_dir, "Exponence", "FeatureDefinitions", f"{pos_name}_features.yaml"
@@ -765,8 +766,8 @@ def update_feature_definitions(
                 else:
                     fd_content["features"][feat] = vals
 
-        # Add lexical features with definitions from verb.yaml
-        if "lexical_features" in verb_config:
+        # Add lexical features with definitions from verb.yaml (only in trailing-tag mode)
+        if not in_place and "lexical_features" in verb_config:
             for item in verb_config["lexical_features"]:
                 if isinstance(item, dict):
                     if len(item) == 1:
@@ -781,9 +782,13 @@ def update_feature_definitions(
                             fd_content["features"][feat] = definition
 
         # Combine only features that are dynamically updated (class features or feature acceptors)
-        update_targets = set(class_features_paradigms.keys()) | set(
-            feature_acceptors.keys()
-        )
+        # In in-place mode, class features and feature acceptors are NOT external features
+        if in_place:
+            update_targets = set()
+        else:
+            update_targets = set(class_features_paradigms.keys()) | set(
+                feature_acceptors.keys()
+            )
 
         for cf in sorted(update_targets):
             if cf not in fd_content["features"]:
@@ -845,7 +850,7 @@ def update_feature_definitions(
         print(f"Updated FeatureDefinitions: {fd_file}")
 
 
-def generate_part_of_speech_config(output_dir, pos_name, verb_config):
+def generate_part_of_speech_config(output_dir, pos_name, verb_config, in_place=False):
     """
     Generates the PartOfSpeech YAML configuration file for the language parser.
 
@@ -857,6 +862,7 @@ def generate_part_of_speech_config(output_dir, pos_name, verb_config):
         output_dir (str): Path to the destination directory.
         pos_name (str): The part of speech name.
         verb_config (dict): Global configuration dictionary.
+        in_place (bool): Whether in-place mode is active.
     """
     pos_dir = os.path.join(output_dir, "Lexicon", "PartOfSpeech")
     os.makedirs(pos_dir, exist_ok=True)
@@ -867,7 +873,7 @@ def generate_part_of_speech_config(output_dir, pos_name, verb_config):
         "name": pos_name,
         "features": list(verb_config.get("features", {}).keys()),
     }
-    if "lexical_features" in verb_config:
+    if not in_place and "lexical_features" in verb_config:
         simplified_lexical_features = []
         for item in verb_config["lexical_features"]:
             if isinstance(item, dict):
@@ -1079,6 +1085,7 @@ def generate_markers(config_path: str, output_dir: str, in_place: bool | None = 
         verb_config=verb_config,
         class_features_paradigms=class_features_paradigms,
         config_path=config_path,
+        in_place=in_place,
     )
 
     # Generate PartOfSpeech configuration
@@ -1086,6 +1093,7 @@ def generate_markers(config_path: str, output_dir: str, in_place: bool | None = 
         output_dir=output_dir,
         pos_name=pos_name,
         verb_config=verb_config,
+        in_place=in_place,
     )
 
 
