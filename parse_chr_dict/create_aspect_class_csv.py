@@ -104,6 +104,7 @@ def parse_classes_csv(src_path: str = "chr-data/classes.csv"):
     mark_final_two_triggers = []
     drop_final_rows = []
     drop_final_two_rows = []
+    effects = []
 
     with open(src_path, "r", encoding="utf-8") as f:
         reader = DictReader(f)
@@ -123,6 +124,14 @@ def parse_classes_csv(src_path: str = "chr-data/classes.csv"):
                     clean_var = var
                     if clean_var.startswith("*"):
                         clean_var = clean_var[1:]
+                        effects.append(
+                            {
+                                "aspect_class": class_name,
+                                "aspect": col_name,
+                                "variant": idx,
+                                "effect": "drop_final",
+                            }
+                        )
                         if idx == 1:
                             trigger = (
                                 f"[AspectClass={class_name}][Aspect={col_name}]"
@@ -135,6 +144,14 @@ def parse_classes_csv(src_path: str = "chr-data/classes.csv"):
                         drop_final_rows.append((drop_paradigm, col_name))
                     elif clean_var.startswith("@"):
                         clean_var = clean_var[1:]
+                        effects.append(
+                            {
+                                "aspect_class": class_name,
+                                "aspect": col_name,
+                                "variant": idx,
+                                "effect": "drop_final_two",
+                            }
+                        )
                         if idx == 1:
                             trigger = (
                                 f"[AspectClass={class_name}][Aspect={col_name}]"
@@ -158,18 +175,34 @@ def parse_classes_csv(src_path: str = "chr-data/classes.csv"):
         mark_final_two_triggers,
         drop_final_rows,
         drop_final_two_rows,
+        effects,
     )
+
+
+def generate_aspect_effects_csv(effects: list[dict], dest_path: str) -> None:
+    """
+    Writes compact value-driven effect table CSV (aspect_class,aspect,variant,effect).
+    """
+    Path(dest_path).parent.mkdir(parents=True, exist_ok=True)
+    with open(dest_path, "w", encoding="utf-8", newline="") as f:
+        writer = DictWriter(
+            f, fieldnames=["aspect_class", "aspect", "variant", "effect"]
+        )
+        writer.writeheader()
+        for eff in effects:
+            writer.writerow(eff)
 
 
 def generate_inplace_aspect_config(
     src_path: str = "chr-data/classes.csv",
     dest_path: str = "chr-inplace-config/verb-aspect.csv",
+    effects_path: str | None = None,
     drop_final_path: str | None = "chr-inplace-config/verb-aspect-drop-final.csv",
     drop_final_two_path: str | None = "chr-inplace-config/verb-aspect-drop-final-two.csv",
 ) -> dict:
     """
-    Generates chr-inplace-config/verb-aspect.csv and drop-final CSVs from chr-data/classes.csv.
-    Returns summary dict containing triggers and count of generated rows.
+    Generates chr-inplace-config/verb-aspect.csv and drop-final CSVs or aspect_effects.csv from chr-data/classes.csv.
+    Returns summary dict containing triggers, effects, and count of generated rows.
     """
     (
         rows_out,
@@ -177,6 +210,7 @@ def generate_inplace_aspect_config(
         mark_final_two_triggers,
         drop_final_rows,
         drop_final_two_rows,
+        effects,
     ) = parse_classes_csv(src_path)
 
     Path(dest_path).parent.mkdir(parents=True, exist_ok=True)
@@ -184,6 +218,9 @@ def generate_inplace_aspect_config(
         writer = setup_inplace_aspect_class_writer(f)
         for r in rows_out:
             writer.writerow(r)
+
+    if effects_path:
+        generate_aspect_effects_csv(effects, effects_path)
 
     if drop_final_path:
         Path(drop_final_path).parent.mkdir(parents=True, exist_ok=True)
@@ -224,6 +261,7 @@ def generate_inplace_aspect_config(
         "num_rows": len(rows_out),
         "mark_final_triggers": mark_final_triggers,
         "mark_final_two_triggers": mark_final_two_triggers,
+        "effects": effects,
     }
 
 
@@ -344,14 +382,23 @@ def main():
         default="chr-inplace-config/verb-aspect.csv",
         help="Path to destination verb-aspect.csv (default: chr-inplace-config/verb-aspect.csv)",
     )
+    parser.add_argument(
+        "--effects",
+        default=None,
+        help="Path to destination aspect_effects.csv (default: None)",
+    )
     args = parser.parse_args()
 
     if args.legacy:
         generate_legacy_aspect_config()
         print("Legacy aspect CSVs generated successfully in chr-config/.")
     else:
-        result = generate_inplace_aspect_config(src_path=args.src, dest_path=args.dest)
+        result = generate_inplace_aspect_config(
+            src_path=args.src, dest_path=args.dest, effects_path=args.effects
+        )
         print(f"Generated {result['num_rows']} aspect classes to {args.dest}")
+        if args.effects:
+            print(f"Generated {len(result['effects'])} effect rows to {args.effects}")
         print("\nVerified drop_root_final triggers:")
         print("mark_final (*):")
         for trig in result["mark_final_triggers"]:

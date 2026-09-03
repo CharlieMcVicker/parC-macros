@@ -15,8 +15,8 @@ sk-s-la,sk,sk,s,la,st
 sk-h,sk,sk,h,ha;,st
 sk-h-yh,sk,sk,yh,yha,st
 hvsk-han,hvsk,hvsk,han,hvka,ht;hvst
-hvsk-nh,hvsk,hvsk,nh,hvka,ht;*ht;hvst;*oht
-hvsk-n,hvsk,hvsk,n,hvka,*oht
+hvsk-nh,hvsk,hvsk,nh,hvka,ht;ht;hvst;oht
+hvsk-n,hvsk,hvsk,n,hvka,oht
 husk,husk,husk,hun,huka,hust
 episodic,vhvsk,vhvsk,vnh,vhvka;vna,ht;vhvst
 terminative,ohvsk,ohvsk,onh,onha,ohvst
@@ -27,7 +27,7 @@ apl-active,eh,esk,eh,vla,eht
 apl-active-h,heh,hesk,helh,hvla,heht
 apl-active-',eh,esk,elh,vla,eht
 apl-active-a,eh,esk,eh,a,ht
-apl,eh,eh,el,*si;@si;isi;vla,eht
+apl,eh,eh,el,si;si;isi;vla,eht
 go,ek;,ek,vs,uka,vst
 go-in,ek,ek,invs;es,uka,invt
 cause,ih;,isk,han;anh;an,a,oht

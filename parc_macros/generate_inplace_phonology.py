@@ -77,14 +77,10 @@ def extract_inplace_data(config_dir: Path) -> dict[str, Any]:
     aspects = [h.strip() for h in header[1:] if h.strip()]
 
     max_variants = 1
-    mark_final_triggers: list[str] = []
-    mark_final_two_triggers: list[str] = []
-
     for r in rows[1:]:
         if not r or not r[0].strip():
             continue
-        cls = r[0].strip()
-        for idx, feat in enumerate(header[1:], 1):
+        for idx in range(1, len(header)):
             if idx >= len(r):
                 continue
             raw_cell = r[idx].strip()
@@ -93,46 +89,58 @@ def extract_inplace_data(config_dir: Path) -> dict[str, Any]:
             cell_variants = [v.strip() for v in raw_cell.split(";")]
             if len(cell_variants) > max_variants:
                 max_variants = len(cell_variants)
-            for v_idx, variant_val in enumerate(cell_variants, start=1):
-                clean_v = variant_val.strip()
-                if clean_v.startswith("*"):
-                    if v_idx == 1:
-                        trigger = f"[AspectClass={cls}][Aspect={feat}]"
-                    else:
-                        trigger = f"[AspectClass={cls}][Variant={v_idx}][Aspect={feat}]"
-                    mark_final_triggers.append(trigger)
-                elif clean_v.startswith("@"):
-                    if v_idx == 1:
-                        trigger = f"[AspectClass={cls}][Aspect={feat}]"
-                    else:
-                        trigger = f"[AspectClass={cls}][Variant={v_idx}][Aspect={feat}]"
-                    mark_final_two_triggers.append(trigger)
 
     variants = list(range(2, max_variants + 1)) if max_variants > 1 else []
 
-    # Fallback to verb-aspect-drop-final.csv if no * triggers were present
-    if not mark_final_triggers and (config_dir / "verb-aspect-drop-final.csv").exists():
-        raw_triggers = _parse_rule_triggers(config_dir / "verb-aspect-drop-final.csv")
-        for cls_expr, feat in raw_triggers:
-            m = re.match(r"^([^\[]+)(\[Variant=\d+\])?", cls_expr)
-            if m:
-                base_cls, var_tag = m.groups()
-                var_tag = var_tag or ""
-                mark_final_triggers.append(f"[AspectClass={base_cls}]{var_tag}[Aspect={feat}]")
-            else:
-                mark_final_triggers.append(f"[AspectClass={cls_expr}][Aspect={feat}]")
+    mark_final_triggers: list[str] = []
+    mark_final_two_triggers: list[str] = []
 
-    # Fallback to verb-aspect-drop-final-two.csv if no @ triggers were present
-    if not mark_final_two_triggers and (config_dir / "verb-aspect-drop-final-two.csv").exists():
-        raw_triggers = _parse_rule_triggers(config_dir / "verb-aspect-drop-final-two.csv")
-        for cls_expr, feat in raw_triggers:
-            m = re.match(r"^([^\[]+)(\[Variant=\d+\])?", cls_expr)
-            if m:
-                base_cls, var_tag = m.groups()
-                var_tag = var_tag or ""
-                mark_final_two_triggers.append(f"[AspectClass={base_cls}]{var_tag}[Aspect={feat}]")
-            else:
-                mark_final_two_triggers.append(f"[AspectClass={cls_expr}][Aspect={feat}]")
+    effects_file = None
+    if (config_dir / "aspect_effects.csv").exists():
+        effects_file = config_dir / "aspect_effects.csv"
+    elif (config_dir / "rule_effects.csv").exists():
+        effects_file = config_dir / "rule_effects.csv"
+
+    if effects_file is not None:
+        with open(effects_file, "r", encoding="utf-8") as f:
+            reader = csv.DictReader(r for r in f if not r.startswith("#"))
+            for row in reader:
+                cls = row["aspect_class"].strip()
+                feat = row["aspect"].strip()
+                var = row.get("variant", "").strip()
+                eff = row["effect"].strip()
+                if var and var != "1":
+                    trigger = f"[AspectClass={cls}][Variant={var}][Aspect={feat}]"
+                else:
+                    trigger = f"[AspectClass={cls}][Aspect={feat}]"
+                if eff == "drop_final":
+                    mark_final_triggers.append(trigger)
+                elif eff == "drop_final_two":
+                    mark_final_two_triggers.append(trigger)
+    else:
+        # Fallback to verb-aspect-drop-final.csv if present
+        if (config_dir / "verb-aspect-drop-final.csv").exists():
+            raw_triggers = _parse_rule_triggers(config_dir / "verb-aspect-drop-final.csv")
+            for cls_expr, feat in raw_triggers:
+                m = re.match(r"^([^\[]+)(\[Variant=\d+\])?", cls_expr)
+                if m:
+                    base_cls, var_tag = m.groups()
+                    var_tag = var_tag or ""
+                    mark_final_triggers.append(f"[AspectClass={base_cls}]{var_tag}[Aspect={feat}]")
+                else:
+                    mark_final_triggers.append(f"[AspectClass={cls_expr}][Aspect={feat}]")
+
+        # Fallback to verb-aspect-drop-final-two.csv if present
+        if (config_dir / "verb-aspect-drop-final-two.csv").exists():
+            raw_triggers = _parse_rule_triggers(config_dir / "verb-aspect-drop-final-two.csv")
+            for cls_expr, feat in raw_triggers:
+                m = re.match(r"^([^\[]+)(\[Variant=\d+\])?", cls_expr)
+                if m:
+                    base_cls, var_tag = m.groups()
+                    var_tag = var_tag or ""
+                    mark_final_two_triggers.append(f"[AspectClass={base_cls}]{var_tag}[Aspect={feat}]")
+                else:
+                    mark_final_two_triggers.append(f"[AspectClass={cls_expr}][Aspect={feat}]")
 
     # 4. Stem-initial vowel drop triggers
     drop_first_a_csv = config_dir / "verb-pronominal-drop-first-a.csv"

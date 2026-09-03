@@ -104,6 +104,14 @@ def map_csv_to_markers(csv_file):
     """
     metadata, fieldnames, rows = parse_csv_with_metadata(csv_file)
 
+    if not metadata.get("kind"):
+        return {
+            "metadata": metadata,
+            "class_feature": None,
+            "paradigms_markers": {},
+            "paradigm_names": set(),
+        }
+
     csv_class_feature = metadata.get("class_feature")
 
     paradigms_markers = {}
@@ -978,6 +986,8 @@ def generate_markers(config_path: str, output_dir: str, in_place: bool | None = 
     if os.path.isdir(config_path):
         for f in os.listdir(config_path):
             if f.endswith(".csv"):
+                if f.endswith("_effects.csv") or f.endswith("-effects.csv"):
+                    continue
                 csv_files.append(os.path.join(config_path, f))
             elif f == "verb.yaml":
                 spec_path = os.path.join(config_path, f)
