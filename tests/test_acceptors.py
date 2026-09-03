@@ -119,9 +119,9 @@ def test_compile_morphotactic_acceptor_ac2():
     morph_fsa = compile_morphotactic_acceptor(syms, alphabet)
     assert morph_fsa is not None
 
-    # State footprint verification: tiny (~15-35 states)
+    # State footprint verification: compact (~15-100 states across all modular CSVs)
     state_count = morph_fsa.num_states()
-    assert 12 <= state_count <= 35, f"Expected state count between 12 and 35, got {state_count}"
+    assert 12 <= state_count <= 100, f"Expected state count between 12 and 100, got {state_count}"
 
     # Helper to test un-wrapped strings against morph_fsa
     def morph_accepts(tokens: list[str]) -> bool:
@@ -179,6 +179,21 @@ def test_compile_morphotactic_acceptor_ac2():
     tokens_plain_imm = base_tokens + ["[TenseClass=a_present]", "[Tense=immediate]"]
     assert morph_accepts(tokens_plain_imm)
 
+    # 8. TASK-109: Pronominal H_alt morphotactics
+    # Trigger 1sg.A licenses all H_alt allomorphs
+    tokens_1sg_alt = ["[PrefixClass=a_stem]", "[Pro=1sg.A]", "[H_alt=drop]", "a", "t", "a", "t", "[AspectClass=a]"]
+    assert morph_accepts(tokens_1sg_alt)
+    tokens_1sg_none = ["[PrefixClass=a_stem]", "[Pro=1sg.A]", "[H_alt=none]", "a", "t", "a", "t", "[AspectClass=a]"]
+    assert morph_accepts(tokens_1sg_none)
+
+    # Elsewhere (*): 3sg.A licenses only [H_alt=none]
+    tokens_3sg_none = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", "[H_alt=none]", "a", "t", "a", "t", "[AspectClass=a]"]
+    assert morph_accepts(tokens_3sg_none)
+    tokens_3sg_drop = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", "[H_alt=drop]", "a", "t", "a", "t", "[AspectClass=a]"]
+    assert not morph_accepts(tokens_3sg_drop)
+    tokens_2sg_glot = ["[PrefixClass=a_stem]", "[Pro=2sg.A]", "[H_alt=glot]", "a", "t", "a", "t", "[AspectClass=a]"]
+    assert not morph_accepts(tokens_2sg_glot)
+
 
 # =========================================================================
 # AC 3: Anchored prefix stem-shape acceptor
@@ -220,7 +235,7 @@ def test_compile_prefix_stem_shape_acceptor_ac3():
         assert stem_accepts(tokens), f"Expected valid parse for {pclass} with root starting {root_chars[0]}"
 
     # Optional H_ALT tags
-    for h_tag in ["[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_NONE]", "[H_VOWEL]"]:
+    for h_tag in ["[H_alt=none]", "[H_alt=drop]", "[H_alt=glot]", "[H_alt=lat]", "[H_alt=vowel]"]:
         tokens_h_a = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", h_tag, "a", "t", "a", "t"] + tail
         assert stem_accepts(tokens_h_a), f"Expected acceptance of a_stem with {h_tag} and initial 'a'"
         tokens_h_cons = ["[PrefixClass=cons_stem]", "[Pro=3sg.A]", h_tag, "t", "h", "a", "t"] + tail
@@ -240,9 +255,9 @@ def test_compile_prefix_stem_shape_acceptor_ac3():
         tokens = [pclass, "[Pro=3sg.A]"] + root_chars + tail
         assert not stem_accepts(tokens), f"Must reject illicit initial phone for {pclass}: {root_chars[0]}"
 
-    # TASK-108 explicit regression check: a_stem with [H_DROP] before consonant root 'that'
-    tokens_task108 = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", "[H_DROP]", "t", "h", "a", "t"] + tail
-    assert not stem_accepts(tokens_task108), "TASK-108: [PrefixClass=a_stem] with [H_DROP]that MUST be rejected"
+    # TASK-108 explicit regression check: a_stem with [H_alt=drop] before consonant root 'that'
+    tokens_task108 = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", "[H_alt=drop]", "t", "h", "a", "t"] + tail
+    assert not stem_accepts(tokens_task108), "TASK-108: [PrefixClass=a_stem] with [H_alt=drop]that MUST be rejected"
 
     # Illicit templates (PrefixClass missing Pro, or PrefixClass followed by non-Pro)
     assert not stem_accepts(["[PrefixClass=a_stem]", "a", "t", "a", "t"] + tail)
@@ -280,8 +295,8 @@ def test_compile_cascade_domain_acceptor_ac4_ac5():
         "[BOW][WI][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
         # [WI] + [DIST=de]
         "[BOW][WI][DIST=de][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
-        # [H_DROP] with a_stem
-        "[BOW][PrefixClass=a_stem][Pro=3sg.A][H_DROP]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
+        # [H_alt=drop] with a_stem and 1sg.A (trigger)
+        "[BOW][PrefixClass=a_stem][Pro=1sg.A][H_alt=drop]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
         # Without trailing [rules=+]
         "[BOW][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW]",
     ]
@@ -292,8 +307,10 @@ def test_compile_cascade_domain_acceptor_ac4_ac5():
     invalid_parses = [
         # TASK-108: a_stem before consonant root 'that'
         "[BOW][PrefixClass=a_stem][Pro=3sg.A]that[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
-        # TASK-108 with [H_DROP]: a_stem with [H_DROP] before consonant root 'that'
-        "[BOW][PrefixClass=a_stem][Pro=3sg.A][H_DROP]that[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
+        # TASK-108 with [H_alt=drop]: a_stem with [H_alt=drop] before consonant root 'that'
+        "[BOW][PrefixClass=a_stem][Pro=1sg.A][H_alt=drop]that[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
+        # TASK-109: Non-trigger 3sg.A with active [H_alt=drop] (violates pro_morphotactics)
+        "[BOW][PrefixClass=a_stem][Pro=3sg.A][H_alt=drop]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
         # cons_stem before vowel root 'atat'
         "[BOW][PrefixClass=cons_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
         # [DIST=de] with immediate tense (violates morphotactics)
@@ -372,5 +389,5 @@ def test_get_parse_graph_inplace_composition():
     for p in parses[:50]:
         if "[PrefixClass=a_stem]" in p:
             # Should not have non-a initial consonant
-            assert not ("[PrefixClass=a_stem][Pro=3sg.A][H_DROP]that" in p)
+            assert not ("[PrefixClass=a_stem][Pro=3sg.A][H_alt=drop]that" in p)
 

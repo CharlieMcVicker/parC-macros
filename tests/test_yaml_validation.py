@@ -72,7 +72,7 @@ def test_chr_inplace_config_yamls():
         verb_data = yaml.safe_load(f)
     assert (
         verb_data["paradigm"]["open_root_template"]
-        == "<PrepronominalPrefixes><PrefixClass><Pro><H_ALT>?<Root><AspectClass><Aspect><TenseClass><Tense>"
+        == "<PrepronominalPrefixes><PrefixClass><Pro><H_alt><Root><AspectClass><Aspect><TenseClass><Tense>"
     )
 
     # Validate all Phonology YAML files with schema validator

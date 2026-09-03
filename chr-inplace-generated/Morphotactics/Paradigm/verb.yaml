@@ -36,4 +36,4 @@ global_markers:
 - kind: rule
   stage: insert_wi
   value: $insert_WI
-open_root_template: <PrepronominalPrefixes><PrefixClass><Pro><H_ALT>?<Root><AspectClass><Aspect><TenseClass><Tense>
+open_root_template: <PrepronominalPrefixes><PrefixClass><Pro><H_alt><Root><AspectClass><Aspect><TenseClass><Tense>

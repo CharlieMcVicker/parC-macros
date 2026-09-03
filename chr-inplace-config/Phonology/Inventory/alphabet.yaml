@@ -50,14 +50,14 @@ data:
   - '[DIST]'
   - '[DIST=de]'
   - '[DIST=di]'
-- name: H_ALT
-  ref: <H_ALT>
+- name: H_alt
+  ref: <H_alt>
   tags:
-  - '[H_DROP]'
-  - '[H_GLOT]'
-  - '[H_LAT]'
-  - '[H_NONE]'
-  - '[H_VOWEL]'
+  - '[H_alt=none]'
+  - '[H_alt=drop]'
+  - '[H_alt=glot]'
+  - '[H_alt=lat]'
+  - '[H_alt=vowel]'
 - name: PrefixClass
   ref: <PrefixClass>
   tags:

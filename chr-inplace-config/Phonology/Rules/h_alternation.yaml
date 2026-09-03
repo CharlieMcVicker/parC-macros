@@ -1,7 +1,7 @@
 kind: Rules
 rules:
 - name: mark_h_vowel
-  input_pattern: '[H_VOWEL]'
+  input_pattern: '[H_alt=vowel]'
   output_pattern: '[TEMP_VOWEL]'
   right_context: <NotLar>*<C>h<C>
 - name: tag_h_vowel
@@ -14,7 +14,7 @@ rules:
   output_pattern: ''
   right_context: <NotLar>*[TEMP_VOWEL_H]
 - name: mark_h_lat
-  input_pattern: '[H_LAT]'
+  input_pattern: '[H_alt=lat]'
   output_pattern: '[TEMP_LAT]'
   right_context: <NotLar>*lh
 - name: tag_h_lat
@@ -27,7 +27,7 @@ rules:
   output_pattern: ''
   right_context: <NotLar>*[TEMP_LAT_H]
 - name: mark_h_drop
-  input_pattern: '[H_DROP]'
+  input_pattern: '[H_alt=drop]'
   output_pattern: '[TEMP_DROP]'
   right_context: <NotLar>*<HTarget>
 - name: tag_h_drop_medial
@@ -54,7 +54,7 @@ rules:
   output_pattern: ''
   right_context: <NotLar>*[TEMP_H]
 - name: mark_h_glot
-  input_pattern: '[H_GLOT]'
+  input_pattern: '[H_alt=glot]'
   output_pattern: '[TEMP_GLOT]'
   right_context: <NotLar>*<HTarget>
 - name: tag_h_glot_medial
@@ -95,7 +95,7 @@ rules:
   input_pattern: '[TEMP_H]'
   output_pattern: ''
 - name: delete_h_none
-  input_pattern: '[H_NONE]'
+  input_pattern: '[H_alt=none]'
   output_pattern: ''
   left_context: <Pro>|[Pro]
 - name: h_alternation

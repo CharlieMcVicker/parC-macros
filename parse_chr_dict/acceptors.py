@@ -19,8 +19,9 @@ import pynini
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
 DEFAULT_CONFIG_DIR = REPO_ROOT / "chr-inplace-config"
-DEFAULT_MORPHOTACTICS_CSV = DEFAULT_CONFIG_DIR / "feature_acceptors" / "morphotactics.csv"
-DEFAULT_PREFIX_CLASS_CSV = DEFAULT_CONFIG_DIR / "feature_acceptors" / "prefix_class.csv"
+DEFAULT_FEATURE_ACCEPTORS_DIR = DEFAULT_CONFIG_DIR / "feature_acceptors"
+DEFAULT_MORPHOTACTICS_CSV = DEFAULT_FEATURE_ACCEPTORS_DIR / "morphotactics.csv"
+DEFAULT_PREFIX_CLASS_CSV = DEFAULT_FEATURE_ACCEPTORS_DIR / "prefix_class.csv"
 
 
 def get_default_symbol_table() -> pynini.SymbolTable:
@@ -145,63 +146,152 @@ def resolve_phones_for_pattern(pattern: str, alphabet=None) -> set[str]:
     return phones
 
 
+def resolve_morphotactic_rule_files(
+    rules_path: str | Path | Iterable[str | Path] | None = None,
+) -> list[Path]:
+    """Resolves morphotactic CSV rule files from path, directory, or defaults."""
+    if rules_path is None:
+        modular_files = sorted(list(DEFAULT_FEATURE_ACCEPTORS_DIR.glob("*_morphotactics.csv")))
+        if modular_files:
+            return modular_files
+        if DEFAULT_MORPHOTACTICS_CSV.exists():
+            return [DEFAULT_MORPHOTACTICS_CSV]
+        return []
+
+    if isinstance(rules_path, (list, tuple, set)):
+        out = []
+        for p in rules_path:
+            p_obj = Path(p)
+            if not p_obj.is_absolute():
+                p_obj = REPO_ROOT / p_obj
+            out.append(p_obj)
+        return out
+
+    p_obj = Path(rules_path)
+    if not p_obj.is_absolute():
+        p_obj = REPO_ROOT / p_obj
+
+    if p_obj.is_dir():
+        modular_files = sorted(list(p_obj.glob("*_morphotactics.csv")))
+        if modular_files:
+            return modular_files
+        if (p_obj / "morphotactics.csv").exists():
+            return [p_obj / "morphotactics.csv"]
+        return []
+
+    return [p_obj]
+
+
 def compile_morphotactic_acceptor(
     syms: pynini.SymbolTable | None = None,
     alphabet=None,
-    rules_csv: str | Path | None = None,
+    rules_csv: str | Path | Iterable[str | Path] | None = None,
 ) -> pynini.Fst:
     """
     Constructs a deterministic finite-state acceptor (DFA) over the linear template alphabet
     enforcing that if trigger T is present, the target slot must contain one of the licensed values.
     If T is absent, the target slot is unconstrained.
 
-    Rules are read from rules_csv (defaults to chr-inplace-config/feature_acceptors/morphotactics.csv).
+    Rules are read from rules_csv (defaults to modular *_morphotactics.csv in chr-inplace-config/feature_acceptors/).
+    Supports '# trigger_slot: <Slot>' frontmatter and '*' / 'elsewhere' trigger rules.
     """
     if alphabet is None:
         alphabet = get_default_alphabet()
     if syms is None:
         syms = alphabet.get_symbol_table() if hasattr(alphabet, "get_symbol_table") else get_default_symbol_table()
 
-    if rules_csv is None:
-        rules_csv = DEFAULT_MORPHOTACTICS_CSV
-    rules_path = Path(rules_csv)
-    if not rules_path.is_absolute():
-        rules_path = REPO_ROOT / rules_path
-
+    rule_files = resolve_morphotactic_rule_files(rules_csv)
     _, sigma_star, all_syms = get_template_sigma(syms)
 
-    # Read morphotactic licensing rules
-    rules: list[tuple[str, str, list[str]]] = []
-    with open(rules_path, "r", encoding="utf-8") as f:
-        reader = csv.reader(f)
-        header = None
-        for row in reader:
-            if not row or not row[0] or row[0].startswith("#"):
-                continue
-            if header is None:
-                header = [c.strip() for c in row]
-                continue
-            row_dict = dict(zip(header, [c.strip() for c in row]))
-            trigger = row_dict.get("trigger", "")
-            target_slot = row_dict.get("target_slot", "")
-            licensed_str = row_dict.get("licensed", "")
-            if trigger and target_slot and licensed_str:
-                licensed_vals = [v.strip() for v in licensed_str.split("|") if v.strip()]
-                rules.append((trigger, target_slot, licensed_vals))
+    from parC.grammar.acceptor_compilation import fsa
+
+    def get_slot_fsa(slot_name: str) -> pynini.Fst:
+        ref = slot_name if (slot_name.startswith("<") and slot_name.endswith(">")) else f"<{slot_name}>"
+        try:
+            return fsa(ref)
+        except Exception:
+            slot_prefix = f"[{slot_name}=" if not slot_name.startswith("[") else slot_name.rstrip("]") + "="
+            all_slot_vals = [s for s in all_syms if s.lower().startswith(slot_prefix.lower()) and s.endswith("]")]
+            return pynini.union(*[pynini.accep(v, token_type=syms) for v in all_slot_vals]).optimize()
+
+    def compile_pattern_fsa(pattern_str: str) -> pynini.Fst:
+        try:
+            return fsa(pattern_str)
+        except Exception:
+            parts = [v.strip() for v in pattern_str.split("|") if v.strip()]
+            return pynini.union(*[pynini.accep(p, token_type=syms) for p in parts]).optimize()
+
+    rules: list[tuple[pynini.Fst, pynini.Fst]] = []
+    for r_path in rule_files:
+        if not r_path.exists():
+            continue
+        trigger_slot = None
+        explicit_triggers_fsa: pynini.Fst | None = None
+        file_rules: list[tuple[pynini.Fst, pynini.Fst]] = []
+        elsewhere_rules: list[tuple[str, str]] = []
+
+        with open(r_path, "r", encoding="utf-8") as f:
+            reader = csv.reader(f)
+            header = None
+            for row in reader:
+                if not row:
+                    continue
+                first_col = row[0].strip()
+                if first_col.startswith("#"):
+                    comment_text = first_col.lstrip("#").strip()
+                    if ":" in comment_text:
+                        k, v = comment_text.split(":", 1)
+                        if k.strip().lower() == "trigger_slot":
+                            trigger_slot = v.strip()
+                    continue
+                if header is None:
+                    header = [c.strip() for c in row]
+                    continue
+                row_dict = dict(zip(header, [c.strip() for c in row]))
+                trigger = row_dict.get("trigger", "")
+                target_slot = row_dict.get("target_slot", "")
+                licensed_str = row_dict.get("licensed", "")
+                if not (trigger and target_slot and licensed_str):
+                    continue
+
+                if trigger == "*" or trigger.lower() == "elsewhere":
+                    elsewhere_rules.append((target_slot, licensed_str))
+                else:
+                    tr_fsa = compile_pattern_fsa(trigger)
+                    if explicit_triggers_fsa is None:
+                        explicit_triggers_fsa = tr_fsa.copy()
+                    else:
+                        explicit_triggers_fsa = pynini.union(explicit_triggers_fsa, tr_fsa).optimize()
+
+                    target_slot_fsa = get_slot_fsa(target_slot)
+                    licensed_fsa = compile_pattern_fsa(licensed_str)
+                    unlicensed_fsa = pynini.difference(target_slot_fsa, licensed_fsa).optimize()
+                    if unlicensed_fsa.num_states() > 0:
+                        file_rules.append((tr_fsa, unlicensed_fsa))
+
+        if elsewhere_rules:
+            if not trigger_slot:
+                raise ValueError(
+                    f"Morphotactics file {r_path.name} specifies '*' / elsewhere trigger, "
+                    "but '# trigger_slot: <Slot>' frontmatter is missing."
+                )
+            all_trigger_fsa = get_slot_fsa(trigger_slot)
+            if explicit_triggers_fsa is not None:
+                elsewhere_trigger_fsa = pynini.difference(all_trigger_fsa, explicit_triggers_fsa).optimize()
+            else:
+                elsewhere_trigger_fsa = all_trigger_fsa
+
+            for target_slot, licensed_str in elsewhere_rules:
+                target_slot_fsa = get_slot_fsa(target_slot)
+                licensed_fsa = compile_pattern_fsa(licensed_str)
+                unlicensed_fsa = pynini.difference(target_slot_fsa, licensed_fsa).optimize()
+                if unlicensed_fsa.num_states() > 0 and elsewhere_trigger_fsa.num_states() > 0:
+                    file_rules.append((elsewhere_trigger_fsa, unlicensed_fsa))
+
+        rules.extend(file_rules)
 
     combined_acceptor = sigma_star
-    for trigger, target_slot, licensed in rules:
-        # Determine all possible values for target_slot in syms
-        slot_prefix = f"[{target_slot}=" if not target_slot.startswith("[") else target_slot.rstrip("]") + "="
-        all_slot_vals = [s for s in all_syms if s.startswith(slot_prefix) and s.endswith("]")]
-        unlicensed = [v for v in all_slot_vals if v not in licensed]
-        if not unlicensed:
-            continue
-
-        trigger_fsa = pynini.accep(trigger, token_type=syms)
-        unlicensed_fsa = pynini.union(*[pynini.accep(u, token_type=syms) for u in unlicensed]).optimize()
-
-        # Disallow sequences where trigger co-occurs with any unlicensed value in either order
+    for trigger_fsa, unlicensed_fsa in rules:
         bad_forward = pynini.concat(
             sigma_star,
             pynini.concat(trigger_fsa, pynini.concat(sigma_star, pynini.concat(unlicensed_fsa, sigma_star))),
@@ -366,13 +456,16 @@ _CASCADE_DOMAIN_CACHE: dict[str, pynini.Fst] = {}
 
 def compute_domain_acceptor_cache_key(
     syms: pynini.SymbolTable,
-    morph_rules_path: Path,
+    morph_rules_path: str | Path | Iterable[str | Path] | None,
     prefix_rules_path: Path,
 ) -> str:
     """Computes a SHA-256 cache key over morphotactics rules, prefix class rules, and symbol table."""
     h = hashlib.sha256()
-    if morph_rules_path.exists():
-        h.update(morph_rules_path.read_bytes())
+    rule_files = resolve_morphotactic_rule_files(morph_rules_path)
+    for rf in rule_files:
+        if rf.exists():
+            h.update(rf.name.encode("utf-8"))
+            h.update(rf.read_bytes())
     if prefix_rules_path.exists():
         h.update(prefix_rules_path.read_bytes())
     h.update(str(syms.num_symbols()).encode("utf-8"))
@@ -384,7 +477,7 @@ def compute_domain_acceptor_cache_key(
 def get_cascade_domain_acceptor(
     syms: pynini.SymbolTable | None = None,
     alphabet=None,
-    morph_rules_csv: str | Path | None = None,
+    morph_rules_csv: str | Path | Iterable[str | Path] | None = None,
     prefix_rules_csv: str | Path | None = None,
     cache_dir: Path | str | None = None,
     force_recompile: bool = False,
@@ -403,11 +496,7 @@ def get_cascade_domain_acceptor(
             else get_default_symbol_table()
         )
 
-    if morph_rules_csv is None:
-        morph_rules_csv = DEFAULT_MORPHOTACTICS_CSV
-    morph_rules_path = Path(morph_rules_csv)
-    if not morph_rules_path.is_absolute():
-        morph_rules_path = REPO_ROOT / morph_rules_path
+    morph_rules_path = morph_rules_csv if morph_rules_csv is not None else DEFAULT_FEATURE_ACCEPTORS_DIR
 
     if prefix_rules_csv is None:
         prefix_rules_csv = DEFAULT_PREFIX_CLASS_CSV

@@ -85,13 +85,13 @@ def test_compile_open_inflect_graph_ac3():
     inflect_no_infer = get_open_inflect_graph("verb", infer_lexical_features=False)
     assert inflect_no_infer is not None
     assert inflect_no_infer.num_states() > 0
-    assert inflect_no_infer.num_states() == 972
+    assert inflect_no_infer.num_states() == 970
 
     # Compile with infer_lexical_features=True
     inflect_infer = get_open_inflect_graph("verb", infer_lexical_features=True)
     assert inflect_infer is not None
     assert inflect_infer.num_states() > 0
-    assert inflect_infer.num_states() == 972
+    assert inflect_infer.num_states() == 970
 
 
 def test_compile_open_parse_graph_ac4():
@@ -104,7 +104,7 @@ def test_compile_open_parse_graph_ac4():
     )
     assert parse_no_infer is not None
     assert parse_no_infer.num_states() > 0
-    assert parse_no_infer.num_states() == 972
+    assert parse_no_infer.num_states() == 970
 
     # Compile with infer_lexical_features=True, non_deterministic_cleanup=True
     parse_infer = get_open_parse_graph(
@@ -112,7 +112,7 @@ def test_compile_open_parse_graph_ac4():
     )
     assert parse_infer is not None
     assert parse_infer.num_states() > 0
-    assert parse_infer.num_states() == 972
+    assert parse_infer.num_states() == 970
 
 
 def test_inplace_inflection_and_parse_roundtrip():
@@ -124,11 +124,12 @@ def test_inplace_inflection_and_parse_roundtrip():
     parse_fst = get_open_parse_graph("verb", infer_lexical_features=False, non_deterministic_cleanup=True)
 
     # [PrefixClass=a_stem][Pro=1sg.A] -> k
+    # [H_alt=none] (mandatory H_alt slot)
     # Root: '' (empty root)
     # [AspectClass=a][Aspect=present] -> a'
     # [TenseClass=a_present][Tense=present] -> a
     # Result: ka'a
-    inner_str = "[PrefixClass=a_stem][Pro=1sg.A][AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present]"
+    inner_str = "[PrefixClass=a_stem][Pro=1sg.A][H_alt=none][AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present]"
     input_fsa = word_fsa(inner_str)
     out_fst = pynini.compose(input_fsa, inflect_fst)
     out_proj = pynini.project(out_fst, "output").optimize()

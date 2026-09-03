@@ -565,10 +565,11 @@ def test_h_alternation_trigger_external_validation():
 
 
 def test_fine_grained_h_alternation_tag_helpers_and_validation():
-    from parse_chr_dict.h_alternation import H_ALT_TAGS, validate_h_alternation_trigger, strip_h_alt_tags
+    from parse_chr_dict.h_alternation import H_ALT_TAGS, NEW_H_ALT_TAGS, validate_h_alternation_trigger, strip_h_alt_tags
 
     # 1. H_ALT_TAGS constant
-    assert H_ALT_TAGS == {"[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_NONE]", "[H_VOWEL]"}
+    assert NEW_H_ALT_TAGS == {"[H_alt=drop]", "[H_alt=glot]", "[H_alt=lat]", "[H_alt=none]", "[H_alt=vowel]"}
+    assert {"[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_NONE]", "[H_VOWEL]"}.issubset(H_ALT_TAGS)
 
     # 2. strip_h_alt_tags
     cleaned = strip_h_alt_tags("[Pro][H_DROP]atanhoy[Aspect][Tense]")
@@ -612,7 +613,7 @@ def test_strict_h_alternation_trigger_rejection():
     # Every surviving hypothesis for the alternating root [Pro]atanhoy... must have an active glottal_root mutation
     for h in hyps_mut:
         assert h.glottal_root != h.h_root
-        assert any(tag in h.glottal_root for tag in ("[H_DROP]", "[H_GLOT]", "[H_LAT]"))
+        assert any(tag in h.glottal_root for tag in ("[H_alt=drop]", "[H_alt=glot]", "[H_alt=lat]", "[H_DROP]", "[H_GLOT]", "[H_LAT]"))
 
     # atateka (3sg) + katateka (1sg trigger without H-mutation)
     forms_non_mutating = [

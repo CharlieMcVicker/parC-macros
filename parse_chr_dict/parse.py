@@ -89,6 +89,8 @@ from dataclasses import dataclass, field
 INPLACE_SLOT_TAG_MAP: dict[str, str] = {
     "PrefixClass": "prefix_class",
     "Pro": "pronominal",
+    "H_alt": "h_alt_tag",
+    "H_ALT": "h_alt_tag",
     "AspectClass": "aspect_class",
     "Aspect": "aspect",
     "TenseClass": "tense_present_class",
@@ -214,10 +216,12 @@ def read_inplace_parse(s: str) -> InPlaceParseConfig:
                 cfg.tense = v
             elif k == "DIST":
                 cfg.prepronominal_prefixes.append(tok)
+            elif k in ("H_alt", "H_ALT"):
+                cfg.h_alt_tag = tok
         else:
             if tok in ("[WI]", "[DIST]"):
                 cfg.prepronominal_prefixes.append(tok)
-            elif tok.startswith("[H_") or tok.startswith("[TEMP"):
+            elif tok.startswith("[H_") or tok.startswith("[H_alt=") or tok.startswith("[TEMP"):
                 cfg.h_alt_tag = tok
 
     if trailing and trailing.startswith("[") and trailing.endswith("]"):

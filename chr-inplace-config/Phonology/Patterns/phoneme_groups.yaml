@@ -29,10 +29,10 @@ patterns:
   pattern: '[Tense=present]|[Tense=immediate]|[Tense=habitual]|[Tense=future_prog]|[Tense=assertive]|[Tense=reported]|[Tense=infinitive]'
 - name: Morpheme
   ref: <Morpheme>
-  pattern: <PrefixClass>|<Pro>|<AspectClass>|<Aspect>|<TenseClass>|<Tense>|<PPP>|<H_ALT>|[WI]|[DIST]|[DIST=de]|[DIST=di]
-- name: H_ALT
-  pattern: <H_ALT>
-  ref: <H_ALT>
+  pattern: <PrefixClass>|<Pro>|<AspectClass>|<Aspect>|<TenseClass>|<Tense>|<PPP>|<H_alt>|[WI]|[DIST]|[DIST=de]|[DIST=di]
+- name: H_alt
+  pattern: <H_alt>
+  ref: <H_alt>
 - name: NotLar
   pattern: '{tkmnslyw}|<V>'
   ref: <NotLar>

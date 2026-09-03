@@ -804,7 +804,7 @@ def derive_hypotheses_for_forms(
         is_glottal = is_h_alternation_trigger(pro_tag)
 
         # Validate trigger if mutation tag is present
-        has_mutation = any(tag in root for tag in H_ALT_TAGS if tag != "[H_NONE]")
+        has_mutation = any(tag in root for tag in H_ALT_TAGS if tag.lower() not in ("[h_none]", "[h_alt=none]"))
         if not validate_h_alternation_trigger(pro_tag, has_h_alt=has_mutation):
             continue
 
@@ -903,7 +903,7 @@ def derive_hypotheses_for_forms(
             p_trans = pro.pronoun_set == "transitive"
             p_is_glottal = is_h_alternation_trigger(pro_tag)
 
-            has_mutation = any(tag in p_root for tag in H_ALT_TAGS if tag != "[H_NONE]")
+            has_mutation = any(tag in p_root for tag in H_ALT_TAGS if tag.lower() not in ("[h_none]", "[h_alt=none]"))
             if not validate_h_alternation_trigger(pro_tag, has_h_alt=has_mutation):
                 continue
 

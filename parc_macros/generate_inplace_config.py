@@ -237,7 +237,7 @@ def update_verb_yaml(verb_yaml_path: Path) -> None:
     with open(verb_yaml_path, "r", encoding="utf-8") as f:
         content = f.read()
 
-    new_template = "<PrepronominalPrefixes><PrefixClass><Pro><H_ALT>?<Root><AspectClass><Aspect><TenseClass><Tense>"
+    new_template = "<PrepronominalPrefixes><PrefixClass><Pro><H_alt><Root><AspectClass><Aspect><TenseClass><Tense>"
     # Pattern to match open_root_template: ...
     subbed = re.sub(
         r"open_root_template:\s*[\"'].*?[\"'].*",
