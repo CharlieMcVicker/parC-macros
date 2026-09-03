@@ -140,7 +140,8 @@ def test_compile_morphotactic_acceptor_ac2():
         "[Tense=reported]",
     ]
     for t in indicative_tenses:
-        tokens = ["[DIST=de]"] + base_tokens + ["[Aspect=present]", "[TenseClass=a_present]", t]
+        asp = "[Aspect=present]" if t == "[Tense=present]" else "[Aspect=incompletive]"
+        tokens = ["[DIST=de]"] + base_tokens + [asp, "[TenseClass=a_present]", t]
         assert morph_accepts(tokens), f"[DIST=de] should accept indicative tense {t}"
 
     # 2. [DIST=de] rejects non-indicative tenses
@@ -156,7 +157,8 @@ def test_compile_morphotactic_acceptor_ac2():
 
     # 4. [DIST=di] rejects indicative tenses
     for t in indicative_tenses:
-        tokens = ["[DIST=di]"] + base_tokens + ["[Aspect=present]", "[TenseClass=a_present]", t]
+        asp = "[Aspect=present]" if t == "[Tense=present]" else "[Aspect=incompletive]"
+        tokens = ["[DIST=di]"] + base_tokens + [asp, "[TenseClass=a_present]", t]
         assert not morph_accepts(tokens), f"[DIST=di] must reject indicative tense {t}"
 
     # 5. [Aspect=immediate] licenses only [Tense=immediate]
@@ -172,9 +174,9 @@ def test_compile_morphotactic_acceptor_ac2():
     assert not morph_accepts(tokens_inf_bad)
 
     # 7. Unconstrained when no triggers present
-    tokens_plain_pres = base_tokens + ["[Aspect=present]", "[TenseClass=a_present]", "[Tense=present]"]
+    tokens_plain_pres = base_tokens + ["[TenseClass=a_present]", "[Tense=present]"]
     assert morph_accepts(tokens_plain_pres)
-    tokens_plain_imm = base_tokens + ["[Aspect=present]", "[TenseClass=a_present]", "[Tense=immediate]"]
+    tokens_plain_imm = base_tokens + ["[TenseClass=a_present]", "[Tense=immediate]"]
     assert morph_accepts(tokens_plain_imm)
 
 

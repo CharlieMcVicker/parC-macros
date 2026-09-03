@@ -39,6 +39,10 @@ data:
   - '[TEMP_LAT]'
   - '[TEMP_DROP]'
   - '[TEMP_GLOT]'
+  - '[TEMP_H]'
+  - '[TEMP_LAT_H]'
+  - '[TEMP_GLOT_H]'
+  - '[TEMP_VOWEL_H]'
 - name: PPP
   ref: <PPP>
   tags:

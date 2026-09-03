@@ -37,7 +37,7 @@ def test_inplace_patterns_and_inventory():
     patterns = get_patterns()
 
     assert len(inv.phones) == 16
-    assert len(inv.tags) == 152
+    assert len(inv.tags) == 156
 
     # Check required patterns
     assert "<PrepronominalPrefixes>" in patterns
