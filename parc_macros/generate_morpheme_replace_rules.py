@@ -162,8 +162,18 @@ def _generate_inplace_rules(csv_files: list[str], rules_out_dir: str) -> None:
                 for col in feature_cols:
                     feat_name = col.strip()
                     val = row.get(col, "").strip()
-                    pattern = f"[{class_tag_title}={class_name}][{feature_tag_title}={feat_name}]"
-                    tag_mappings[tag_slug]["mappings"][pattern] = val
+                    if ";" in val:
+                        variants = val.split(";")
+                        for idx, v in enumerate(variants, start=1):
+                            clean_v = v.strip()
+                            if idx == 1:
+                                pattern = f"[{class_tag_title}={class_name}][{feature_tag_title}={feat_name}]"
+                            else:
+                                pattern = f"[{class_tag_title}={class_name}][Variant={idx}][{feature_tag_title}={feat_name}]"
+                            tag_mappings[tag_slug]["mappings"][pattern] = clean_v
+                    else:
+                        pattern = f"[{class_tag_title}={class_name}][{feature_tag_title}={feat_name}]"
+                        tag_mappings[tag_slug]["mappings"][pattern] = val
         else:
             feature_cols = reader.fieldnames
             for row in reader:

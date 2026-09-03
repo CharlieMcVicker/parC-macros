@@ -102,6 +102,18 @@ def test_read_labels():
     assert labels_mut["tense_present_class"] == "a_present"
     assert labels_mut["tense"] == "present"
 
+    # In-place format with [Variant=N] tag
+    variant_str = (
+        "[BOW][PrefixClass=a_stem][Pro=3sg.B][H_alt=none]a[AspectClass=become]"
+        "[Variant=2][Aspect=infinitive][TenseClass=a_present][Tense=infinitive][EOW]"
+    )
+    form_var, labels_var = read_labels(variant_str)
+    assert form_var == "a"
+    assert labels_var["aspect_class"] == "become"
+    assert labels_var["variant"] == "2"
+    assert labels_var["aspect"] == "infinitive"
+    assert labels_var["pronominal"] == "3sg.B"
+
 
 
 def test_str_to_lexical_hashable():

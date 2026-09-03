@@ -72,7 +72,7 @@ def test_chr_inplace_config_yamls():
         verb_data = yaml.safe_load(f)
     assert (
         verb_data["paradigm"]["open_root_template"]
-        == "<PrepronominalPrefixes><PrefixClass><Pro><H_alt><Root><AspectClass><Aspect><TenseClass><Tense>"
+        == "<PrepronominalPrefixes><PrefixClass><Pro><H_alt><Root><AspectClass><Variant><Aspect><TenseClass><Tense>"
     )
 
     # Validate all Phonology YAML files with schema validator
@@ -91,6 +91,7 @@ def test_chr_inplace_config_yamls():
     assert "<PrefixClass>" in pat_map
     assert "<Pro>" in pat_map
     assert "<AspectClass>" in pat_map
+    assert "<Variant>" in pat_map
     assert "<Aspect>" in pat_map
     assert "<TenseClass>" in pat_map
     assert "<Tense>" in pat_map
@@ -103,7 +104,8 @@ def test_chr_inplace_config_yamls():
     inv_map = {node["ref"]: node.get("tags", []) for node in inv_data["data"]}
     assert len(inv_map["<PrefixClass>"]) == 7
     assert len(inv_map["<Pro>"]) == 22
-    assert len(inv_map["<AspectClass>"]) == 92
+    assert len(inv_map["<AspectClass>"]) == 55
+    assert len(inv_map["<Variant>"]) == 3
     assert len(inv_map["<Aspect>"]) == 5
     assert len(inv_map["<TenseClass>"]) == 2
     assert len(inv_map["<Tense>"]) == 7

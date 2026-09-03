@@ -5,13 +5,13 @@ rules:
   string_map:
   - - <Phone>
     - '[TEMP]'
-  right_context: '[AspectClass=hvsk-nh[inf2]][Aspect=infinitive]|[AspectClass=hvsk-nh[inf4]][Aspect=infinitive]|[AspectClass=hvsk-n][Aspect=infinitive]|[AspectClass=apl][Aspect=immediate]'
+  right_context: '[AspectClass=hvsk-nh][Variant=2][Aspect=infinitive]|[AspectClass=hvsk-nh][Variant=4][Aspect=infinitive]|[AspectClass=hvsk-n][Aspect=infinitive]|[AspectClass=apl][Aspect=immediate]'
 - name: mark_final_two
   description: mark the final two phones for deletion based on in-place aspect triggers
   string_map:
   - - <Phone><Phone>?
     - '[TEMP]'
-  right_context: '[AspectClass=apl[imp2]][Aspect=immediate]'
+  right_context: '[AspectClass=apl][Variant=2][Aspect=immediate]'
 - name: drop_final
   description: drop final phone
   rule_sequence:

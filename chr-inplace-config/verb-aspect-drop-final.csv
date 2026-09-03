@@ -5,7 +5,7 @@
 # part_of_speech: $verb
 # class_feature: aspect_class
 paradigm,immediate,infinitive
-hvsk-nh[inf2],N,Y
-hvsk-nh[inf4],N,Y
+hvsk-nh[Variant=2],N,Y
+hvsk-nh[Variant=4],N,Y
 hvsk-n,N,Y
 apl,Y,N

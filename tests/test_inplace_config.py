@@ -37,7 +37,7 @@ def test_inplace_patterns_and_inventory():
     patterns = get_patterns()
 
     assert len(inv.phones) == 16
-    assert len(inv.tags) == 156
+    assert len(inv.tags) == 122
 
     # Check required patterns
     assert "<PrepronominalPrefixes>" in patterns
@@ -45,6 +45,7 @@ def test_inplace_patterns_and_inventory():
     assert "<PrefixClass>" in patterns
     assert "<Pro>" in patterns
     assert "<AspectClass>" in patterns
+    assert "<Variant>" in patterns
     assert "<Aspect>" in patterns
     assert "<TenseClass>" in patterns
     assert "<Tense>" in patterns

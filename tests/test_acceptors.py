@@ -335,19 +335,20 @@ def test_tokenize_parse_str_and_parse_to_fsa():
     """Verify parse tokenization handles nested brackets and complex tags."""
     syms = get_default_symbol_table()
 
-    # Nested brackets in AspectClass: [AspectClass=become[inf2]]
-    s = "[BOW][PrefixClass=a_stem][Pro=1sg.A]atat[AspectClass=become[inf2]][Aspect=infinitive][TenseClass=a_present][Tense=infinitive][EOW][rules=+]"
+    # In-place string with AspectClass and Variant tags
+    s = "[BOW][PrefixClass=a_stem][Pro=1sg.A]atat[AspectClass=become][Variant=2][Aspect=infinitive][TenseClass=a_present][Tense=infinitive][EOW][rules=+]"
     tokens = tokenize_parse_str(s)
     assert tokens[0] == "[BOW]"
     assert tokens[1] == "[PrefixClass=a_stem]"
     assert tokens[2] == "[Pro=1sg.A]"
     assert tokens[3:7] == ["a", "t", "a", "t"]
-    assert tokens[7] == "[AspectClass=become[inf2]]"
-    assert tokens[8] == "[Aspect=infinitive]"
-    assert tokens[9] == "[TenseClass=a_present]"
-    assert tokens[10] == "[Tense=infinitive]"
-    assert tokens[11] == "[EOW]"
-    assert tokens[12] == "[rules=+]"
+    assert tokens[7] == "[AspectClass=become]"
+    assert tokens[8] == "[Variant=2]"
+    assert tokens[9] == "[Aspect=infinitive]"
+    assert tokens[10] == "[TenseClass=a_present]"
+    assert tokens[11] == "[Tense=infinitive]"
+    assert tokens[12] == "[EOW]"
+    assert tokens[13] == "[rules=+]"
 
     fsa = parse_to_fsa(s, syms)
     assert fsa.num_states() == len(tokens) + 1

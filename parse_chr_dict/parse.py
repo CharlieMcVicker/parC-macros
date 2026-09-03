@@ -92,6 +92,7 @@ INPLACE_SLOT_TAG_MAP: dict[str, str] = {
     "H_alt": "h_alt_tag",
     "H_ALT": "h_alt_tag",
     "AspectClass": "aspect_class",
+    "Variant": "variant",
     "Aspect": "aspect",
     "TenseClass": "tense_present_class",
     "Tense": "tense",
@@ -107,6 +108,7 @@ class InPlaceParseConfig:
     prefix_class: str = ""
     pronominal: str = ""
     aspect_class: str = ""
+    variant: str = ""
     aspect: str = ""
     tense_present_class: str = ""
     tense: str = ""
@@ -138,6 +140,8 @@ class InPlaceParseConfig:
             "tense": self.tense,
             "rules": self.rules,
         }
+        if self.variant:
+            d["variant"] = self.variant
         if "[WI]" in self.prepronominal_prefixes:
             d["translocutive"] = "+"
         if "[DIST]" in self.prepronominal_prefixes or any(
@@ -208,6 +212,8 @@ def read_inplace_parse(s: str) -> InPlaceParseConfig:
                 cfg.pronominal = v
             elif k == "AspectClass":
                 cfg.aspect_class = v
+            elif k == "Variant":
+                cfg.variant = v
             elif k == "Aspect":
                 cfg.aspect = v
             elif k == "TenseClass":

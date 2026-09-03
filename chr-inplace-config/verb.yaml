@@ -61,4 +61,4 @@ features:
 
 paradigm:
   generate_contingent_markers: true
-  open_root_template: "<PrepronominalPrefixes><PrefixClass><Pro><H_alt><Root><AspectClass><Aspect><TenseClass><Tense>"
+  open_root_template: "<PrepronominalPrefixes><PrefixClass><Pro><H_alt><Root><AspectClass><Variant><Aspect><TenseClass><Tense>"

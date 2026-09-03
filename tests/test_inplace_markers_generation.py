@@ -232,3 +232,60 @@ def test_yaml_schema_validation_ac4():
 
         for yf in all_yamls:
             assert validate_yaml_file(yf) is True, f"Schema validation failed for {yf}"
+
+
+def test_inplace_aspect_variants_generation_task_111_2():
+    """
+    TASK-111.2: Verify that generate_morpheme_replace_rules supports [Variant=N] tags in in-place rules:
+    - Semicolon-delimited values in CSV feature cells produce [AspectClass=Class][Variant=N][Aspect=Feature] for N >= 2
+    - Default variant 1 and non-varying features emit standard 2-tag [AspectClass=Class][Aspect=Feature] rules
+    - Non-varying classes (e.g. prefix_class, tense_class) emit clean 2-tag rules without [Variant=N]
+    """
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        generate_morpheme_replace_rules("chr-inplace-config", tmp_dir, in_place=True)
+
+        rules_dir = Path(tmp_dir) / "Phonology/Rules"
+        aspect_file = rules_dir / "aspect_replace.yaml"
+        assert aspect_file.exists()
+
+        with open(aspect_file, "r", encoding="utf-8") as f:
+            aspect_data = yaml.safe_load(f)
+        assert validate_yaml_content(aspect_data) is True
+
+        aspect_map = dict(aspect_data["rules"][0]["string_map"])
+
+        # 1. Non-varying cell: 'become' present is 'k'
+        assert aspect_map["[AspectClass=become][Aspect=present]"] == "k"
+        assert "[AspectClass=become][Variant=2][Aspect=present]" not in aspect_map
+
+        # 2. Varying cell with multiple variants: 'become' infinitive is 'st;'ist;yhst;ist'
+        assert aspect_map["[AspectClass=become][Aspect=infinitive]"] == "st"
+        assert aspect_map["[AspectClass=become][Variant=2][Aspect=infinitive]"] == "'ist"
+        assert aspect_map["[AspectClass=become][Variant=3][Aspect=infinitive]"] == "yhst"
+        assert aspect_map["[AspectClass=become][Variant=4][Aspect=infinitive]"] == "ist"
+
+        # 3. Row with leading empty variant: 'sk-s-hst' immediate is ';hi'
+        assert aspect_map["[AspectClass=sk-s-hst][Aspect=immediate]"] == ""
+        assert aspect_map["[AspectClass=sk-s-hst][Variant=2][Aspect=immediate]"] == "hi"
+
+        # 4. Row with trailing empty variant: 'go' present is 'ek;'
+        assert aspect_map["[AspectClass=go][Aspect=present]"] == "ek"
+        assert aspect_map["[AspectClass=go][Variant=2][Aspect=present]"] == ""
+
+        # 5. Verify non-varying classes (prefix_class, tense_present_class) emit clean 2-tag rules without [Variant=N]
+        pro_file = rules_dir / "pro_replace.yaml"
+        with open(pro_file, "r", encoding="utf-8") as f:
+            pro_data = yaml.safe_load(f)
+        pro_map = dict(pro_data["rules"][0]["string_map"])
+        for pattern in pro_map.keys():
+            assert "[Variant=" not in pattern, f"Unexpected Variant tag in pro rule: {pattern}"
+            assert pattern.startswith("[PrefixClass=") and "[Pro=" in pattern
+
+        tense_file = rules_dir / "tense_replace.yaml"
+        with open(tense_file, "r", encoding="utf-8") as f:
+            tense_data = yaml.safe_load(f)
+        tense_map = dict(tense_data["rules"][0]["string_map"])
+        for pattern in tense_map.keys():
+            assert "[Variant=" not in pattern, f"Unexpected Variant tag in tense rule: {pattern}"
+            assert pattern.startswith("[TenseClass=") and "[Tense=" in pattern
+

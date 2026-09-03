@@ -658,6 +658,7 @@ class DerivationHypothesis:
     set_a: bool = True
     plural: bool = False
     animate_objects: bool = False
+    present_variant: str = ""
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -669,6 +670,7 @@ class DerivationHypothesis:
             "set_a": self.set_a,
             "plural": self.plural,
             "animate_objects": self.animate_objects,
+            "present_variant": self.present_variant,
         }
 
     def lexical_labels(self) -> Dict[str, str]:
@@ -794,6 +796,7 @@ def derive_hypotheses_for_forms(
         asp = labels.get("aspect_class")
         t_pres = labels.get("tense_present_class")
         pro_tag = labels.get("pronominal")
+        pres_var = labels.get("variant", "")
         if not pref or not asp or not t_pres or not pro_tag:
             continue
 
@@ -843,6 +846,7 @@ def derive_hypotheses_for_forms(
                             set_a=sa,
                             plural=pl,
                             animate_objects=anim,
+                            present_variant=pres_var,
                         )
                     )
 
@@ -887,13 +891,14 @@ def derive_hypotheses_for_forms(
             return set()
 
         # Group parses by (p_asp, p_t_pres)
-        parsed_by_asp_tense: Dict[Tuple[str, str], List[Tuple[str, str, str, bool, bool, bool, bool]]] = {}
+        parsed_by_asp_tense: Dict[Tuple[str, str], List[Tuple[str, str, str, bool, bool, bool, bool, str]]] = {}
         for p in parses:
             p_root, p_labels = read_labels(p)
             p_pref = p_labels.get("prefix_class", "")
             p_asp = p_labels.get("aspect_class", "")
             p_t_pres = p_labels.get("tense_present_class", "")
             pro_tag = p_labels.get("pronominal", "")
+            p_var = p_labels.get("variant", "")
             if not p_pref or not p_asp or not p_t_pres or not pro_tag:
                 continue
 
@@ -910,7 +915,7 @@ def derive_hypotheses_for_forms(
             key = (p_asp, p_t_pres)
             if key not in parsed_by_asp_tense:
                 parsed_by_asp_tense[key] = []
-            parsed_by_asp_tense[key].append((p_root, p_pref, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal))
+            parsed_by_asp_tense[key].append((p_root, p_pref, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal, p_var))
 
         surviving: Set[DerivationHypothesis] = set()
 
@@ -919,9 +924,13 @@ def derive_hypotheses_for_forms(
             if not matching_items:
                 continue
 
-            for p_root, p_pref, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal in matching_items:
+            for p_root, p_pref, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal, p_var in matching_items:
                 if not prefix_compat(hyp.prefix_class, p_pref):
                     continue
+
+                if form_spec.meta_label_id == "[FORM=1ST_PRES]" or form_spec.name == "1st_present" or form_spec.corpus_key == "present_1sg":
+                    if p_var != hyp.present_variant:
+                        continue
 
                 if p_plural != hyp.plural:
                     continue
