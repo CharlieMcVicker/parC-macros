@@ -5,7 +5,7 @@ patterns:
   ref: <C>
 - name: PrepronominalPrefixes
   ref: <PrepronominalPrefixes>
-  pattern: '[WI]?[DIST]?'
+  pattern: '[WI]?([DIST=de]|[DIST=di])?'
 - name: Root
   ref: <Root>
   pattern: <V>?(<C>+<V>)*<C>*
@@ -29,7 +29,7 @@ patterns:
   pattern: '[Tense=present]|[Tense=immediate]|[Tense=habitual]|[Tense=future_prog]|[Tense=assertive]|[Tense=reported]|[Tense=infinitive]'
 - name: Morpheme
   ref: <Morpheme>
-  pattern: <PrefixClass>|<Pro>|<AspectClass>|<Aspect>|<TenseClass>|<Tense>|<PPP>|<H_ALT>|[WI]|[DIST]
+  pattern: <PrefixClass>|<Pro>|<AspectClass>|<Aspect>|<TenseClass>|<Tense>|<PPP>|<H_ALT>|[WI]|[DIST]|[DIST=de]|[DIST=di]
 - name: H_ALT
   pattern: <H_ALT>
   ref: <H_ALT>

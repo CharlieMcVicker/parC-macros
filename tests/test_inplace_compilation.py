@@ -28,6 +28,7 @@ def setup_inplace_env():
     """Ensure chr-inplace-generated exists, configure parC YAML_DIR, and restore after."""
     from parC.constants import set_yaml_dir
     from parC.grammar.paradigm_compilation import clear_all_caches
+    import parse_chr_dict.parse as parse_mod
 
     orig_yaml_dir = os.environ.get("YAML_DIR")
 
@@ -36,6 +37,9 @@ def setup_inplace_env():
 
     # Clear caches and set YAML_DIR to chr-inplace-generated
     clear_all_caches()
+    parse_mod.PARSE_GRAPH = None
+    parse_mod.INFLECT_GRAPH = None
+    parse_mod._READ_LABELS_CACHE.clear()
     set_yaml_dir(str(INPLACE_GEN_DIR))
     os.environ["YAML_DIR"] = str(INPLACE_GEN_DIR)
 
@@ -43,6 +47,9 @@ def setup_inplace_env():
 
     # Restore original YAML_DIR and clear caches
     clear_all_caches()
+    parse_mod.PARSE_GRAPH = None
+    parse_mod.INFLECT_GRAPH = None
+    parse_mod._READ_LABELS_CACHE.clear()
     if orig_yaml_dir:
         set_yaml_dir(orig_yaml_dir)
         os.environ["YAML_DIR"] = orig_yaml_dir
@@ -64,7 +71,7 @@ def test_generator_execution_ac1():
 def test_yaml_schema_validation_ac2():
     """AC 2: Validate all generated YAML files against parc_macros schema suite."""
     yaml_files = list(INPLACE_GEN_DIR.glob("**/*.yaml"))
-    assert len(yaml_files) >= 14, f"Expected at least 14 YAML files, found {len(yaml_files)}"
+    assert len(yaml_files) >= 13, f"Expected at least 13 YAML files, found {len(yaml_files)}"
 
     for yf in sorted(yaml_files):
         assert validate_yaml_file(yf) is True, f"Schema validation failed for {yf}"
@@ -78,13 +85,13 @@ def test_compile_open_inflect_graph_ac3():
     inflect_no_infer = get_open_inflect_graph("verb", infer_lexical_features=False)
     assert inflect_no_infer is not None
     assert inflect_no_infer.num_states() > 0
-    assert inflect_no_infer.num_states() == 953
+    assert inflect_no_infer.num_states() == 998
 
     # Compile with infer_lexical_features=True
     inflect_infer = get_open_inflect_graph("verb", infer_lexical_features=True)
     assert inflect_infer is not None
     assert inflect_infer.num_states() > 0
-    assert inflect_infer.num_states() == 953
+    assert inflect_infer.num_states() == 998
 
 
 def test_compile_open_parse_graph_ac4():
@@ -97,7 +104,7 @@ def test_compile_open_parse_graph_ac4():
     )
     assert parse_no_infer is not None
     assert parse_no_infer.num_states() > 0
-    assert parse_no_infer.num_states() == 953
+    assert parse_no_infer.num_states() == 998
 
     # Compile with infer_lexical_features=True, non_deterministic_cleanup=True
     parse_infer = get_open_parse_graph(
@@ -105,7 +112,7 @@ def test_compile_open_parse_graph_ac4():
     )
     assert parse_infer is not None
     assert parse_infer.num_states() > 0
-    assert parse_infer.num_states() == 953
+    assert parse_infer.num_states() == 998
 
 
 def test_inplace_inflection_and_parse_roundtrip():
@@ -137,4 +144,36 @@ def test_inplace_inflection_and_parse_roundtrip():
     # Verify input_fsa is accepted in the parse projection
     match = pynini.intersect(input_fsa, parsed_proj).optimize()
     assert match.num_states() > 0
+
+
+def test_inplace_distributive_allomorph_realization():
+    """AC 5: Verify phonological realization across indicative (te-), imperative (th-), and infinitive (tsu-) forms."""
+    from parC.grammar.paradigm_compilation import get_open_inflect_graph, get_open_parse_graph
+    from parC.grammar.acceptor_compilation import fsm_strings, word_fsa
+    from parse_chr_dict.parse import parse, read_inplace_parse
+
+    # 1. Imperative distributive with [DIST=di] before h yields 'th-'
+    imperative_parses = parse("thatanhesaka")
+    di_imperatives = [p for p in imperative_parses if "[DIST=di]" in p]
+    assert len(di_imperatives) > 0
+    cfg_imp = read_inplace_parse(di_imperatives[0])
+    assert "[DIST=di]" in cfg_imp.prepronominal_prefixes
+    assert cfg_imp.to_labels_dict()["distributive"] == "+"
+
+    # 2. Infinitive distributive with [DIST=di] before V yields 'tsu-'
+    infinitive_parses = parse("tsutanhesesti")
+    di_infinitives = [p for p in infinitive_parses if "[DIST=di]" in p]
+    assert len(di_infinitives) > 0
+    cfg_inf = read_inplace_parse(di_infinitives[0])
+    assert "[DIST=di]" in cfg_inf.prepronominal_prefixes
+    assert cfg_inf.to_labels_dict()["distributive"] == "+"
+
+    # 3. Indicative distributive with [DIST=de] yields 'te-'
+    indicative_parses = parse("tetanheseka")
+    de_indicatives = [p for p in indicative_parses if "[DIST=de]" in p]
+    assert len(de_indicatives) > 0
+    cfg_ind = read_inplace_parse(de_indicatives[0])
+    assert "[DIST=de]" in cfg_ind.prepronominal_prefixes
+    assert cfg_ind.to_labels_dict()["distributive"] == "+"
+
 

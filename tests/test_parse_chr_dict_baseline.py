@@ -205,3 +205,28 @@ def test_read_inplace_parse_shared_domain():
     # Verify canonical wrapped root
     assert cfg.canonical_root == "[Pro]a[H_NONE]li[Aspect][Tense]"
 
+
+def test_read_inplace_parse_distributive_allomorphs():
+    from parse_chr_dict.parse import InPlaceParseConfig, read_inplace_parse
+
+    # Test [DIST=de]
+    s_de = (
+        "[BOW][DIST=de][PrefixClass=a_stem][Pro=3sg.A]a[H_NONE]li"
+        "[AspectClass=become[inf2]][Aspect=completive][TenseClass=a_present][Tense=present][EOW][rules=+]"
+    )
+    cfg_de = read_inplace_parse(s_de)
+    assert "[DIST=de]" in cfg_de.prepronominal_prefixes
+    assert cfg_de.to_labels_dict()["distributive"] == "+"
+    assert cfg_de.canonical_root == "[Pro]a[H_NONE]li[Aspect][Tense]"
+
+    # Test [DIST=di]
+    s_di = (
+        "[BOW][DIST=di][PrefixClass=a_stem][Pro=2sg.A]atanhesaka"
+        "[AspectClass=a][Aspect=completive][TenseClass=a_present][Tense=immediate][EOW][rules=+]"
+    )
+    cfg_di = read_inplace_parse(s_di)
+    assert "[DIST=di]" in cfg_di.prepronominal_prefixes
+    assert cfg_di.to_labels_dict()["distributive"] == "+"
+    assert cfg_di.canonical_root == "[Pro]atanhesaka[Aspect][Tense]"
+
+

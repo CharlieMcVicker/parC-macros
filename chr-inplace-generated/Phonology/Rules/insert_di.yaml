@@ -1,0 +1,49 @@
+# This is a Rules config file
+# Generated automatically by generate_insertion_rules.py
+kind: Rules
+rules:
+- name: insert_dist_de_i
+  string_map:
+  - - '[DIST=de]i'
+    - t
+- name: insert_dist_de_v
+  string_map:
+  - - '[DIST=de]'
+    - t
+  right_context: <V>
+- name: insert_dist_de_default
+  string_map:
+  - - '[DIST=de]'
+    - te
+- name: insert_dist_di_a
+  string_map:
+  - - '[DIST=di]a'
+    - ti
+- name: insert_dist_di_i
+  string_map:
+  - - '[DIST=di]i'
+    - ti
+- name: insert_dist_di_h
+  string_map:
+  - - '[DIST=di]'
+    - t
+  right_context: h
+- name: insert_dist_di_v
+  string_map:
+  - - '[DIST=di]'
+    - ts
+  right_context: <V>
+- name: insert_dist_di_default
+  string_map:
+  - - '[DIST=di]'
+    - ti
+- name: insert_DIST
+  rule_sequence:
+  - $insert_dist_de_i
+  - $insert_dist_de_v
+  - $insert_dist_de_default
+  - $insert_dist_di_a
+  - $insert_dist_di_i
+  - $insert_dist_di_h
+  - $insert_dist_di_v
+  - $insert_dist_di_default

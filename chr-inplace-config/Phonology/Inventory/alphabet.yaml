@@ -44,6 +44,8 @@ data:
   tags:
   - '[WI]'
   - '[DIST]'
+  - '[DIST=de]'
+  - '[DIST=di]'
 - name: H_ALT
   ref: <H_ALT>
   tags:

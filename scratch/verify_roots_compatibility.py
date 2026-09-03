@@ -88,8 +88,16 @@ def verify_row(row: dict, verbose: bool = False) -> tuple[bool, dict]:
             # Check root compatibility and lexical class compatibility
             root_matches = clean_cfg_root in valid_stems
             aspect_matches = not exp_aspect or cfg.aspect_class == exp_aspect
+            prefix_matches = (
+                not exp_prefix
+                or cfg.prefix_class == exp_prefix
+                or (
+                    exp_prefix in ("a_stem", "k_a_stem")
+                    and cfg.prefix_class in ("a_stem", "k_a_stem")
+                )
+            )
 
-            if root_matches and aspect_matches:
+            if root_matches and aspect_matches and prefix_matches:
                 compatible = True
                 sample_parse = p
                 break
@@ -176,7 +184,7 @@ def main():
                 if args.verbose or not ok or idx % 50 == 0 or idx == len(rows_to_check):
                     print(
                         f"[{idx}/{len(rows_to_check)}] Row #{res['entry_no']} ({res['definition']}): {status} "
-                        f"(stems={res['stems']}, aspect={res['aspect_class']})"
+                        f"(stems={res['stems']}, aspect={res['aspect_class']}, prefix={res['prefix_class']})"
                     )
                     if not ok:
                         for col, fres in res["forms"].items():
@@ -200,7 +208,7 @@ def main():
             if args.verbose or not ok or idx % 50 == 0 or idx == len(rows_to_check):
                 print(
                     f"[{idx}/{len(rows_to_check)}] Row #{res['entry_no']} ({res['definition']}): {status} "
-                    f"(stems={res['stems']}, aspect={res['aspect_class']})"
+                    f"(stems={res['stems']}, aspect={res['aspect_class']}, prefix={res['prefix_class']})"
                 )
                 if not ok:
                     for col, fres in res["forms"].items():

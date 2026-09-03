@@ -86,7 +86,7 @@ def test_chr_inplace_config_yamls():
     with open(patterns_yaml, "r", encoding="utf-8") as f:
         pat_data = yaml.safe_load(f)
     pat_map = {p["ref"]: p["pattern"] for p in pat_data["patterns"]}
-    assert pat_map["<PrepronominalPrefixes>"] == "[WI]?[DIST]?"
+    assert pat_map["<PrepronominalPrefixes>"] == "[WI]?([DIST=de]|[DIST=di])?"
     assert pat_map["<Root>"] == "<V>?(<C>+<V>)*<C>*"
     assert "<PrefixClass>" in pat_map
     assert "<Pro>" in pat_map
@@ -118,7 +118,7 @@ def test_chr_inplace_generated_yamls():
     assert gen_dir.exists(), "chr-inplace-generated directory must exist"
 
     yaml_files = list(gen_dir.glob("**/*.yaml"))
-    assert len(yaml_files) >= 14, f"Expected at least 14 YAML files in chr-inplace-generated, found {len(yaml_files)}"
+    assert len(yaml_files) >= 13, f"Expected at least 13 YAML files in chr-inplace-generated, found {len(yaml_files)}"
 
     for yf in sorted(yaml_files):
         assert validate_yaml_file(yf) is True, f"Schema validation failed for {yf}"

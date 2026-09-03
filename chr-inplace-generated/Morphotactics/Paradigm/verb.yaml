@@ -32,7 +32,7 @@ global_markers:
   value: $tense_replace
 - kind: rule
   stage: insert_dist
-  value: $insert_DIST1
+  value: $insert_DIST
 - kind: rule
   stage: insert_wi
   value: $insert_WI

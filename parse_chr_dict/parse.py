@@ -1,27 +1,53 @@
+import os
+import re
+from pathlib import Path
 from typing import Iterable
 
-from parC.grammar.paradigm_compilation import (
-    get_open_parse_graph,
-    word_fsa,
-    fsa,
-)
-
-from parC.grammar.paradigm_compilation import inflect
-
-import re
+import pynini
 
 from parC.grammar.acceptor_compilation import fsm_strings
-
-import pynini
+from parC.grammar.paradigm_compilation import (
+    fsa,
+    get_open_parse_graph,
+    inflect,
+    word_fsa,
+)
+from parse_chr_dict.acceptors import get_cascade_domain_acceptor
 
 PARSE_GRAPH = None
 INFLECT_GRAPH = None
 
 
+def is_inplace_grammar() -> bool:
+    """Detects whether the active grammar uses in-place morpheme tags."""
+    yaml_dir = os.environ.get("YAML_DIR", "")
+    if "inplace" in yaml_dir:
+        return True
+    try:
+        from parC.constants import get_yaml_dir
+
+        yd = Path(get_yaml_dir())
+        if "inplace" in yd.name or "inplace" in str(yd):
+            return True
+        paradigm_path = yd / "Morphotactics" / "Paradigm" / "verb.yaml"
+        if paradigm_path.exists():
+            content = paradigm_path.read_text(encoding="utf-8")
+            if "<PrefixClass>" in content:
+                return True
+    except Exception:
+        pass
+    return False
+
+
 def get_parse_graph():
-    return get_open_parse_graph(
+    raw_parse = get_open_parse_graph(
         "verb", infer_lexical_features=True, non_deterministic_cleanup=True
     )
+    if is_inplace_grammar():
+        syms = raw_parse.output_symbols()
+        domain_acceptor = get_cascade_domain_acceptor(syms=syms)
+        return pynini.compose(raw_parse, domain_acceptor).optimize()
+    return raw_parse
 
 
 def parse(surface: str, labels: list[tuple[str, str]] = None) -> list[str]:
@@ -95,7 +121,10 @@ class InPlaceParseConfig:
             if self.h_alt_tag and self.h_alt_tag not in self.root
             else ""
         )
-        return f"[Pro]{h_part}{self.root}[Aspect][Tense]"
+        clean_root = (
+            self.root.replace("[DIST=de]", "[DIST]").replace("[DIST=di]", "[DIST]")
+        )
+        return f"[Pro]{h_part}{clean_root}[Aspect][Tense]"
 
     def to_labels_dict(self) -> dict[str, str]:
         d = {
@@ -109,7 +138,9 @@ class InPlaceParseConfig:
         }
         if "[WI]" in self.prepronominal_prefixes:
             d["translocutive"] = "+"
-        if "[DIST]" in self.prepronominal_prefixes:
+        if "[DIST]" in self.prepronominal_prefixes or any(
+            p.startswith("[DIST") for p in self.prepronominal_prefixes
+        ):
             d["distributive"] = "+"
         if self.h_alt_tag:
             d["h_alt_tag"] = self.h_alt_tag
@@ -152,7 +183,7 @@ def read_inplace_parse(s: str) -> InPlaceParseConfig:
             eq_idx = inner.find("=")
             if eq_idx != -1 and inner[:eq_idx] in INPLACE_SLOT_TAG_MAP:
                 tokens.append(tok)
-            elif tok in ("[WI]", "[DIST]"):
+            elif tok in ("[WI]", "[DIST]", "[DIST=de]", "[DIST=di]") or tok.startswith("[DIST="):
                 tokens.append(tok)
             else:
                 # Internal root tag (e.g. [H_NONE], [H_GLOT], [H_DROP]) or phonological tag
@@ -181,6 +212,8 @@ def read_inplace_parse(s: str) -> InPlaceParseConfig:
                 cfg.tense_present_class = v
             elif k == "Tense":
                 cfg.tense = v
+            elif k == "DIST":
+                cfg.prepronominal_prefixes.append(tok)
         else:
             if tok in ("[WI]", "[DIST]"):
                 cfg.prepronominal_prefixes.append(tok)

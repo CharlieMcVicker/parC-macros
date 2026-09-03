@@ -1,0 +1,11 @@
+# kind: insertion
+# rule: insert_DIST
+tag,rule_name,l_context,r_context,content
+[DIST=de]i,insert_dist_de_i,,,t
+[DIST=de],insert_dist_de_v,,"<V>",t
+[DIST=de],insert_dist_de_default,,,te
+[DIST=di]a,insert_dist_di_a,,,ti
+[DIST=di]i,insert_dist_di_i,,,ti
+[DIST=di],insert_dist_di_h,,"h",t
+[DIST=di],insert_dist_di_v,,"<V>",ts
+[DIST=di],insert_dist_di_default,,,ti

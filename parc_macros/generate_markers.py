@@ -648,13 +648,20 @@ def generate_inplace_paradigm_config(
                 if pref in available_rules:
                     stage_to_rule[stg] = "$" + pref
 
-            if "insert_di" not in available_rules:
-                for candidate in ("insert_DIST1", "insert_di1", "insert_DIST"):
-                    if candidate in available_rules:
-                        stage_to_rule["insert_dist"] = f"${candidate}"
-                        break
+            # Bridge case differences for insert_dist / insert_DIST
+            if "insert_DIST" in stage_to_rule and "insert_dist" not in stage_to_rule:
+                stage_to_rule["insert_dist"] = stage_to_rule["insert_DIST"]
+            elif "insert_dist" in stage_to_rule and "insert_DIST" not in stage_to_rule:
+                stage_to_rule["insert_DIST"] = stage_to_rule["insert_dist"]
+
+            for candidate in ("insert_DIST", "insert_di", "insert_DIST1", "insert_di1"):
+                if candidate in available_rules:
+                    stage_to_rule["insert_dist"] = f"${candidate}"
+                    stage_to_rule["insert_DIST"] = f"${candidate}"
+                    break
             if "insert_wi" not in available_rules and "insert_WI" in available_rules:
                 stage_to_rule["insert_wi"] = "$insert_WI"
+                stage_to_rule["insert_WI"] = "$insert_WI"
 
         global_markers = []
         if stage_order:
