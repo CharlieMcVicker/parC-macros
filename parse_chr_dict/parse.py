@@ -3,6 +3,18 @@ import re
 from pathlib import Path
 from typing import Iterable
 
+# Ensure YAML_DIR defaults to chr-inplace-generated
+if "YAML_DIR" not in os.environ:
+    repo_root = Path(__file__).parent.parent.resolve()
+    inplace_dir = repo_root / "chr-inplace-generated"
+    if inplace_dir.exists():
+        os.environ["YAML_DIR"] = str(inplace_dir)
+        try:
+            from parC.constants import set_yaml_dir
+            set_yaml_dir(str(inplace_dir))
+        except ImportError:
+            pass
+
 import pynini
 
 from parC.grammar.acceptor_compilation import fsm_strings
@@ -75,16 +87,44 @@ def parse(surface: str, labels: list[tuple[str, str]] = None) -> list[str]:
 
 
 def get_inflect_graph():
-    return get_open_inflect_graph(
-        "verb", infer_lexical_features=True, non_deterministic_cleanup=False
-    )
+    global INFLECT_GRAPH
+    if INFLECT_GRAPH is not None:
+        return INFLECT_GRAPH
+    from parC.grammar.paradigm_compilation import get_open_inflect_graph
+    if is_inplace_grammar():
+        INFLECT_GRAPH = get_open_inflect_graph("verb", infer_lexical_features=False)
+    else:
+        INFLECT_GRAPH = get_open_inflect_graph("verb", infer_lexical_features=True, non_deterministic_cleanup=False)
+    return INFLECT_GRAPH
 
 
-def feature_tag(feature, value):
+SLOT_NAME_TO_INPLACE_TAG: dict[str, str] = {
+    "prefix_class": "PrefixClass",
+    "pronominal": "Pro",
+    "h_alt_tag": "H_alt",
+    "aspect_class": "AspectClass",
+    "variant": "Variant",
+    "aspect": "Aspect",
+    "tense_present_class": "TenseClass",
+    "tense": "Tense",
+}
+
+
+def feature_tag(feature: str, value: str) -> str:
+    if is_inplace_grammar():
+        slot = SLOT_NAME_TO_INPLACE_TAG.get(feature, feature)
+        return f"[{slot}={value}]"
     return f"[{feature}={value}]"
 
 
-from dataclasses import dataclass, field
+from parse_chr_dict.types import (
+    ParseData,
+    InPlaceParseConfig,
+    VerbTemplate,
+    AspectVariants,
+    VerbMetadata,
+    LexicalVerb,
+)
 
 INPLACE_SLOT_TAG_MAP: dict[str, str] = {
     "PrefixClass": "prefix_class",
@@ -101,61 +141,9 @@ INPLACE_SLOT_TAG_MAP: dict[str, str] = {
 _READ_LABELS_CACHE: dict[str, tuple[str, dict[str, str]]] = {}
 
 
-@dataclass
-class InPlaceParseConfig:
-    """Structured configuration object representing in-place morpheme slots and root."""
-    root: str
-    prefix_class: str = ""
-    pronominal: str = ""
-    aspect_class: str = ""
-    variant: str = ""
-    aspect: str = ""
-    tense_present_class: str = ""
-    tense: str = ""
-    prepronominal_prefixes: list[str] = field(default_factory=list)
-    h_alt_tag: str = ""
-    rules: str = "+"
-    raw_tokens: list[str] = field(default_factory=list)
-
-    @property
-    def canonical_root(self) -> str:
-        """Returns the root wrapped in legacy marker format for backwards compatibility."""
-        h_part = (
-            self.h_alt_tag
-            if self.h_alt_tag and self.h_alt_tag not in self.root
-            else ""
-        )
-        clean_root = (
-            self.root.replace("[DIST=de]", "[DIST]").replace("[DIST=di]", "[DIST]")
-        )
-        return f"[Pro]{h_part}{clean_root}[Aspect][Tense]"
-
-    def to_labels_dict(self) -> dict[str, str]:
-        d = {
-            "prefix_class": self.prefix_class,
-            "pronominal": self.pronominal,
-            "aspect_class": self.aspect_class,
-            "aspect": self.aspect,
-            "tense_present_class": self.tense_present_class,
-            "tense": self.tense,
-            "rules": self.rules,
-        }
-        if self.variant:
-            d["variant"] = self.variant
-        if "[WI]" in self.prepronominal_prefixes:
-            d["translocutive"] = "+"
-        if "[DIST]" in self.prepronominal_prefixes or any(
-            p.startswith("[DIST") for p in self.prepronominal_prefixes
-        ):
-            d["distributive"] = "+"
-        if self.h_alt_tag:
-            d["h_alt_tag"] = self.h_alt_tag
-        return {k: v for k, v in d.items() if v}
-
-
-def read_inplace_parse(s: str) -> InPlaceParseConfig:
+def read_inplace_parse(s: str) -> ParseData:
     """
-    Parses an in-place morpheme parse string into an InPlaceParseConfig object.
+    Parses an in-place morpheme parse string into a ParseData (InPlaceParseConfig) object.
     Uses bracket-depth tracking to safely handle nested brackets (e.g. [AspectClass=become[inf2]]).
     Slot tags ([PrefixClass=...], [Pro=...], [AspectClass=...], etc.) and PPP tags ([WI], [DIST])
     are extracted as metadata; any internal root mutation tags (like [H_NONE]) remain in the root.
@@ -164,13 +152,10 @@ def read_inplace_parse(s: str) -> InPlaceParseConfig:
         s = s[5:]
     eow_idx = s.find("[EOW]")
     if eow_idx != -1:
-        trailing = s[eow_idx + 5 :]
         s = s[:eow_idx]
-    else:
-        trailing = ""
 
-    tokens = []
-    root_chars = []
+    tokens: list[str] = []
+    root_chars: list[str] = []
     i = 0
     n = len(s)
     while i < n:
@@ -199,7 +184,16 @@ def read_inplace_parse(s: str) -> InPlaceParseConfig:
             root_chars.append(s[i])
             i += 1
 
-    cfg = InPlaceParseConfig(root="".join(root_chars), raw_tokens=tokens)
+    prefix_class = ""
+    pronominal = ""
+    aspect_class = ""
+    variant = 1
+    aspect = ""
+    tense_present_class = ""
+    tense = ""
+    prepronominal_prefixes: list[str] = []
+    h_alt_tag = ""
+
     for tok in tokens:
         inner = tok[1:-1]
         eq_idx = inner.find("=")
@@ -207,38 +201,42 @@ def read_inplace_parse(s: str) -> InPlaceParseConfig:
             k = inner[:eq_idx]
             v = inner[eq_idx + 1 :]
             if k == "PrefixClass":
-                cfg.prefix_class = v
+                prefix_class = v
             elif k == "Pro":
-                cfg.pronominal = v
+                pronominal = v
             elif k == "AspectClass":
-                cfg.aspect_class = v
+                aspect_class = v
             elif k == "Variant":
-                cfg.variant = v
+                variant = int(v) if v.isdigit() else 1
             elif k == "Aspect":
-                cfg.aspect = v
+                aspect = v
             elif k == "TenseClass":
-                cfg.tense_present_class = v
+                tense_present_class = v
             elif k == "Tense":
-                cfg.tense = v
+                tense = v
             elif k == "DIST":
-                cfg.prepronominal_prefixes.append(tok)
+                prepronominal_prefixes.append(tok)
             elif k in ("H_alt", "H_ALT"):
-                cfg.h_alt_tag = tok
+                h_alt_tag = tok
         else:
             if tok in ("[WI]", "[DIST]"):
-                cfg.prepronominal_prefixes.append(tok)
+                prepronominal_prefixes.append(tok)
             elif tok.startswith("[H_") or tok.startswith("[H_alt=") or tok.startswith("[TEMP"):
-                cfg.h_alt_tag = tok
+                h_alt_tag = tok
 
-    if trailing and trailing.startswith("[") and trailing.endswith("]"):
-        for chunk in trailing[1:-1].split("]["):
-            eq = chunk.find("=")
-            if eq != -1:
-                k, v = chunk[:eq], chunk[eq + 1 :]
-                if k == "rules":
-                    cfg.rules = v
-
-    return cfg
+    return ParseData(
+        root="".join(root_chars),
+        prefix_class=prefix_class,
+        pronominal=pronominal,
+        h_alt_tag=h_alt_tag,
+        aspect_class=aspect_class,
+        variant=variant,
+        aspect=aspect,
+        tense_present_class=tense_present_class,
+        tense=tense,
+        prepronominal_prefixes=tuple(prepronominal_prefixes),
+        raw_tokens=tuple(tokens),
+    )
 
 
 def read_labels(s: str):

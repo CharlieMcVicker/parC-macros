@@ -19,7 +19,7 @@ from parc_macros.yaml_validation import validate_yaml_file
 
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
-INPLACE_CONFIG_DIR = REPO_ROOT / "chr-inplace-config"
+INPLACE_CONFIG_DIR = REPO_ROOT / "chr-clean-inplace-config"
 INPLACE_GEN_DIR = REPO_ROOT / "chr-inplace-generated"
 
 
@@ -44,6 +44,9 @@ def setup_inplace_env():
     os.environ["YAML_DIR"] = str(INPLACE_GEN_DIR)
 
     yield
+
+    # Restore chr-inplace-generated from chr-clean-inplace-config
+    generate_markers(str(REPO_ROOT / "chr-clean-inplace-config"), str(INPLACE_GEN_DIR), in_place=True)
 
     # Restore original YAML_DIR and clear caches
     clear_all_caches()
@@ -85,13 +88,13 @@ def test_compile_open_inflect_graph_ac3():
     inflect_no_infer = get_open_inflect_graph("verb", infer_lexical_features=False)
     assert inflect_no_infer is not None
     assert inflect_no_infer.num_states() > 0
-    assert inflect_no_infer.num_states() == 983
+    assert inflect_no_infer.num_states() == 998
 
     # Compile with infer_lexical_features=True
     inflect_infer = get_open_inflect_graph("verb", infer_lexical_features=True)
     assert inflect_infer is not None
     assert inflect_infer.num_states() > 0
-    assert inflect_infer.num_states() == 983
+    assert inflect_infer.num_states() == 998
 
 
 def test_compile_open_parse_graph_ac4():
@@ -104,7 +107,7 @@ def test_compile_open_parse_graph_ac4():
     )
     assert parse_no_infer is not None
     assert parse_no_infer.num_states() > 0
-    assert parse_no_infer.num_states() == 983
+    assert parse_no_infer.num_states() == 998
 
     # Compile with infer_lexical_features=True, non_deterministic_cleanup=True
     parse_infer = get_open_parse_graph(
@@ -112,7 +115,7 @@ def test_compile_open_parse_graph_ac4():
     )
     assert parse_infer is not None
     assert parse_infer.num_states() > 0
-    assert parse_infer.num_states() == 983
+    assert parse_infer.num_states() == 998
 
 
 def test_inplace_inflection_and_parse_roundtrip():

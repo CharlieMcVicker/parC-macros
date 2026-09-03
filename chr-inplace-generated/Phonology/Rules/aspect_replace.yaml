@@ -362,7 +362,7 @@ rules:
   - - '[AspectClass=oh-ol][Aspect=present]'
     - oh
   - - '[AspectClass=oh-ol][Variant=2][Aspect=infinitive]'
-    - st
+    - hst
   - - '[AspectClass=oh-ol][Variant=3][Aspect=infinitive]'
     - ast
   - - '[AspectClass=rev-''i][Aspect=completive]'
@@ -472,66 +472,96 @@ rules:
   - - '[AspectClass=sk-s-la][Aspect=present]'
     - sk
   - - '[AspectClass=stative-a''][Aspect=completive]'
-    - a'
+    - ''
   - - '[AspectClass=stative-a''][Aspect=immediate]'
-    - a'esti
+    - ''
   - - '[AspectClass=stative-a''][Aspect=incompletive]'
     - a'
   - - '[AspectClass=stative-a''][Aspect=infinitive]'
-    - vt
+    - ''
   - - '[AspectClass=stative-a''][Aspect=present]'
     - a'
+  - - '[AspectClass=stative-a''][Variant=2][Aspect=completive]'
+    - a'
+  - - '[AspectClass=stative-a''][Variant=2][Aspect=immediate]'
+    - a'esti
+  - - '[AspectClass=stative-a''][Variant=2][Aspect=infinitive]'
+    - vt
   - - '[AspectClass=stative-eh][Aspect=completive]'
-    - eh
+    - ''
   - - '[AspectClass=stative-eh][Aspect=immediate]'
-    - ehesti
+    - ''
   - - '[AspectClass=stative-eh][Aspect=incompletive]'
     - eh
   - - '[AspectClass=stative-eh][Aspect=infinitive]'
     - ''
   - - '[AspectClass=stative-eh][Aspect=present]'
     - eh
+  - - '[AspectClass=stative-eh][Variant=2][Aspect=completive]'
+    - eh
+  - - '[AspectClass=stative-eh][Variant=2][Aspect=immediate]'
+    - ehesti
   - - '[AspectClass=stative-h][Aspect=completive]'
-    - h
+    - ''
   - - '[AspectClass=stative-h][Aspect=immediate]'
-    - hesti
+    - ''
   - - '[AspectClass=stative-h][Aspect=incompletive]'
     - h
   - - '[AspectClass=stative-h][Aspect=infinitive]'
-    - ht
+    - ''
   - - '[AspectClass=stative-h][Aspect=present]'
     - h
+  - - '[AspectClass=stative-h][Variant=2][Aspect=completive]'
+    - h
+  - - '[AspectClass=stative-h][Variant=2][Aspect=immediate]'
+    - hesti
+  - - '[AspectClass=stative-h][Variant=2][Aspect=infinitive]'
+    - ht
   - - '[AspectClass=stative-k][Aspect=completive]'
-    - k
+    - ''
   - - '[AspectClass=stative-k][Aspect=immediate]'
-    - kesti
+    - ''
   - - '[AspectClass=stative-k][Aspect=incompletive]'
     - k
   - - '[AspectClass=stative-k][Aspect=infinitive]'
     - ''
   - - '[AspectClass=stative-k][Aspect=present]'
     - k
+  - - '[AspectClass=stative-k][Variant=2][Aspect=completive]'
+    - k
+  - - '[AspectClass=stative-k][Variant=2][Aspect=immediate]'
+    - kesti
   - - '[AspectClass=stative-s][Aspect=completive]'
-    - s
+    - ''
   - - '[AspectClass=stative-s][Aspect=immediate]'
-    - sesti
+    - ''
   - - '[AspectClass=stative-s][Aspect=incompletive]'
     - s
   - - '[AspectClass=stative-s][Aspect=infinitive]'
-    - ht
+    - ''
   - - '[AspectClass=stative-s][Aspect=present]'
     - h
+  - - '[AspectClass=stative-s][Variant=2][Aspect=completive]'
+    - s
+  - - '[AspectClass=stative-s][Variant=2][Aspect=immediate]'
+    - sesti
+  - - '[AspectClass=stative-s][Variant=2][Aspect=infinitive]'
+    - ht
   - - '[AspectClass=stative][Aspect=completive]'
     - ''
   - - '[AspectClass=stative][Aspect=immediate]'
-    - esti
+    - ''
   - - '[AspectClass=stative][Aspect=incompletive]'
     - ''
   - - '[AspectClass=stative][Aspect=infinitive]'
-    - ht
+    - ''
   - - '[AspectClass=stative][Aspect=present]'
     - ''
+  - - '[AspectClass=stative][Variant=2][Aspect=immediate]'
+    - esti
   - - '[AspectClass=stative][Variant=2][Aspect=infinitive]'
+    - ht
+  - - '[AspectClass=stative][Variant=3][Aspect=infinitive]'
     - oht
   - - '[AspectClass=terminative-no-o][Aspect=completive]'
     - nh

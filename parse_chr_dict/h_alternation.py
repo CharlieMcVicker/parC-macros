@@ -82,6 +82,9 @@ def determine_h_alt_glottal_root(h_root: str, p_root: str) -> Optional[str]:
     clean_h = strip_h_alt_tags(h_root)
     clean_p = strip_h_alt_tags(p_root)
     if clean_h != clean_p:
+        from parse_chr_dict.h_alternation_fst import fst_grades_are_compatible
+        if fst_grades_are_compatible(h=clean_h, glottal=clean_p):
+            return clean_p
         return None
     active_tags = (
         "[H_alt=drop]", "[H_alt=glot]", "[H_alt=lat]", "[H_alt=vowel]",

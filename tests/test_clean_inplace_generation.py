@@ -112,23 +112,23 @@ def test_clean_inplace_parity_against_reference(generated_clean_dir):
         assert gen_data == ref_data, f"YAML content mismatch in {rel_p}"
 
 
-def test_clean_inplace_inflect_graph_compilation_983_states():
-    """Compiles open inflect graph with parC and verifies exact 983 states."""
+def test_clean_inplace_inflect_graph_compilation_998_states():
+    """Compiles open inflect graph with parC and verifies exact 998 states."""
     from parC.grammar.paradigm_compilation import get_open_inflect_graph
 
     # Compile with infer_lexical_features=False
     inflect_no_infer = get_open_inflect_graph("verb", infer_lexical_features=False)
     assert inflect_no_infer is not None
-    assert inflect_no_infer.num_states() == 983
+    assert inflect_no_infer.num_states() == 998
 
     # Compile with infer_lexical_features=True
     inflect_infer = get_open_inflect_graph("verb", infer_lexical_features=True)
     assert inflect_infer is not None
-    assert inflect_infer.num_states() == 983
+    assert inflect_infer.num_states() == 998
 
 
-def test_clean_inplace_parse_graph_compilation_983_states():
-    """Compiles open parse graph with parC and verifies exact 983 states."""
+def test_clean_inplace_parse_graph_compilation_998_states():
+    """Compiles open parse graph with parC and verifies exact 998 states."""
     from parC.grammar.paradigm_compilation import get_open_parse_graph
 
     # Compile with infer_lexical_features=False
@@ -136,14 +136,14 @@ def test_clean_inplace_parse_graph_compilation_983_states():
         "verb", infer_lexical_features=False, non_deterministic_cleanup=True
     )
     assert parse_no_infer is not None
-    assert parse_no_infer.num_states() == 983
+    assert parse_no_infer.num_states() == 998
 
     # Compile with infer_lexical_features=True
     parse_infer = get_open_parse_graph(
         "verb", infer_lexical_features=True, non_deterministic_cleanup=True
     )
     assert parse_infer is not None
-    assert parse_infer.num_states() == 983
+    assert parse_infer.num_states() == 998
 
 
 def test_clean_inplace_roundtrip_inflection_and_parse():

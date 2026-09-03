@@ -1,6 +1,19 @@
 import csv
+import os
+from pathlib import Path
 from dataclasses import asdict
 from tqdm import tqdm
+
+if "YAML_DIR" not in os.environ:
+    repo_root = Path(__file__).parent.parent.resolve()
+    inplace_dir = repo_root / "chr-inplace-generated"
+    if inplace_dir.exists():
+        os.environ["YAML_DIR"] = str(inplace_dir)
+        try:
+            from parC.constants import set_yaml_dir
+            set_yaml_dir(str(inplace_dir))
+        except ImportError:
+            pass
 
 from parse_chr_dict.create_aspect_class_csv import respell_consonants
 from parse_chr_dict.meta_label_compiler import (
@@ -98,6 +111,33 @@ def write_shims(row, roots, form_parses, roots_writer):
             write_roots(row, shim_type, valid_shims, roots_writer)
 
 
+ROOTS_FIELDNAMES = [
+    "corpus_id",
+    "entry_no",
+    "definition",
+    "present",
+    "present_1sg",
+    "imperfective",
+    "perfective",
+    "imperative",
+    "infinitive",
+    "entry_type",
+    "h_root",
+    "glottal_root",
+    "aspect_class",
+    "prefix_class",
+    "tense_present_class",
+    "set_a",
+    "plural",
+    "animate_objects",
+    "variant_present",
+    "variant_incompletive",
+    "variant_completive",
+    "variant_immediate",
+    "variant_infinitive",
+]
+
+
 def main():
     fieldnames = [
         "corpus_id",
@@ -121,15 +161,12 @@ def main():
         error_writer.writeheader()
         roots_writer = csv.DictWriter(
             roots_f,
-            fieldnames=fieldnames + ["entry_type", "h_root", "glottal_root"] + sorted(LEXICAL_FEATURES) + ReconstructionSpec.fieldnames(),
+            fieldnames=ROOTS_FIELDNAMES,
         )
         roots_writer.writeheader()
 
-
-
         next(reader)
         rows = list(reader)
-        # rows = rows[:10]
         for row in tqdm(rows):
             row_written = False
 
@@ -173,13 +210,14 @@ def main():
                             x.set_a,
                             x.plural,
                             x.animate_objects,
+                            x.metadata.aspect_variants.present,
+                            x.metadata.aspect_variants.incompletive,
+                            x.metadata.aspect_variants.completive,
+                            x.metadata.aspect_variants.immediate,
+                            x.metadata.aspect_variants.infinitive,
                         ),
                     ):
-                        row_data = {
-                            **row,
-                            "entry_type": entry_type.name,
-                            **h.to_dict(),
-                        }
+                        row_data = h.to_row_dict(row, entry_type=entry_type.name)
                         roots_writer.writerow(row_data)
                     break
 

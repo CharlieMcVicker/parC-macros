@@ -31,7 +31,7 @@ from parse_chr_dict.acceptors import (
 )
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
-INPLACE_CONFIG_DIR = REPO_ROOT / "chr-inplace-config"
+INPLACE_CONFIG_DIR = REPO_ROOT / "chr-clean-inplace-config"
 INPLACE_GEN_DIR = REPO_ROOT / "chr-inplace-generated"
 
 

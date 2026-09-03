@@ -15,6 +15,17 @@ from parC.grammar.paradigm_compilation import (
 )
 from parC.grammar.acceptor_compilation import fsm_strings
 from parse_chr_dict.parse import feature_tag, read_labels, str_to_lexical_hashable
+from parse_chr_dict.types import (
+    ParseData,
+    InPlaceParseConfig,
+    VerbTemplate,
+    AspectVariants,
+    VerbMetadata,
+    LexicalVerb,
+    DerivationHypothesis,
+    LexicalVerbHypothesis,
+    LexicalVerbEntry,
+)
 from parse_chr_dict.h_alternation import (
     H_ALT_TAGS,
     is_h_alternation_trigger,
@@ -483,9 +494,10 @@ class MetaConstraintCompiler:
         if hasattr(self, "_acceptor_cache") and cache_key in self._acceptor_cache:
             return self._acceptor_cache[cache_key]
 
+        from parse_chr_dict.parse import is_inplace_grammar
         restricted_fsa = (
             self.base_tag_acceptor.copy()
-            if self.base_tag_acceptor is not None
+            if (self.base_tag_acceptor is not None and not is_inplace_grammar())
             else self.sigma_star.copy()
         )
 
@@ -554,11 +566,9 @@ class MetaConstraintCompiler:
         parse_graph: Optional[pynini.Fst] = None,
     ) -> List[str]:
         """
-        Executes Q o P composition directly via Pynini.
-        Q = surface_fsa . L_restricted
-        P = parse_graph (open parse graph)
-        Memoized by (surface_form, sorted(meta_label_ids), dynamic_constraints)
-        for identical parse graph lookups.
+        Executes lattice parsing.
+        For in-place grammar: projects output of surface o P, then intersects with L_restricted.
+        For legacy grammar: Q o P composition where Q = surface_fsa . L_restricted.
         """
         dyn_tuple = ()
         if dynamic_constraints:
@@ -576,17 +586,36 @@ class MetaConstraintCompiler:
         if parse_graph is None:
             parse_graph = self.parse_graph
 
-        Q = self.build_query_lattice(
-            surface_form, meta_label_ids, dynamic_constraints=dynamic_constraints
-        )
-        output_lattice = pynini.compose(Q, parse_graph).optimize()
-        output_lattice = pynini.project(output_lattice, project_type="output")
-        output_lattice = pynini.rmepsilon(output_lattice).optimize()
+        from parse_chr_dict.parse import is_inplace_grammar
+        if is_inplace_grammar():
+            if not hasattr(self, "_surface_fsa_cache"):
+                self._surface_fsa_cache = {}
+            if surface_form in self._surface_fsa_cache:
+                surface_fsa = self._surface_fsa_cache[surface_form]
+            else:
+                surface_fsa = word_fsa(surface_form)
+                self._surface_fsa_cache[surface_form] = surface_fsa
+
+            output_lattice = pynini.compose(surface_fsa, parse_graph).optimize()
+            output_lattice = pynini.project(output_lattice, project_type="output")
+            output_lattice = pynini.rmepsilon(output_lattice).optimize()
+
+            L_restricted = self.compile_restricted_tag_acceptor(
+                meta_label_ids, dynamic_constraints=dynamic_constraints
+            )
+            output_lattice = pynini.intersect(output_lattice, L_restricted).optimize()
+        else:
+            Q = self.build_query_lattice(
+                surface_form, meta_label_ids, dynamic_constraints=dynamic_constraints
+            )
+            output_lattice = pynini.compose(Q, parse_graph).optimize()
+            output_lattice = pynini.project(output_lattice, project_type="output")
+            output_lattice = pynini.rmepsilon(output_lattice).optimize()
+
         if output_lattice.properties(pynini.CYCLIC, True) == pynini.CYCLIC:
             output_lattice = pynini.shortestpath(output_lattice, nshortest=2000).optimize()
 
         results = fsm_strings(output_lattice, strip_all_tags=False)
-
 
         if (parse_graph is self.parse_graph or parse_graph is None) and hasattr(self, "_parse_cache"):
             self._parse_cache[cache_key] = results
@@ -644,118 +673,39 @@ class MetaConstraintCompiler:
         return matched_meta
 
 
-@dataclass(frozen=True)
-class DerivationHypothesis:
-    """
-    Represents a candidate lexical verb entry hypothesis with morphological root grades (h_root, glottal_root),
-    fine-grained H-alternation tag (h_alt_tag), lexical inflection classes, and meta-label traits.
-    """
-    h_root: str
-    glottal_root: Optional[str] = None
-    prefix_class: str = ""
-    aspect_class: str = ""
-    tense_present_class: str = ""
-    set_a: bool = True
-    plural: bool = False
-    animate_objects: bool = False
-    present_variant: str = ""
-
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "h_root": self.h_root,
-            "glottal_root": self.glottal_root if self.glottal_root is not None else "",
-            "prefix_class": self.prefix_class,
-            "aspect_class": self.aspect_class,
-            "tense_present_class": self.tense_present_class,
-            "set_a": self.set_a,
-            "plural": self.plural,
-            "animate_objects": self.animate_objects,
-            "present_variant": self.present_variant,
-        }
-
-    def lexical_labels(self) -> Dict[str, str]:
-        return {
-            "aspect_class": self.aspect_class,
-            "prefix_class": self.prefix_class,
-            "tense_present_class": self.tense_present_class,
-        }
-
-    def lexical_tuple(self) -> Tuple[str, Optional[str], Tuple[Tuple[str, str], ...]]:
-        return (
-            self.h_root,
-            self.glottal_root,
-            (
-                ("aspect_class", self.aspect_class),
-                ("prefix_class", self.prefix_class),
-                ("tense_present_class", self.tense_present_class),
-            ),
-        )
-
-
-    def to_meta_combination(self):
-        from parse_chr_dict.reconstruct import MetaLabelCombination
-        return MetaLabelCombination(
-            set_a=self.set_a,
-            plural=self.plural,
-            animate_objects=self.animate_objects,
-        )
-
-    def get_dynamic_constraints(self, form_spec: Optional[FormParsingSpec] = None) -> List[FeatureConstraint]:
-        constraints = [
-            FeatureConstraint(slot_name="aspect_class", mode=MatchMode.EXACT, values=[self.aspect_class]),
-            FeatureConstraint(slot_name="tense_present_class", mode=MatchMode.EXACT, values=[self.tense_present_class]),
-        ]
-        if self.prefix_class in ("a_stem", "k_a_stem"):
-            constraints.append(FeatureConstraint(slot_name="prefix_class", mode=MatchMode.ONE_OF, values=["a_stem", "k_a_stem"]))
-        else:
-            constraints.append(FeatureConstraint(slot_name="prefix_class", mode=MatchMode.EXACT, values=[self.prefix_class]))
-        return constraints
-
-    def get_meta_label_ids(self, form_spec: FormParsingSpec) -> List[str]:
-        meta_ids = [form_spec.meta_label_id]
-        if form_spec.allows_set_a:
-            if self.set_a:
-                meta_ids.append("[PRONOUN_SET=A]")
-
-        if self.plural:
-            meta_ids.append("[PLURAL=TRUE]")
-        else:
-            meta_ids.append("[PLURAL=FALSE]")
-
-        if form_spec.person in ("1st", "2nd"):
-            if self.animate_objects:
-                meta_ids.append("[OBJECT_ANIMACY=ANIMATE]")
-            else:
-                meta_ids.append("[OBJECT_ANIMACY=INANIMATE]")
-
-        return meta_ids
-
-    def validate(
-        self,
-        row: Dict[str, str],
-        entry_type: EntryTypeSpec,
-        compiler: Optional[MetaConstraintCompiler] = None,
-    ) -> bool:
-        from parse_chr_dict.reconstruct import validate_hypothesis
-        return validate_hypothesis(self, row, entry_type, compiler=compiler)
-
-
-LexicalVerbHypothesis = DerivationHypothesis
-LexicalVerbEntry = DerivationHypothesis
+def parse_string_to_parse_data(p: str) -> ParseData:
+    """Converts a raw parse string (in-place morphemes or legacy trailing tags) to ParseData."""
+    from parse_chr_dict.parse import read_inplace_parse, read_labels
+    if "[" in p and ("PrefixClass=" in p or "AspectClass=" in p or "Pro=" in p):
+        return read_inplace_parse(p)
+    form, labels = read_labels(p)
+    var_raw = labels.get("variant", 1)
+    var = int(var_raw) if str(var_raw).isdigit() else 1
+    return ParseData(
+        root=form,
+        prefix_class=labels.get("prefix_class", ""),
+        pronominal=labels.get("pronominal", ""),
+        h_alt_tag=labels.get("h_alt_tag", ""),
+        aspect_class=labels.get("aspect_class", ""),
+        variant=var,
+        aspect=labels.get("aspect", ""),
+        tense_present_class=labels.get("tense_present_class", ""),
+        tense=labels.get("tense", ""),
+    )
 
 
 def derive_hypotheses_for_forms(
     forms: List[Tuple[str, FormParsingSpec | str]],
     compiler: MetaConstraintCompiler,
     lexical_features: Optional[Set[str]] = None,
-) -> Set[DerivationHypothesis]:
+) -> Set[LexicalVerb]:
     """
-    Derives and iteratively narrows candidate LexicalVerbEntry / DerivationHypothesis objects
-    form-by-form across a row:
+    Derives and iteratively narrows candidate LexicalVerb objects form-by-form across a row:
     1. Parse the initial form with its meta-label to generate candidate hypotheses
-       (h_root, glottal_root, prefix_class, aspect_class, tense_present_class, set_a, plural, animate_objects).
+       as LexicalVerb instances (VerbTemplate x VerbMetadata).
     2. For each subsequent form, parse using the specific constraints of each hypothesis
-       to filter/prune the candidate set and check H-alternation compatibility.
+       to filter/prune the candidate set, enforce present-tense variant consistency,
+       fold non-shared aspect variants into VerbMetadata, and check H-alternation compatibility.
     """
     if not forms:
         return set()
@@ -788,15 +738,16 @@ def derive_hypotheses_for_forms(
     if not init_parses:
         return set()
 
-    candidate_hypotheses: Set[DerivationHypothesis] = set()
+    candidate_hypotheses: Set[LexicalVerb] = set()
 
     for p in init_parses:
-        root, labels = read_labels(p)
-        pref = labels.get("prefix_class")
-        asp = labels.get("aspect_class")
-        t_pres = labels.get("tense_present_class")
-        pro_tag = labels.get("pronominal")
-        pres_var = labels.get("variant", "")
+        p_data = parse_string_to_parse_data(p)
+        tmpl = VerbTemplate.from_parse(p_data)
+        pref = tmpl.prefix_class
+        asp = tmpl.aspect_class
+        t_pres = tmpl.tense_present_class
+        pro_tag = p_data.pronominal
+        pres_var = tmpl.variant
         if not pref or not asp or not t_pres or not pro_tag:
             continue
 
@@ -807,7 +758,7 @@ def derive_hypotheses_for_forms(
         is_glottal = is_h_alternation_trigger(pro_tag)
 
         # Validate trigger if mutation tag is present
-        has_mutation = any(tag in root for tag in H_ALT_TAGS if tag.lower() not in ("[h_none]", "[h_alt=none]"))
+        has_mutation = any(tag in p_data.root for tag in H_ALT_TAGS if tag.lower() not in ("[h_none]", "[h_alt=none]"))
         if not validate_h_alternation_trigger(pro_tag, has_h_alt=has_mutation):
             continue
 
@@ -830,23 +781,26 @@ def derive_hypotheses_for_forms(
         else:
             animate_options = [False]
 
-        h_root_val = strip_h_alt_tags(root)
-        glottal_root_val = root if is_glottal else None
+        glottal_root_val = p_data.root if is_glottal else None
+        h_alt_val = p_data.h_alt_tag
+        aspect_variants = AspectVariants(present=pres_var)
 
         for sa in set_a_options:
             for pl in plural_options:
                 for anim in animate_options:
+                    meta = VerbMetadata(
+                        entry_type="Eventful",
+                        is_set_a=sa,
+                        is_plural=pl,
+                        animate_objects=anim,
+                        aspect_variants=aspect_variants,
+                    )
                     candidate_hypotheses.add(
-                        DerivationHypothesis(
-                            h_root=h_root_val,
+                        LexicalVerb(
+                            template=tmpl,
+                            metadata=meta,
                             glottal_root=glottal_root_val,
-                            prefix_class=pref,
-                            aspect_class=asp,
-                            tense_present_class=t_pres,
-                            set_a=sa,
-                            plural=pl,
-                            animate_objects=anim,
-                            present_variant=pres_var,
+                            h_alt_tag=h_alt_val,
                         )
                     )
 
@@ -891,14 +845,15 @@ def derive_hypotheses_for_forms(
             return set()
 
         # Group parses by (p_asp, p_t_pres)
-        parsed_by_asp_tense: Dict[Tuple[str, str], List[Tuple[str, str, str, bool, bool, bool, bool, str]]] = {}
+        parsed_by_asp_tense: Dict[Tuple[str, str], List[Tuple[ParseData, VerbTemplate, str, bool, bool, bool, bool, int]]] = {}
         for p in parses:
-            p_root, p_labels = read_labels(p)
-            p_pref = p_labels.get("prefix_class", "")
-            p_asp = p_labels.get("aspect_class", "")
-            p_t_pres = p_labels.get("tense_present_class", "")
-            pro_tag = p_labels.get("pronominal", "")
-            p_var = p_labels.get("variant", "")
+            p_data = parse_string_to_parse_data(p)
+            p_tmpl = VerbTemplate.from_parse(p_data)
+            p_pref = p_tmpl.prefix_class
+            p_asp = p_tmpl.aspect_class
+            p_t_pres = p_tmpl.tense_present_class
+            pro_tag = p_data.pronominal
+            p_var = p_tmpl.variant
             if not p_pref or not p_asp or not p_t_pres or not pro_tag:
                 continue
 
@@ -908,28 +863,29 @@ def derive_hypotheses_for_forms(
             p_trans = pro.pronoun_set == "transitive"
             p_is_glottal = is_h_alternation_trigger(pro_tag)
 
-            has_mutation = any(tag in p_root for tag in H_ALT_TAGS if tag.lower() not in ("[h_none]", "[h_alt=none]"))
+            has_mutation = any(tag in p_data.root for tag in H_ALT_TAGS if tag.lower() not in ("[h_none]", "[h_alt=none]"))
             if not validate_h_alternation_trigger(pro_tag, has_h_alt=has_mutation):
                 continue
 
             key = (p_asp, p_t_pres)
             if key not in parsed_by_asp_tense:
                 parsed_by_asp_tense[key] = []
-            parsed_by_asp_tense[key].append((p_root, p_pref, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal, p_var))
+            parsed_by_asp_tense[key].append((p_data, p_tmpl, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal, p_var))
 
-        surviving: Set[DerivationHypothesis] = set()
+        surviving: Set[LexicalVerb] = set()
 
         for hyp in candidate_hypotheses:
             matching_items = parsed_by_asp_tense.get((hyp.aspect_class, hyp.tense_present_class))
             if not matching_items:
                 continue
 
-            for p_root, p_pref, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal, p_var in matching_items:
-                if not prefix_compat(hyp.prefix_class, p_pref):
+            for p_data, p_tmpl, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal, p_var in matching_items:
+                if not prefix_compat(hyp.prefix_class, p_tmpl.prefix_class):
                     continue
 
+                # Enforce present-tense variant consistency: template_3sg.variant == template_1sg.variant
                 if form_spec.meta_label_id == "[FORM=1ST_PRES]" or form_spec.name == "1st_present" or form_spec.corpus_key == "present_1sg":
-                    if p_var != hyp.present_variant:
+                    if p_var != hyp.template.variant:
                         continue
 
                 if p_plural != hyp.plural:
@@ -950,38 +906,56 @@ def derive_hypotheses_for_forms(
 
                 # Root compatibility check
                 if p_is_glottal:
-                    compatible_glottal = determine_h_alt_glottal_root(hyp.h_root, p_root)
+                    compatible_glottal = determine_h_alt_glottal_root(hyp.h_root, p_data.root)
                     if compatible_glottal is None:
                         continue
-                    # Tighten H-alternation trigger matching:
-                    # If this trigger form proves that the root undergoes mutation (i.e. compatible_glottal != hyp.h_root),
-                    # do NOT allow non-mutated [H_NONE] / unmutated fallback hypotheses to survive.
                     if compatible_glottal != hyp.h_root:
                         if hyp.glottal_root is not None and hyp.glottal_root != compatible_glottal:
                             continue
                         new_glottal = compatible_glottal
+                        new_h_alt_tag = p_data.h_alt_tag or hyp.h_alt_tag
                     else:
-                        # No mutation occurred on trigger form -> must strictly be non-mutating [H_NONE] (glottal_root == h_root)
                         if hyp.glottal_root is not None and hyp.glottal_root != hyp.h_root:
                             continue
                         new_glottal = hyp.h_root
+                        new_h_alt_tag = p_data.h_alt_tag or hyp.h_alt_tag
                 else:
-                    if strip_h_alt_tags(p_root) != hyp.h_root:
+                    if strip_h_alt_tags(p_data.root) != hyp.h_root:
                         continue
                     new_glottal = hyp.glottal_root
+                    new_h_alt_tag = hyp.h_alt_tag
+
+                # Fold non-shared form variant into metadata.aspect_variants
+                aspect_name = p_data.aspect or form_spec.corpus_key
+                new_aspect_variants = hyp.metadata.aspect_variants.with_variant(aspect_name, p_var)
+                new_metadata = VerbMetadata(
+                    entry_type=hyp.metadata.entry_type,
+                    is_set_a=hyp.metadata.is_set_a,
+                    is_plural=hyp.metadata.is_plural,
+                    animate_objects=hyp.metadata.animate_objects,
+                    aspect_variants=new_aspect_variants,
+                )
 
                 # Determine canonical prefix class
+                p_pref = p_tmpl.prefix_class
                 canon_pref = hyp.prefix_class if hyp.prefix_class != "k_a_stem" else (p_pref if p_pref != "k_a_stem" else "a_stem")
+                new_template = VerbTemplate(
+                    root=hyp.template.root,
+                    prefix_class=canon_pref,
+                    aspect_class=hyp.template.aspect_class,
+                    tense_present_class=hyp.template.tense_present_class,
+                    variant=hyp.template.variant,
+                    distributive=hyp.template.distributive,
+                    translocutive=hyp.template.translocutive,
+                    h_alt_tag=hyp.template.h_alt_tag,
+                )
+
                 surviving.add(
-                    DerivationHypothesis(
-                        h_root=hyp.h_root,
+                    LexicalVerb(
+                        template=new_template,
+                        metadata=new_metadata,
                         glottal_root=new_glottal,
-                        prefix_class=canon_pref,
-                        aspect_class=hyp.aspect_class,
-                        tense_present_class=hyp.tense_present_class,
-                        set_a=hyp.set_a,
-                        plural=hyp.plural,
-                        animate_objects=hyp.animate_objects,
+                        h_alt_tag=new_h_alt_tag,
                     )
                 )
 
