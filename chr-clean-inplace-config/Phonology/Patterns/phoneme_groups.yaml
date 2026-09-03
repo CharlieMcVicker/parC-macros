@@ -1,0 +1,17 @@
+kind: Patterns
+patterns:
+- name: Consonants
+  pattern: <Stops>|<Frc>|<Son>|<N>
+  ref: <C>
+- name: H_alt
+  pattern: <H_alt>
+  ref: <H_alt>
+- name: NotLar
+  pattern: '{tkmnslyw}|<V>'
+  ref: <NotLar>
+- name: SonH
+  pattern: nh|lh|yh|wh|mh
+  ref: <SonH>
+- name: HTarget
+  pattern: h<V>|<SonH>
+  ref: <HTarget>

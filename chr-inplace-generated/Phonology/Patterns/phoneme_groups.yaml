@@ -20,7 +20,7 @@ patterns:
   pattern: '[AspectClass=a]|[AspectClass=become]|[AspectClass=ko-kots]|[AspectClass=sk-s-hi-hihst]|[AspectClass=sk-s-a]|[AspectClass=sk-s-hst]|[AspectClass=sk-s-la]|[AspectClass=sk-h]|[AspectClass=sk-h-yh]|[AspectClass=hvsk-han]|[AspectClass=hvsk-nh]|[AspectClass=hvsk-n]|[AspectClass=husk]|[AspectClass=episodic]|[AspectClass=terminative]|[AspectClass=terminative-no-o]|[AspectClass=e-aka]|[AspectClass=e-a]|[AspectClass=apl-active]|[AspectClass=apl-active-h]|[AspectClass=apl-active-'']|[AspectClass=apl-active-a]|[AspectClass=apl]|[AspectClass=go]|[AspectClass=go-in]|[AspectClass=cause]|[AspectClass=ih-il]|[AspectClass=hih-hil]|[AspectClass=hih-hilh]|[AspectClass=hih-lh]|[AspectClass=ih-vh]|[AspectClass=vnh-ih-a]|[AspectClass=vnh-vsk]|[AspectClass=i-vka]|[AspectClass=i-a-i]|[AspectClass=i-a-ihsk]|[AspectClass=ih-ihi]|[AspectClass=o]|[AspectClass=be-at]|[AspectClass=oh-al]|[AspectClass=oh-ol]|[AspectClass=v-vhs]|[AspectClass=vsk]|[AspectClass=vsk-long]|[AspectClass=vsk-post-v]|[AspectClass=rev-gi]|[AspectClass=rev-i]|[AspectClass=rev-''i]|[AspectClass=rev-e]|[AspectClass=stative]|[AspectClass=stative-k]|[AspectClass=stative-h]|[AspectClass=stative-s]|[AspectClass=stative-a'']|[AspectClass=stative-eh]'
 - name: Variant
   ref: <Variant>
-  pattern: '([Variant=2]|[Variant=3]|[Variant=4])?'
+  pattern: ([Variant=2]|[Variant=3]|[Variant=4])?
 - name: Aspect
   ref: <Aspect>
   pattern: '[Aspect=present]|[Aspect=incompletive]|[Aspect=completive]|[Aspect=immediate]|[Aspect=infinitive]'
@@ -34,8 +34,8 @@ patterns:
   ref: <Morpheme>
   pattern: <PrefixClass>|<Pro>|<AspectClass>|<Aspect>|<TenseClass>|<Tense>|<PPP>|<H_alt>|[WI]|[DIST]|[DIST=de]|[DIST=di]|[Variant=2]|[Variant=3]|[Variant=4]
 - name: H_alt
-  pattern: <H_alt>
   ref: <H_alt>
+  pattern: <H_alt>
 - name: NotLar
   pattern: '{tkmnslyw}|<V>'
   ref: <NotLar>

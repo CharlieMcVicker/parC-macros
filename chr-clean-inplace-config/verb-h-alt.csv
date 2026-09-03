@@ -1,0 +1,7 @@
+# kind: rule
+# stage: h_alternation
+# rule: $h_alternation
+# feature: rules
+# part_of_speech: $verb
++
+Y

@@ -165,23 +165,25 @@ def _generate_inplace_rules(csv_files: list[str], rules_out_dir: str) -> None:
                     if ";" in val:
                         variants = val.split(";")
                         for idx, v in enumerate(variants, start=1):
-                            clean_v = v.strip()
+                            clean_v = v.strip().lstrip("*@")
                             if idx == 1:
                                 pattern = f"[{class_tag_title}={class_name}][{feature_tag_title}={feat_name}]"
                             else:
                                 pattern = f"[{class_tag_title}={class_name}][Variant={idx}][{feature_tag_title}={feat_name}]"
                             tag_mappings[tag_slug]["mappings"][pattern] = clean_v
                     else:
+                        clean_v = val.lstrip("*@")
                         pattern = f"[{class_tag_title}={class_name}][{feature_tag_title}={feat_name}]"
-                        tag_mappings[tag_slug]["mappings"][pattern] = val
+                        tag_mappings[tag_slug]["mappings"][pattern] = clean_v
         else:
             feature_cols = reader.fieldnames
             for row in reader:
                 for col in feature_cols:
                     feat_name = col.strip()
                     val = row.get(col, "").strip()
+                    clean_v = val.lstrip("*@")
                     pattern = f"[{feature_tag_title}={feat_name}]"
-                    tag_mappings[tag_slug]["mappings"][pattern] = val
+                    tag_mappings[tag_slug]["mappings"][pattern] = clean_v
 
     for tag_slug, info in tag_mappings.items():
         rule_name = info["rule_name"]
@@ -265,7 +267,13 @@ def _generate_legacy_rules(csv_files: list[str], rules_out_dir: str) -> None:
             for col in cols:
                 if col in row and row[col]:
                     val = row[col].strip()
-                    tag_to_values[morpheme_tag].add(val)
+                    if ";" in val:
+                        for v in val.split(";"):
+                            clean_v = v.strip().lstrip("*@")
+                            tag_to_values[morpheme_tag].add(clean_v)
+                    else:
+                        clean_v = val.lstrip("*@")
+                        tag_to_values[morpheme_tag].add(clean_v)
 
     if not tag_to_values:
         return

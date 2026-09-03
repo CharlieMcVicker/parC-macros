@@ -16,6 +16,12 @@ from parc_macros.generate_morpheme_replace_rules import (
     sanitize_rule_name,
     is_in_place_mode,
 )
+from parc_macros.generate_inplace_phonology import (
+    extract_inplace_data,
+    generate_inplace_inventory,
+    generate_inplace_patterns,
+    generate_inplace_rules,
+)
 
 
 
@@ -957,14 +963,14 @@ def generate_markers(config_path: str, output_dir: str, in_place: bool | None = 
                 else:
                     shutil.copy2(s, d)
 
-    # Copy Phonology from config/Phonology to output_dir/Phonology if present
+    # Copy feature_acceptors from config/feature_acceptors to output_dir/feature_acceptors if present
     if os.path.isdir(config_path):
-        phonology_dir = os.path.join(config_path, "Phonology")
-        if os.path.exists(phonology_dir) and os.path.isdir(phonology_dir):
-            dest_phonology = os.path.join(output_dir, "Phonology")
-            if os.path.exists(dest_phonology):
-                shutil.rmtree(dest_phonology)
-            shutil.copytree(phonology_dir, dest_phonology)
+        fa_dir = os.path.join(config_path, "feature_acceptors")
+        if os.path.exists(fa_dir) and os.path.isdir(fa_dir):
+            dest_fa = os.path.join(output_dir, "feature_acceptors")
+            if os.path.exists(dest_fa):
+                shutil.rmtree(dest_fa)
+            shutil.copytree(fa_dir, dest_fa)
 
     # Determine all CSVs and verb.yaml
     csv_files = []
@@ -1015,6 +1021,36 @@ def generate_markers(config_path: str, output_dir: str, in_place: bool | None = 
     # Check in-place mode
     if in_place is None:
         in_place = is_in_place_mode(verb_config)
+
+    # Phonology setup: dynamic in-place vs static legacy
+    if in_place:
+        cfg_p = Path(config_path)
+        out_p = Path(output_dir)
+        inplace_data = extract_inplace_data(cfg_p)
+        generate_inplace_inventory(
+            cfg_p / "Phonology" / "Inventory" / "alphabet.yaml",
+            out_p / "Phonology" / "Inventory" / "alphabet.yaml",
+            inplace_data,
+        )
+        generate_inplace_patterns(
+            cfg_p / "Phonology" / "Patterns" / "phoneme_groups.yaml",
+            out_p / "Phonology" / "Patterns" / "phoneme_groups.yaml",
+            inplace_data,
+        )
+        generate_inplace_rules(
+            cfg_p,
+            out_p / "Phonology" / "Rules",
+            inplace_data,
+        )
+    else:
+        # Legacy trailing-label configs: copy entire Phonology dir as-is
+        if os.path.isdir(config_path):
+            phonology_dir = os.path.join(config_path, "Phonology")
+            if os.path.exists(phonology_dir) and os.path.isdir(phonology_dir):
+                dest_phonology = os.path.join(output_dir, "Phonology")
+                if os.path.exists(dest_phonology):
+                    shutil.rmtree(dest_phonology)
+                shutil.copytree(phonology_dir, dest_phonology)
 
     # Generate insertion rules and morpheme replace rules
     if os.path.isdir(config_path):

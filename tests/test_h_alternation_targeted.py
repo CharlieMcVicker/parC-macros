@@ -91,7 +91,7 @@ def test_h_drop_entry_537():
     """Entry 537: [Pro][H_alt=drop]yvwhahth[Aspect][Tense] -> 1sg tsiyvwahthiha
     1st h in wh drops, subsequent th remains.
     """
-    tag_str = "[PrefixClass=cons_stem][Pro=1sg>3sg][H_alt=drop]yvwhahth[AspectClass=ih-vh[inf2]][Aspect=present][TenseClass=a_present][Tense=present]"
+    tag_str = "[PrefixClass=cons_stem][Pro=1sg>3sg][H_alt=drop]yvwhahth[AspectClass=ih-vh][Aspect=present][TenseClass=a_present][Tense=present]"
     forms = _inflect(tag_str)
     assert "tsiyvwahthiha" in forms
 
@@ -109,7 +109,7 @@ def test_h_glot_entry_321():
     """Entry 321: [Pro][H_alt=glot]alihelitsh[Aspect][Tense] -> 1sg tsiyali'elitsheha
     1st h becomes ', subsequent tsh remains.
     """
-    tag_str = "[PrefixClass=a_stem][Pro=1sg>3sg][H_alt=glot]alihelitsh[AspectClass=apl[imp3]][Aspect=present][TenseClass=a_present][Tense=present]"
+    tag_str = "[PrefixClass=a_stem][Pro=1sg>3sg][H_alt=glot]alihelitsh[AspectClass=apl][Aspect=present][TenseClass=a_present][Tense=present]"
     forms = _inflect(tag_str)
     assert "tsiyali'elitsheha" in forms
 
@@ -127,7 +127,7 @@ def test_h_lat_entry_175():
     """Entry 175: [Pro][H_alt=lat]alhawitht[Aspect][Tense] -> 1sg tsiyatlawithtiha
     1st lh becomes tl, subsequent th and ht remain.
     """
-    tag_str = "[PrefixClass=a_stem][Pro=1sg>3sg][H_alt=lat]alhawitht[AspectClass=cause[perf3]][Aspect=present][TenseClass=a_present][Tense=present]"
+    tag_str = "[PrefixClass=a_stem][Pro=1sg>3sg][H_alt=lat]alhawitht[AspectClass=cause][Aspect=present][TenseClass=a_present][Tense=present]"
     forms = _inflect(tag_str)
     assert "tsiyatlawithtiha" in forms
 
