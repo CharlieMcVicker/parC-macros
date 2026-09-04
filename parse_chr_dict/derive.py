@@ -110,11 +110,21 @@ def _derive_category(
     normalized_forms: List[Tuple[str, VerbForm]],
     is_stative: bool,
 ) -> Set[LexicalVerb]:
-    # Step 1: Initial form
-    init_surface, init_form = normalized_forms[0]
-    if not init_surface:
+    valid_forms = [(s, f) for s, f in normalized_forms if s]
+    if not valid_forms:
         return set()
 
+    # Reorder so all 3rd-person forms (non-H-alternating) are processed first
+    third_person_forms = [(s, f) for s, f in valid_forms if f.person == "3rd"]
+    other_forms = [(s, f) for s, f in valid_forms if f.person != "3rd"]
+
+    if third_person_forms:
+        ordered_forms = third_person_forms + other_forms
+    else:
+        ordered_forms = valid_forms
+
+    # Step 1: Initial form
+    init_surface, init_form = ordered_forms[0]
     init_parses = parse_surface(init_surface, form=init_form, is_stative=is_stative)
     if not init_parses:
         return set()
@@ -189,20 +199,27 @@ def _derive_category(
                         )
                     )
 
-    if not candidate_hypotheses or len(normalized_forms) == 1:
+    if not candidate_hypotheses or len(ordered_forms) == 1:
         return candidate_hypotheses
 
     # Step 2: Form-by-form refinement
     def prefix_compat(p1: str, p2: str) -> bool:
         return p1 == p2 or (p1 in ("k_a_stem", "a_stem") and p2 in ("k_a_stem", "a_stem"))
 
-    for surface, form in normalized_forms[1:]:
+    for surface, form in ordered_forms[1:]:
         if not surface:
             continue
         if not candidate_hypotheses:
             break
 
-        parses = parse_surface(surface, form=form, is_stative=is_stative)
+        # If form is non-3rd-person (can H-alternate), restrict parse graph to candidate roots
+        allowed_roots = None
+        if form.person != "3rd" and candidate_hypotheses:
+            allowed_roots = {h.h_root for h in candidate_hypotheses if h.h_root}
+
+        parses = parse_surface(
+            surface, form=form, is_stative=is_stative, allowed_roots=allowed_roots
+        )
         if not parses:
             return set()
 

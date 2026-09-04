@@ -1,3 +1,4 @@
+import functools
 import os
 import re
 from pathlib import Path
@@ -301,10 +302,11 @@ def read_labels(s: str):
     return form, dict(labels_dict)
 
 
-_SURFACE_PARSE_CACHE: dict[tuple[str, int], list[str]] = {}
+_SURFACE_PARSE_CACHE: dict[tuple, list[str]] = {}
 _SURFACE_FSA_CACHE: dict[str, pynini.Fst] = {}
 _PARSE_DATA_CACHE: dict[str, ParseData] = {}
 _SPECIALIZED_PARSE_GRAPHS: dict[tuple[bool, str], pynini.Fst] = {}
+_ROOT_FILTER_CACHE: dict[frozenset[str], pynini.Fst] = {}
 
 
 def get_specialized_parse_graph(form: Any, is_stative: bool = False) -> pynini.Fst:
@@ -380,17 +382,79 @@ def get_specialized_parse_graph(form: Any, is_stative: bool = False) -> pynini.F
     return specialized_graph
 
 
+def build_root_filter_fsa(allowed_roots: Iterable[str]) -> pynini.Fst | None:
+    """
+    Constructs an optimized FSA filter that restricts the output of a parse graph to
+    match only roots in allowed_roots.
+    Boundary structure: sigma* + [H_alt=...] + root_union + [AspectClass=...] + sigma*
+    """
+    if not is_inplace_grammar():
+        return None
+    key = frozenset(allowed_roots)
+    if not key:
+        return None
+    if key in _ROOT_FILTER_CACHE:
+        return _ROOT_FILTER_CACHE[key]
+
+    base_graph = get_parse_graph()
+    syms = base_graph.output_symbols()
+    if syms is None:
+        return None
+
+    all_syms = [syms.find(i) for i in range(1, syms.num_symbols())]
+    sigma = pynini.union(*[pynini.accep(s, token_type=syms) for s in all_syms]).optimize()
+    sigma_star = sigma.star.optimize()
+
+    # Pre-root boundary tags: all [H_alt=...] tags
+    h_alt_tags = [s for s in all_syms if s.startswith("[H_alt=")]
+    if not h_alt_tags:
+        return None
+    h_alt_fsa = pynini.union(*[pynini.accep(t, token_type=syms) for t in h_alt_tags if syms.member(t)]).optimize()
+
+    # Post-root boundary tags: all [AspectClass=...] tags
+    asp_tags = [s for s in all_syms if s.startswith("[AspectClass=")]
+    if not asp_tags:
+        return None
+    asp_fsa = pynini.union(*[pynini.accep(t, token_type=syms) for t in asp_tags if syms.member(t)]).optimize()
+
+    root_fsas = []
+    for r in key:
+        clean_r = get_just_root(r) if "[" in r else r
+        if clean_r and all(syms.member(c) for c in clean_r):
+            chars = [pynini.accep(c, token_type=syms) for c in clean_r]
+            root_fsas.append(functools.reduce(pynini.concat, chars))
+
+    if not root_fsas:
+        return None
+
+    root_fsa = pynini.union(*root_fsas).optimize()
+
+    exact_root_filter = pynini.concat(
+        sigma_star,
+        pynini.concat(
+            h_alt_fsa,
+            pynini.concat(root_fsa, pynini.concat(asp_fsa, sigma_star))
+        )
+    ).optimize()
+
+    _ROOT_FILTER_CACHE[key] = exact_root_filter
+    return exact_root_filter
+
+
 def parse_surface(
     surface: str,
     parse_graph: pynini.Fst | None = None,
     form: Any | None = None,
     is_stative: bool = False,
+    allowed_roots: Iterable[str] | None = None,
 ) -> list[str]:
     """
     Parses a bare surface form by executing pynini.compose(linear_surface_fsa, parse_graph).
     When form is provided, uses the specialized, domain-restricted FST for that form
     and entry type category (Eventful vs. Stative).
-    Memoized by (surface, id(graph)).
+    When allowed_roots is provided, constrains the parse graph output to only accept
+    those roots.
+    Memoized by (surface, id(graph), frozenset(allowed_roots) if allowed_roots else None).
     """
     if not surface:
         return []
@@ -402,7 +466,8 @@ def parse_surface(
     else:
         graph = get_parse_graph()
 
-    cache_key = (surface, id(graph))
+    roots_key = frozenset(allowed_roots) if allowed_roots else None
+    cache_key = (surface, id(graph), roots_key)
     if cache_key in _SURFACE_PARSE_CACHE:
         return _SURFACE_PARSE_CACHE[cache_key]
 
@@ -413,6 +478,10 @@ def parse_surface(
         _SURFACE_FSA_CACHE[surface] = surface_fsa
 
     output_lattice = pynini.compose(surface_fsa, graph).optimize()
+    if roots_key and is_inplace_grammar():
+        root_filter = build_root_filter_fsa(roots_key)
+        if root_filter is not None:
+            output_lattice = pynini.compose(output_lattice, root_filter).optimize()
     output_lattice = pynini.project(output_lattice, project_type="output")
     output_lattice = pynini.rmepsilon(output_lattice).optimize()
     if output_lattice.properties(pynini.CYCLIC, True) == pynini.CYCLIC:
