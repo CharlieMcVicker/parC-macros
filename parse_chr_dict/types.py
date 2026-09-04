@@ -149,8 +149,6 @@ class VerbTemplate:
             d["translocutive"] = "+"
         if self.distributive:
             d["distributive"] = "+"
-        if self.h_alt_tag:
-            d["h_alt_tag"] = self.h_alt_tag
         return d
 
 
@@ -362,7 +360,7 @@ class LexicalVerb:
     def to_dict(self) -> dict[str, Any]:
         return {
             "h_root": self.h_root,
-            "glottal_root": self.glottal_root if self.glottal_root is not None else "",
+            "h_alt_tag": self.h_alt_tag or "[H_alt=none]",
             "prefix_class": self.prefix_class,
             "aspect_class": self.aspect_class,
             "tense_present_class": self.tense_present_class,
@@ -381,7 +379,7 @@ class LexicalVerb:
         ]}
         d["entry_type"] = entry_type or self.metadata.entry_type
         d["h_root"] = self.h_root
-        d["glottal_root"] = self.glottal_root or ""
+        d["h_alt_tag"] = self.h_alt_tag or "[H_alt=none]"
         d["aspect_class"] = self.template.aspect_class
         d["prefix_class"] = self.template.prefix_class
         d["tense_present_class"] = self.template.tense_present_class
@@ -394,10 +392,10 @@ class LexicalVerb:
     def lexical_labels(self) -> dict[str, str]:
         return self.template.lexical_labels()
 
-    def lexical_tuple(self) -> tuple[str, Optional[str], tuple[tuple[str, str], ...]]:
+    def lexical_tuple(self) -> tuple[str, str, tuple[tuple[str, str], ...]]:
         return (
             self.h_root,
-            self.glottal_root,
+            self.h_alt_tag or "[H_alt=none]",
             (
                 ("aspect_class", self.aspect_class),
                 ("prefix_class", self.prefix_class),

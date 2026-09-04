@@ -31,7 +31,6 @@ from parse_chr_dict.h_alternation import (
     is_h_alternation_trigger,
     validate_h_alternation_trigger,
     strip_h_alt_tags,
-    determine_h_alt_glottal_root,
 )
 
 
@@ -681,11 +680,17 @@ def parse_string_to_parse_data(p: str) -> ParseData:
     form, labels = read_labels(p)
     var_raw = labels.get("variant", 1)
     var = int(var_raw) if str(var_raw).isdigit() else 1
+    h_alt_tag = labels.get("h_alt_tag", "")
+    if not h_alt_tag:
+        for tag in ("[H_alt=drop]", "[H_alt=glot]", "[H_alt=lat]", "[H_alt=vowel]", "[H_alt=none]", "[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_VOWEL]", "[H_NONE]"):
+            if tag in form:
+                h_alt_tag = tag
+                break
     return ParseData(
         root=form,
         prefix_class=labels.get("prefix_class", ""),
         pronominal=labels.get("pronominal", ""),
-        h_alt_tag=labels.get("h_alt_tag", ""),
+        h_alt_tag=h_alt_tag,
         aspect_class=labels.get("aspect_class", ""),
         variant=var,
         aspect=labels.get("aspect", ""),
@@ -781,8 +786,7 @@ def derive_hypotheses_for_forms(
         else:
             animate_options = [False]
 
-        glottal_root_val = p_data.root if is_glottal else None
-        h_alt_val = p_data.h_alt_tag
+        h_alt_val = p_data.h_alt_tag or "[H_alt=none]"
         aspect_variants = AspectVariants(present=pres_var)
 
         for sa in set_a_options:
@@ -799,7 +803,6 @@ def derive_hypotheses_for_forms(
                         LexicalVerb(
                             template=tmpl,
                             metadata=meta,
-                            glottal_root=glottal_root_val,
                             h_alt_tag=h_alt_val,
                         )
                     )
@@ -904,26 +907,18 @@ def derive_hypotheses_for_forms(
                         if p_trans:
                             continue
 
-                # Root compatibility check
+                # Root compatibility check: all forms must match hyp.h_root
+                if strip_h_alt_tags(p_data.root) != hyp.h_root:
+                    continue
+
                 if p_is_glottal:
-                    compatible_glottal = determine_h_alt_glottal_root(hyp.h_root, p_data.root)
-                    if compatible_glottal is None:
-                        continue
-                    if compatible_glottal != hyp.h_root:
-                        if hyp.glottal_root is not None and hyp.glottal_root != compatible_glottal:
+                    p_alt = p_data.h_alt_tag or "[H_alt=none]"
+                    if hyp.h_alt_tag and hyp.h_alt_tag != "[H_alt=none]" and p_alt != "[H_alt=none]":
+                        if hyp.h_alt_tag != p_alt:
                             continue
-                        new_glottal = compatible_glottal
-                        new_h_alt_tag = p_data.h_alt_tag or hyp.h_alt_tag
-                    else:
-                        if hyp.glottal_root is not None and hyp.glottal_root != hyp.h_root:
-                            continue
-                        new_glottal = hyp.h_root
-                        new_h_alt_tag = p_data.h_alt_tag or hyp.h_alt_tag
+                    new_h_alt_tag = p_alt if p_alt != "[H_alt=none]" else (hyp.h_alt_tag or "[H_alt=none]")
                 else:
-                    if strip_h_alt_tags(p_data.root) != hyp.h_root:
-                        continue
-                    new_glottal = hyp.glottal_root
-                    new_h_alt_tag = hyp.h_alt_tag
+                    new_h_alt_tag = hyp.h_alt_tag or "[H_alt=none]"
 
                 # Fold non-shared form variant into metadata.aspect_variants
                 aspect_name = p_data.aspect or form_spec.corpus_key
@@ -947,22 +942,21 @@ def derive_hypotheses_for_forms(
                     variant=hyp.template.variant,
                     distributive=hyp.template.distributive,
                     translocutive=hyp.template.translocutive,
-                    h_alt_tag=hyp.template.h_alt_tag,
+                    h_alt_tag=new_h_alt_tag,
                 )
 
                 surviving.add(
                     LexicalVerb(
                         template=new_template,
                         metadata=new_metadata,
-                        glottal_root=new_glottal,
                         h_alt_tag=new_h_alt_tag,
                     )
                 )
 
         # If any hypotheses underwent actual H-mutation on a trigger form, reject unmutated fallbacks for the same root
-        mutated_h_roots = {h.h_root for h in surviving if h.glottal_root is not None and h.glottal_root != h.h_root}
+        mutated_h_roots = {h.h_root for h in surviving if h.h_alt_tag and h.h_alt_tag != "[H_alt=none]"}
         if mutated_h_roots:
-            surviving = {h for h in surviving if not (h.h_root in mutated_h_roots and h.glottal_root == h.h_root)}
+            surviving = {h for h in surviving if not (h.h_root in mutated_h_roots and (not h.h_alt_tag or h.h_alt_tag == "[H_alt=none]"))}
 
         candidate_hypotheses = surviving
 

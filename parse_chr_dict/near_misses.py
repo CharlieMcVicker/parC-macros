@@ -32,11 +32,11 @@ def validate_form_subset(
     for surf, parsing_meta in forms:
         if not meta_comb.validate(
             h_root=hypothesis.h_root,
-            glottal_root=hypothesis.glottal_root,
             reference_form=surf,
             labels=labels,
             parsing_meta=parsing_meta,
             compiler=compiler,
+            h_alt_tag=hypothesis.h_alt_tag,
         ):
             return False
     return True
@@ -57,12 +57,8 @@ def generate_for_slot(
     prefix_candidates = (pref, "k_a_stem") if pref == "a_stem" else (pref,)
     generated = set()
     for pro in pronominal_candidates:
-        if is_h_alternation_trigger(pro):
-            if hypothesis.glottal_root is None:
-                continue
-            active_root = hypothesis.glottal_root
-        else:
-            active_root = hypothesis.h_root
+        active_root = hypothesis.h_root
+        active_h_alt = hypothesis.h_alt_tag or "[H_alt=none]" if is_h_alternation_trigger(pro) else "[H_alt=none]"
 
         for p_cand in prefix_candidates:
             all_labels = {
@@ -72,6 +68,8 @@ def generate_for_slot(
                 "prefix_class": p_cand,
                 "rules": "+",
             }
+            if active_h_alt:
+                all_labels["h_alt_tag"] = active_h_alt
             surfs = memoized_inflect(
                 active_root,
                 feature_values=all_labels,
@@ -135,7 +133,7 @@ def find_near_misses(
                         valid_hypotheses,
                         key=lambda x: (
                             x.h_root,
-                            x.glottal_root or "",
+                            x.h_alt_tag or "[H_alt=none]",
                             x.aspect_class,
                             x.prefix_class,
                             x.tense_present_class,
@@ -152,7 +150,7 @@ def find_near_misses(
                             "corpus_form": row[omitted_spec.corpus_key],
                             "generated_forms": "; ".join(generated) if generated else "<none>",
                             "h_root": h.h_root,
-                            "glottal_root": h.glottal_root or "",
+                            "h_alt_tag": h.h_alt_tag or "[H_alt=none]",
                             "aspect_class": h.aspect_class,
                             "prefix_class": h.prefix_class,
                             "tense_present_class": h.tense_present_class,
@@ -177,7 +175,7 @@ def find_near_misses(
         "corpus_form",
         "generated_forms",
         "h_root",
-        "glottal_root",
+        "h_alt_tag",
         "aspect_class",
         "prefix_class",
         "tense_present_class",

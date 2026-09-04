@@ -55,7 +55,9 @@ def build_inplace_tag_str(root: str, feature_values: dict[str, str]) -> str:
         parts.append(h_alt)
     elif not any(root.startswith(t) for t in ("[H_", "[TEMP")):
         parts.append("[H_alt=none]")
-    parts.append(root)
+    import re
+    clean_root = re.sub(r"\[(Pro|Aspect|Tense)\]", "", root)
+    parts.append(clean_root)
     if asp_cls:
         parts.append(f"[AspectClass={asp_cls}]")
     if var > 1:
@@ -224,15 +226,15 @@ class MetaLabelCombination:
 
         var = variant if variant > 1 else int(labels.get("variant", 1))
 
+        from parse_chr_dict.parse import is_inplace_grammar
+        is_inplace = is_inplace_grammar()
+
         for pro in pronominal_candidates:
+            active_root = h_root
             if is_h_alternation_trigger(pro):
-                if glottal_root is None:
-                    continue
-                active_root = glottal_root
-                active_h_alt = h_alt_tag
+                active_h_alt = h_alt_tag or "[H_alt=none]"
             else:
-                active_root = h_root
-                active_h_alt = ""
+                active_h_alt = "[H_alt=none]"
 
             for p_cand in prefix_candidates:
                 all_labels = {
@@ -241,7 +243,7 @@ class MetaLabelCombination:
                     "pronominal": pro,
                     "prefix_class": p_cand,
                 }
-                if active_h_alt:
+                if is_inplace:
                     all_labels["h_alt_tag"] = active_h_alt
                 if var > 1:
                     all_labels["variant"] = str(var)
@@ -308,7 +310,6 @@ def validate_hypothesis(
 
             if not meta_comb.validate(
                 h_root=hypothesis.h_root,
-                glottal_root=hypothesis.glottal_root,
                 reference_form=ref_surface,
                 labels=form_labels,
                 parsing_meta=parsing_meta,
@@ -337,11 +338,11 @@ def reconstruct_row(row, entry_type: EntryType, lexical_fields: list[str], compi
                 labels["rules"] = "+"
                 if not spec.validate(
                     h_root=row["h_root"],
-                    glottal_root=row.get("glottal_root") or None,
                     reference_form=reference_form,
                     labels=labels,
                     parsing_meta=parsing_meta,
                     compiler=compiler,
+                    h_alt_tag=row.get("h_alt_tag") or "",
                 ):
 
                     valid = False

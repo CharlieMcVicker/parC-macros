@@ -169,13 +169,12 @@ def test_lexical_verb_product_and_serialization():
     verb = LexicalVerb(
         template=tmpl,
         metadata=meta,
-        glottal_root="ali",
-        h_alt_tag="[H_NONE]",
+        h_alt_tag="[H_alt=none]",
     )
 
     # Properties
     assert verb.h_root == "ali"
-    assert verb.glottal_root == "ali"
+    assert verb.h_alt_tag == "[H_alt=none]"
     assert verb.prefix_class == "a_stem"
     assert verb.aspect_class == "become"
     assert verb.tense_present_class == "a_present"
@@ -186,7 +185,7 @@ def test_lexical_verb_product_and_serialization():
 
     # Immutability
     with pytest.raises(FrozenInstanceError):
-        verb.glottal_root = "other"
+        verb.h_alt_tag = "other"
 
     # Serialization to roots.csv schema
     base_row = {
@@ -204,7 +203,7 @@ def test_lexical_verb_product_and_serialization():
     expected_keys = [
         "corpus_id", "entry_no", "definition", "present", "present_1sg",
         "imperfective", "perfective", "imperative", "infinitive",
-        "entry_type", "h_root", "glottal_root", "aspect_class", "prefix_class",
+        "entry_type", "h_root", "h_alt_tag", "aspect_class", "prefix_class",
         "tense_present_class", "set_a", "plural", "animate_objects",
         "variant_present", "variant_incompletive", "variant_completive",
         "variant_immediate", "variant_infinitive",
@@ -212,6 +211,7 @@ def test_lexical_verb_product_and_serialization():
     assert list(row_dict.keys()) == expected_keys
     assert row_dict["variant_infinitive"] == 2
     assert row_dict["h_root"] == "ali"
+    assert row_dict["h_alt_tag"] == "[H_alt=none]"
     assert row_dict["entry_type"] == "Eventful"
 
 

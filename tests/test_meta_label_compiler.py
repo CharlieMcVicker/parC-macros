@@ -269,7 +269,7 @@ def test_derivation_hypothesis_dataclass_and_aliases():
 
     hyp = DerivationHypothesis(
         h_root="[Pro]atat[Aspect][Tense]",
-        glottal_root=None,
+        h_alt_tag="[H_alt=none]",
         prefix_class="a_stem",
         aspect_class="go-in",
         tense_present_class="a_present",
@@ -278,7 +278,7 @@ def test_derivation_hypothesis_dataclass_and_aliases():
         animate_objects=False,
     )
     assert hyp.h_root == "[Pro]atat[Aspect][Tense]"
-    assert hyp.glottal_root is None
+    assert hyp.h_alt_tag == "[H_alt=none]"
     assert hyp.prefix_class == "a_stem"
     assert hyp.aspect_class == "go-in"
     assert hyp.tense_present_class == "a_present"
@@ -289,7 +289,7 @@ def test_derivation_hypothesis_dataclass_and_aliases():
 
     d = hyp.to_dict()
     assert d["h_root"] == "[Pro]atat[Aspect][Tense]"
-    assert d["glottal_root"] == ""
+    assert d["h_alt_tag"] == "[H_alt=none]"
     assert d["prefix_class"] == "a_stem"
 
     assert d["aspect_class"] == "go-in"
@@ -307,7 +307,7 @@ def test_derivation_hypothesis_dataclass_and_aliases():
 
     lex_tup = hyp.lexical_tuple()
     assert lex_tup[0] == "[Pro]atat[Aspect][Tense]"
-    assert lex_tup[1] is None
+    assert lex_tup[1] == "[H_alt=none]"
     assert ("aspect_class", "go-in") in lex_tup[2]
     assert ("prefix_class", "a_stem") in lex_tup[2]
     assert ("tense_present_class", "a_present") in lex_tup[2]
@@ -334,7 +334,7 @@ def test_derive_hypotheses_for_forms_direct():
     assert isinstance(hyps, set)
     assert len(hyps) > 0
     assert all(isinstance(h, DerivationHypothesis) for h in hyps)
-    assert any(h.h_root == "[Pro]atat[Aspect][Tense]" and h.glottal_root == "[Pro]atat[Aspect][Tense]" and h.aspect_class == "go-in" for h in hyps)
+    assert any(h.h_root == "[Pro]atat[Aspect][Tense]" and h.aspect_class == "go-in" for h in hyps)
 
 
 def test_validate_hypothesis_and_row_reconstruction():
@@ -355,7 +355,6 @@ def test_validate_hypothesis_and_row_reconstruction():
     }
     valid_hyp = DerivationHypothesis(
         h_root="[Pro]atat[Aspect][Tense]",
-        glottal_root="[Pro]atat[Aspect][Tense]",
         prefix_class="a_stem",
         aspect_class="go-in",
         tense_present_class="a_present",
@@ -369,7 +368,6 @@ def test_validate_hypothesis_and_row_reconstruction():
     # Invalid hypothesis (unknown aspect_class) should fail validation safely
     invalid_hyp = DerivationHypothesis(
         h_root="[Pro]atat[Aspect][Tense]",
-        glottal_root="[Pro]atat[Aspect][Tense]",
         prefix_class="a_stem",
         aspect_class="wrong_aspect",
         tense_present_class="a_present",
@@ -382,7 +380,6 @@ def test_validate_hypothesis_and_row_reconstruction():
     # Mismatched valid aspect_class should fail validation
     mismatched_hyp = DerivationHypothesis(
         h_root="[Pro]atat[Aspect][Tense]",
-        glottal_root="[Pro]atat[Aspect][Tense]",
         prefix_class="a_stem",
         aspect_class="become",
         tense_present_class="a_present",
@@ -506,7 +503,7 @@ def test_h_alternation_verb_derivation():
     ]
     hyps = derive_hypotheses_for_forms(forms, compiler)
     assert len(hyps) > 0
-    assert any(h.h_root == "[Pro]atat[Aspect][Tense]" and h.glottal_root is not None for h in hyps)
+    assert any(h.h_root == "[Pro]atat[Aspect][Tense]" for h in hyps)
 
 
 def test_h_alternation_trigger_external_validation():
@@ -536,7 +533,7 @@ def test_h_alternation_trigger_external_validation():
     }
     hyp = DerivationHypothesis(
         h_root="[Pro]atat[Aspect][Tense]",
-        glottal_root="[Pro]atat[Aspect][Tense]",
+        h_alt_tag="[H_alt=none]",
         prefix_class="a_stem",
         aspect_class="go-in",
         tense_present_class="a_present",
@@ -550,7 +547,7 @@ def test_h_alternation_trigger_external_validation():
     row_with_roots = {
         **row,
         "h_root": "[Pro]atat[Aspect][Tense]",
-        "glottal_root": "[Pro]atat[Aspect][Tense]",
+        "h_alt_tag": "[H_alt=none]",
         "prefix_class": "a_stem",
         "aspect_class": "go-in",
         "tense_present_class": "a_present",
@@ -610,10 +607,9 @@ def test_strict_h_alternation_trigger_rejection():
     ]
     hyps_mut = derive_hypotheses_for_forms(forms_mutating, compiler)
     assert len(hyps_mut) > 0
-    # Every surviving hypothesis for the alternating root [Pro]atanhoy... must have an active glottal_root mutation
+    # Every surviving hypothesis for the alternating root [Pro]atanhoy... must have an active h_alt_tag mutation
     for h in hyps_mut:
-        assert h.glottal_root != h.h_root
-        assert any(tag in h.glottal_root for tag in ("[H_alt=drop]", "[H_alt=glot]", "[H_alt=lat]", "[H_DROP]", "[H_GLOT]", "[H_LAT]"))
+        assert h.h_alt_tag in ("[H_alt=drop]", "[H_alt=glot]", "[H_alt=lat]", "[H_DROP]", "[H_GLOT]", "[H_LAT]")
 
     # atateka (3sg) + katateka (1sg trigger without H-mutation)
     forms_non_mutating = [
@@ -623,7 +619,7 @@ def test_strict_h_alternation_trigger_rejection():
     hyps_non_mut = derive_hypotheses_for_forms(forms_non_mutating, compiler)
     assert len(hyps_non_mut) > 0
     for h in hyps_non_mut:
-        assert h.glottal_root == h.h_root
+        assert h.h_alt_tag in ("[H_alt=none]", "[H_NONE]", "")
 
 
 def test_h_vowel_row_39_43_thinking_derivation():
@@ -638,10 +634,10 @@ def test_h_vowel_row_39_43_thinking_derivation():
     ]
     hyps = derive_hypotheses_for_forms(forms, compiler)
     assert len(hyps) > 0
-    h_vowel_hyps = [h for h in hyps if "[H_VOWEL]" in (h.glottal_root or "")]
+    h_vowel_hyps = [h for h in hyps if h.h_alt_tag in ("[H_VOWEL]", "[H_alt=vowel]")]
     assert len(h_vowel_hyps) > 0, "Expected at least one hypothesis with [H_VOWEL]"
     for h in h_vowel_hyps:
-        assert "[H_VOWEL]" in h.glottal_root
+        assert h.h_alt_tag in ("[H_VOWEL]", "[H_alt=vowel]")
         assert "atanh" in h.h_root
 
 

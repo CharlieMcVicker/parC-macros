@@ -69,10 +69,10 @@ def write_roots(row, entry_type, roots, writer, compiler=None):
         data["entry_type"] = entry_type.name
         if isinstance(entry, tuple):
             data["h_root"] = entry[0]
-            data["glottal_root"] = entry[1] or ""
+            data["h_alt_tag"] = entry[1] or "[H_alt=none]"
         else:
             data["h_root"] = entry
-            data["glottal_root"] = ""
+            data["h_alt_tag"] = "[H_alt=none]"
 
         for k, v in label_values:
             data[k] = v
@@ -123,7 +123,7 @@ ROOTS_FIELDNAMES = [
     "infinitive",
     "entry_type",
     "h_root",
-    "glottal_root",
+    "h_alt_tag",
     "aspect_class",
     "prefix_class",
     "tense_present_class",
@@ -203,7 +203,7 @@ def main():
                         valid_hypotheses,
                         key=lambda x: (
                             x.h_root,
-                            x.glottal_root or "",
+                            x.h_alt_tag or "[H_alt=none]",
                             x.aspect_class,
                             x.prefix_class,
                             x.tense_present_class,
