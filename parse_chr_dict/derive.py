@@ -47,15 +47,13 @@ def derive_hypotheses_for_forms(
     forms: List[Tuple[str, VerbForm | Any]],
     compiler: Optional[Any] = None,
     lexical_features: Optional[Set[str]] = None,
+    entry_type: Optional[Any] = None,
 ) -> Set[LexicalVerb]:
     """
     Derives and iteratively narrows candidate LexicalVerb objects form-by-form across a row
-    via pure surface parsing:
-    1. Parse the initial form bare surface to generate candidate hypotheses
-       as LexicalVerb instances (VerbTemplate x VerbMetadata).
-    2. For each subsequent form, parse its bare surface, filter via VerbForm.matches,
-       and prune hypotheses in pure Python (prefix compatibility, present-tense variant
-       consistency, plurality, animacy, root equality, and H-alternation).
+    via pure surface parsing using specialized FSTs:
+    1. Parse the initial form surface to generate candidate hypotheses.
+    2. For each subsequent form, parse its surface and prune hypotheses.
     """
     if not forms:
         return set()
@@ -87,12 +85,37 @@ def derive_hypotheses_for_forms(
             raise TypeError(f"Unsupported form specification: {type(spec_or_form)}")
         normalized_forms.append((surface, v_form))
 
+    if entry_type is not None:
+        name = getattr(entry_type, "name", str(entry_type))
+        is_stative = name.startswith("Stative")
+        return _derive_stative(normalized_forms) if is_stative else _derive_eventful(normalized_forms)
+
+    if any(f.name == "2nd_future_prog" for _, f in normalized_forms):
+        return _derive_stative(normalized_forms)
+
+    eventful_hyps = _derive_eventful(normalized_forms)
+    stative_hyps = _derive_stative(normalized_forms)
+    return eventful_hyps | stative_hyps
+
+
+def _derive_eventful(normalized_forms: List[Tuple[str, VerbForm]]) -> Set[LexicalVerb]:
+    return _derive_category(normalized_forms, is_stative=False)
+
+
+def _derive_stative(normalized_forms: List[Tuple[str, VerbForm]]) -> Set[LexicalVerb]:
+    return _derive_category(normalized_forms, is_stative=True)
+
+
+def _derive_category(
+    normalized_forms: List[Tuple[str, VerbForm]],
+    is_stative: bool,
+) -> Set[LexicalVerb]:
     # Step 1: Initial form
     init_surface, init_form = normalized_forms[0]
     if not init_surface:
         return set()
 
-    init_parses = parse_surface(init_surface)
+    init_parses = parse_surface(init_surface, form=init_form, is_stative=is_stative)
     if not init_parses:
         return set()
 
@@ -152,7 +175,7 @@ def derive_hypotheses_for_forms(
             for pl in plural_options:
                 for anim in animate_options:
                     meta = VerbMetadata(
-                        entry_type="Eventful",
+                        entry_type="Stative" if is_stative else "Eventful",
                         is_set_a=sa,
                         is_plural=pl,
                         animate_objects=anim,
@@ -179,9 +202,12 @@ def derive_hypotheses_for_forms(
         if not candidate_hypotheses:
             break
 
-        parses = parse_surface(surface)
+        parses = parse_surface(surface, form=form, is_stative=is_stative)
         if not parses:
             return set()
+
+        # Extract allowed aspect classes from current candidate hypotheses
+        allowed_asp_classes = {h.aspect_class for h in candidate_hypotheses}
 
         # Group parses by (p_asp, p_t_pres)
         parsed_by_asp_tense: Dict[
@@ -189,6 +215,11 @@ def derive_hypotheses_for_forms(
             List[Tuple[ParseData, VerbTemplate, str, bool, bool, bool, bool, int]],
         ] = {}
         for p in parses:
+            if "[AspectClass=" in p:
+                asp_tok = p.split("[AspectClass=")[1].split("]")[0]
+                if asp_tok not in allowed_asp_classes:
+                    continue
+
             p_data = parse_string_to_parse_data(p)
             if not form.matches(p_data):
                 continue

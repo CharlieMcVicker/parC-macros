@@ -77,7 +77,9 @@ def find_near_misses(
                 omitted_surface, omitted_spec = entry_forms[idx]
                 subset_forms = [f for j, f in enumerate(entry_forms) if j != idx]
 
-                derived_hypotheses = derive_hypotheses_for_forms(subset_forms)
+                derived_hypotheses = derive_hypotheses_for_forms(
+                    subset_forms, entry_type=entry_type
+                )
                 if not derived_hypotheses:
                     continue
 

@@ -1,7 +1,7 @@
 import os
 import re
 from pathlib import Path
-from typing import Iterable
+from typing import Any, Iterable
 
 # Ensure YAML_DIR defaults to chr-inplace-generated
 if "YAML_DIR" not in os.environ:
@@ -146,35 +146,50 @@ INPLACE_SLOT_TAG_MAP: dict[str, str] = {
 _READ_LABELS_CACHE: dict[str, tuple[str, dict[str, str]]] = {}
 
 
+_READ_INPLACE_PARSE_CACHE: dict[str, ParseData] = {}
+
+
 def read_inplace_parse(s: str) -> ParseData:
     """
     Parses an in-place morpheme parse string into a ParseData (InPlaceParseConfig) object.
     Uses bracket-depth tracking to safely handle nested brackets (e.g. [AspectClass=become[inf2]]).
     Slot tags ([PrefixClass=...], [Pro=...], [AspectClass=...], etc.) and PPP tags ([WI], [DIST])
     are extracted as metadata; any internal root mutation tags (like [H_NONE]) remain in the root.
+    Memoized directly via _READ_INPLACE_PARSE_CACHE.
     """
-    if s.startswith("[BOW]"):
-        s = s[5:]
-    eow_idx = s.find("[EOW]")
+    cached = _READ_INPLACE_PARSE_CACHE.get(s)
+    if cached is not None:
+        return cached
+
+    clean_s = s
+    if clean_s.startswith("[BOW]"):
+        clean_s = clean_s[5:]
+    eow_idx = clean_s.find("[EOW]")
     if eow_idx != -1:
-        s = s[:eow_idx]
+        clean_s = clean_s[:eow_idx]
 
     tokens: list[str] = []
-    root_chars: list[str] = []
+    root_parts: list[str] = []
     i = 0
-    n = len(s)
+    n = len(clean_s)
+    root_start = -1
+
     while i < n:
-        if s[i] == "[":
+        if clean_s[i] == "[":
+            if root_start != -1:
+                root_parts.append(clean_s[root_start:i])
+                root_start = -1
             depth = 1
             start = i
             i += 1
             while i < n and depth > 0:
-                if s[i] == "[":
+                ch = clean_s[i]
+                if ch == "[":
                     depth += 1
-                elif s[i] == "]":
+                elif ch == "]":
                     depth -= 1
                 i += 1
-            tok = s[start:i]
+            tok = clean_s[start:i]
             inner = tok[1:-1]
             eq_idx = inner.find("=")
             if eq_idx != -1 and inner[:eq_idx] in INPLACE_SLOT_TAG_MAP:
@@ -184,10 +199,14 @@ def read_inplace_parse(s: str) -> ParseData:
             else:
                 # Internal root tag (e.g. [H_NONE], [H_GLOT], [H_DROP]) or phonological tag
                 tokens.append(tok)
-                root_chars.append(tok)
+                root_parts.append(tok)
         else:
-            root_chars.append(s[i])
+            if root_start == -1:
+                root_start = i
             i += 1
+
+    if root_start != -1:
+        root_parts.append(clean_s[root_start:n])
 
     prefix_class = ""
     pronominal = ""
@@ -229,8 +248,8 @@ def read_inplace_parse(s: str) -> ParseData:
             elif tok.startswith("[H_") or tok.startswith("[H_alt=") or tok.startswith("[TEMP"):
                 h_alt_tag = tok
 
-    return ParseData(
-        root="".join(root_chars),
+    res = ParseData(
+        root="".join(root_parts),
         prefix_class=prefix_class,
         pronominal=pronominal,
         h_alt_tag=h_alt_tag,
@@ -242,6 +261,8 @@ def read_inplace_parse(s: str) -> ParseData:
         prepronominal_prefixes=tuple(prepronominal_prefixes),
         raw_tokens=tuple(tokens),
     )
+    _READ_INPLACE_PARSE_CACHE[s] = res
+    return res
 
 
 def read_labels(s: str):
@@ -283,21 +304,104 @@ def read_labels(s: str):
 _SURFACE_PARSE_CACHE: dict[tuple[str, int], list[str]] = {}
 _SURFACE_FSA_CACHE: dict[str, pynini.Fst] = {}
 _PARSE_DATA_CACHE: dict[str, ParseData] = {}
+_SPECIALIZED_PARSE_GRAPHS: dict[tuple[bool, str], pynini.Fst] = {}
+
+
+def get_specialized_parse_graph(form: Any, is_stative: bool = False) -> pynini.Fst:
+    """
+    Returns an optimized FST specialized for a specific VerbForm and entry type category
+    (Eventful vs. Stative), restricting the output domain to only licensed aspect class,
+    aspect, tense, and pronominal tags.
+    """
+    form_name = getattr(form, "name", str(form))
+    key = (is_stative, form_name)
+    if key in _SPECIALIZED_PARSE_GRAPHS:
+        return _SPECIALIZED_PARSE_GRAPHS[key]
+
+    base_graph = get_parse_graph()
+    if not is_inplace_grammar():
+        _SPECIALIZED_PARSE_GRAPHS[key] = base_graph
+        return base_graph
+
+    syms = base_graph.output_symbols()
+    all_syms = [syms.find(i) for i in range(1, syms.num_symbols())]
+    sigma = pynini.union(*[pynini.accep(s, token_type=syms) for s in all_syms]).optimize()
+    sigma_star = sigma.star.optimize()
+
+    # 1. Aspect Class filter (stative vs eventful)
+    aspect_classes = [s for s in all_syms if s.startswith("[AspectClass=")]
+    if is_stative:
+        target_asp_classes = [c for c in aspect_classes if c.startswith("[AspectClass=stative")]
+    else:
+        target_asp_classes = [c for c in aspect_classes if not c.startswith("[AspectClass=stative")]
+
+    if target_asp_classes:
+        asp_cls_fsa = pynini.union(*[pynini.accep(c, token_type=syms) for c in target_asp_classes]).optimize()
+        f_asp_cls = pynini.concat(sigma_star, pynini.concat(asp_cls_fsa, sigma_star)).optimize()
+    else:
+        f_asp_cls = sigma_star
+
+    # 2. Pronominal filter
+    from parse_chr_dict.types import filter_pronominals
+    person = getattr(form, "person", None)
+    allows_set_a = getattr(form, "allows_set_a", True)
+    p_set = "B" if not allows_set_a else None
+    pro_tags = [f"[Pro={t}]" for t in filter_pronominals(person=person, pronoun_set=p_set)]
+    valid_pros = [t for t in pro_tags if syms.member(t)]
+    if valid_pros:
+        pro_fsa = pynini.union(*[pynini.accep(t, token_type=syms) for t in valid_pros]).optimize()
+        f_pro = pynini.concat(sigma_star, pynini.concat(pro_fsa, sigma_star)).optimize()
+    else:
+        f_pro = sigma_star
+
+    # 3. Aspect tag filter
+    aspect = getattr(form, "aspect", "")
+    asp_tag = f"[Aspect={aspect}]"
+    if aspect and syms.member(asp_tag):
+        f_asp = pynini.concat(sigma_star, pynini.concat(pynini.accep(asp_tag, token_type=syms), sigma_star)).optimize()
+    else:
+        f_asp = sigma_star
+
+    # 4. Tense tag filter
+    tense = getattr(form, "tense", "")
+    tense_tag = f"[Tense={tense}]"
+    if tense and syms.member(tense_tag):
+        f_tense = pynini.concat(sigma_star, pynini.concat(pynini.accep(tense_tag, token_type=syms), sigma_star)).optimize()
+    else:
+        f_tense = sigma_star
+
+    filter_fsa = pynini.intersect(
+        pynini.intersect(f_asp_cls, f_pro),
+        pynini.intersect(f_asp, f_tense),
+    ).optimize()
+
+    specialized_graph = pynini.compose(base_graph, filter_fsa).optimize()
+    _SPECIALIZED_PARSE_GRAPHS[key] = specialized_graph
+    return specialized_graph
 
 
 def parse_surface(
     surface: str,
     parse_graph: pynini.Fst | None = None,
+    form: Any | None = None,
+    is_stative: bool = False,
 ) -> list[str]:
     """
-    Parses a bare surface form without input tag acceptors by executing
-    pynini.compose(linear_surface_fsa, parse_graph).
-    Memoized by (surface, id(parse_graph)).
+    Parses a bare surface form by executing pynini.compose(linear_surface_fsa, parse_graph).
+    When form is provided, uses the specialized, domain-restricted FST for that form
+    and entry type category (Eventful vs. Stative).
+    Memoized by (surface, id(graph)).
     """
     if not surface:
         return []
 
-    graph = parse_graph if parse_graph is not None else get_parse_graph()
+    if form is not None and parse_graph is None:
+        graph = get_specialized_parse_graph(form, is_stative=is_stative)
+    elif parse_graph is not None:
+        graph = parse_graph
+    else:
+        graph = get_parse_graph()
+
     cache_key = (surface, id(graph))
     if cache_key in _SURFACE_PARSE_CACHE:
         return _SURFACE_PARSE_CACHE[cache_key]

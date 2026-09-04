@@ -89,7 +89,9 @@ def main():
                 if not entry_forms:
                     continue
 
-                derived_hypotheses = derive_hypotheses_for_forms(entry_forms)
+                derived_hypotheses = derive_hypotheses_for_forms(
+                    entry_forms, entry_type=entry_type
+                )
                 if not derived_hypotheses:
                     continue
 
