@@ -52,14 +52,19 @@ def is_inplace_grammar() -> bool:
 
 
 def get_parse_graph():
+    global PARSE_GRAPH
+    if PARSE_GRAPH is not None:
+        return PARSE_GRAPH
     raw_parse = get_open_parse_graph(
         "verb", infer_lexical_features=True, non_deterministic_cleanup=True
     )
     if is_inplace_grammar():
         syms = raw_parse.output_symbols()
         domain_acceptor = get_cascade_domain_acceptor(syms=syms)
-        return pynini.compose(raw_parse, domain_acceptor).optimize()
-    return raw_parse
+        PARSE_GRAPH = pynini.compose(raw_parse, domain_acceptor).optimize()
+    else:
+        PARSE_GRAPH = raw_parse
+    return PARSE_GRAPH
 
 
 def parse(surface: str, labels: list[tuple[str, str]] = None) -> list[str]:
@@ -273,6 +278,91 @@ def read_labels(s: str):
 
     _READ_LABELS_CACHE[s] = (form, labels_dict)
     return form, dict(labels_dict)
+
+
+_SURFACE_PARSE_CACHE: dict[tuple[str, int], list[str]] = {}
+_SURFACE_FSA_CACHE: dict[str, pynini.Fst] = {}
+_PARSE_DATA_CACHE: dict[str, ParseData] = {}
+
+
+def parse_surface(
+    surface: str,
+    parse_graph: pynini.Fst | None = None,
+) -> list[str]:
+    """
+    Parses a bare surface form without input tag acceptors by executing
+    pynini.compose(linear_surface_fsa, parse_graph).
+    Memoized by (surface, id(parse_graph)).
+    """
+    if not surface:
+        return []
+
+    graph = parse_graph if parse_graph is not None else get_parse_graph()
+    cache_key = (surface, id(graph))
+    if cache_key in _SURFACE_PARSE_CACHE:
+        return _SURFACE_PARSE_CACHE[cache_key]
+
+    if surface in _SURFACE_FSA_CACHE:
+        surface_fsa = _SURFACE_FSA_CACHE[surface]
+    else:
+        surface_fsa = word_fsa(surface)
+        _SURFACE_FSA_CACHE[surface] = surface_fsa
+
+    output_lattice = pynini.compose(surface_fsa, graph).optimize()
+    output_lattice = pynini.project(output_lattice, project_type="output")
+    output_lattice = pynini.rmepsilon(output_lattice).optimize()
+    if output_lattice.properties(pynini.CYCLIC, True) == pynini.CYCLIC:
+        output_lattice = pynini.shortestpath(output_lattice, nshortest=2000).optimize()
+
+    results = fsm_strings(output_lattice, strip_all_tags=False)
+    _SURFACE_PARSE_CACHE[cache_key] = results
+    return results
+
+
+def parse_string_to_parse_data(p: str) -> ParseData:
+    """Converts a raw parse string (in-place morphemes or legacy trailing tags) to ParseData."""
+    cached = _PARSE_DATA_CACHE.get(p)
+    if cached is not None:
+        return cached
+
+    if "[" in p and ("PrefixClass=" in p or "AspectClass=" in p or "Pro=" in p):
+        res = read_inplace_parse(p)
+        _PARSE_DATA_CACHE[p] = res
+        return res
+
+    form, labels = read_labels(p)
+    var_raw = labels.get("variant", 1)
+    var = int(var_raw) if str(var_raw).isdigit() else 1
+    h_alt_tag = labels.get("h_alt_tag", "")
+    if not h_alt_tag:
+        for tag in (
+            "[H_alt=drop]",
+            "[H_alt=glot]",
+            "[H_alt=lat]",
+            "[H_alt=vowel]",
+            "[H_alt=none]",
+            "[H_DROP]",
+            "[H_GLOT]",
+            "[H_LAT]",
+            "[H_VOWEL]",
+            "[H_NONE]",
+        ):
+            if tag in form:
+                h_alt_tag = tag
+                break
+    res = ParseData(
+        root=form,
+        prefix_class=labels.get("prefix_class", ""),
+        pronominal=labels.get("pronominal", ""),
+        h_alt_tag=h_alt_tag,
+        aspect_class=labels.get("aspect_class", ""),
+        variant=var,
+        aspect=labels.get("aspect", ""),
+        tense_present_class=labels.get("tense_present_class", ""),
+        tense=labels.get("tense", ""),
+    )
+    _PARSE_DATA_CACHE[p] = res
+    return res
 
 
 def str_to_lexical_hashable(parse_str: str, lexical_features: set[str]):

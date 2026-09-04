@@ -1,7 +1,6 @@
 import csv
 import os
 from pathlib import Path
-from dataclasses import asdict
 from tqdm import tqdm
 
 if "YAML_DIR" not in os.environ:
@@ -16,99 +15,9 @@ if "YAML_DIR" not in os.environ:
             pass
 
 from parse_chr_dict.create_aspect_class_csv import respell_consonants
-from parse_chr_dict.meta_label_compiler import (
-    FORMS_TO_PARSE,
-    PRIMARY_ENTRY_TYPES,
-    SHIM_ENTRY_TYPES,
-    MetaConstraintCompiler,
-    derive_hypotheses_for_forms,
-    DerivationHypothesis,
-)
-from parse_chr_dict.parse import (
-    get_roots_for_parses,
-    parses_by_form,
-)
-from parse_chr_dict.reconstruct import (
-    ReconstructionSpec,
-    reconstruct_row,
-    validate_hypothesis,
-)
-
-LEXICAL_FEATURES = {
-    "aspect_class",
-    "prefix_class",
-    "tense_present_class",
-}
-
-ENTRY_TYPE_FORMS = {
-    entry_type.name: [parsing for parsing in FORMS_TO_PARSE if parsing.name in entry_type.forms]
-    for entry_type in PRIMARY_ENTRY_TYPES
-}
-
-
-def get_label(a: list[tuple[str, str]], key: str):
-    return next((v for l, v in a if l == key), None)
-
-
-def labels_match(
-    a: list[tuple[str, str]],
-    b: list[tuple[str, str]],
-    key: str,
-):
-    a_val = get_label(a, key)
-    b_val = get_label(b, key)
-    if a_val == None or b_val == None:
-        return False
-    else:
-        return a_val == b_val
-
-
-def write_roots(row, entry_type, roots, writer, compiler=None):
-    for entry, label_values in sorted(roots, key=str):
-        data = {**row}
-        data["entry_type"] = entry_type.name
-        if isinstance(entry, tuple):
-            data["h_root"] = entry[0]
-            data["h_alt_tag"] = entry[1] or "[H_alt=none]"
-        else:
-            data["h_root"] = entry
-            data["h_alt_tag"] = "[H_alt=none]"
-
-        for k, v in label_values:
-            data[k] = v
-
-        specs = reconstruct_row(data, entry_type, LEXICAL_FEATURES, compiler=compiler)
-        for spec in specs:
-            row_data = {**data, **asdict(spec)}
-            writer.writerow(row_data)
-
-
-def write_shims(row, roots, form_parses, roots_writer):
-    roots_without_aspect = [
-        (r, [(k, v) for k, v in labels if not k == "aspect_class"])
-        for r, labels in roots
-    ]
-    for shim_type in SHIM_ENTRY_TYPES:
-        shim_roots = get_roots_for_parses(
-            [form_parses[name][1] for name in shim_type.forms if name in form_parses]
-        )
-
-        valid_shims = [
-            (shim_r, shim_labels)
-            for shim_r, shim_labels in shim_roots
-            if any(
-                shim_r == parent_r
-                and all(
-                    (
-                        labels_match(shim_labels, parent_labels, k)
-                        for k, _ in parent_labels
-                    )
-                )
-                for parent_r, parent_labels in roots_without_aspect
-            )
-        ]
-        if len(valid_shims):
-            write_roots(row, shim_type, valid_shims, roots_writer)
+from parse_chr_dict.meta_label_compiler import derive_hypotheses_for_forms
+from parse_chr_dict.reconstruct import validate_hypothesis
+from parse_chr_dict.types import PRIMARY_VERB_ENTRY_TYPES
 
 
 ROOTS_FIELDNAMES = [
@@ -151,8 +60,6 @@ def main():
         "infinitive",
     ]
 
-    compiler = MetaConstraintCompiler()
-
     with open("chr-corpus/corpus.csv") as f, open("errors.csv", "w+") as error_f, open(
         "roots.csv", "w+"
     ) as roots_f:
@@ -170,19 +77,19 @@ def main():
         for row in tqdm(rows):
             row_written = False
 
-            # Run derivation & validation per EntryTypeSpec in priority order
-            for entry_type in PRIMARY_ENTRY_TYPES:
+            # Run derivation & validation per VerbEntryType in priority order
+            for entry_type in PRIMARY_VERB_ENTRY_TYPES:
                 # Gather forms specific to this entry type
                 entry_forms = [
-                    (respell_consonants(row[parsing.corpus_key]), parsing)
-                    for parsing in ENTRY_TYPE_FORMS[entry_type.name]
-                    if row.get(parsing.corpus_key)
-                    and " " not in row[parsing.corpus_key]
+                    (respell_consonants(row[form.corpus_key]), form)
+                    for form in entry_type.forms
+                    if row.get(form.corpus_key)
+                    and " " not in row[form.corpus_key]
                 ]
                 if not entry_forms:
                     continue
 
-                derived_hypotheses = derive_hypotheses_for_forms(entry_forms, compiler)
+                derived_hypotheses = derive_hypotheses_for_forms(entry_forms)
                 if not derived_hypotheses:
                     continue
 
@@ -194,7 +101,7 @@ def main():
                 # Validate each candidate hypothesis against full row reconstruction
                 valid_hypotheses = [
                     h for h in derived_hypotheses
-                    if validate_hypothesis(h, row, entry_type, compiler=compiler)
+                    if validate_hypothesis(h, row, entry_type)
                 ]
 
                 if valid_hypotheses:

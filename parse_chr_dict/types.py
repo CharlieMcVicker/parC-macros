@@ -1,6 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Any, Optional, Set, Tuple
+import functools
+from typing import Any, List, Optional, Set, Tuple
 
 
 @dataclass(frozen=True)
@@ -104,6 +105,78 @@ class ParseData:
 
 # Backward compatibility alias
 InPlaceParseConfig = ParseData
+
+
+@dataclass(frozen=True)
+class Pronominal:
+    """Structured representation of a pronominal tag (e.g. 3sg.A, 1sg>3sg, 3ns.B)."""
+    tag: str
+    person: str        # "1st", "2nd", "3rd"
+    number: str        # "sg", "ns", "pl", "dl"
+    pronoun_set: str   # "A", "B", "transitive"
+
+    @classmethod
+    @functools.lru_cache(maxsize=256)
+    def from_tag(cls, tag: str) -> Pronominal:
+        if ">" in tag:
+            subj = tag.split(">")[0]
+            person = "1st" if subj.startswith("1") else "2nd" if subj.startswith("2") else "3rd"
+            return cls(tag=tag, person=person, number="sg", pronoun_set="transitive")
+
+        # Standard tags: 3sg.A, 1sg.B, 3ns.A, Epl.A, etc.
+        parts = tag.split(".")
+        prefix = parts[0]
+        pronoun_set = parts[1] if len(parts) > 1 else "A"
+
+        if prefix.startswith("1") or prefix.startswith("E") or prefix.startswith("I"):
+            person = "1st"
+            number = "sg" if prefix == "1sg" else "dl" if "dl" in prefix else "pl"
+        elif prefix.startswith("2"):
+            person = "2nd"
+            number = "sg" if prefix == "2sg" else "dl" if "dl" in prefix else "pl"
+        elif prefix.startswith("3"):
+            person = "3rd"
+            number = "sg" if "sg" in prefix else "dl" if "dl" in prefix else "ns" if "ns" in prefix else "pl"
+        else:
+            person, number = "3rd", "sg"
+
+        return cls(tag=tag, person=person, number=number, pronoun_set=pronoun_set)
+
+
+ALL_PRONOMINALS: list[Pronominal] = [
+    Pronominal.from_tag(t) for t in [
+        "3sg.A", "3sg.B", "1sg.A", "1sg.B", "2sg.A", "2sg.B",
+        "3ns.A", "3ns.B", "3dl.A", "3dl.B",
+        "1pl.A", "1pl.B", "1dl.A", "1dl.B",
+        "2pl.A", "2pl.B", "2dl.A", "2dl.B",
+        "Epl.A", "Epl.B", "Edl.A", "Edl.B",
+        "Ipl.A", "Ipl.B", "Idl.A", "Idl.B",
+        "1sg>3sg", "2sg>3sg",
+    ]
+]
+
+
+def filter_pronominals(
+    person: Optional[str] = None,
+    number: Optional[str] = None,
+    pronoun_set: Optional[str] = None,
+    exclude_transitive: bool = False,
+) -> list[str]:
+    """Filters PRONOMINAL tags using clean functional predicates."""
+    res = ALL_PRONOMINALS
+    if person is not None:
+        res = [p for p in res if p.person == person]
+    if number is not None:
+        res = [p for p in res if p.number == number]
+    if pronoun_set is not None:
+        if pronoun_set == "A":
+            res = [p for p in res if p.pronoun_set in ("A", "transitive")]
+        else:
+            res = [p for p in res if p.pronoun_set == pronoun_set]
+    if exclude_transitive:
+        res = [p for p in res if p.pronoun_set != "transitive"]
+    return [p.tag for p in res]
+
 
 
 @dataclass(frozen=True)
@@ -234,13 +307,195 @@ class AspectVariants:
 
 
 @dataclass(frozen=True)
+class VerbForm:
+    """Specification of a single inflectional verb form."""
+    name: str
+    corpus_key: str
+    aspect: str
+    tense: str
+    person: str
+    allows_set_a: bool
+
+    def matches(self, p: ParseData) -> bool:
+        if p.aspect != self.aspect or p.tense != self.tense:
+            return False
+        if not p.pronominal:
+            return False
+        pro = Pronominal.from_tag(p.pronominal)
+        if pro.person != self.person:
+            return False
+        if not self.allows_set_a and pro.pronoun_set == "A":
+            return False
+        return True
+
+
+# Standard VerbForm constants
+PRES_3RD = VerbForm(
+    name="3rd_present",
+    corpus_key="present",
+    aspect="present",
+    tense="present",
+    person="3rd",
+    allows_set_a=True,
+)
+PRES_1SG = VerbForm(
+    name="1st_present",
+    corpus_key="present_1sg",
+    aspect="present",
+    tense="present",
+    person="1st",
+    allows_set_a=True,
+)
+HABITUAL_3RD = VerbForm(
+    name="3rd_incompletive_habitual",
+    corpus_key="imperfective",
+    aspect="incompletive",
+    tense="habitual",
+    person="3rd",
+    allows_set_a=True,
+)
+COMPLETIVE_3RD = VerbForm(
+    name="3rd_completive_assertive",
+    corpus_key="perfective",
+    aspect="completive",
+    tense="assertive",
+    person="3rd",
+    allows_set_a=False,
+)
+INCOMPLETIVE_ASSERTIVE_3RD = VerbForm(
+    name="3rd_incompletive_assertive",
+    corpus_key="perfective",
+    aspect="incompletive",
+    tense="assertive",
+    person="3rd",
+    allows_set_a=True,
+)
+IMPERATIVE_2ND = VerbForm(
+    name="2nd_imperative",
+    corpus_key="imperative",
+    aspect="immediate",
+    tense="immediate",
+    person="2nd",
+    allows_set_a=True,
+)
+FUT_PROG_2ND = VerbForm(
+    name="2nd_future_prog",
+    corpus_key="imperative",
+    aspect="incompletive",
+    tense="future_prog",
+    person="2nd",
+    allows_set_a=True,
+)
+INFINITIVE_3RD = VerbForm(
+    name="3rd_infinitive",
+    corpus_key="infinitive",
+    aspect="infinitive",
+    tense="infinitive",
+    person="3rd",
+    allows_set_a=False,
+)
+
+ALL_VERB_FORMS = [
+    PRES_3RD,
+    PRES_1SG,
+    HABITUAL_3RD,
+    COMPLETIVE_3RD,
+    INCOMPLETIVE_ASSERTIVE_3RD,
+    IMPERATIVE_2ND,
+    FUT_PROG_2ND,
+    INFINITIVE_3RD,
+]
+VERB_FORMS_BY_NAME = {f.name: f for f in ALL_VERB_FORMS}
+
+
+@dataclass(frozen=True)
+class VerbEntryType:
+    """Entry type defining an inflectional paradigm schema (tuple of VerbForm instances)."""
+    name: str
+    forms: tuple[VerbForm, ...]
+
+    def __post_init__(self):
+        if not isinstance(self.forms, tuple):
+            object.__setattr__(self, "forms", tuple(self.forms))
+
+    def __iter__(self):
+        return iter(self.forms)
+
+    def __len__(self) -> int:
+        return len(self.forms)
+
+    def get_form(self, name: str) -> Optional[VerbForm]:
+        for f in self.forms:
+            if f.name == name:
+                return f
+        return None
+
+
+EVENTFUL = VerbEntryType(
+    "Eventful",
+    (PRES_3RD, PRES_1SG, HABITUAL_3RD, COMPLETIVE_3RD, IMPERATIVE_2ND, INFINITIVE_3RD),
+)
+STATIVE_FUT_PROG = VerbEntryType(
+    "StativeFutProg",
+    (PRES_3RD, PRES_1SG, HABITUAL_3RD, COMPLETIVE_3RD, FUT_PROG_2ND),
+)
+STATIVE_NO_IMP = VerbEntryType(
+    "StativeNoImp",
+    (PRES_3RD, PRES_1SG, HABITUAL_3RD, COMPLETIVE_3RD),
+)
+
+PRIMARY_VERB_ENTRY_TYPES = [EVENTFUL, STATIVE_FUT_PROG, STATIVE_NO_IMP]
+VERB_ENTRY_TYPES_BY_NAME = {e.name: e for e in PRIMARY_VERB_ENTRY_TYPES}
+
+
+@dataclass(frozen=True, init=False)
 class VerbMetadata:
     """Paradigm-level metadata and pooled aspect variants."""
-    entry_type: str = "Eventful"
+    entry_type: str | VerbEntryType = "Eventful"
     is_set_a: bool = True
     is_plural: bool = False
     animate_objects: bool = False
     aspect_variants: AspectVariants = field(default_factory=AspectVariants)
+
+    def __init__(
+        self,
+        entry_type: str | VerbEntryType = "Eventful",
+        is_set_a: Optional[bool] = None,
+        is_plural: Optional[bool] = None,
+        animate_objects: bool = False,
+        aspect_variants: Optional[AspectVariants] = None,
+        *,
+        set_a: Optional[bool] = None,
+        plural: Optional[bool] = None,
+    ):
+        actual_set_a = set_a if set_a is not None else (is_set_a if is_set_a is not None else True)
+        actual_plural = plural if plural is not None else (is_plural if is_plural is not None else False)
+        actual_variants = aspect_variants if aspect_variants is not None else AspectVariants()
+        object.__setattr__(self, "entry_type", entry_type)
+        object.__setattr__(self, "is_set_a", actual_set_a)
+        object.__setattr__(self, "is_plural", actual_plural)
+        object.__setattr__(self, "animate_objects", animate_objects)
+        object.__setattr__(self, "aspect_variants", actual_variants)
+
+    @property
+    def set_a(self) -> bool:
+        return self.is_set_a
+
+    @property
+    def plural(self) -> bool:
+        return self.is_plural
+
+    @classmethod
+    def all_combinations(cls, entry_type: str | VerbEntryType = "Eventful"):
+        for plural in [True, False]:
+            for set_a in [True, False]:
+                for animate_objects in [False] if plural else [True, False]:
+                    yield cls(
+                        entry_type=entry_type,
+                        is_set_a=set_a,
+                        is_plural=plural,
+                        animate_objects=animate_objects,
+                    )
 
     def with_variant(self, aspect: str, variant: int) -> VerbMetadata:
         return VerbMetadata(
@@ -252,13 +507,40 @@ class VerbMetadata:
         )
 
     def to_dict(self) -> dict[str, Any]:
+        entry_val = self.entry_type.name if isinstance(self.entry_type, VerbEntryType) else str(self.entry_type)
         return {
-            "entry_type": self.entry_type,
+            "entry_type": entry_val,
             "set_a": self.is_set_a,
             "plural": self.is_plural,
             "animate_objects": self.animate_objects,
             **self.aspect_variants.to_dict(),
         }
+
+    def get_pronominal_candidates(self, person: str, allow_set_a: bool) -> list[str]:
+        pronoun_set = "A" if self.is_set_a and allow_set_a else "B"
+        if self.animate_objects and person in ("1st", "2nd"):
+            tags = filter_pronominals(person=person, pronoun_set="transitive")
+            candidates = list(tags) if tags else [f"{person[0]}sg>3sg"]
+            if person == "2nd":
+                candidates.append(f"2sg.{pronoun_set}")
+            return candidates
+
+        if self.is_plural:
+            if person == "3rd":
+                return [f"3ns.{pronoun_set}", f"3dl.{pronoun_set}"]
+            elif person == "1st":
+                return [f"Epl.{pronoun_set}", f"Edl.{pronoun_set}", f"1pl.{pronoun_set}", f"1dl.{pronoun_set}"]
+            elif person == "2nd":
+                return [f"2pl.{pronoun_set}", f"2dl.{pronoun_set}"]
+            else:
+                return [f"{person[0]}sg.{pronoun_set}"]
+        else:
+            return [f"{person[0]}sg.{pronoun_set}"]
+
+    def get_pronominal(self, person: str, allow_set_a: bool) -> str:
+        candidates = self.get_pronominal_candidates(person, allow_set_a)
+        return candidates[0] if candidates else ("3sg.A" if self.is_set_a and allow_set_a else "3sg.B")
+
 
 
 @dataclass(frozen=True, init=False)
@@ -403,44 +685,51 @@ class LexicalVerb:
             ),
         )
 
-    def to_meta_combination(self):
-        from parse_chr_dict.reconstruct import MetaLabelCombination
-        return MetaLabelCombination(
-            set_a=self.set_a,
-            plural=self.plural,
-            animate_objects=self.animate_objects,
-        )
+    def get_pronominal_candidates(self, person: str, allow_set_a: bool) -> list[str]:
+        return self.metadata.get_pronominal_candidates(person, allow_set_a)
 
-    def get_dynamic_constraints(self, form_spec: Optional[Any] = None) -> list[Any]:
-        from parse_chr_dict.meta_label_compiler import FeatureConstraint, MatchMode
-        constraints = [
-            FeatureConstraint(slot_name="aspect_class", mode=MatchMode.EXACT, values=[self.aspect_class]),
-            FeatureConstraint(slot_name="tense_present_class", mode=MatchMode.EXACT, values=[self.tense_present_class]),
-        ]
-        if self.prefix_class in ("a_stem", "k_a_stem"):
-            constraints.append(FeatureConstraint(slot_name="prefix_class", mode=MatchMode.ONE_OF, values=["a_stem", "k_a_stem"]))
-        else:
-            constraints.append(FeatureConstraint(slot_name="prefix_class", mode=MatchMode.EXACT, values=[self.prefix_class]))
-        return constraints
+    def get_pronominal(self, person: str, allow_set_a: bool) -> str:
+        return self.metadata.get_pronominal(person, allow_set_a)
 
-    def get_meta_label_ids(self, form_spec: Any) -> list[str]:
-        meta_ids = [form_spec.meta_label_id]
-        if form_spec.allows_set_a:
-            if self.set_a:
-                meta_ids.append("[PRONOUN_SET=A]")
 
-        if self.plural:
-            meta_ids.append("[PLURAL=TRUE]")
-        else:
-            meta_ids.append("[PLURAL=FALSE]")
+    def inflect_form(self, form: VerbForm) -> list[str]:
+        from parse_chr_dict.h_alternation import is_h_alternation_trigger
+        from parse_chr_dict.reconstruct import memoized_inflect
 
-        if form_spec.person in ("1st", "2nd"):
-            if self.animate_objects:
-                meta_ids.append("[OBJECT_ANIMACY=ANIMATE]")
-            else:
-                meta_ids.append("[OBJECT_ANIMACY=INANIMATE]")
+        var = self.metadata.aspect_variants.get_variant(form.corpus_key)
+        pros = self.metadata.get_pronominal_candidates(form.person, form.allows_set_a)
+        prefixes = (self.prefix_class, "k_a_stem") if self.prefix_class == "a_stem" else (self.prefix_class,)
 
-        return meta_ids
+        results: set[str] = set()
+        for pro in pros:
+            h_alt = self.h_alt_tag or "[H_alt=none]" if is_h_alternation_trigger(pro) else "[H_alt=none]"
+            for p_cand in prefixes:
+                feat_dict = {
+                    "prefix_class": p_cand,
+                    "pronominal": pro,
+                    "h_alt_tag": h_alt,
+                    "aspect_class": self.aspect_class,
+                    "variant": str(var),
+                    "aspect": form.aspect,
+                    "tense_present_class": self.tense_present_class,
+                    "tense": form.tense,
+                    "distributive": "+" if self.template.distributive else "",
+                    "translocutive": "+" if self.template.translocutive else "",
+                    "rules": "+",
+                }
+                surfs = memoized_inflect(
+                    self.h_root,
+                    feature_values=feat_dict,
+                    name="verb",
+                    open_root=True,
+                    infer_lexical_features=True,
+                )
+                results.update(surfs)
+        return sorted(list(results))
+
+    def validate_form(self, form: VerbForm, reference_form: str) -> bool:
+        from parse_chr_dict.create_aspect_class_csv import respell_consonants
+        return respell_consonants(reference_form) in self.inflect_form(form)
 
     def validate(
         self,

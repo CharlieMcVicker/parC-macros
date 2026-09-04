@@ -1,92 +1,57 @@
 import csv
 from collections import Counter
-from dataclasses import asdict
 from typing import List, Dict, Any, Optional
 from tqdm import tqdm
 
 from parse_chr_dict.create_aspect_class_csv import respell_consonants
-from parse_chr_dict.h_alternation import is_h_alternation_trigger
-from parse_chr_dict.meta_label_compiler import (
-    FORMS_TO_PARSE,
-    PRIMARY_ENTRY_TYPES,
-    FormParsingSpec,
-    MetaConstraintCompiler,
-    derive_hypotheses_for_forms,
+from parse_chr_dict.meta_label_compiler import derive_hypotheses_for_forms
+from parse_chr_dict.types import (
+    VerbForm,
+    PRIMARY_VERB_ENTRY_TYPES,
+    VERB_FORMS_BY_NAME,
+    LexicalVerb,
     DerivationHypothesis,
 )
-from parse_chr_dict.reconstruct import memoized_inflect
-
-ENTRY_TYPE_FORMS = {
-    entry_type.name: [parsing for parsing in FORMS_TO_PARSE if parsing.name in entry_type.forms]
-    for entry_type in PRIMARY_ENTRY_TYPES
-}
 
 
 def validate_form_subset(
-    hypothesis: DerivationHypothesis,
-    forms: List[tuple[str, FormParsingSpec]],
-    compiler: MetaConstraintCompiler,
+    hypothesis: DerivationHypothesis | LexicalVerb,
+    forms: List[tuple[str, VerbForm | Any]],
+    compiler: Optional[Any] = None,
 ) -> bool:
-    meta_comb = hypothesis.to_meta_combination()
-    labels = {**hypothesis.lexical_labels(), "rules": "+"}
-    for surf, parsing_meta in forms:
-        if not meta_comb.validate(
-            h_root=hypothesis.h_root,
-            reference_form=surf,
-            labels=labels,
-            parsing_meta=parsing_meta,
-            compiler=compiler,
-            h_alt_tag=hypothesis.h_alt_tag,
-        ):
-            return False
+    for surf, form_item in forms:
+        if isinstance(form_item, VerbForm):
+            form = form_item
+        elif hasattr(form_item, "to_verb_form"):
+            form = form_item.to_verb_form()
+        else:
+            form = VERB_FORMS_BY_NAME.get(getattr(form_item, "name", str(form_item)))
+        if form:
+            if not hypothesis.validate_form(form, surf):
+                return False
     return True
 
 
 def generate_for_slot(
-    hypothesis: DerivationHypothesis,
-    parsing_meta: FormParsingSpec,
-    compiler: MetaConstraintCompiler,
+    hypothesis: DerivationHypothesis | LexicalVerb,
+    parsing_meta: VerbForm | Any,
+    compiler: Optional[Any] = None,
 ) -> List[str]:
-    meta_comb = hypothesis.to_meta_combination()
-    target_tuples = compiler.get_feature_tuples_from_meta([parsing_meta.meta_label_id])
-    form_labels = dict(target_tuples)
-    pronominal_candidates = meta_comb.get_pronominal_candidates(
-        person=parsing_meta.person, allow_set_a=parsing_meta.allows_set_a
-    )
-    pref = hypothesis.prefix_class
-    prefix_candidates = (pref, "k_a_stem") if pref == "a_stem" else (pref,)
-    generated = set()
-    for pro in pronominal_candidates:
-        active_root = hypothesis.h_root
-        active_h_alt = hypothesis.h_alt_tag or "[H_alt=none]" if is_h_alternation_trigger(pro) else "[H_alt=none]"
-
-        for p_cand in prefix_candidates:
-            all_labels = {
-                **hypothesis.lexical_labels(),
-                **form_labels,
-                "pronominal": pro,
-                "prefix_class": p_cand,
-                "rules": "+",
-            }
-            if active_h_alt:
-                all_labels["h_alt_tag"] = active_h_alt
-            surfs = memoized_inflect(
-                active_root,
-                feature_values=all_labels,
-                name="verb",
-                open_root=True,
-                infer_lexical_features=True,
-            )
-            generated.update(surfs)
-    return sorted(list(generated))
+    if isinstance(parsing_meta, VerbForm):
+        form = parsing_meta
+    elif hasattr(parsing_meta, "to_verb_form"):
+        form = parsing_meta.to_verb_form()
+    else:
+        form = VERB_FORMS_BY_NAME.get(getattr(parsing_meta, "name", str(parsing_meta)))
+    if form:
+        return hypothesis.inflect_form(form)
+    return []
 
 
 def find_near_misses(
     errors_csv_path: str = "errors.csv",
     output_csv_path: str = "near_misses.csv",
 ):
-    compiler = MetaConstraintCompiler()
-
     with open(errors_csv_path, mode="r", encoding="utf-8") as f:
         reader = list(csv.DictReader(f))
 
@@ -96,14 +61,14 @@ def find_near_misses(
     for row in tqdm(reader, desc="Analyzing near misses"):
         row_found = False
 
-        for entry_type in PRIMARY_ENTRY_TYPES:
+        for entry_type in PRIMARY_VERB_ENTRY_TYPES:
             if row_found:
                 break
 
             entry_forms = [
-                (respell_consonants(row[parsing.corpus_key]), parsing)
-                for parsing in ENTRY_TYPE_FORMS[entry_type.name]
-                if row.get(parsing.corpus_key) and " " not in row[parsing.corpus_key]
+                (respell_consonants(row[form.corpus_key]), form)
+                for form in entry_type.forms
+                if row.get(form.corpus_key) and " " not in row[form.corpus_key]
             ]
             if len(entry_forms) < 3:
                 continue
@@ -112,7 +77,7 @@ def find_near_misses(
                 omitted_surface, omitted_spec = entry_forms[idx]
                 subset_forms = [f for j, f in enumerate(entry_forms) if j != idx]
 
-                derived_hypotheses = derive_hypotheses_for_forms(subset_forms, compiler)
+                derived_hypotheses = derive_hypotheses_for_forms(subset_forms)
                 if not derived_hypotheses:
                     continue
 
@@ -123,7 +88,7 @@ def find_near_misses(
 
                 valid_hypotheses = [
                     h for h in derived_hypotheses
-                    if validate_form_subset(h, subset_forms, compiler)
+                    if validate_form_subset(h, subset_forms)
                 ]
 
                 if valid_hypotheses:
@@ -139,7 +104,7 @@ def find_near_misses(
                             x.tense_present_class,
                         ),
                     ):
-                        generated = generate_for_slot(h, omitted_spec, compiler)
+                        generated = generate_for_slot(h, omitted_spec)
                         slot_failure_counter[omitted_spec.corpus_key] += 1
                         near_miss_rows.append({
                             "corpus_id": row["corpus_id"],

@@ -10,11 +10,25 @@ from parse_chr_dict.meta_label_compiler import (
     SHIM_ENTRY_TYPES,
     derive_lexical_features_4step,
 )
+from parse_chr_dict.types import (
+    VerbForm,
+    VerbEntryType,
+    ALL_VERB_FORMS,
+    PRIMARY_VERB_ENTRY_TYPES,
+    PRES_3RD,
+    PRES_1SG,
+    HABITUAL_3RD,
+    COMPLETIVE_3RD,
+    EVENTFUL,
+    VerbMetadata,
+)
 from parse_chr_dict.parse import read_labels, str_to_lexical_hashable, get_roots_for_parses, parse
-from parse_chr_dict.reconstruct import ReconstructionSpec, reconstruct_row
+from parse_chr_dict.reconstruct import reconstruct_row
 
 
 def test_meta_label_constants_and_definitions():
+    assert len(ALL_VERB_FORMS) == 8
+    assert len(PRIMARY_VERB_ENTRY_TYPES) == 3
     assert len(FORMS_TO_PARSE) == 8
     assert len(PRIMARY_ENTRY_TYPES) == 3
     assert len(SHIM_ENTRY_TYPES) == 2
@@ -41,7 +55,8 @@ def test_meta_label_constants_and_definitions():
 
 
 def test_meta_constraint_compiler_acceptor():
-    compiler = MetaConstraintCompiler()
+    with pytest.deprecated_call():
+        compiler = MetaConstraintCompiler()
     
     # Test Step 1a target label extraction
     target_labels = compiler.get_feature_tuples_from_meta(["[FORM=3RD_PRES]"])
@@ -56,13 +71,12 @@ def test_meta_constraint_compiler_acceptor():
 
 
 def test_derive_lexical_features_4step():
-    compiler = MetaConstraintCompiler()
     lexical_features = {"aspect_class", "prefix_class", "tense_present_class"}
     
     forms = [
-        ("atateka", "[FORM=3RD_PRES]"),
+        ("atateka", PRES_3RD),
     ]
-    derived = derive_lexical_features_4step(forms, compiler, lexical_features)
+    derived = derive_lexical_features_4step(forms, lexical_features=lexical_features)
     assert isinstance(derived, set)
     assert len(derived) > 0
 
@@ -132,7 +146,7 @@ def test_get_roots_for_parses():
 
 
 def test_reconstruct_row():
-    spec = ReconstructionSpec(plural=False, set_a=True, animate_objects=False)
+    spec = VerbMetadata(plural=False, set_a=True, animate_objects=False)
     assert spec.get_pronominal("3rd", True) == "3sg.A"
     assert spec.get_pronominal("3rd", False) == "3sg.B"
 
@@ -145,18 +159,18 @@ def test_parse_sample_cherokee():
 
 
 def test_derivation_pipeline_hypothesis_refinement():
-    from parse_chr_dict.meta_label_compiler import derive_hypotheses_for_forms, DerivationHypothesis
+    from parse_chr_dict.derive import derive_hypotheses_for_forms
+    from parse_chr_dict.meta_label_compiler import DerivationHypothesis
     from parse_chr_dict.reconstruct import validate_hypothesis
-    compiler = MetaConstraintCompiler()
 
     # Multi-form row
     forms = [
-        ("atateka", "[FORM=3RD_PRES]"),
-        ("katateka", "[FORM=1ST_PRES]"),
-        ("atateko'i", "[FORM=3RD_HABITUAL]"),
-        ("utatinvsv'i", "[FORM=3RD_COMPLETIVE]"),
+        ("atateka", PRES_3RD),
+        ("katateka", PRES_1SG),
+        ("atateko'i", HABITUAL_3RD),
+        ("utatinvsv'i", COMPLETIVE_3RD),
     ]
-    hyps = derive_hypotheses_for_forms(forms, compiler)
+    hyps = derive_hypotheses_for_forms(forms)
     assert len(hyps) > 0
     for h in hyps:
         assert isinstance(h, DerivationHypothesis)
@@ -171,7 +185,7 @@ def test_derivation_pipeline_hypothesis_refinement():
         "imperative": "hatatuka",
         "infinitive": "utatinvti",
     }
-    validated = [h for h in hyps if validate_hypothesis(h, row, PRIMARY_ENTRY_TYPES[0], compiler=compiler)]
+    validated = [h for h in hyps if validate_hypothesis(h, row, EVENTFUL)]
     assert len(validated) > 0
     val_hyp = validated[0]
     assert val_hyp.h_root == "[Pro]atat[Aspect][Tense]"

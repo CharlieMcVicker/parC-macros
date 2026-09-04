@@ -237,3 +237,85 @@ def test_lexical_verb_legacy_init_and_aliases():
     assert hyp.template.variant == 2
     assert hyp.present_variant == "2"
     assert hyp.metadata.aspect_variants.present == 2
+
+
+def test_lexical_verb_inflect_form_and_validate_form():
+    from parse_chr_dict.types import (
+        PRES_3RD,
+        PRES_1SG,
+        HABITUAL_3RD,
+        COMPLETIVE_3RD,
+        IMPERATIVE_2ND,
+        INFINITIVE_3RD,
+    )
+    verb = LexicalVerb(
+        h_root="[Pro]atat[Aspect][Tense]",
+        prefix_class="a_stem",
+        aspect_class="go-in",
+        tense_present_class="a_present",
+        set_a=True,
+        plural=False,
+        animate_objects=False,
+    )
+
+    # inflect_form returns sorted, deduplicated list
+    forms_3rd = verb.inflect_form(PRES_3RD)
+    assert isinstance(forms_3rd, list)
+    assert forms_3rd == sorted(list(set(forms_3rd)))
+    assert "atateka" in forms_3rd
+
+    # validate_form with respell_consonants handling
+    assert verb.validate_form(PRES_3RD, "atateka") is True
+    assert verb.validate_form(PRES_1SG, "katateka") is True
+    assert verb.validate_form(HABITUAL_3RD, "atateko'i") is True
+    assert verb.validate_form(COMPLETIVE_3RD, "utatinvsv'i") is True
+    assert verb.validate_form(IMPERATIVE_2ND, "hatatuka") is True
+    assert verb.validate_form(INFINITIVE_3RD, "utatinvti") is True
+
+    # Failed validations
+    assert verb.validate_form(PRES_3RD, "invalid") is False
+    assert verb.validate_form(PRES_1SG, "atateka") is False
+
+
+def test_lexical_verb_validate_hypothesis_direct():
+    from parse_chr_dict.reconstruct import validate_hypothesis
+    from parse_chr_dict.types import EVENTFUL
+
+    row = {
+        "corpus_id": "4",
+        "entry_no": "8",
+        "definition": "it’s bouncing",
+        "present": "atateka",
+        "present_1sg": "katateka",
+        "imperfective": "atateko'i",
+        "perfective": "utatinvsv'i",
+        "imperative": "hatatuka",
+        "infinitive": "utatinvti",
+    }
+    valid_verb = LexicalVerb(
+        h_root="[Pro]atat[Aspect][Tense]",
+        prefix_class="a_stem",
+        aspect_class="go-in",
+        tense_present_class="a_present",
+        set_a=True,
+        plural=False,
+        animate_objects=False,
+    )
+
+    # Valid with VerbEntryType, str name, or without compiler
+    assert validate_hypothesis(valid_verb, row, EVENTFUL) is True
+    assert validate_hypothesis(valid_verb, row, "Eventful") is True
+    assert valid_verb.validate(row, EVENTFUL) is True
+
+    # Mismatched hypothesis fails
+    bad_verb = LexicalVerb(
+        h_root="[Pro]atat[Aspect][Tense]",
+        prefix_class="a_stem",
+        aspect_class="wrong",
+        tense_present_class="a_present",
+        set_a=True,
+        plural=False,
+        animate_objects=False,
+    )
+    assert validate_hypothesis(bad_verb, row, EVENTFUL) is False
+    assert bad_verb.validate(row, EVENTFUL) is False

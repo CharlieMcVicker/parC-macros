@@ -9,11 +9,32 @@ from parse_chr_dict.meta_label_compiler import (
     PRIMARY_ENTRY_TYPES,
     SHIM_ENTRY_TYPES,
     derive_lexical_features_4step,
+    derive_hypotheses_for_forms,
+    Pronominal,
+    filter_pronominals,
+    DerivationHypothesis,
+    VerbForm,
+    VerbEntryType,
+    ALL_VERB_FORMS,
+    PRIMARY_VERB_ENTRY_TYPES,
+    PRES_3RD,
+    PRES_1SG,
+    HABITUAL_3RD,
+    COMPLETIVE_3RD,
+    INCOMPLETIVE_ASSERTIVE_3RD,
+    IMPERATIVE_2ND,
+    FUT_PROG_2ND,
+    INFINITIVE_3RD,
+    EVENTFUL,
+    STATIVE_FUT_PROG,
 )
+from parse_chr_dict.parse import parse_surface, parse_string_to_parse_data
 
 
 def test_meta_label_definitions():
-    compiler = MetaConstraintCompiler()
+    # Deprecated compiler shim
+    with pytest.deprecated_call():
+        compiler = MetaConstraintCompiler()
     assert compiler is not None
     assert "[FORM=3RD_PRES]" in compiler.meta_registry
     assert "[FORM=1ST_PRES]" in compiler.meta_registry
@@ -21,9 +42,14 @@ def test_meta_label_definitions():
     assert "[PLURAL=TRUE]" in compiler.meta_registry
     assert "[PLURAL=FALSE]" in compiler.meta_registry
 
+    # Pure VerbForm domain models
+    assert PRES_3RD.name == "3rd_present"
+    assert PRES_1SG.name == "1st_present"
+    assert len(ALL_VERB_FORMS) == 8
+    assert len(PRIMARY_VERB_ENTRY_TYPES) == 3
+
 
 def test_pronominal_struct_and_filters():
-    from parse_chr_dict.meta_label_compiler import Pronominal, filter_pronominals
     p = Pronominal.from_tag("3sg.A")
     assert p.person == "3rd"
     assert p.number == "sg"
@@ -42,88 +68,77 @@ def test_pronominal_struct_and_filters():
 
 
 def test_step1a_feature_tuples():
-    compiler = MetaConstraintCompiler()
+    with pytest.deprecated_call():
+        compiler = MetaConstraintCompiler()
     target_labels = compiler.get_feature_tuples_from_meta(["[FORM=3RD_PRES]"])
     assert ("tense", "present") in target_labels
     assert ("aspect", "present") in target_labels
 
+    # Direct VerbForm features
+    assert PRES_3RD.tense == "present"
+    assert PRES_3RD.aspect == "present"
+
 
 def test_step2_infer_meta_labels():
-    compiler = MetaConstraintCompiler()
+    with pytest.deprecated_call():
+        compiler = MetaConstraintCompiler()
     parse_str = "[BOW]gawoniha[EOW][tense=present][aspect=present][pronominal=3sg.A]"
     inferred = compiler.infer_meta_labels_from_parse(parse_str)
     assert "[FORM=3RD_PRES]" in inferred
     assert "[PRONOUN_SET=A]" in inferred
 
+    # Pure VerbForm matching
+    p_data = parse_string_to_parse_data(parse_str)
+    assert PRES_3RD.matches(p_data) is True
+    assert PRES_1SG.matches(p_data) is False
+
 
 def test_4step_derivation_flow():
-    compiler = MetaConstraintCompiler()
-    lexical_features = {"aspect_class", "prefix_class", "tense_present_class"}
     forms = [
-        ("atateka", "[FORM=3RD_PRES]"),
+        ("atateka", PRES_3RD),
     ]
-    res = derive_lexical_features_4step(forms, compiler, lexical_features)
+    res = derive_hypotheses_for_forms(forms)
     assert isinstance(res, set)
     assert len(res) > 0
 
 
-def test_dynamic_constraints_compilation():
-    compiler = MetaConstraintCompiler()
-    dyn_constraints = [
-        FeatureConstraint(slot_name="aspect_class", mode=MatchMode.ONE_OF, values=["go", "d_stem"]),
-        FeatureConstraint(slot_name="prefix_class", mode=MatchMode.EXACT, values=["a_stem"]),
-    ]
-    fsa = compiler.compile_restricted_tag_acceptor(["[FORM=3RD_PRES]"], dynamic_constraints=dyn_constraints)
-    assert fsa is not None
-    assert fsa.num_states() > 0
-
-
-def test_build_query_lattice_and_parse_with_lattice():
-    compiler = MetaConstraintCompiler()
-    surface = "atateka"
-    meta_ids = ["[FORM=3RD_PRES]"]
-    
-    Q = compiler.build_query_lattice(surface, meta_ids)
-    assert Q is not None
-    assert Q.num_states() > 0
-
-    parses = compiler.parse_with_lattice(surface, meta_ids)
-    assert isinstance(parses, list)
+def test_verb_form_filtering_and_template_extraction():
+    from parse_chr_dict.types import VerbTemplate
+    parses = parse_surface("atateka")
     assert len(parses) > 0
+    matched = []
+    for p in parses:
+        p_data = parse_string_to_parse_data(p)
+        if PRES_3RD.matches(p_data):
+            tmpl = VerbTemplate.from_parse(p_data)
+            matched.append((p_data, tmpl))
+    assert len(matched) > 0
+    assert any(tmpl.aspect_class == "go-in" for _, tmpl in matched)
 
 
 def test_parse_surface_bare():
-    compiler = MetaConstraintCompiler()
     surface = "atateka"
-    parses = compiler.parse_surface(surface)
+    parses = parse_surface(surface)
     assert isinstance(parses, list)
     assert len(parses) > 0
-    # Hit cache
-    parses_cached = compiler.parse_surface(surface)
-    assert parses_cached is parses
 
 
 def test_4step_derivation_flow_multi_form():
-    compiler = MetaConstraintCompiler()
-    lexical_features = {"aspect_class", "prefix_class", "tense_present_class"}
     forms = [
-        ("atateka", "[FORM=3RD_PRES]"),
-        ("atatekaha", "[FORM=3RD_HABITUAL]"),
+        ("atateka", PRES_3RD),
+        ("atatekaha", HABITUAL_3RD),
     ]
-    res = derive_lexical_features_4step(forms, compiler, lexical_features)
+    res = derive_lexical_features_4step(forms)
     assert isinstance(res, set)
 
 
 def test_4step_meta_label_propagation():
-    compiler = MetaConstraintCompiler()
-    lexical_features = {"aspect_class", "prefix_class", "tense_present_class"}
-    # Multi-form derivation with valid surface form spellings
     forms = [
-        ("atateka", "[FORM=3RD_PRES]"),
-        ("atatekaha", "[FORM=3RD_HABITUAL]"),
-        ("atatekea", "[FORM=3RD_COMPLETIVE]"), # allows_set_a = False, overrides to Set B
+        ("atateka", PRES_3RD),
+        ("atatekaha", HABITUAL_3RD),
+        ("atatekea", COMPLETIVE_3RD),  # allows_set_a = False, overrides to Set B
     ]
-    res = derive_lexical_features_4step(forms, compiler, lexical_features)
+    res = derive_lexical_features_4step(forms)
     assert isinstance(res, set)
 
 
@@ -147,16 +162,13 @@ def test_real_plural_verb_entry_355():
         next(reader)
         row = next(r for r in reader if r["corpus_id"] == "355")
 
-    compiler = MetaConstraintCompiler()
-    lexical_features = {"aspect_class", "prefix_class", "tense_present_class"}
-
     # Entry 355 forms: present='anatalhisiha', present_1sg='otsatalhisiha'
     forms = [
-        (row["present"], "[FORM=3RD_PRES]"),
-        (row["present_1sg"], "[FORM=1ST_PRES]"),
-        (row["imperfective"], "[FORM=3RD_HABITUAL]"),
+        (row["present"], PRES_3RD),
+        (row["present_1sg"], PRES_1SG),
+        (row["imperfective"], HABITUAL_3RD),
     ]
-    derived = derive_lexical_features_4step(forms, compiler, lexical_features)
+    derived = derive_hypotheses_for_forms(forms)
     assert len(derived) > 0, f"Plural verb entry 355 ('{row['present']}') failed multi-form derivation"
 
 
@@ -180,16 +192,13 @@ def test_real_plural_verb_entry_598():
         next(reader)
         row = next(r for r in reader if r["corpus_id"] == "598")
 
-    compiler = MetaConstraintCompiler()
-    lexical_features = {"aspect_class", "prefix_class", "tense_present_class"}
-
     # Entry 598 forms: present='tanakaleniha', present_1sg='tostakaleniha', imperative='tistakalena'
     forms = [
-        (row["present"], "[FORM=3RD_PRES]"),
-        (row["present_1sg"], "[FORM=1ST_PRES]"),
-        (row["imperative"], "[FORM=2ND_IMPERATIVE]"),
+        (row["present"], PRES_3RD),
+        (row["present_1sg"], PRES_1SG),
+        (row["imperative"], IMPERATIVE_2ND),
     ]
-    derived = derive_lexical_features_4step(forms, compiler, lexical_features)
+    derived = derive_hypotheses_for_forms(forms)
     assert len(derived) > 0, f"Plural verb entry 598 ('{row['present']}') failed multi-form derivation"
 
 
@@ -213,16 +222,13 @@ def test_real_animate_verb_entry_776():
         next(reader)
         row = next(r for r in reader if r["corpus_id"] == "776")
 
-    compiler = MetaConstraintCompiler()
-    lexical_features = {"aspect_class", "prefix_class", "tense_present_class"}
-
     # Entry 776 forms: present="katonhtiha", present_1sg="tsiyatonhtiha", imperative="hiyatonhta"
     forms = [
-        (row["present"], "[FORM=3RD_PRES]"),
-        (row["present_1sg"], "[FORM=1ST_PRES]"),
-        (row["imperative"], "[FORM=2ND_IMPERATIVE]"),
+        (row["present"], PRES_3RD),
+        (row["present_1sg"], PRES_1SG),
+        (row["imperative"], IMPERATIVE_2ND),
     ]
-    derived = derive_lexical_features_4step(forms, compiler, lexical_features)
+    derived = derive_hypotheses_for_forms(forms)
     assert len(derived) > 0, f"Animate verb entry 776 ('{row['present']}') failed multi-form derivation"
 
 
@@ -246,15 +252,12 @@ def test_real_animate_verb_entry_788():
         next(reader)
         row = next(r for r in reader if r["corpus_id"] == "788")
 
-    compiler = MetaConstraintCompiler()
-    lexical_features = {"aspect_class", "prefix_class", "tense_present_class"}
-
     # Entry 788 forms: present="katv'vska", present_1sg="tsiyatv'vska"
     forms = [
-        (row["present"], "[FORM=3RD_PRES]"),
-        (row["present_1sg"], "[FORM=1ST_PRES]"),
+        (row["present"], PRES_3RD),
+        (row["present_1sg"], PRES_1SG),
     ]
-    derived = derive_lexical_features_4step(forms, compiler, lexical_features)
+    derived = derive_hypotheses_for_forms(forms)
     assert len(derived) > 0, f"Animate verb entry 788 ('{row['present']}') failed multi-form derivation"
 
 
@@ -312,25 +315,25 @@ def test_derivation_hypothesis_dataclass_and_aliases():
     assert ("prefix_class", "a_stem") in lex_tup[2]
     assert ("tense_present_class", "a_present") in lex_tup[2]
 
-
-    meta_comb = hyp.to_meta_combination()
-    assert meta_comb.set_a is True
-    assert meta_comb.plural is False
-    assert meta_comb.animate_objects is False
+    assert hyp.set_a is True
+    assert hyp.plural is False
+    assert hyp.animate_objects is False
+    assert hyp.metadata.set_a is True
+    assert hyp.metadata.plural is False
+    assert hyp.metadata.animate_objects is False
 
 
 def test_derive_hypotheses_for_forms_direct():
-    from parse_chr_dict.meta_label_compiler import derive_hypotheses_for_forms, DerivationHypothesis
+    from parse_chr_dict.derive import derive_hypotheses_for_forms
     from parse_chr_dict.create_aspect_class_csv import respell_consonants
 
-    compiler = MetaConstraintCompiler()
     forms = [
-        (respell_consonants("atateka"), "[FORM=3RD_PRES]"),
-        (respell_consonants("katateka"), "[FORM=1ST_PRES]"),
-        (respell_consonants("atateko'i"), "[FORM=3RD_HABITUAL]"),
-        (respell_consonants("utatinvsv'i"), "[FORM=3RD_COMPLETIVE]"),
+        (respell_consonants("atateka"), PRES_3RD),
+        (respell_consonants("katateka"), PRES_1SG),
+        (respell_consonants("atateko'i"), HABITUAL_3RD),
+        (respell_consonants("utatinvsv'i"), COMPLETIVE_3RD),
     ]
-    hyps = derive_hypotheses_for_forms(forms, compiler)
+    hyps = derive_hypotheses_for_forms(forms)
     assert isinstance(hyps, set)
     assert len(hyps) > 0
     assert all(isinstance(h, DerivationHypothesis) for h in hyps)
@@ -338,9 +341,7 @@ def test_derive_hypotheses_for_forms_direct():
 
 
 def test_validate_hypothesis_and_row_reconstruction():
-    from parse_chr_dict.meta_label_compiler import DerivationHypothesis
     from parse_chr_dict.reconstruct import validate_hypothesis
-    compiler = MetaConstraintCompiler()
 
     row = {
         "corpus_id": "4",
@@ -362,8 +363,8 @@ def test_validate_hypothesis_and_row_reconstruction():
         plural=False,
         animate_objects=False,
     )
-    assert validate_hypothesis(valid_hyp, row, PRIMARY_ENTRY_TYPES[0], compiler=compiler) is True
-    assert valid_hyp.validate(row, PRIMARY_ENTRY_TYPES[0], compiler=compiler) is True
+    assert validate_hypothesis(valid_hyp, row, EVENTFUL) is True
+    assert valid_hyp.validate(row, EVENTFUL) is True
 
     # Invalid hypothesis (unknown aspect_class) should fail validation safely
     invalid_hyp = DerivationHypothesis(
@@ -375,7 +376,7 @@ def test_validate_hypothesis_and_row_reconstruction():
         plural=False,
         animate_objects=False,
     )
-    assert validate_hypothesis(invalid_hyp, row, PRIMARY_ENTRY_TYPES[0], compiler=compiler) is False
+    assert validate_hypothesis(invalid_hyp, row, EVENTFUL) is False
 
     # Mismatched valid aspect_class should fail validation
     mismatched_hyp = DerivationHypothesis(
@@ -387,25 +388,19 @@ def test_validate_hypothesis_and_row_reconstruction():
         plural=False,
         animate_objects=False,
     )
-    assert validate_hypothesis(mismatched_hyp, row, PRIMARY_ENTRY_TYPES[0], compiler=compiler) is False
+    assert validate_hypothesis(mismatched_hyp, row, EVENTFUL) is False
 
 
-def test_parse_with_lattice_caching():
-    compiler = MetaConstraintCompiler()
+def test_parse_surface_caching():
+    from parse_chr_dict.parse import parse_surface
     surface = "atateka"
-    meta_ids = ["[FORM=3RD_PRES]"]
 
     # Initial parse
-    parses_1 = compiler.parse_with_lattice(surface, meta_ids)
+    parses_1 = parse_surface(surface)
     assert len(parses_1) > 0
 
-    # Cache hit check
-    cache_key = (surface, tuple(sorted(meta_ids)), ())
-    assert cache_key in compiler._parse_cache
-    assert compiler._parse_cache[cache_key] is parses_1
-
     # Second call returns cached list
-    parses_2 = compiler.parse_with_lattice(surface, meta_ids)
+    parses_2 = parse_surface(surface)
     assert parses_2 is parses_1
 
 
@@ -438,31 +433,29 @@ def test_memoized_inflect_caching():
 
 
 def test_hypothesis_pruning_efficiency():
-    from parse_chr_dict.meta_label_compiler import derive_hypotheses_for_forms, DerivationHypothesis
+    from parse_chr_dict.derive import derive_hypotheses_for_forms
 
-    compiler = MetaConstraintCompiler()
     # Provide 4 consistent forms
     forms = [
-        ("atateka", "[FORM=3RD_PRES]"),
-        ("katateka", "[FORM=1ST_PRES]"),
-        ("atateko'i", "[FORM=3RD_HABITUAL]"),
-        ("utatinvsv'i", "[FORM=3RD_COMPLETIVE]"),
+        ("atateka", PRES_3RD),
+        ("katateka", PRES_1SG),
+        ("atateko'i", HABITUAL_3RD),
+        ("utatinvsv'i", COMPLETIVE_3RD),
     ]
-    hyps = derive_hypotheses_for_forms(forms, compiler)
+    hyps = derive_hypotheses_for_forms(forms)
     assert len(hyps) > 0
     # Provide an incompatible form sequence (atateka + kanestalatisko'i from a different root)
     bad_forms = [
-        ("atateka", "[FORM=3RD_PRES]"),
-        ("kanestalatisko'i", "[FORM=3RD_HABITUAL]"),
+        ("atateka", PRES_3RD),
+        ("kanestalatisko'i", HABITUAL_3RD),
     ]
-    bad_hyps = derive_hypotheses_for_forms(bad_forms, compiler)
+    bad_hyps = derive_hypotheses_for_forms(bad_forms)
     assert len(bad_hyps) == 0
 
 
 def test_entry_1759_derivation_and_validation():
-    from parse_chr_dict.meta_label_compiler import derive_hypotheses_for_forms, DerivationHypothesis
+    from parse_chr_dict.derive import derive_hypotheses_for_forms
 
-    compiler = MetaConstraintCompiler()
     row = {
         "present": "uthvtasti",
         "present_1sg": "tsiyathvtasti",
@@ -471,11 +464,10 @@ def test_entry_1759_derivation_and_validation():
         "imperative": "hiyathvtastesti",
         "infinitive": "uthvtastohti",
     }
-    spec_by_name = {p.name: p for p in FORMS_TO_PARSE}
-    entry_type = PRIMARY_ENTRY_TYPES[1]  # StativeFutProg
-    forms = [(row[spec_by_name[fn].corpus_key], spec_by_name[fn]) for fn in entry_type.forms]
+    entry_type = STATIVE_FUT_PROG
+    forms = [(row[form.corpus_key], form) for form in entry_type.forms]
 
-    hyps = derive_hypotheses_for_forms(forms, compiler)
+    hyps = derive_hypotheses_for_forms(forms)
     assert len(hyps) >= 1
     hyp = next(h for h in hyps if h.h_root == "[Pro]athvtast[Aspect][Tense]" and h.animate_objects is True)
     assert hyp.h_root == "[Pro]athvtast[Aspect][Tense]"
@@ -487,28 +479,25 @@ def test_entry_1759_derivation_and_validation():
     assert hyp.animate_objects is True
 
     # Validate against full row under StativeFutProg
-    assert hyp.validate(row, entry_type, compiler=compiler)
-
+    assert hyp.validate(row, entry_type)
 
 
 def test_h_alternation_verb_derivation():
-    from parse_chr_dict.meta_label_compiler import derive_hypotheses_for_forms, DerivationHypothesis
+    from parse_chr_dict.derive import derive_hypotheses_for_forms
     from parse_chr_dict.create_aspect_class_csv import respell_consonants
 
-    compiler = MetaConstraintCompiler()
     # Test with a pair of forms where 3rd person has H-grade and 1st person triggers H-alternation
     forms = [
-        (respell_consonants("atateka"), "[FORM=3RD_PRES]"),
-        (respell_consonants("katateka"), "[FORM=1ST_PRES]"),
+        (respell_consonants("atateka"), PRES_3RD),
+        (respell_consonants("katateka"), PRES_1SG),
     ]
-    hyps = derive_hypotheses_for_forms(forms, compiler)
+    hyps = derive_hypotheses_for_forms(forms)
     assert len(hyps) > 0
     assert any(h.h_root == "[Pro]atat[Aspect][Tense]" for h in hyps)
 
 
 def test_h_alternation_trigger_external_validation():
-    from parse_chr_dict.h_alternation import validate_h_alternation_trigger, is_h_alternation_trigger
-    from parse_chr_dict.meta_label_compiler import DerivationHypothesis, PRIMARY_ENTRY_TYPES
+    from parse_chr_dict.h_alternation import validate_h_alternation_trigger
     from parse_chr_dict.reconstruct import validate_hypothesis, reconstruct_row
 
     # Test standalone trigger validation logic
@@ -521,8 +510,7 @@ def test_h_alternation_trigger_external_validation():
     assert validate_h_alternation_trigger("3sg.A", has_h_alt=False) is True
 
     # Test integration with validate_hypothesis and reconstruct_row
-    compiler = MetaConstraintCompiler()
-    entry_type = PRIMARY_ENTRY_TYPES[0]  # PrimaryPresent
+    entry_type = EVENTFUL
     row = {
         "present": "atateka",
         "present_1sg": "katateka",
@@ -541,7 +529,7 @@ def test_h_alternation_trigger_external_validation():
         plural=False,
         animate_objects=False,
     )
-    assert validate_hypothesis(hyp, row, entry_type, compiler=compiler) is True
+    assert validate_hypothesis(hyp, row, entry_type) is True
 
     # Row reconstruction with H-alternation fields
     row_with_roots = {
@@ -556,7 +544,6 @@ def test_h_alternation_trigger_external_validation():
         row_with_roots,
         entry_type,
         ["prefix_class", "aspect_class", "tense_present_class"],
-        compiler=compiler,
     )
     assert len(specs) > 0
 
@@ -596,27 +583,25 @@ def test_fine_grained_h_alternation_tag_helpers_and_validation():
 
 def test_strict_h_alternation_trigger_rejection():
     """Verify that when a trigger form shows H-mutation, unmutated [H_NONE] fallbacks for that root are pruned."""
-    from parse_chr_dict.meta_label_compiler import derive_hypotheses_for_forms
+    from parse_chr_dict.derive import derive_hypotheses_for_forms
     from parse_chr_dict.create_aspect_class_csv import respell_consonants
 
-    compiler = MetaConstraintCompiler()
     # atanhoyeha (3sg) + katanoyeha (1sg trigger with H_DROP mutation)
     forms_mutating = [
-        (respell_consonants("atanhoyeha"), "[FORM=3RD_PRES]"),
-        (respell_consonants("katanoyeha"), "[FORM=1ST_PRES]"),
+        (respell_consonants("atanhoyeha"), PRES_3RD),
+        (respell_consonants("katanoyeha"), PRES_1SG),
     ]
-    hyps_mut = derive_hypotheses_for_forms(forms_mutating, compiler)
+    hyps_mut = derive_hypotheses_for_forms(forms_mutating)
     assert len(hyps_mut) > 0
-    # Every surviving hypothesis for the alternating root [Pro]atanhoy... must have an active h_alt_tag mutation
     for h in hyps_mut:
         assert h.h_alt_tag in ("[H_alt=drop]", "[H_alt=glot]", "[H_alt=lat]", "[H_DROP]", "[H_GLOT]", "[H_LAT]")
 
     # atateka (3sg) + katateka (1sg trigger without H-mutation)
     forms_non_mutating = [
-        (respell_consonants("atateka"), "[FORM=3RD_PRES]"),
-        (respell_consonants("katateka"), "[FORM=1ST_PRES]"),
+        (respell_consonants("atateka"), PRES_3RD),
+        (respell_consonants("katateka"), PRES_1SG),
     ]
-    hyps_non_mut = derive_hypotheses_for_forms(forms_non_mutating, compiler)
+    hyps_non_mut = derive_hypotheses_for_forms(forms_non_mutating)
     assert len(hyps_non_mut) > 0
     for h in hyps_non_mut:
         assert h.h_alt_tag in ("[H_alt=none]", "[H_NONE]", "")
@@ -624,20 +609,17 @@ def test_strict_h_alternation_trigger_rejection():
 
 def test_h_vowel_row_39_43_thinking_derivation():
     """Verify that row 39,43 ('he/she is thinking') matches and derives hypotheses containing [H_VOWEL]."""
-    from parse_chr_dict.meta_label_compiler import derive_hypotheses_for_forms, MetaConstraintCompiler
+    from parse_chr_dict.derive import derive_hypotheses_for_forms
     from parse_chr_dict.create_aspect_class_csv import respell_consonants
 
-    compiler = MetaConstraintCompiler()
     forms = [
-        (respell_consonants("atanhtheha"), "[FORM=3RD_PRES]"),
-        (respell_consonants("katanvtheha"), "[FORM=1ST_PRES]"),
+        (respell_consonants("atanhtheha"), PRES_3RD),
+        (respell_consonants("katanvtheha"), PRES_1SG),
     ]
-    hyps = derive_hypotheses_for_forms(forms, compiler)
+    hyps = derive_hypotheses_for_forms(forms)
     assert len(hyps) > 0
     h_vowel_hyps = [h for h in hyps if h.h_alt_tag in ("[H_VOWEL]", "[H_alt=vowel]")]
     assert len(h_vowel_hyps) > 0, "Expected at least one hypothesis with [H_VOWEL]"
     for h in h_vowel_hyps:
         assert h.h_alt_tag in ("[H_VOWEL]", "[H_alt=vowel]")
         assert "atanh" in h.h_root
-
-

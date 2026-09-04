@@ -5,10 +5,11 @@ A python package and utility suite for generating and validating feature markers
 ## Project Structure
 
 - `parse_chr_dict/`: Cherokee dictionary parsing and root derivation module.
-  - `meta_label_compiler.py`: FST tag acceptor compiler (`MetaConstraintCompiler`), meta-label registry (`META_LABELS`), structured `Pronominal` handling, and the 4-step multi-form derivation engine (`derive_lexical_features_4step`).
+  - `derive.py`: Pure surface parsing and iterative candidate hypothesis derivation engine (`derive_hypotheses_for_forms`).
+  - `meta_label_compiler.py`: Deprecated module containing legacy shims (`MetaConstraintCompiler`, `META_LABELS`) and re-exports.
   - `parse.py`: OpenFST parse graph extraction and root template derivation.
-  - `reconstruct.py`: Forward inflection validation (`MetaLabelCombination`) supporting `[PRONOUN_SET=...]`, `[PLURAL=...]`, and `[OBJECT_ANIMACY=...]` meta-labels.
-  - `__main__.py`: Main CLI workflow running 4-step multi-form derivation per entry type (`Eventful`, `StativeFutProg`, `StativeNoImp`) across `chr-corpus/corpus.csv`.
+  - `reconstruct.py`: Pure forward inflection and validation (`validate_hypothesis`) using `LexicalVerb` and `VerbForm`.
+  - `__main__.py`: Main CLI workflow running pure multi-form derivation per entry type (`Eventful`, `StativeFutProg`, `StativeNoImp`) across `chr-corpus/corpus.csv`.
 - `tests/`: Project test suite.
   - `test_meta_label_compiler.py`: Unit tests covering meta-label FST compilation, Pronominal filters, query lattice composition, multi-form derivation, and real corpus entry tests (including plural entry 355, dual entry 598, and animate entries 776 & 788).
   - `test_parse_chr_dict_baseline.py`: Baseline regression suite for Cherokee dictionary parsing.
