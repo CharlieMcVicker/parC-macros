@@ -1,53 +1,47 @@
-# This is a Patterns config file
-# Define reusable regular expressions to reference common sequences
-# or natural classes relevant for your language.
 kind: Patterns
 patterns:
-  # type pat-item to add more patterns!
-  - name: Consonants
-    pattern: <Stops>|<Frc>|<Son>|<N>
-    ref: <C>
-  - name: Morpheme
-    pattern: <Pro>|<PPP>|<Aspect>|<Tense>|<H_ALT>|[WI]|[DIST]
-    ref: <Morpheme>
-
-  - name: H_ALT
-    pattern: <H_ALT>
-    ref: <H_ALT>
-  - name: NotLar
-    pattern: "{tkmnslyw}|<V>"
-    ref: <NotLar>
-  - name: SonH
-    pattern: "nh|lh|yh|wh|mh"
-    ref: <SonH>
-  - name: HTarget
-    pattern: "h<V>|<SonH>"
-    ref: <HTarget>
-
-
-## HELP FOR PATTERNS ##
-# List of pattern definitions.
-# - ref: Unique identifier enclosed in angle braces.
-# - pattern: String or list of strings defining the regex-like shape.
-
-# Example:
-# - name: High Vowels
-#   pattern: "{iuɪʊ}"
-#   ref: "<V_High>"
-#   test_includes: [i, u]
-#   test_excludes: [a, e, o]
-
-# parC regular expression reference
-# - {curly braces}:     Union over a group, i.e. matches any symbol inside the braces
-#                       Equivalent to [square brackets] in traditional regular expressions
-# - (parentheses):      Grouping, i.e. treats the enclosed expression as a single unit
-#                       e.g. {ae}t matches "at" or "et"
-#                       e.g. {aeiou} matches any of "a", "e", "i", "o" or "u"
-# - | (pipe):           Union between two expressions, e.g. a|e matches "a" or "e"
-#                       foo|bar matches "foo" or "bar"
-#                       and bugs?|fl(y|ies) matches "bug", "bugs", "fly", or "flies"
-# - * (asterisk):       Zero or more of the preceding element, e.g. a* matches "a", "aa", "aaa", etc.
-# - ? (question mark):  Zero or one of the preceding element, e.g. a? matches "a" or ""
-# - + (plus):           One or more of the preceding element, e.g. a+ matches "a", "aa", "aaa", etc.
-# - {^...} (caret):     Negation, i.e. matches any symbol except those inside the braces
-#                       e.g. {^aeiou} matches any symbol except "a", "e", "i", "o" or "u"
+- name: Consonants
+  pattern: <Stops>|<Frc>|<Son>|<N>
+  ref: <C>
+- name: PrepronominalPrefixes
+  ref: <PrepronominalPrefixes>
+  pattern: '[WI]?([DIST=de]|[DIST=di])?'
+- name: Root
+  ref: <Root>
+  pattern: <V>?(<C>+<V>)*<C>*
+- name: PrefixClass
+  ref: <PrefixClass>
+  pattern: '[PrefixClass=a_stem]|[PrefixClass=v_stem]|[PrefixClass=e_stem]|[PrefixClass=k_a_stem]|[PrefixClass=vowel_stem]|[PrefixClass=cons_stem]|[PrefixClass=r_stem]'
+- name: Pro
+  ref: <Pro>
+  pattern: '[Pro=1sg.A]|[Pro=Edl.A]|[Pro=Epl.A]|[Pro=Idl.A]|[Pro=Ipl.A]|[Pro=2sg.A]|[Pro=2dl.A]|[Pro=2pl.A]|[Pro=3sg.A]|[Pro=3ns.A]|[Pro=1sg.B]|[Pro=Edl.B]|[Pro=Epl.B]|[Pro=Idl.B]|[Pro=Ipl.B]|[Pro=2sg.B]|[Pro=2dl.B]|[Pro=2pl.B]|[Pro=3sg.B]|[Pro=3ns.B]|[Pro=1sg>3sg]|[Pro=2sg>3sg]'
+- name: AspectClass
+  ref: <AspectClass>
+  pattern: '[AspectClass=a]|[AspectClass=become]|[AspectClass=ko-kots]|[AspectClass=sk-s-hi-hihst]|[AspectClass=sk-s-a]|[AspectClass=sk-s-hst]|[AspectClass=sk-s-la]|[AspectClass=sk-h]|[AspectClass=sk-h-yh]|[AspectClass=hvsk-han]|[AspectClass=hvsk-nh]|[AspectClass=hvsk-n]|[AspectClass=husk]|[AspectClass=episodic]|[AspectClass=terminative]|[AspectClass=terminative-no-o]|[AspectClass=e-aka]|[AspectClass=e-a]|[AspectClass=apl-active]|[AspectClass=apl-active-h]|[AspectClass=apl-active-'']|[AspectClass=apl-active-a]|[AspectClass=apl]|[AspectClass=go]|[AspectClass=go-in]|[AspectClass=cause]|[AspectClass=ih-il]|[AspectClass=hih-hil]|[AspectClass=hih-hilh]|[AspectClass=hih-lh]|[AspectClass=ih-vh]|[AspectClass=vnh-ih-a]|[AspectClass=vnh-vsk]|[AspectClass=i-vka]|[AspectClass=i-a-i]|[AspectClass=i-a-ihsk]|[AspectClass=ih-ihi]|[AspectClass=o]|[AspectClass=be-at]|[AspectClass=oh-al]|[AspectClass=oh-ol]|[AspectClass=v-vhs]|[AspectClass=vsk]|[AspectClass=vsk-long]|[AspectClass=vsk-post-v]|[AspectClass=rev-gi]|[AspectClass=rev-i]|[AspectClass=rev-''i]|[AspectClass=rev-e]|[AspectClass=stative]|[AspectClass=stative-k]|[AspectClass=stative-h]|[AspectClass=stative-s]|[AspectClass=stative-a'']|[AspectClass=stative-eh]'
+- name: Variant
+  ref: <Variant>
+  pattern: ([Variant=2]|[Variant=3]|[Variant=4])?
+- name: Aspect
+  ref: <Aspect>
+  pattern: '[Aspect=present]|[Aspect=incompletive]|[Aspect=completive]|[Aspect=immediate]|[Aspect=infinitive]'
+- name: TenseClass
+  ref: <TenseClass>
+  pattern: '[TenseClass=a_present]|[TenseClass=i_present]'
+- name: Tense
+  ref: <Tense>
+  pattern: '[Tense=present]|[Tense=immediate]|[Tense=habitual]|[Tense=future_prog]|[Tense=assertive]|[Tense=reported]|[Tense=infinitive]'
+- name: Morpheme
+  ref: <Morpheme>
+  pattern: <PrefixClass>|<Pro>|<AspectClass>|<Aspect>|<TenseClass>|<Tense>|<PPP>|<H_alt>|[WI]|[DIST]|[DIST=de]|[DIST=di]|[Variant=2]|[Variant=3]|[Variant=4]
+- name: H_alt
+  ref: <H_alt>
+  pattern: <H_alt>
+- name: NotLar
+  pattern: '{tkmnslyw}|<V>'
+  ref: <NotLar>
+- name: SonH
+  pattern: nh|lh|yh|wh|mh
+  ref: <SonH>
+- name: HTarget
+  pattern: h<V>|<SonH>
+  ref: <HTarget>

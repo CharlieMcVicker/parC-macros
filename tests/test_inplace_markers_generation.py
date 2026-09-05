@@ -26,13 +26,12 @@ from parc_macros.yaml_validation import validate_yaml_file, validate_yaml_conten
 
 def test_is_in_place_mode_detection():
     """Verify in-place mode detection across configs and templates."""
-    # chr-inplace-config has <PrefixClass> in open_root_template
-    assert is_in_place_mode("chr-inplace-config") is True
+    # chr-config has <PrefixClass> in open_root_template
+    assert is_in_place_mode("chr-config") is True
 
     # Legacy configs should be detected as False
-    assert is_in_place_mode("chr-config") is False
-    assert is_in_place_mode("spanish-config") is False
-    assert is_in_place_mode("min-min-config") is False
+    assert is_in_place_mode("tests/fixtures/spanish-config") is False
+    assert is_in_place_mode("tests/fixtures/min-min-config") is False
 
     # Dictionary configs
     assert is_in_place_mode({"paradigm": {"in_place": True}}) is True
@@ -58,7 +57,7 @@ def test_inplace_2_tag_rules_generation_ac1():
     ([PrefixClass=...][Pro=...], [AspectClass=...][Aspect=...], [TenseClass=...][Tense=...])
     """
     with tempfile.TemporaryDirectory() as tmp_dir:
-        generate_morpheme_replace_rules("chr-inplace-config", tmp_dir, in_place=True)
+        generate_morpheme_replace_rules("chr-config", tmp_dir, in_place=True)
 
         rules_dir = Path(tmp_dir) / "Phonology/Rules"
         assert rules_dir.exists()
@@ -108,7 +107,7 @@ def test_inplace_paradigm_generation_ac2():
     """
     with tempfile.TemporaryDirectory() as tmp_dir:
         out_dir = Path(tmp_dir) / "out"
-        generate_markers("chr-inplace-config", str(out_dir))
+        generate_markers("chr-config", str(out_dir))
 
         # ContingentFeatureMarkers directory should be empty
         cfm_dir = out_dir / "Exponence/ContingentFeatureMarkers"
@@ -159,7 +158,7 @@ def test_explicit_global_markers_in_verb_yaml_ac2():
     """Verify explicit global_markers defined in verb.yaml are preserved."""
     with tempfile.TemporaryDirectory() as tmp_dir:
         cfg_dir = Path(tmp_dir) / "cfg"
-        shutil.copytree("chr-inplace-config", str(cfg_dir))
+        shutil.copytree("chr-config", str(cfg_dir))
 
         # Inject explicit custom global_markers in verb.yaml
         verb_yaml = cfg_dir / "verb.yaml"
@@ -194,27 +193,22 @@ def test_explicit_global_markers_in_verb_yaml_ac2():
 def test_backwards_compatibility_ac3():
     """
     AC 3: Ensure strict backwards compatibility with standard trailing-label configs
-    (spanish-config, chr-config, min-min-config).
+    (tests/fixtures/spanish-config, tests/fixtures/min-min-config).
     """
     with tempfile.TemporaryDirectory() as tmp_dir:
-        # 1. chr-config
-        chr_out = Path(tmp_dir) / "chr_out"
-        generate_markers("chr-config", str(chr_out))
-        cfm_files = list((chr_out / "Exponence/ContingentFeatureMarkers").glob("*.yaml"))
-        assert len(cfm_files) == 3, f"Expected 3 CFM files for chr-config, got {len(cfm_files)}"
-        with open(chr_out / "Morphotactics/Paradigm/verb.yaml", "r", encoding="utf-8") as f:
-            chr_paradigm = yaml.safe_load(f)
-        assert "contingent_markers" in chr_paradigm
-        assert "global_markers" not in chr_paradigm
-
-        # 2. min-min-config
+        # 1. min-min-config
         min_out = Path(tmp_dir) / "min_out"
-        generate_markers("min-min-config", str(min_out))
-        assert (min_out / "Morphotactics/Paradigm/verb.yaml").exists()
+        generate_markers("tests/fixtures/min-min-config", str(min_out))
+        cfm_files = list((min_out / "Exponence/ContingentFeatureMarkers").glob("*.yaml"))
+        assert len(cfm_files) == 1, f"Expected 1 CFM file for min-min-config, got {len(cfm_files)}"
+        with open(min_out / "Morphotactics/Paradigm/verb.yaml", "r", encoding="utf-8") as f:
+            min_paradigm = yaml.safe_load(f)
+        assert "contingent_markers" in min_paradigm
+        assert "global_markers" not in min_paradigm
 
-        # 3. spanish-config
+        # 2. spanish-config
         sp_out = Path(tmp_dir) / "sp_out"
-        generate_markers("spanish-config", str(sp_out))
+        generate_markers("tests/fixtures/spanish-config", str(sp_out))
         sp_paradigms = list((sp_out / "Morphotactics/Paradigm").glob("*.yaml"))
         assert len(sp_paradigms) >= 4
 
@@ -225,7 +219,7 @@ def test_yaml_schema_validation_ac4():
     """
     with tempfile.TemporaryDirectory() as tmp_dir:
         out_dir = Path(tmp_dir) / "out"
-        generate_markers("chr-inplace-config", str(out_dir))
+        generate_markers("chr-config", str(out_dir))
 
         all_yamls = list(out_dir.glob("**/*.yaml"))
         assert len(all_yamls) >= 10, f"Expected >= 10 YAML files, found {len(all_yamls)}"
@@ -242,7 +236,7 @@ def test_inplace_aspect_variants_generation_task_111_2():
     - Non-varying classes (e.g. prefix_class, tense_class) emit clean 2-tag rules without [Variant=N]
     """
     with tempfile.TemporaryDirectory() as tmp_dir:
-        generate_morpheme_replace_rules("chr-inplace-config", tmp_dir, in_place=True)
+        generate_morpheme_replace_rules("chr-config", tmp_dir, in_place=True)
 
         rules_dir = Path(tmp_dir) / "Phonology/Rules"
         aspect_file = rules_dir / "aspect_replace.yaml"

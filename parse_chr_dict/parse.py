@@ -4,15 +4,15 @@ import re
 from pathlib import Path
 from typing import Any, Iterable
 
-# Ensure YAML_DIR defaults to chr-inplace-generated
+# Ensure YAML_DIR defaults to chr-generated
 if "YAML_DIR" not in os.environ:
     repo_root = Path(__file__).parent.parent.resolve()
-    inplace_dir = repo_root / "chr-inplace-generated"
-    if inplace_dir.exists():
-        os.environ["YAML_DIR"] = str(inplace_dir)
+    gen_dir = repo_root / "chr-generated"
+    if gen_dir.exists():
+        os.environ["YAML_DIR"] = str(gen_dir)
         try:
             from parC.constants import set_yaml_dir
-            set_yaml_dir(str(inplace_dir))
+            set_yaml_dir(str(gen_dir))
         except ImportError:
             pass
 
@@ -34,18 +34,18 @@ INFLECT_GRAPH = None
 def is_inplace_grammar() -> bool:
     """Detects whether the active grammar uses in-place morpheme tags."""
     yaml_dir = os.environ.get("YAML_DIR", "")
-    if "inplace" in yaml_dir:
+    if "chr-generated" in str(yaml_dir) or "inplace" in str(yaml_dir):
         return True
     try:
         from parC.constants import get_yaml_dir
 
         yd = Path(get_yaml_dir())
-        if "inplace" in yd.name or "inplace" in str(yd):
+        if "chr-generated" in str(yd) or "inplace" in yd.name or "inplace" in str(yd):
             return True
         paradigm_path = yd / "Morphotactics" / "Paradigm" / "verb.yaml"
         if paradigm_path.exists():
             content = paradigm_path.read_text(encoding="utf-8")
-            if "<PrefixClass>" in content:
+            if "<PrefixClass>" in content or "<AspectClass>" in content:
                 return True
     except Exception:
         pass

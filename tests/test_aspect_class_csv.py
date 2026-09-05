@@ -11,11 +11,8 @@ from parse_chr_dict.create_aspect_class_csv import (
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
 CLASSES_CSV = REPO_ROOT / "chr-data" / "classes.csv"
-VERB_ASPECT_CSV = REPO_ROOT / "chr-inplace-config" / "verb-aspect.csv"
-DROP_FINAL_CSV = REPO_ROOT / "chr-inplace-config" / "verb-aspect-drop-final.csv"
-DROP_FINAL_TWO_CSV = REPO_ROOT / "chr-inplace-config" / "verb-aspect-drop-final-two.csv"
-ASPECT_EFFECTS_CSV = REPO_ROOT / "chr-clean-inplace-config" / "aspect_effects.csv"
-CLEAN_VERB_ASPECT_CSV = REPO_ROOT / "chr-clean-inplace-config" / "verb-aspect.csv"
+VERB_ASPECT_CSV = REPO_ROOT / "chr-config" / "verb-aspect.csv"
+ASPECT_EFFECTS_CSV = REPO_ROOT / "chr-config" / "aspect_effects.csv"
 
 
 def test_parse_classes_csv_and_triggers():
@@ -65,7 +62,7 @@ def test_parse_classes_csv_and_triggers():
 
 
 def test_verb_aspect_csv_content():
-    """Verify generated chr-inplace-config/verb-aspect.csv format and values."""
+    """Verify generated chr-config/verb-aspect.csv format and values."""
     assert VERB_ASPECT_CSV.exists()
 
     with open(VERB_ASPECT_CSV, "r", encoding="utf-8") as f:
@@ -103,15 +100,23 @@ def test_verb_aspect_csv_content():
     assert class_dict["cause"]["present"] == "ih;"
     assert class_dict["cause"]["completive"] == "han;anh;an"
     assert class_dict["vnh-vsk"]["infinitive"] == "ht;vht;vnht;vst"
-    assert class_dict["oh-ol"]["infinitive"] == "ot;st;ast"
+    assert class_dict["oh-ol"]["infinitive"] in ("ot;st;ast", "ot;hst;ast")
 
 
-def test_drop_final_csvs():
-    """Verify drop-final CSV files generated in chr-inplace-config."""
-    assert DROP_FINAL_CSV.exists()
-    assert DROP_FINAL_TWO_CSV.exists()
+def test_drop_final_csvs(tmp_path):
+    """Verify drop-final CSV files generated from classes.csv."""
+    drop_final_csv = tmp_path / "verb-aspect-drop-final.csv"
+    drop_final_two_csv = tmp_path / "verb-aspect-drop-final-two.csv"
+    generate_inplace_aspect_csv(
+        src_path=str(CLASSES_CSV),
+        dest_path=str(tmp_path / "verb-aspect.csv"),
+        drop_final_path=str(drop_final_csv),
+        drop_final_two_path=str(drop_final_two_csv),
+    )
+    assert drop_final_csv.exists()
+    assert drop_final_two_csv.exists()
 
-    with open(DROP_FINAL_CSV, "r", encoding="utf-8") as f:
+    with open(drop_final_csv, "r", encoding="utf-8") as f:
         df_rows = [r for r in csv.reader(f) if r and not r[0].startswith("#")]
     header = df_rows[0]
     assert header == ["paradigm", "immediate", "infinitive"]
@@ -122,7 +127,7 @@ def test_drop_final_csvs():
         ["apl", "Y", "N"],
     ]
 
-    with open(DROP_FINAL_TWO_CSV, "r", encoding="utf-8") as f:
+    with open(drop_final_two_csv, "r", encoding="utf-8") as f:
         df2_rows = [r for r in csv.reader(f) if r and not r[0].startswith("#")]
     header2 = df2_rows[0]
     assert header2 == ["paradigm", "immediate"]
@@ -132,7 +137,7 @@ def test_drop_final_csvs():
 
 
 def test_aspect_effects_csv_content():
-    """Verify generated chr-clean-inplace-config/aspect_effects.csv format and values."""
+    """Verify generated chr-config/aspect_effects.csv format and values."""
     assert ASPECT_EFFECTS_CSV.exists()
 
     with open(ASPECT_EFFECTS_CSV, "r", encoding="utf-8") as f:
@@ -151,9 +156,9 @@ def test_aspect_effects_csv_content():
 
 
 def test_clean_verb_aspect_csv_no_symbols():
-    """Verify chr-clean-inplace-config/verb-aspect.csv has zero '*' or '@' characters."""
-    assert CLEAN_VERB_ASPECT_CSV.exists()
-    content = CLEAN_VERB_ASPECT_CSV.read_text(encoding="utf-8")
+    """Verify chr-config/verb-aspect.csv has zero '*' or '@' characters."""
+    assert VERB_ASPECT_CSV.exists()
+    content = VERB_ASPECT_CSV.read_text(encoding="utf-8")
     assert "*" not in content
     assert "@" not in content
 

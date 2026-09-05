@@ -2,7 +2,7 @@
 tests/test_inplace_compilation.py
 
 Integration test suite for TASK-102.4:
-- AC 1: Execute generator to produce chr-inplace-generated/ from chr-inplace-config/
+- AC 1: Execute generator to produce chr-generated/ from chr-config/
 - AC 2: Validate all generated YAML files against parc_macros schema suite
 - AC 3: Compile open inflect graph with parC (infer_lexical_features=False and True) and verify zero errors
 - AC 4: Compile open parse graph with parC (infer_lexical_features=False and True) and verify zero errors
@@ -19,23 +19,23 @@ from parc_macros.yaml_validation import validate_yaml_file
 
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
-INPLACE_CONFIG_DIR = REPO_ROOT / "chr-clean-inplace-config"
-INPLACE_GEN_DIR = REPO_ROOT / "chr-inplace-generated"
+INPLACE_CONFIG_DIR = REPO_ROOT / "chr-config"
+INPLACE_GEN_DIR = REPO_ROOT / "chr-generated"
 
 
 @pytest.fixture(scope="module", autouse=True)
 def setup_inplace_env():
-    """Ensure chr-inplace-generated exists, configure parC YAML_DIR, and restore after."""
+    """Ensure chr-generated exists, configure parC YAML_DIR, and restore after."""
     from parC.constants import set_yaml_dir
     from parC.grammar.paradigm_compilation import clear_all_caches
     import parse_chr_dict.parse as parse_mod
 
     orig_yaml_dir = os.environ.get("YAML_DIR")
 
-    # AC 1: Generate chr-inplace-generated from chr-inplace-config
+    # AC 1: Generate chr-generated from chr-config
     generate_markers(str(INPLACE_CONFIG_DIR), str(INPLACE_GEN_DIR), in_place=True)
 
-    # Clear caches and set YAML_DIR to chr-inplace-generated
+    # Clear caches and set YAML_DIR to chr-generated
     clear_all_caches()
     parse_mod.PARSE_GRAPH = None
     parse_mod.INFLECT_GRAPH = None
@@ -45,8 +45,8 @@ def setup_inplace_env():
 
     yield
 
-    # Restore chr-inplace-generated from chr-clean-inplace-config
-    generate_markers(str(REPO_ROOT / "chr-clean-inplace-config"), str(INPLACE_GEN_DIR), in_place=True)
+    # Restore chr-generated from chr-config
+    generate_markers(str(INPLACE_CONFIG_DIR), str(INPLACE_GEN_DIR), in_place=True)
 
     # Restore original YAML_DIR and clear caches
     clear_all_caches()
@@ -59,7 +59,7 @@ def setup_inplace_env():
 
 
 def test_generator_execution_ac1():
-    """AC 1: Execute generator to produce chr-inplace-generated/ from chr-inplace-config/."""
+    """AC 1: Execute generator to produce chr-generated/ from chr-config/."""
     assert INPLACE_GEN_DIR.exists()
     assert (INPLACE_GEN_DIR / "Morphotactics/Paradigm/verb.yaml").exists()
     assert (INPLACE_GEN_DIR / "Phonology/Inventory/alphabet.yaml").exists()

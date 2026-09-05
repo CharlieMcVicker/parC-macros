@@ -18,7 +18,7 @@ from typing import Iterable, Set
 import pynini
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
-DEFAULT_CONFIG_DIR = REPO_ROOT / "chr-inplace-config"
+DEFAULT_CONFIG_DIR = REPO_ROOT / "chr-config"
 DEFAULT_FEATURE_ACCEPTORS_DIR = DEFAULT_CONFIG_DIR / "feature_acceptors"
 DEFAULT_MORPHOTACTICS_CSV = DEFAULT_FEATURE_ACCEPTORS_DIR / "morphotactics.csv"
 DEFAULT_PREFIX_CLASS_CSV = DEFAULT_FEATURE_ACCEPTORS_DIR / "prefix_class.csv"
@@ -192,7 +192,7 @@ def compile_morphotactic_acceptor(
     enforcing that if trigger T is present, the target slot must contain one of the licensed values.
     If T is absent, the target slot is unconstrained.
 
-    Rules are read from rules_csv (defaults to modular *_morphotactics.csv in chr-inplace-config/feature_acceptors/).
+    Rules are read from rules_csv (defaults to modular *_morphotactics.csv in chr-config/feature_acceptors/).
     Supports '# trigger_slot: <Slot>' frontmatter and '*' / 'elsewhere' trigger rules.
     """
     if alphabet is None:
@@ -320,7 +320,7 @@ def compile_prefix_stem_shape_acceptor(
     For every prefix class c in rules, [PrefixClass=c] must be followed by <Pro>,
     optional <H_ALT>, and a root whose initial phoneme satisfies PhonemeConstraint_c.
 
-    Rules are read from rules_csv (defaults to chr-inplace-config/feature_acceptors/prefix_class.csv).
+    Rules are read from rules_csv (defaults to chr-config/feature_acceptors/prefix_class.csv).
     """
     if alphabet is None:
         alphabet = get_default_alphabet()

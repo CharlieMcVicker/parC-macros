@@ -3,7 +3,8 @@ from pathlib import Path
 import pytest
 import yaml
 
-CONFIG_DIR = Path(__file__).parent.parent / "chr-inplace-config"
+CONFIG_DIR = Path(__file__).parent.parent / "chr-config"
+GEN_DIR = Path(__file__).parent.parent / "chr-generated"
 import parC.constants as c
 from parC.grammar.paradigm_compilation import clear_all_caches
 
@@ -23,7 +24,7 @@ import pynini
 @pytest.fixture(autouse=True)
 def setup_inplace_config():
     old_dir = c.get_yaml_dir()
-    c.set_yaml_dir(str(CONFIG_DIR))
+    c.set_yaml_dir(str(GEN_DIR))
     clear_all_caches()
     try:
         yield

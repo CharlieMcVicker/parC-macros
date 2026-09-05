@@ -1,84 +1,188 @@
-# This is an Inventory config file
-# This is where you specify phonemes as well as special tags
-# for your language
 kind: Inventory
 data:
-  # type inv-phones, inv-tags or inv-nested to add more nodes!
-  - name: Stops
-    ref: <Stops>
-    phones: [t, k, "'"]
-  - name: Nasals
-    ref: <N>
-    phones: [m, n]
-  - name: Fricatives
-    ref: <Frc>
-    phones: [h, s]
-  - name: Sonorants
-    ref: <Son>
-    phones: [l, y, w]
-  - name: Vowels
-    ref: <V>
-    phones: [a, e, i, o, u, v]
-  - name: Temp Tags
-    ref: <TempTags>
-    tags: ["[TEMP]", "[TEMP_VOWEL]", "[TEMP_LAT]", "[TEMP_DROP]", "[TEMP_GLOT]"]
-  - name: PPP
-    ref: <PPP>
-    tags: ["[WI]", "[DIST]"]
-  - name: Pro
-    ref: <Pro>
-    tags: ["[Pro]"]
-  - name: H_ALT
-    ref: <H_ALT>
-    tags: ["[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_NONE]", "[H_VOWEL]"]
-  - name: Tense
-    ref: <Tense>
-    tags: ["[Tense]"]
-  - name: Aspect
-    ref: <Aspect>
-    tags: ["[Aspect]"]
-## HELP FOR INVENTORY ##
-# The inventory is built as a nested tree
-# Each node of the tree contains either phones, tags, or other nodes
-# that themeselves may contain phones, tags, or other nodes, etc.
-# Each node must have three attributes:
-#   name: A natural description of the node
-#   ref: A shorthand to refer to the node in parC
-#     must be wrapped in <angle_brackets> and contain no spaces
-#   children OR phones OR tags
-#     children: nested nodes
-#     phones: list of phones, each phone may be a single letter or multiple,
-#       separated by commas e.g. [p, t, tʃ, k]
-#       optionally wrapped in quotes e.g. ["p", "t", "tʃ", "k"]
-#     tags: list of tags, each tag must be wrapped in both quotes and "[square_brackets]"
-#       and not contain any spaces, e.g. [ "[TBU]", "[MORA]", "[SYLLABLE]"]
-#       keep in mind the outermost square brackets indicate a list
-
-# Below `consonants` and `vowels` are nested nodes,
-# whereas `stops`, `nasals`, `high vowels` etc. are phone nodes
-# and `tone tags` is a tag node
-
-# - name: consonants
-#   ref: <C>
-#   children:
-#   - name: Stops
-#     ref: <Stp>
-#     phones: [p, t, k, b, d, g]
-#   - name: Nasals
-#     ref: <N>
-#     phones: [m, n, ŋ]
-# - name: vowels
-#   ref: <V>
-#   children:
-#   - name: high vowels
-#     ref: <V_High>
-#     phones: [i, u]
-#   - name: mid vowels
-#     ref: <V_Mid>
-#     phones: [e, o]
-#   - name: low_vowels
-#     ref: <V_Low>
-#     phones: [a, æ]
-# - name: tone slots
-#   ref: <ToneSlot>
-#   tags: ["[TBU]", "[FLOAT]"]
+- name: Stops
+  ref: <Stops>
+  phones:
+  - t
+  - k
+  - ''''
+- name: Nasals
+  ref: <N>
+  phones:
+  - m
+  - n
+- name: Fricatives
+  ref: <Frc>
+  phones:
+  - h
+  - s
+- name: Sonorants
+  ref: <Son>
+  phones:
+  - l
+  - y
+  - w
+- name: Vowels
+  ref: <V>
+  phones:
+  - a
+  - e
+  - i
+  - o
+  - u
+  - v
+- name: Temp Tags
+  ref: <TempTags>
+  tags:
+  - '[TEMP]'
+  - '[TEMP_VOWEL]'
+  - '[TEMP_LAT]'
+  - '[TEMP_DROP]'
+  - '[TEMP_GLOT]'
+  - '[TEMP_H]'
+  - '[TEMP_LAT_H]'
+  - '[TEMP_GLOT_H]'
+  - '[TEMP_VOWEL_H]'
+- name: PPP
+  ref: <PPP>
+  tags:
+  - '[WI]'
+  - '[DIST]'
+  - '[DIST=de]'
+  - '[DIST=di]'
+- name: H_alt
+  ref: <H_alt>
+  tags:
+  - '[H_alt=none]'
+  - '[H_alt=drop]'
+  - '[H_alt=glot]'
+  - '[H_alt=lat]'
+  - '[H_alt=vowel]'
+- name: PrefixClass
+  ref: <PrefixClass>
+  tags:
+  - '[PrefixClass=a_stem]'
+  - '[PrefixClass=v_stem]'
+  - '[PrefixClass=e_stem]'
+  - '[PrefixClass=k_a_stem]'
+  - '[PrefixClass=vowel_stem]'
+  - '[PrefixClass=cons_stem]'
+  - '[PrefixClass=r_stem]'
+- name: Pro
+  ref: <Pro>
+  tags:
+  - '[Pro=1sg.A]'
+  - '[Pro=Edl.A]'
+  - '[Pro=Epl.A]'
+  - '[Pro=Idl.A]'
+  - '[Pro=Ipl.A]'
+  - '[Pro=2sg.A]'
+  - '[Pro=2dl.A]'
+  - '[Pro=2pl.A]'
+  - '[Pro=3sg.A]'
+  - '[Pro=3ns.A]'
+  - '[Pro=1sg.B]'
+  - '[Pro=Edl.B]'
+  - '[Pro=Epl.B]'
+  - '[Pro=Idl.B]'
+  - '[Pro=Ipl.B]'
+  - '[Pro=2sg.B]'
+  - '[Pro=2dl.B]'
+  - '[Pro=2pl.B]'
+  - '[Pro=3sg.B]'
+  - '[Pro=3ns.B]'
+  - '[Pro=1sg>3sg]'
+  - '[Pro=2sg>3sg]'
+- name: AspectClass
+  ref: <AspectClass>
+  tags:
+  - '[AspectClass=a]'
+  - '[AspectClass=become]'
+  - '[AspectClass=ko-kots]'
+  - '[AspectClass=sk-s-hi-hihst]'
+  - '[AspectClass=sk-s-a]'
+  - '[AspectClass=sk-s-hst]'
+  - '[AspectClass=sk-s-la]'
+  - '[AspectClass=sk-h]'
+  - '[AspectClass=sk-h-yh]'
+  - '[AspectClass=hvsk-han]'
+  - '[AspectClass=hvsk-nh]'
+  - '[AspectClass=hvsk-n]'
+  - '[AspectClass=husk]'
+  - '[AspectClass=episodic]'
+  - '[AspectClass=terminative]'
+  - '[AspectClass=terminative-no-o]'
+  - '[AspectClass=e-aka]'
+  - '[AspectClass=e-a]'
+  - '[AspectClass=apl-active]'
+  - '[AspectClass=apl-active-h]'
+  - '[AspectClass=apl-active-'']'
+  - '[AspectClass=apl-active-a]'
+  - '[AspectClass=apl]'
+  - '[AspectClass=go]'
+  - '[AspectClass=go-in]'
+  - '[AspectClass=cause]'
+  - '[AspectClass=ih-il]'
+  - '[AspectClass=hih-hil]'
+  - '[AspectClass=hih-hilh]'
+  - '[AspectClass=hih-lh]'
+  - '[AspectClass=ih-vh]'
+  - '[AspectClass=vnh-ih-a]'
+  - '[AspectClass=vnh-vsk]'
+  - '[AspectClass=i-vka]'
+  - '[AspectClass=i-a-i]'
+  - '[AspectClass=i-a-ihsk]'
+  - '[AspectClass=ih-ihi]'
+  - '[AspectClass=o]'
+  - '[AspectClass=be-at]'
+  - '[AspectClass=oh-al]'
+  - '[AspectClass=oh-ol]'
+  - '[AspectClass=v-vhs]'
+  - '[AspectClass=vsk]'
+  - '[AspectClass=vsk-long]'
+  - '[AspectClass=vsk-post-v]'
+  - '[AspectClass=rev-gi]'
+  - '[AspectClass=rev-i]'
+  - '[AspectClass=rev-''i]'
+  - '[AspectClass=rev-e]'
+  - '[AspectClass=stative]'
+  - '[AspectClass=stative-k]'
+  - '[AspectClass=stative-h]'
+  - '[AspectClass=stative-s]'
+  - '[AspectClass=stative-a'']'
+  - '[AspectClass=stative-eh]'
+- name: Variant
+  ref: <Variant>
+  tags:
+  - '[Variant=2]'
+  - '[Variant=3]'
+  - '[Variant=4]'
+- name: Aspect
+  ref: <Aspect>
+  tags:
+  - '[Aspect=present]'
+  - '[Aspect=incompletive]'
+  - '[Aspect=completive]'
+  - '[Aspect=immediate]'
+  - '[Aspect=infinitive]'
+- name: TenseClass
+  ref: <TenseClass>
+  tags:
+  - '[TenseClass=a_present]'
+  - '[TenseClass=i_present]'
+- name: Tense
+  ref: <Tense>
+  tags:
+  - '[Tense=present]'
+  - '[Tense=immediate]'
+  - '[Tense=habitual]'
+  - '[Tense=future_prog]'
+  - '[Tense=assertive]'
+  - '[Tense=reported]'
+  - '[Tense=infinitive]'
+- name: Legacy Tags
+  ref: <LegacyTags>
+  tags:
+  - '[Pro]'
+  - '[Aspect]'
+  - '[Tense]'

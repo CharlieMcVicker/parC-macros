@@ -5,12 +5,12 @@ from tqdm import tqdm
 
 if "YAML_DIR" not in os.environ:
     repo_root = Path(__file__).parent.parent.resolve()
-    inplace_dir = repo_root / "chr-inplace-generated"
-    if inplace_dir.exists():
-        os.environ["YAML_DIR"] = str(inplace_dir)
+    gen_dir = repo_root / "chr-generated"
+    if gen_dir.exists():
+        os.environ["YAML_DIR"] = str(gen_dir)
         try:
             from parC.constants import set_yaml_dir
-            set_yaml_dir(str(inplace_dir))
+            set_yaml_dir(str(gen_dir))
         except ImportError:
             pass
 

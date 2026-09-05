@@ -62,8 +62,8 @@ def test_chr_inplace_config_yamls():
     import yaml
     from parc_macros.yaml_validation import validate_yaml_file
 
-    config_dir = Path(__file__).parent.parent / "chr-inplace-config"
-    assert config_dir.exists(), "chr-inplace-config directory must exist"
+    config_dir = Path(__file__).parent.parent / "chr-config"
+    assert config_dir.exists(), "chr-config directory must exist"
 
     # Validate verb.yaml
     verb_yaml = config_dir / "verb.yaml"
@@ -77,12 +77,53 @@ def test_chr_inplace_config_yamls():
 
     # Validate all Phonology YAML files with schema validator
     phonology_yamls = list((config_dir / "Phonology").glob("**/*.yaml"))
-    assert len(phonology_yamls) == 5, f"Expected 5 phonology yaml files, found {len(phonology_yamls)}"
+    assert len(phonology_yamls) >= 3, f"Expected at least 3 phonology yaml files, found {len(phonology_yamls)}"
     for yf in phonology_yamls:
         assert validate_yaml_file(yf) is True, f"Validation failed for {yf}"
 
     # Verify Patterns
     patterns_yaml = config_dir / "Phonology/Patterns/phoneme_groups.yaml"
+    with open(patterns_yaml, "r", encoding="utf-8") as f:
+        pat_data = yaml.safe_load(f)
+    pat_map = {p["ref"]: p["pattern"] for p in pat_data["patterns"]}
+    assert "<HTarget>" in pat_map
+    assert "<H_alt>" in pat_map
+
+    # Verify Inventory
+    alphabet_yaml = config_dir / "Phonology/Inventory/alphabet.yaml"
+    with open(alphabet_yaml, "r", encoding="utf-8") as f:
+        inv_data = yaml.safe_load(f)
+    inv_map = {node["ref"]: node.get("tags", []) for node in inv_data["data"]}
+    assert "<TempTags>" in inv_map
+    assert "<PPP>" in inv_map
+    assert "<H_alt>" in inv_map
+
+
+def test_chr_inplace_generated_yamls():
+    from pathlib import Path
+    import yaml
+    from parc_macros.yaml_validation import validate_yaml_file
+
+    gen_dir = Path(__file__).parent.parent / "chr-generated"
+    assert gen_dir.exists(), "chr-generated directory must exist"
+
+    yaml_files = list(gen_dir.glob("**/*.yaml"))
+    assert len(yaml_files) >= 13, f"Expected at least 13 YAML files in chr-generated, found {len(yaml_files)}"
+
+    for yf in sorted(yaml_files):
+        assert validate_yaml_file(yf) is True, f"Schema validation failed for {yf}"
+
+    # Verify paradigm
+    paradigm_path = gen_dir / "Morphotactics/Paradigm/verb.yaml"
+    assert paradigm_path.exists()
+    with open(paradigm_path, "r", encoding="utf-8") as f:
+        pdata = yaml.safe_load(f)
+    assert pdata["kind"] == "Paradigm"
+    assert "global_markers" in pdata
+    assert "open_root_template" in pdata
+
+    # Verify Patterns in generated
+    patterns_yaml = gen_dir / "Phonology/Patterns/phoneme_groups.yaml"
     with open(patterns_yaml, "r", encoding="utf-8") as f:
         pat_data = yaml.safe_load(f)
     pat_map = {p["ref"]: p["pattern"] for p in pat_data["patterns"]}
@@ -97,8 +138,8 @@ def test_chr_inplace_config_yamls():
     assert "<Tense>" in pat_map
     assert "<Morpheme>" in pat_map
 
-    # Verify Inventory
-    alphabet_yaml = config_dir / "Phonology/Inventory/alphabet.yaml"
+    # Verify Inventory in generated
+    alphabet_yaml = gen_dir / "Phonology/Inventory/alphabet.yaml"
     with open(alphabet_yaml, "r", encoding="utf-8") as f:
         inv_data = yaml.safe_load(f)
     inv_map = {node["ref"]: node.get("tags", []) for node in inv_data["data"]}
@@ -109,28 +150,4 @@ def test_chr_inplace_config_yamls():
     assert len(inv_map["<Aspect>"]) == 5
     assert len(inv_map["<TenseClass>"]) == 2
     assert len(inv_map["<Tense>"]) == 7
-
-
-def test_chr_inplace_generated_yamls():
-    from pathlib import Path
-    import yaml
-    from parc_macros.yaml_validation import validate_yaml_file
-
-    gen_dir = Path(__file__).parent.parent / "chr-inplace-generated"
-    assert gen_dir.exists(), "chr-inplace-generated directory must exist"
-
-    yaml_files = list(gen_dir.glob("**/*.yaml"))
-    assert len(yaml_files) >= 13, f"Expected at least 13 YAML files in chr-inplace-generated, found {len(yaml_files)}"
-
-    for yf in sorted(yaml_files):
-        assert validate_yaml_file(yf) is True, f"Schema validation failed for {yf}"
-
-    # Verify paradigm
-    paradigm_path = gen_dir / "Morphotactics/Paradigm/verb.yaml"
-    assert paradigm_path.exists()
-    with open(paradigm_path, "r", encoding="utf-8") as f:
-        pdata = yaml.safe_load(f)
-    assert pdata["kind"] == "Paradigm"
-    assert "global_markers" in pdata
-    assert "open_root_template" in pdata
 

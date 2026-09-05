@@ -1,6 +1,0 @@
-# This is a FeatureDefinitions config file
-# Generated/Updated automatically from CSV
-kind: FeatureDefinitions
-features:
-  rules:
-  - +

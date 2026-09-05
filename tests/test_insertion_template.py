@@ -2,13 +2,27 @@ import os
 from pathlib import Path
 import pytest
 
-# Ensure environment variable YAML_DIR is set to the insertion-generated output
-if "YAML_DIR" not in os.environ:
-    os.environ["YAML_DIR"] = str(
-        Path(__file__).parent.parent / "min-min-insertion-generated"
-    )
-
+from parC.constants import set_yaml_dir
+from parC.grammar.paradigm_compilation import clear_all_caches
+import parse_chr_dict.parse as parse_mod
 from parse_chr_dict.parse import parse
+
+FIXTURE_DIR = Path(__file__).parent / "fixtures" / "min-min-insertion-generated"
+
+
+@pytest.fixture(autouse=True)
+def setup_yaml_dir():
+    orig_yaml_dir = os.environ.get("YAML_DIR")
+    os.environ["YAML_DIR"] = str(FIXTURE_DIR)
+    set_yaml_dir(str(FIXTURE_DIR))
+    clear_all_caches()
+    parse_mod.PARSE_GRAPH = None
+    yield
+    clear_all_caches()
+    parse_mod.PARSE_GRAPH = None
+    if orig_yaml_dir:
+        os.environ["YAML_DIR"] = orig_yaml_dir
+        set_yaml_dir(orig_yaml_dir)
 
 
 def test_optional_feature_combinations_insertion():

@@ -17,9 +17,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-# Ensure YAML_DIR defaults to chr-inplace-generated
+# Ensure YAML_DIR defaults to chr-generated
 if "YAML_DIR" not in os.environ:
-    os.environ["YAML_DIR"] = "chr-inplace-generated"
+    os.environ["YAML_DIR"] = "chr-generated"
 
 from parse_chr_dict.parse import parse, read_inplace_parse
 

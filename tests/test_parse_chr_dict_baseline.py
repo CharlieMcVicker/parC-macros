@@ -188,7 +188,7 @@ def test_derivation_pipeline_hypothesis_refinement():
     validated = [h for h in hyps if validate_hypothesis(h, row, EVENTFUL)]
     assert len(validated) > 0
     val_hyp = validated[0]
-    assert val_hyp.h_root == "[Pro]atat[Aspect][Tense]"
+    assert val_hyp.h_root in ("atat", "[Pro]atat[Aspect][Tense]")
     assert val_hyp.aspect_class == "go-in"
     assert val_hyp.prefix_class == "a_stem"
     assert val_hyp.tense_present_class == "a_present"

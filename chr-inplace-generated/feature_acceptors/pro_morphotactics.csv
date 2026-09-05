@@ -1,5 +1,0 @@
-# kind: morphotactic_licensing
-# trigger_slot: Pro
-trigger,target_slot,licensed
-[Pro=1sg.A]|[Pro=1sg>3sg]|[Pro=2sg>3sg],H_alt,<H_alt>
-*,H_alt,[H_alt=none]

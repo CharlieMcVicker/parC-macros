@@ -10,8 +10,8 @@ from parc_macros import generate_markers_main, validate_yaml_file
 def test_generation_exact_match():
     # Paths to source files and directories
     root_dir = Path(__file__).parent.parent
-    csv_path = root_dir / "spanish-config/verb-suffix.csv"
-    ref_dir = root_dir / "spanish-reference"
+    csv_path = root_dir / "tests/fixtures/spanish-config/verb-suffix.csv"
+    ref_dir = root_dir / "tests/fixtures/spanish-reference"
 
     class_feature = "conjugation_class"
 

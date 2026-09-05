@@ -2,7 +2,7 @@
 tests/test_acceptors.py
 
 Comprehensive test suite for in-place stem-shape and morphotactic acceptor system (TASK-106):
-- AC 1: Audit and verify all 7 prefix classes in chr-inplace-config/feature_acceptors/prefix_class.csv
+- AC 1: Audit and verify all 7 prefix classes in chr-config/feature_acceptors/prefix_class.csv
 - AC 2: Morphotactic licensing acceptor enforcing trigger => licensed constraints
 - AC 3: Anchored prefix stem-shape acceptor matching [PrefixClass=c]<Pro><H_ALT>?<PhoneConstraint>
 - AC 4: Cascade domain acceptor combining morphotactics and stem-shape with [BOW]/[EOW] wrapping
@@ -31,8 +31,8 @@ from parse_chr_dict.acceptors import (
 )
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
-INPLACE_CONFIG_DIR = REPO_ROOT / "chr-clean-inplace-config"
-INPLACE_GEN_DIR = REPO_ROOT / "chr-inplace-generated"
+INPLACE_CONFIG_DIR = REPO_ROOT / "chr-config"
+INPLACE_GEN_DIR = REPO_ROOT / "chr-generated"
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -64,9 +64,9 @@ def setup_acceptor_env():
         os.environ["YAML_DIR"] = orig_yaml_dir
 
 
-# =========================================================================
-# AC 1: Audit and verify chr-inplace-config/feature_acceptors/prefix_class.csv
-# =========================================================================
+# ==============================================================================
+# AC 1: Audit and verify chr-config/feature_acceptors/prefix_class.csv
+# ==============================================================================
 
 def test_prefix_class_csv_audit_ac1():
     """Verify all 7 prefix classes are present and map to exact phoneme patterns."""

@@ -1,164 +1,315 @@
 # This is a Rules config file
-# Generated automatically by generate_morpheme_replace_rules.py
+# Generated automatically by generate_morpheme_replace_rules.py (in-place)
 kind: Rules
 rules:
-- name: pro_empty
+- name: pro_replace
+  description: In-place morpheme replacement rule for [Pro]
   string_map:
-  - - '[Pro]'
-    - ''
-- name: pro_a
-  string_map:
-  - - '[Pro]'
-    - a
-- name: pro_aki
-  string_map:
-  - - '[Pro]'
-    - aki
-- name: pro_akw
-  string_map:
-  - - '[Pro]'
-    - akw
-- name: pro_an
-  string_map:
-  - - '[Pro]'
-    - an
-- name: pro_ani
-  string_map:
-  - - '[Pro]'
-    - ani
-- name: pro_h
-  string_map:
-  - - '[Pro]'
-    - h
-- name: pro_hi
-  string_map:
-  - - '[Pro]'
-    - hi
-- name: pro_hiy
-  string_map:
-  - - '[Pro]'
-    - hiy
-- name: pro_ik
-  string_map:
-  - - '[Pro]'
-    - ik
-- name: pro_iki
-  string_map:
-  - - '[Pro]'
-    - iki
-- name: pro_in
-  string_map:
-  - - '[Pro]'
-    - in
-- name: pro_ini
-  string_map:
-  - - '[Pro]'
-    - ini
-- name: pro_it
-  string_map:
-  - - '[Pro]'
-    - it
-- name: pro_iti
-  string_map:
-  - - '[Pro]'
-    - iti
-- name: pro_its
-  string_map:
-  - - '[Pro]'
-    - its
-- name: pro_itsi
-  string_map:
-  - - '[Pro]'
-    - itsi
-- name: pro_k
-  string_map:
-  - - '[Pro]'
+  - - '[PrefixClass=a_stem][Pro=1sg.A]'
     - k
-- name: pro_ka
-  string_map:
-  - - '[Pro]'
-    - ka
-- name: pro_kin
-  string_map:
-  - - '[Pro]'
-    - kin
-- name: pro_kini
-  string_map:
-  - - '[Pro]'
-    - kini
-- name: pro_ok
-  string_map:
-  - - '[Pro]'
-    - ok
-- name: pro_oki
-  string_map:
-  - - '[Pro]'
-    - oki
-- name: pro_okin
-  string_map:
-  - - '[Pro]'
-    - okin
-- name: pro_okini
-  string_map:
-  - - '[Pro]'
-    - okini
-- name: pro_ost
-  string_map:
-  - - '[Pro]'
-    - ost
-- name: pro_osti
-  string_map:
-  - - '[Pro]'
-    - osti
-- name: pro_ots
-  string_map:
-  - - '[Pro]'
-    - ots
-- name: pro_otsi
-  string_map:
-  - - '[Pro]'
-    - otsi
-- name: pro_st
-  string_map:
-  - - '[Pro]'
-    - st
-- name: pro_sti
-  string_map:
-  - - '[Pro]'
-    - sti
-- name: pro_ts
-  string_map:
-  - - '[Pro]'
-    - ts
-- name: pro_tsa
-  string_map:
-  - - '[Pro]'
-    - tsa
-- name: pro_tsi
-  string_map:
-  - - '[Pro]'
-    - tsi
-- name: pro_tsiy
-  string_map:
-  - - '[Pro]'
+  - - '[PrefixClass=a_stem][Pro=1sg.B]'
+    - akw
+  - - '[PrefixClass=a_stem][Pro=1sg>3sg]'
     - tsiy
-- name: pro_u
-  string_map:
-  - - '[Pro]'
-    - u
-- name: pro_un
-  string_map:
-  - - '[Pro]'
+  - - '[PrefixClass=a_stem][Pro=2dl.A]'
+    - st
+  - - '[PrefixClass=a_stem][Pro=2dl.B]'
+    - st
+  - - '[PrefixClass=a_stem][Pro=2pl.A]'
+    - its
+  - - '[PrefixClass=a_stem][Pro=2pl.B]'
+    - its
+  - - '[PrefixClass=a_stem][Pro=2sg.A]'
+    - h
+  - - '[PrefixClass=a_stem][Pro=2sg.B]'
+    - ts
+  - - '[PrefixClass=a_stem][Pro=2sg>3sg]'
+    - hiy
+  - - '[PrefixClass=a_stem][Pro=3ns.A]'
+    - an
+  - - '[PrefixClass=a_stem][Pro=3ns.B]'
     - un
-- name: pro_uni
-  string_map:
-  - - '[Pro]'
+  - - '[PrefixClass=a_stem][Pro=3sg.A]'
+    - a
+  - - '[PrefixClass=a_stem][Pro=3sg.B]'
+    - u
+  - - '[PrefixClass=a_stem][Pro=Edl.A]'
+    - ost
+  - - '[PrefixClass=a_stem][Pro=Edl.B]'
+    - okin
+  - - '[PrefixClass=a_stem][Pro=Epl.A]'
+    - ots
+  - - '[PrefixClass=a_stem][Pro=Epl.B]'
+    - ok
+  - - '[PrefixClass=a_stem][Pro=Idl.A]'
+    - in
+  - - '[PrefixClass=a_stem][Pro=Idl.B]'
+    - kin
+  - - '[PrefixClass=a_stem][Pro=Ipl.A]'
+    - it
+  - - '[PrefixClass=a_stem][Pro=Ipl.B]'
+    - ik
+  - - '[PrefixClass=cons_stem][Pro=1sg.A]'
+    - tsi
+  - - '[PrefixClass=cons_stem][Pro=1sg.B]'
+    - aki
+  - - '[PrefixClass=cons_stem][Pro=1sg>3sg]'
+    - tsi
+  - - '[PrefixClass=cons_stem][Pro=2dl.A]'
+    - sti
+  - - '[PrefixClass=cons_stem][Pro=2dl.B]'
+    - sti
+  - - '[PrefixClass=cons_stem][Pro=2pl.A]'
+    - itsi
+  - - '[PrefixClass=cons_stem][Pro=2pl.B]'
+    - itsi
+  - - '[PrefixClass=cons_stem][Pro=2sg.A]'
+    - hi
+  - - '[PrefixClass=cons_stem][Pro=2sg.B]'
+    - tsa
+  - - '[PrefixClass=cons_stem][Pro=2sg>3sg]'
+    - hi
+  - - '[PrefixClass=cons_stem][Pro=3ns.A]'
+    - ani
+  - - '[PrefixClass=cons_stem][Pro=3ns.B]'
     - uni
-- name: pro_uw
-  string_map:
-  - - '[Pro]'
+  - - '[PrefixClass=cons_stem][Pro=3sg.A]'
+    - a
+  - - '[PrefixClass=cons_stem][Pro=3sg.B]'
+    - u
+  - - '[PrefixClass=cons_stem][Pro=Edl.A]'
+    - osti
+  - - '[PrefixClass=cons_stem][Pro=Edl.B]'
+    - okini
+  - - '[PrefixClass=cons_stem][Pro=Epl.A]'
+    - otsi
+  - - '[PrefixClass=cons_stem][Pro=Epl.B]'
+    - oki
+  - - '[PrefixClass=cons_stem][Pro=Idl.A]'
+    - ini
+  - - '[PrefixClass=cons_stem][Pro=Idl.B]'
+    - kini
+  - - '[PrefixClass=cons_stem][Pro=Ipl.A]'
+    - iti
+  - - '[PrefixClass=cons_stem][Pro=Ipl.B]'
+    - iki
+  - - '[PrefixClass=e_stem][Pro=1sg.A]'
+    - k
+  - - '[PrefixClass=e_stem][Pro=1sg.B]'
+    - akw
+  - - '[PrefixClass=e_stem][Pro=1sg>3sg]'
+    - tsiy
+  - - '[PrefixClass=e_stem][Pro=2dl.A]'
+    - st
+  - - '[PrefixClass=e_stem][Pro=2dl.B]'
+    - st
+  - - '[PrefixClass=e_stem][Pro=2pl.A]'
+    - its
+  - - '[PrefixClass=e_stem][Pro=2pl.B]'
+    - its
+  - - '[PrefixClass=e_stem][Pro=2sg.A]'
+    - h
+  - - '[PrefixClass=e_stem][Pro=2sg.B]'
+    - ts
+  - - '[PrefixClass=e_stem][Pro=2sg>3sg]'
+    - hiy
+  - - '[PrefixClass=e_stem][Pro=3ns.A]'
+    - an
+  - - '[PrefixClass=e_stem][Pro=3ns.B]'
+    - un
+  - - '[PrefixClass=e_stem][Pro=3sg.A]'
+    - ''
+  - - '[PrefixClass=e_stem][Pro=3sg.B]'
     - uw
-- name: pro_uwa
-  string_map:
-  - - '[Pro]'
+  - - '[PrefixClass=e_stem][Pro=Edl.A]'
+    - ost
+  - - '[PrefixClass=e_stem][Pro=Edl.B]'
+    - okin
+  - - '[PrefixClass=e_stem][Pro=Epl.A]'
+    - ots
+  - - '[PrefixClass=e_stem][Pro=Epl.B]'
+    - ok
+  - - '[PrefixClass=e_stem][Pro=Idl.A]'
+    - in
+  - - '[PrefixClass=e_stem][Pro=Idl.B]'
+    - kin
+  - - '[PrefixClass=e_stem][Pro=Ipl.A]'
+    - it
+  - - '[PrefixClass=e_stem][Pro=Ipl.B]'
+    - ik
+  - - '[PrefixClass=k_a_stem][Pro=1sg.A]'
+    - k
+  - - '[PrefixClass=k_a_stem][Pro=1sg.B]'
+    - akw
+  - - '[PrefixClass=k_a_stem][Pro=1sg>3sg]'
+    - tsiy
+  - - '[PrefixClass=k_a_stem][Pro=2dl.A]'
+    - st
+  - - '[PrefixClass=k_a_stem][Pro=2dl.B]'
+    - st
+  - - '[PrefixClass=k_a_stem][Pro=2pl.A]'
+    - its
+  - - '[PrefixClass=k_a_stem][Pro=2pl.B]'
+    - its
+  - - '[PrefixClass=k_a_stem][Pro=2sg.A]'
+    - h
+  - - '[PrefixClass=k_a_stem][Pro=2sg.B]'
+    - ts
+  - - '[PrefixClass=k_a_stem][Pro=2sg>3sg]'
+    - hiy
+  - - '[PrefixClass=k_a_stem][Pro=3ns.A]'
+    - an
+  - - '[PrefixClass=k_a_stem][Pro=3ns.B]'
+    - un
+  - - '[PrefixClass=k_a_stem][Pro=3sg.A]'
+    - k
+  - - '[PrefixClass=k_a_stem][Pro=3sg.B]'
+    - u
+  - - '[PrefixClass=k_a_stem][Pro=Edl.A]'
+    - ost
+  - - '[PrefixClass=k_a_stem][Pro=Edl.B]'
+    - okin
+  - - '[PrefixClass=k_a_stem][Pro=Epl.A]'
+    - ots
+  - - '[PrefixClass=k_a_stem][Pro=Epl.B]'
+    - ok
+  - - '[PrefixClass=k_a_stem][Pro=Idl.A]'
+    - in
+  - - '[PrefixClass=k_a_stem][Pro=Idl.B]'
+    - kin
+  - - '[PrefixClass=k_a_stem][Pro=Ipl.A]'
+    - it
+  - - '[PrefixClass=k_a_stem][Pro=Ipl.B]'
+    - ik
+  - - '[PrefixClass=r_stem][Pro=1sg.A]'
+    - tsi
+  - - '[PrefixClass=r_stem][Pro=1sg.B]'
+    - aki
+  - - '[PrefixClass=r_stem][Pro=1sg>3sg]'
+    - tsi
+  - - '[PrefixClass=r_stem][Pro=2dl.A]'
+    - sti
+  - - '[PrefixClass=r_stem][Pro=2dl.B]'
+    - sti
+  - - '[PrefixClass=r_stem][Pro=2pl.A]'
+    - itsi
+  - - '[PrefixClass=r_stem][Pro=2pl.B]'
+    - itsi
+  - - '[PrefixClass=r_stem][Pro=2sg.A]'
+    - hi
+  - - '[PrefixClass=r_stem][Pro=2sg.B]'
+    - tsa
+  - - '[PrefixClass=r_stem][Pro=2sg>3sg]'
+    - hi
+  - - '[PrefixClass=r_stem][Pro=3ns.A]'
+    - ani
+  - - '[PrefixClass=r_stem][Pro=3ns.B]'
+    - uni
+  - - '[PrefixClass=r_stem][Pro=3sg.A]'
+    - ka
+  - - '[PrefixClass=r_stem][Pro=3sg.B]'
+    - u
+  - - '[PrefixClass=r_stem][Pro=Edl.A]'
+    - osti
+  - - '[PrefixClass=r_stem][Pro=Edl.B]'
+    - okini
+  - - '[PrefixClass=r_stem][Pro=Epl.A]'
+    - otsi
+  - - '[PrefixClass=r_stem][Pro=Epl.B]'
+    - oki
+  - - '[PrefixClass=r_stem][Pro=Idl.A]'
+    - ini
+  - - '[PrefixClass=r_stem][Pro=Idl.B]'
+    - kini
+  - - '[PrefixClass=r_stem][Pro=Ipl.A]'
+    - iti
+  - - '[PrefixClass=r_stem][Pro=Ipl.B]'
+    - iki
+  - - '[PrefixClass=v_stem][Pro=1sg.A]'
+    - k
+  - - '[PrefixClass=v_stem][Pro=1sg.B]'
+    - akw
+  - - '[PrefixClass=v_stem][Pro=1sg>3sg]'
+    - tsiy
+  - - '[PrefixClass=v_stem][Pro=2dl.A]'
+    - st
+  - - '[PrefixClass=v_stem][Pro=2dl.B]'
+    - st
+  - - '[PrefixClass=v_stem][Pro=2pl.A]'
+    - its
+  - - '[PrefixClass=v_stem][Pro=2pl.B]'
+    - its
+  - - '[PrefixClass=v_stem][Pro=2sg.A]'
+    - h
+  - - '[PrefixClass=v_stem][Pro=2sg.B]'
+    - ts
+  - - '[PrefixClass=v_stem][Pro=2sg>3sg]'
+    - hiy
+  - - '[PrefixClass=v_stem][Pro=3ns.A]'
+    - an
+  - - '[PrefixClass=v_stem][Pro=3ns.B]'
+    - un
+  - - '[PrefixClass=v_stem][Pro=3sg.A]'
+    - k
+  - - '[PrefixClass=v_stem][Pro=3sg.B]'
     - uwa
+  - - '[PrefixClass=v_stem][Pro=Edl.A]'
+    - ost
+  - - '[PrefixClass=v_stem][Pro=Edl.B]'
+    - okin
+  - - '[PrefixClass=v_stem][Pro=Epl.A]'
+    - ots
+  - - '[PrefixClass=v_stem][Pro=Epl.B]'
+    - ok
+  - - '[PrefixClass=v_stem][Pro=Idl.A]'
+    - in
+  - - '[PrefixClass=v_stem][Pro=Idl.B]'
+    - kin
+  - - '[PrefixClass=v_stem][Pro=Ipl.A]'
+    - it
+  - - '[PrefixClass=v_stem][Pro=Ipl.B]'
+    - ik
+  - - '[PrefixClass=vowel_stem][Pro=1sg.A]'
+    - k
+  - - '[PrefixClass=vowel_stem][Pro=1sg.B]'
+    - akw
+  - - '[PrefixClass=vowel_stem][Pro=1sg>3sg]'
+    - tsiy
+  - - '[PrefixClass=vowel_stem][Pro=2dl.A]'
+    - st
+  - - '[PrefixClass=vowel_stem][Pro=2dl.B]'
+    - st
+  - - '[PrefixClass=vowel_stem][Pro=2pl.A]'
+    - its
+  - - '[PrefixClass=vowel_stem][Pro=2pl.B]'
+    - its
+  - - '[PrefixClass=vowel_stem][Pro=2sg.A]'
+    - h
+  - - '[PrefixClass=vowel_stem][Pro=2sg.B]'
+    - ts
+  - - '[PrefixClass=vowel_stem][Pro=2sg>3sg]'
+    - hiy
+  - - '[PrefixClass=vowel_stem][Pro=3ns.A]'
+    - an
+  - - '[PrefixClass=vowel_stem][Pro=3ns.B]'
+    - un
+  - - '[PrefixClass=vowel_stem][Pro=3sg.A]'
+    - k
+  - - '[PrefixClass=vowel_stem][Pro=3sg.B]'
+    - uw
+  - - '[PrefixClass=vowel_stem][Pro=Edl.A]'
+    - ost
+  - - '[PrefixClass=vowel_stem][Pro=Edl.B]'
+    - okin
+  - - '[PrefixClass=vowel_stem][Pro=Epl.A]'
+    - ots
+  - - '[PrefixClass=vowel_stem][Pro=Epl.B]'
+    - ok
+  - - '[PrefixClass=vowel_stem][Pro=Idl.A]'
+    - in
+  - - '[PrefixClass=vowel_stem][Pro=Idl.B]'
+    - kin
+  - - '[PrefixClass=vowel_stem][Pro=Ipl.A]'
+    - it
+  - - '[PrefixClass=vowel_stem][Pro=Ipl.B]'
+    - ik

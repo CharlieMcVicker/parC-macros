@@ -28,7 +28,7 @@ from parse_chr_dict.parse import parse, get_just_root
 
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
-INPLACE_GEN_DIR = REPO_ROOT / "chr-inplace-generated"
+INPLACE_GEN_DIR = REPO_ROOT / "chr-generated"
 
 
 @pytest.fixture(scope="module", autouse=True)

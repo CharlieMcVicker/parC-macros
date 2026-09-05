@@ -195,13 +195,13 @@ def generate_aspect_effects_csv(effects: list[dict], dest_path: str) -> None:
 
 def generate_inplace_aspect_config(
     src_path: str = "chr-data/classes.csv",
-    dest_path: str = "chr-inplace-config/verb-aspect.csv",
-    effects_path: str | None = None,
-    drop_final_path: str | None = "chr-inplace-config/verb-aspect-drop-final.csv",
-    drop_final_two_path: str | None = "chr-inplace-config/verb-aspect-drop-final-two.csv",
+    dest_path: str = "chr-config/verb-aspect.csv",
+    effects_path: str | None = "chr-config/aspect_effects.csv",
+    drop_final_path: str | None = None,
+    drop_final_two_path: str | None = None,
 ) -> dict:
     """
-    Generates chr-inplace-config/verb-aspect.csv and drop-final CSVs or aspect_effects.csv from chr-data/classes.csv.
+    Generates chr-config/verb-aspect.csv and aspect_effects.csv (or drop-final CSVs) from chr-data/classes.csv.
     Returns summary dict containing triggers, effects, and count of generated rows.
     """
     (
@@ -379,13 +379,13 @@ def main():
     )
     parser.add_argument(
         "--dest",
-        default="chr-inplace-config/verb-aspect.csv",
-        help="Path to destination verb-aspect.csv (default: chr-inplace-config/verb-aspect.csv)",
+        default="chr-config/verb-aspect.csv",
+        help="Path to destination verb-aspect.csv (default: chr-config/verb-aspect.csv)",
     )
     parser.add_argument(
         "--effects",
-        default=None,
-        help="Path to destination aspect_effects.csv (default: None)",
+        default="chr-config/aspect_effects.csv",
+        help="Path to destination aspect_effects.csv (default: chr-config/aspect_effects.csv)",
     )
     args = parser.parse_args()
 

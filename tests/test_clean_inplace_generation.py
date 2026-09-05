@@ -2,9 +2,9 @@
 tests/test_clean_inplace_generation.py
 
 Integration test suite for TASK-112:
-- Generates from chr-clean-inplace-config/ to a temporary output directory
+- Generates from chr-config/ to a temporary output directory
 - Asserts all generated YAML files exist and pass validate_yaml_file
-- Compares generated YAMLs against chr-inplace-generated/ for 100% parity
+- Compares generated YAMLs against chr-generated/ for 100% parity
 - Compiles open inflect graph and open parse graph with parC and verifies 983 states
 - End-to-end inflection and parse roundtrip verification
 """
@@ -22,13 +22,13 @@ from parc_macros.yaml_validation import validate_yaml_file
 
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
-CLEAN_CONFIG_DIR = REPO_ROOT / "chr-clean-inplace-config"
-INPLACE_GEN_DIR = REPO_ROOT / "chr-inplace-generated"
+CLEAN_CONFIG_DIR = REPO_ROOT / "chr-config"
+INPLACE_GEN_DIR = REPO_ROOT / "chr-generated"
 
 
 @pytest.fixture(scope="module")
 def generated_clean_dir():
-    """Generates marker configuration from chr-clean-inplace-config to a temporary directory."""
+    """Generates marker configuration from chr-config to a temporary directory."""
     tmpdir = tempfile.mkdtemp(prefix="clean_inplace_gen_")
     out_path = Path(tmpdir)
 
@@ -92,7 +92,7 @@ def test_clean_inplace_yamls_exist_and_validate(generated_clean_dir):
 
 
 def test_clean_inplace_parity_against_reference(generated_clean_dir):
-    """Compares generated YAML files against chr-inplace-generated for full data parity."""
+    """Compares generated YAML files against chr-generated for full data parity."""
     ref_yamls = sorted([
         p.relative_to(INPLACE_GEN_DIR)
         for p in INPLACE_GEN_DIR.glob("**/*.yaml")

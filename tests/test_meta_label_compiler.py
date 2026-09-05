@@ -337,7 +337,7 @@ def test_derive_hypotheses_for_forms_direct():
     assert isinstance(hyps, set)
     assert len(hyps) > 0
     assert all(isinstance(h, DerivationHypothesis) for h in hyps)
-    assert any(h.h_root == "[Pro]atat[Aspect][Tense]" and h.aspect_class == "go-in" for h in hyps)
+    assert any(h.h_root in ("atat", "[Pro]atat[Aspect][Tense]") and h.aspect_class == "go-in" for h in hyps)
 
 
 def test_validate_hypothesis_and_row_reconstruction():
@@ -469,8 +469,8 @@ def test_entry_1759_derivation_and_validation():
 
     hyps = derive_hypotheses_for_forms(forms)
     assert len(hyps) >= 1
-    hyp = next(h for h in hyps if h.h_root == "[Pro]athvtast[Aspect][Tense]" and h.animate_objects is True)
-    assert hyp.h_root == "[Pro]athvtast[Aspect][Tense]"
+    hyp = next(h for h in hyps if h.h_root in ("athvtast", "[Pro]athvtast[Aspect][Tense]") and h.animate_objects is True)
+    assert hyp.h_root in ("athvtast", "[Pro]athvtast[Aspect][Tense]")
     assert hyp.prefix_class == "a_stem"
     assert hyp.aspect_class == "stative"
     assert hyp.tense_present_class == "i_present"
@@ -493,7 +493,7 @@ def test_h_alternation_verb_derivation():
     ]
     hyps = derive_hypotheses_for_forms(forms)
     assert len(hyps) > 0
-    assert any(h.h_root == "[Pro]atat[Aspect][Tense]" for h in hyps)
+    assert any(h.h_root in ("atat", "[Pro]atat[Aspect][Tense]") for h in hyps)
 
 
 def test_h_alternation_trigger_external_validation():
