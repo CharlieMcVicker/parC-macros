@@ -4,14 +4,7 @@ from parse_chr_dict.h_alternation import (
     is_h_alternation_trigger,
     validate_h_alternation_trigger,
 )
-from parse_chr_dict.meta_label_compiler import (
-    FORMS_TO_PARSE,
-    EntryTypeSpec as EntryType,
-    FormParsingSpec as FormParsing,
-)
 from parC.grammar.paradigm_compilation import inflect
-
-FORMS_BY_NAME: dict[str, FormParsing] = {p.name: p for p in FORMS_TO_PARSE}
 
 _INFLECT_CACHE: dict[tuple[str, frozenset[tuple[str, str]], str, bool, bool], list[str]] = {}
 
@@ -143,10 +136,6 @@ def validate_hypothesis(
     if isinstance(entry_type, str):
         if entry_type in VERB_ENTRY_TYPES_BY_NAME:
             entry_type = VERB_ENTRY_TYPES_BY_NAME[entry_type]
-        else:
-            from parse_chr_dict.meta_label_compiler import ENTRY_TYPES_BY_NAME
-            if entry_type in ENTRY_TYPES_BY_NAME:
-                entry_type = ENTRY_TYPES_BY_NAME[entry_type]
 
     forms = getattr(entry_type, "forms", ())
     for form_item in forms:

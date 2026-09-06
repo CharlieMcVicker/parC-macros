@@ -4,7 +4,7 @@ from typing import List, Dict, Any, Optional
 from tqdm import tqdm
 
 from parse_chr_dict.create_aspect_class_csv import respell_consonants
-from parse_chr_dict.meta_label_compiler import derive_hypotheses_for_forms
+from parse_chr_dict.derive import derive_hypotheses_for_forms
 from parse_chr_dict.types import (
     VerbForm,
     PRIMARY_VERB_ENTRY_TYPES,

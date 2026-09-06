@@ -229,13 +229,13 @@ def benchmark_corpus_parsing(
     in chr-corpus/corpus.csv using the parse_chr_dict derivation and validation pipeline.
     """
     from parse_chr_dict.create_aspect_class_csv import respell_consonants
-    from parse_chr_dict.meta_label_compiler import (
-        MetaConstraintCompiler,
-        PRIMARY_ENTRY_TYPES,
-        derive_hypotheses_for_forms,
-    )
+    from parse_chr_dict.derive import derive_hypotheses_for_forms
+    from parse_chr_dict.types import PRIMARY_VERB_ENTRY_TYPES as PRIMARY_ENTRY_TYPES
     from parse_chr_dict.reconstruct import validate_hypothesis
-    from parse_chr_dict.__main__ import ENTRY_TYPE_FORMS
+    try:
+        from parse_chr_dict.__main__ import ENTRY_TYPE_FORMS
+    except ImportError:
+        ENTRY_TYPE_FORMS = {}
 
     fieldnames = [
         "corpus_id",
@@ -250,7 +250,7 @@ def benchmark_corpus_parsing(
     ]
 
     t_init_0 = time.perf_counter()
-    compiler = MetaConstraintCompiler()
+    compiler = None
     init_time = time.perf_counter() - t_init_0
 
     with open(corpus_path, mode="r", encoding="utf-8") as f:

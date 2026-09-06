@@ -1,15 +1,9 @@
 import pytest
-from parse_chr_dict.meta_label_compiler import (
-    MetaConstraintCompiler,
-    MetaLabelDefinition,
-    FeatureConstraint,
-    MatchMode,
-    META_LABELS,
-    FORMS_TO_PARSE,
-    PRIMARY_ENTRY_TYPES,
-    SHIM_ENTRY_TYPES,
+from parse_chr_dict.derive import (
     derive_lexical_features_4step,
     derive_hypotheses_for_forms,
+)
+from parse_chr_dict.types import (
     Pronominal,
     filter_pronominals,
     DerivationHypothesis,
@@ -32,16 +26,6 @@ from parse_chr_dict.parse import parse_surface, parse_string_to_parse_data
 
 
 def test_meta_label_definitions():
-    # Deprecated compiler shim
-    with pytest.deprecated_call():
-        compiler = MetaConstraintCompiler()
-    assert compiler is not None
-    assert "[FORM=3RD_PRES]" in compiler.meta_registry
-    assert "[FORM=1ST_PRES]" in compiler.meta_registry
-    assert "[PRONOUN_SET=A]" in compiler.meta_registry
-    assert "[PLURAL=TRUE]" in compiler.meta_registry
-    assert "[PLURAL=FALSE]" in compiler.meta_registry
-
     # Pure VerbForm domain models
     assert PRES_3RD.name == "3rd_present"
     assert PRES_1SG.name == "1st_present"
@@ -68,26 +52,14 @@ def test_pronominal_struct_and_filters():
 
 
 def test_step1a_feature_tuples():
-    with pytest.deprecated_call():
-        compiler = MetaConstraintCompiler()
-    target_labels = compiler.get_feature_tuples_from_meta(["[FORM=3RD_PRES]"])
-    assert ("tense", "present") in target_labels
-    assert ("aspect", "present") in target_labels
-
     # Direct VerbForm features
     assert PRES_3RD.tense == "present"
     assert PRES_3RD.aspect == "present"
 
 
 def test_step2_infer_meta_labels():
-    with pytest.deprecated_call():
-        compiler = MetaConstraintCompiler()
-    parse_str = "[BOW]gawoniha[EOW][tense=present][aspect=present][pronominal=3sg.A]"
-    inferred = compiler.infer_meta_labels_from_parse(parse_str)
-    assert "[FORM=3RD_PRES]" in inferred
-    assert "[PRONOUN_SET=A]" in inferred
-
     # Pure VerbForm matching
+    parse_str = "[BOW]gawoniha[EOW][tense=present][aspect=present][pronominal=3sg.A]"
     p_data = parse_string_to_parse_data(parse_str)
     assert PRES_3RD.matches(p_data) is True
     assert PRES_1SG.matches(p_data) is False
@@ -262,7 +234,7 @@ def test_real_animate_verb_entry_788():
 
 
 def test_derivation_hypothesis_dataclass_and_aliases():
-    from parse_chr_dict.meta_label_compiler import (
+    from parse_chr_dict.types import (
         DerivationHypothesis,
         LexicalVerbHypothesis,
         LexicalVerbEntry,
