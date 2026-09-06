@@ -1,11 +1,11 @@
 ---
 id: TASK-113
 title: 'Eliminate TenseClass: replace generic present with present_a and present_i'
-status: In Progress
+status: Done
 assignee:
   - '@subagent'
 created_date: '2026-09-03 18:14'
-updated_date: '2026-09-06 17:46'
+updated_date: '2026-09-06 17:47'
 labels: []
 dependencies: []
 modified_files:
