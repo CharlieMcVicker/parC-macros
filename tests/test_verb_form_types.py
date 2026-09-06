@@ -182,7 +182,7 @@ def test_verb_entry_type_definitions():
         PRES_3RD,
         PRES_1SG,
         HABITUAL_3RD,
-        COMPLETIVE_3RD,
+        INCOMPLETIVE_ASSERTIVE_3RD,
         FUT_PROG_2ND,
     )
 
@@ -192,7 +192,7 @@ def test_verb_entry_type_definitions():
         PRES_3RD,
         PRES_1SG,
         HABITUAL_3RD,
-        COMPLETIVE_3RD,
+        INCOMPLETIVE_ASSERTIVE_3RD,
     )
 
     assert PRIMARY_VERB_ENTRY_TYPES == [EVENTFUL, STATIVE_FUT_PROG, STATIVE_NO_IMP]

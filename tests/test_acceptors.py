@@ -119,9 +119,9 @@ def test_compile_morphotactic_acceptor_ac2():
     morph_fsa = compile_morphotactic_acceptor(syms, alphabet)
     assert morph_fsa is not None
 
-    # State footprint verification: compact (~15-100 states across all modular CSVs)
+    # State footprint verification: compact (~15-130 states across all modular CSVs)
     state_count = morph_fsa.num_states()
-    assert 12 <= state_count <= 100, f"Expected state count between 12 and 100, got {state_count}"
+    assert 12 <= state_count <= 130, f"Expected state count between 12 and 130, got {state_count}"
 
     # Helper to test un-wrapped strings against morph_fsa
     def morph_accepts(tokens: list[str]) -> bool:
@@ -193,6 +193,18 @@ def test_compile_morphotactic_acceptor_ac2():
     assert not morph_accepts(tokens_3sg_drop)
     tokens_2sg_glot = ["[PrefixClass=a_stem]", "[Pro=2sg.A]", "[H_alt=glot]", "a", "t", "a", "t", "[AspectClass=a]"]
     assert not morph_accepts(tokens_2sg_glot)
+
+    # 9. Stative aspect morphotactics: stative classes license ONLY present and incompletive aspects
+    tokens_stative_pres = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", "a", "t", "a", "t", "[AspectClass=stative-k]", "[Aspect=present]", "[Tense=present]"]
+    assert morph_accepts(tokens_stative_pres)
+    tokens_stative_incomp = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", "a", "t", "a", "t", "[AspectClass=stative-k]", "[Aspect=incompletive]", "[Tense=habitual]"]
+    assert morph_accepts(tokens_stative_incomp)
+    tokens_stative_comp = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", "a", "t", "a", "t", "[AspectClass=stative-k]", "[Aspect=completive]", "[Tense=assertive]"]
+    assert not morph_accepts(tokens_stative_comp)
+    tokens_stative_imm = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", "a", "t", "a", "t", "[AspectClass=stative-k]", "[Aspect=immediate]", "[Tense=immediate]"]
+    assert not morph_accepts(tokens_stative_imm)
+    tokens_stative_inf = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", "a", "t", "a", "t", "[AspectClass=stative-k]", "[Aspect=infinitive]", "[Tense=infinitive]"]
+    assert not morph_accepts(tokens_stative_inf)
 
 
 # =========================================================================

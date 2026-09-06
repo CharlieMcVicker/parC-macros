@@ -25,7 +25,10 @@ from parC.grammar.paradigm_compilation import (
     inflect,
     word_fsa,
 )
-from parse_chr_dict.acceptors import get_cascade_domain_acceptor
+from parse_chr_dict.acceptors import (
+    get_cascade_domain_acceptor,
+    get_default_symbol_table,
+)
 
 PARSE_GRAPH = None
 INFLECT_GRAPH = None
@@ -60,9 +63,13 @@ def get_parse_graph():
         "verb", infer_lexical_features=True, non_deterministic_cleanup=True
     )
     if is_inplace_grammar():
-        syms = raw_parse.output_symbols()
+        syms = raw_parse.output_symbols() or get_default_symbol_table()
         domain_acceptor = get_cascade_domain_acceptor(syms=syms)
         PARSE_GRAPH = pynini.compose(raw_parse, domain_acceptor).optimize()
+        if syms is not None:
+            if raw_parse.input_symbols() is not None:
+                PARSE_GRAPH.set_input_symbols(raw_parse.input_symbols())
+            PARSE_GRAPH.set_output_symbols(syms)
     else:
         PARSE_GRAPH = raw_parse
     return PARSE_GRAPH
@@ -325,7 +332,10 @@ def get_specialized_parse_graph(form: Any, is_stative: bool = False) -> pynini.F
         _SPECIALIZED_PARSE_GRAPHS[key] = base_graph
         return base_graph
 
-    syms = base_graph.output_symbols()
+    syms = base_graph.output_symbols() or get_default_symbol_table()
+    if syms is None:
+        _SPECIALIZED_PARSE_GRAPHS[key] = base_graph
+        return base_graph
     all_syms = [syms.find(i) for i in range(1, syms.num_symbols())]
     sigma = pynini.union(*[pynini.accep(s, token_type=syms) for s in all_syms]).optimize()
     sigma_star = sigma.star.optimize()
@@ -397,7 +407,7 @@ def build_root_filter_fsa(allowed_roots: Iterable[str]) -> pynini.Fst | None:
         return _ROOT_FILTER_CACHE[key]
 
     base_graph = get_parse_graph()
-    syms = base_graph.output_symbols()
+    syms = base_graph.output_symbols() or get_default_symbol_table()
     if syms is None:
         return None
 

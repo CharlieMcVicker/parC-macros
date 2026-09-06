@@ -64,31 +64,52 @@ def extract_inplace_data(config_dir: Path) -> dict[str, Any]:
     # 2. Tenses and tense classes
     tense_classes, tenses = _parse_csv_matrix(config_dir / "verb-tense.csv")
 
-    # 3. Aspects, aspect classes, variants, and drop-final triggers from verb-aspect.csv
-    aspect_csv_path = config_dir / "verb-aspect.csv"
-    with open(aspect_csv_path, "r", encoding="utf-8") as f:
-        rows = [r for r in csv.reader(f) if r and not r[0].startswith("#")]
+    # 3. Aspects, aspect classes, variants, and drop-final triggers from verb-aspect.csv and optional verb-aspect-stative.csv
+    aspect_csv_files = [config_dir / "verb-aspect.csv"]
+    stative_csv_path = config_dir / "verb-aspect-stative.csv"
+    if stative_csv_path.exists():
+        aspect_csv_files.append(stative_csv_path)
 
-    if not rows:
-        raise ValueError(f"Empty aspect CSV: {aspect_csv_path}")
-
-    header = rows[0]
-    aspect_classes = [r[0].strip() for r in rows[1:] if r and r[0].strip()]
-    aspects = [h.strip() for h in header[1:] if h.strip()]
-
+    aspect_classes: list[str] = []
+    aspects: list[str] = []
     max_variants = 1
-    for r in rows[1:]:
-        if not r or not r[0].strip():
+
+    for aspect_csv_path in aspect_csv_files:
+        if not aspect_csv_path.exists():
             continue
-        for idx in range(1, len(header)):
-            if idx >= len(r):
+        with open(aspect_csv_path, "r", encoding="utf-8") as f:
+            rows = [r for r in csv.reader(f) if r and not r[0].startswith("#")]
+
+        if not rows:
+            continue
+
+        header = rows[0]
+        for r in rows[1:]:
+            if r and r[0].strip():
+                cls_name = r[0].strip()
+                if cls_name not in aspect_classes:
+                    aspect_classes.append(cls_name)
+
+        for h in header[1:]:
+            feat_name = h.strip()
+            if feat_name and feat_name not in aspects:
+                aspects.append(feat_name)
+
+        for r in rows[1:]:
+            if not r or not r[0].strip():
                 continue
-            raw_cell = r[idx].strip()
-            if not raw_cell:
-                continue
-            cell_variants = [v.strip() for v in raw_cell.split(";")]
-            if len(cell_variants) > max_variants:
-                max_variants = len(cell_variants)
+            for idx in range(1, len(header)):
+                if idx >= len(r):
+                    continue
+                raw_cell = r[idx].strip()
+                if not raw_cell:
+                    continue
+                cell_variants = [v.strip() for v in raw_cell.split(";")]
+                if len(cell_variants) > max_variants:
+                    max_variants = len(cell_variants)
+
+    if not aspect_classes:
+        raise ValueError(f"No aspect classes found in {aspect_csv_files}")
 
     variants = list(range(2, max_variants + 1)) if max_variants > 1 else []
 

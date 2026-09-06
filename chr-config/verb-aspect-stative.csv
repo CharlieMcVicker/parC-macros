@@ -1,0 +1,13 @@
+# kind: morpheme_replace
+# morpheme_tag: [Aspect]
+# stage: aspect_suffix
+# feature: aspect
+# part_of_speech: $verb
+# class_feature: aspect_class
+paradigm,present,incompletive
+stative,,
+stative-k,k,k
+stative-h,h,h
+stative-s,h,s
+stative-a',a',a'
+stative-eh,eh,eh

@@ -12,13 +12,15 @@ from parse_chr_dict.create_aspect_class_csv import (
 REPO_ROOT = Path(__file__).parent.parent.resolve()
 CLASSES_CSV = REPO_ROOT / "chr-data" / "classes.csv"
 VERB_ASPECT_CSV = REPO_ROOT / "chr-config" / "verb-aspect.csv"
+VERB_ASPECT_STATIVE_CSV = REPO_ROOT / "chr-config" / "verb-aspect-stative.csv"
 ASPECT_EFFECTS_CSV = REPO_ROOT / "chr-config" / "aspect_effects.csv"
 
 
 def test_parse_classes_csv_and_triggers():
     """Verify parsing classes.csv, row count, final-dropping triggers, and effects."""
     (
-        rows_out,
+        eventful_rows,
+        stative_rows,
         mark_final_triggers,
         mark_final_two_triggers,
         drop_final_rows,
@@ -26,9 +28,10 @@ def test_parse_classes_csv_and_triggers():
         effects,
     ) = parse_classes_csv(str(CLASSES_CSV))
 
-    # Exactly 55 classes
-    assert len(rows_out) == 55
-    paradigms = [r["paradigm"] for r in rows_out]
+    # 49 eventful classes and 6 stative classes (55 total)
+    assert len(eventful_rows) == 49
+    assert len(stative_rows) == 6
+    paradigms = [r["paradigm"] for r in eventful_rows + stative_rows]
     assert len(set(paradigms)) == 55
 
     # No bracketed variant names
@@ -84,9 +87,19 @@ def test_verb_aspect_csv_content():
 
     reader = csv.DictReader(data_lines)
     rows = list(reader)
-    assert len(rows) == 55
+    assert len(rows) == 49
 
     class_dict = {r["paradigm"]: r for r in rows}
+
+    # Statives should be in verb-aspect-stative.csv
+    assert VERB_ASPECT_STATIVE_CSV.exists()
+    with open(VERB_ASPECT_STATIVE_CSV, "r", encoding="utf-8") as f:
+        stative_lines = [line.strip() for line in f if line.strip()]
+    stative_data_lines = [line for line in stative_lines if not line.startswith("#")]
+    assert stative_data_lines[0] == "paradigm,present,incompletive"
+    stative_reader = csv.DictReader(stative_data_lines)
+    stative_rows = list(stative_reader)
+    assert len(stative_rows) == 6
 
     # Spot checks on multi-variant classes
     assert class_dict["become"]["infinitive"] == "st;'ist;yhst;ist"
@@ -156,11 +169,16 @@ def test_aspect_effects_csv_content():
 
 
 def test_clean_verb_aspect_csv_no_symbols():
-    """Verify chr-config/verb-aspect.csv has zero '*' or '@' characters."""
+    """Verify chr-config/verb-aspect.csv and verb-aspect-stative.csv have zero '*' or '@' characters."""
     assert VERB_ASPECT_CSV.exists()
     content = VERB_ASPECT_CSV.read_text(encoding="utf-8")
     assert "*" not in content
     assert "@" not in content
+
+    assert VERB_ASPECT_STATIVE_CSV.exists()
+    stative_content = VERB_ASPECT_STATIVE_CSV.read_text(encoding="utf-8")
+    assert "*" not in stative_content
+    assert "@" not in stative_content
 
 
 def test_generate_aspect_effects_csv_helper(tmp_path):

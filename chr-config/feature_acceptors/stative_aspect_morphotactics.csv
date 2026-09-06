@@ -1,0 +1,4 @@
+# kind: morphotactic_licensing
+# trigger_slot: AspectClass
+trigger,target_slot,licensed
+[AspectClass=stative]|[AspectClass=stative-k]|[AspectClass=stative-h]|[AspectClass=stative-s]|[AspectClass=stative-a']|[AspectClass=stative-eh],Aspect,[Aspect=present]|[Aspect=incompletive]

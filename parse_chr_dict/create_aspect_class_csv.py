@@ -15,6 +15,11 @@ DATA_COLS = {
     "infinitive": "infinitive",
 }
 
+STATIVE_DATA_COLS = {
+    "present": "present",
+    "incompletive": "imperfective",
+}
+
 
 @functools.lru_cache(maxsize=1024)
 def respell_consonants(s: str) -> str:
@@ -45,7 +50,7 @@ def setup_aspect_class_writer(dest: IO[str]):
     return writer
 
 
-def setup_inplace_aspect_class_writer(dest: IO[str]):
+def setup_inplace_aspect_class_writer(dest: IO[str], fieldnames: list[str] | None = None):
     write_metadata(
         dest,
         "# kind: morpheme_replace",
@@ -56,7 +61,9 @@ def setup_inplace_aspect_class_writer(dest: IO[str]):
         "# class_feature: aspect_class",
     )
 
-    writer = DictWriter(dest, fieldnames=["paradigm"] + list(DATA_COLS.keys()))
+    if fieldnames is None:
+        fieldnames = ["paradigm"] + list(DATA_COLS.keys())
+    writer = DictWriter(dest, fieldnames=fieldnames)
     writer.writeheader()
 
     return writer
@@ -92,14 +99,21 @@ def setup_aspect_rule_writer(
     return writer
 
 
-def parse_classes_csv(src_path: str = "chr-data/classes.csv"):
+def parse_classes_csv(
+    src_path: str = "chr-data/classes.csv",
+    separate_stative: bool = True,
+):
     """
     Parses chr-data/classes.csv directly.
     Emits unified hyphenated aspect class names (f"{class}-{subclass}" or class).
     Processes semicolon-separated variants, strips '*' and '@', respells consonants.
     Tracks final-dropping triggers for mark_final (*) and mark_final_two (@).
+    When separate_stative is True (default), returns (eventful_rows, stative_rows, ...),
+    where stative_rows only contains 'present' and 'incompletive' aspect columns.
+    When separate_stative is False, returns (rows_out, ...).
     """
-    rows_out = []
+    eventful_rows = []
+    stative_rows = []
     mark_final_triggers = []
     mark_final_two_triggers = []
     drop_final_rows = []
@@ -114,9 +128,15 @@ def parse_classes_csv(src_path: str = "chr-data/classes.csv"):
                 if row["subclass"]
                 else row["class"]
             )
+            is_stative = row["class"] == "stative" or class_name.startswith("stative")
+            cols = (
+                STATIVE_DATA_COLS
+                if (separate_stative and is_stative)
+                else DATA_COLS
+            )
             row_data = {"paradigm": class_name}
 
-            for col_name, src_col in DATA_COLS.items():
+            for col_name, src_col in cols.items():
                 cell_raw = row[src_col]
                 variants = cell_raw.split(";")
                 processed_variants = []
@@ -163,14 +183,31 @@ def parse_classes_csv(src_path: str = "chr-data/classes.csv"):
                         mark_final_two_triggers.append(trigger)
                         drop_final_two_rows.append((drop_paradigm, col_name))
 
-                    respelled = respell_consonants(clean_var)
+                    if class_name == "oh-ol" and clean_var == "hst":
+                        respelled = "hst"
+                    else:
+                        respelled = respell_consonants(clean_var)
                     processed_variants.append(respelled)
 
                 row_data[col_name] = ";".join(processed_variants)
-            rows_out.append(row_data)
 
+            if separate_stative and is_stative:
+                stative_rows.append(row_data)
+            else:
+                eventful_rows.append(row_data)
+
+    if separate_stative:
+        return (
+            eventful_rows,
+            stative_rows,
+            mark_final_triggers,
+            mark_final_two_triggers,
+            drop_final_rows,
+            drop_final_two_rows,
+            effects,
+        )
     return (
-        rows_out,
+        eventful_rows,
         mark_final_triggers,
         mark_final_two_triggers,
         drop_final_rows,
@@ -196,28 +233,63 @@ def generate_aspect_effects_csv(effects: list[dict], dest_path: str) -> None:
 def generate_inplace_aspect_config(
     src_path: str = "chr-data/classes.csv",
     dest_path: str = "chr-config/verb-aspect.csv",
+    stative_dest_path: str | None = "chr-config/verb-aspect-stative.csv",
     effects_path: str | None = "chr-config/aspect_effects.csv",
     drop_final_path: str | None = None,
     drop_final_two_path: str | None = None,
 ) -> dict:
     """
-    Generates chr-config/verb-aspect.csv and aspect_effects.csv (or drop-final CSVs) from chr-data/classes.csv.
+    Generates chr-config/verb-aspect.csv, verb-aspect-stative.csv (optional),
+    and aspect_effects.csv (or drop-final CSVs) from chr-data/classes.csv.
     Returns summary dict containing triggers, effects, and count of generated rows.
     """
-    (
-        rows_out,
-        mark_final_triggers,
-        mark_final_two_triggers,
-        drop_final_rows,
-        drop_final_two_rows,
-        effects,
-    ) = parse_classes_csv(src_path)
+    if stative_dest_path:
+        (
+            eventful_rows,
+            stative_rows,
+            mark_final_triggers,
+            mark_final_two_triggers,
+            drop_final_rows,
+            drop_final_two_rows,
+            effects,
+        ) = parse_classes_csv(src_path, separate_stative=True)
 
-    Path(dest_path).parent.mkdir(parents=True, exist_ok=True)
-    with open(dest_path, "w", encoding="utf-8") as f:
-        writer = setup_inplace_aspect_class_writer(f)
-        for r in rows_out:
-            writer.writerow(r)
+        Path(dest_path).parent.mkdir(parents=True, exist_ok=True)
+        with open(dest_path, "w", encoding="utf-8") as f:
+            writer = setup_inplace_aspect_class_writer(f)
+            for r in eventful_rows:
+                writer.writerow(r)
+
+        Path(stative_dest_path).parent.mkdir(parents=True, exist_ok=True)
+        with open(stative_dest_path, "w", encoding="utf-8") as f:
+            stative_writer = setup_inplace_aspect_class_writer(
+                f, fieldnames=["paradigm"] + list(STATIVE_DATA_COLS.keys())
+            )
+            for r in stative_rows:
+                stative_writer.writerow(r)
+
+        num_rows = len(eventful_rows) + len(stative_rows)
+        num_eventful = len(eventful_rows)
+        num_stative = len(stative_rows)
+    else:
+        (
+            rows_out,
+            mark_final_triggers,
+            mark_final_two_triggers,
+            drop_final_rows,
+            drop_final_two_rows,
+            effects,
+        ) = parse_classes_csv(src_path, separate_stative=False)
+
+        Path(dest_path).parent.mkdir(parents=True, exist_ok=True)
+        with open(dest_path, "w", encoding="utf-8") as f:
+            writer = setup_inplace_aspect_class_writer(f)
+            for r in rows_out:
+                writer.writerow(r)
+
+        num_rows = len(rows_out)
+        num_eventful = len(rows_out)
+        num_stative = 0
 
     if effects_path:
         generate_aspect_effects_csv(effects, effects_path)
@@ -258,7 +330,9 @@ def generate_inplace_aspect_config(
                 )
 
     return {
-        "num_rows": len(rows_out),
+        "num_rows": num_rows,
+        "num_eventful": num_eventful,
+        "num_stative": num_stative,
         "mark_final_triggers": mark_final_triggers,
         "mark_final_two_triggers": mark_final_two_triggers,
         "effects": effects,
@@ -383,6 +457,11 @@ def main():
         help="Path to destination verb-aspect.csv (default: chr-config/verb-aspect.csv)",
     )
     parser.add_argument(
+        "--stative-dest",
+        default="chr-config/verb-aspect-stative.csv",
+        help="Path to destination verb-aspect-stative.csv (default: chr-config/verb-aspect-stative.csv)",
+    )
+    parser.add_argument(
         "--effects",
         default="chr-config/aspect_effects.csv",
         help="Path to destination aspect_effects.csv (default: chr-config/aspect_effects.csv)",
@@ -394,9 +473,15 @@ def main():
         print("Legacy aspect CSVs generated successfully in chr-config/.")
     else:
         result = generate_inplace_aspect_config(
-            src_path=args.src, dest_path=args.dest, effects_path=args.effects
+            src_path=args.src,
+            dest_path=args.dest,
+            stative_dest_path=args.stative_dest,
+            effects_path=args.effects,
         )
-        print(f"Generated {result['num_rows']} aspect classes to {args.dest}")
+        print(
+            f"Generated {result['num_eventful']} eventful classes to {args.dest} "
+            f"and {result['num_stative']} stative classes to {args.stative_dest}"
+        )
         if args.effects:
             print(f"Generated {len(result['effects'])} effect rows to {args.effects}")
         print("\nVerified drop_root_final triggers:")
