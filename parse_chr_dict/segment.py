@@ -91,7 +91,7 @@ def _categorize_arc(in_char: str, out_char: str, current_stage: str) -> str:
         return "AspectClass"
     elif out_char.startswith("[Aspect="):
         return "Aspect"
-    elif out_char.startswith("[TenseClass=") or out_char.startswith("[Tense="):
+    elif out_char.startswith("[Tense="):
         return "Tense"
     elif (
         out_char.startswith("[PrefixClass=")

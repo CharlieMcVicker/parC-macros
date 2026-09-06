@@ -85,13 +85,13 @@ def test_compile_open_inflect_graph_ac3():
     inflect_no_infer = get_open_inflect_graph("verb", infer_lexical_features=False)
     assert inflect_no_infer is not None
     assert inflect_no_infer.num_states() > 0
-    assert inflect_no_infer.num_states() == 940
+    assert inflect_no_infer.num_states() == 932
 
     # Compile with infer_lexical_features=True
     inflect_infer = get_open_inflect_graph("verb", infer_lexical_features=True)
     assert inflect_infer is not None
     assert inflect_infer.num_states() > 0
-    assert inflect_infer.num_states() == 940
+    assert inflect_infer.num_states() == 932
 
 
 def test_compile_open_parse_graph_ac4():
@@ -104,7 +104,7 @@ def test_compile_open_parse_graph_ac4():
     )
     assert parse_no_infer is not None
     assert parse_no_infer.num_states() > 0
-    assert parse_no_infer.num_states() == 940
+    assert parse_no_infer.num_states() == 932
 
     # Compile with infer_lexical_features=True, non_deterministic_cleanup=True
     parse_infer = get_open_parse_graph(
@@ -112,7 +112,7 @@ def test_compile_open_parse_graph_ac4():
     )
     assert parse_infer is not None
     assert parse_infer.num_states() > 0
-    assert parse_infer.num_states() == 940
+    assert parse_infer.num_states() == 932
 
 
 def test_inplace_inflection_and_parse_roundtrip():
@@ -127,9 +127,9 @@ def test_inplace_inflection_and_parse_roundtrip():
     # [H_alt=none] (mandatory H_alt slot)
     # Root: '' (empty root)
     # [AspectClass=a][Aspect=present] -> a'
-    # [TenseClass=a_present][Tense=present] -> a
+    # [Tense=present_a] -> a
     # Result: ka'a
-    inner_str = "[PrefixClass=a_stem][Pro=1sg.A][H_alt=none][AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present]"
+    inner_str = "[PrefixClass=a_stem][Pro=1sg.A][H_alt=none][AspectClass=a][Aspect=present][Tense=present_a]"
     input_fsa = word_fsa(inner_str)
     out_fst = pynini.compose(input_fsa, inflect_fst)
     out_proj = pynini.project(out_fst, "output").optimize()
@@ -186,15 +186,15 @@ def test_aspect_variants_and_elimination_of_overgeneration():
     inflect_fst = get_open_inflect_graph("verb", infer_lexical_features=False)
 
     # 1. Present tense for class 'become' - ONLY ONE path exists (no duplicate inf2, inf3, inf4 variants!)
-    # [PrefixClass=a_stem][Pro=3sg.A][H_alt=none][AspectClass=become][Aspect=present][TenseClass=a_present][Tense=present]
-    pres_str = "[PrefixClass=a_stem][Pro=3sg.A][H_alt=none][AspectClass=become][Aspect=present][TenseClass=a_present][Tense=present]"
+    # [PrefixClass=a_stem][Pro=3sg.A][H_alt=none][AspectClass=become][Aspect=present][Tense=present_a]
+    pres_str = "[PrefixClass=a_stem][Pro=3sg.A][H_alt=none][AspectClass=become][Aspect=present][Tense=present_a]"
     out_fst = pynini.compose(word_fsa(pres_str), inflect_fst)
     out_forms = fsm_strings(pynini.project(out_fst, "output").optimize())
     assert len(out_forms) == 1
     assert out_forms == ["[BOW]aka[EOW]"]
 
     # Verify that trying to pass [Variant=2] on present tense yields no valid surface forms (tags remain unconsumed)
-    invalid_pres_str = "[PrefixClass=a_stem][Pro=3sg.A][H_alt=none][AspectClass=become][Variant=2][Aspect=present][TenseClass=a_present][Tense=present]"
+    invalid_pres_str = "[PrefixClass=a_stem][Pro=3sg.A][H_alt=none][AspectClass=become][Variant=2][Aspect=present][Tense=present_a]"
     invalid_fst = pynini.compose(word_fsa(invalid_pres_str), inflect_fst)
     invalid_forms = [
         f
@@ -205,22 +205,22 @@ def test_aspect_variants_and_elimination_of_overgeneration():
 
     # 2. Infinitive forms for class 'become'
     # Default (variant 1): no [Variant=N] tag -> st
-    inf1_str = "[PrefixClass=a_stem][Pro=3sg.B][H_alt=none][AspectClass=become][Aspect=infinitive][TenseClass=a_present][Tense=infinitive]"
+    inf1_str = "[PrefixClass=a_stem][Pro=3sg.B][H_alt=none][AspectClass=become][Aspect=infinitive][Tense=infinitive]"
     out1_fst = pynini.compose(word_fsa(inf1_str), inflect_fst)
     assert fsm_strings(pynini.project(out1_fst, "output").optimize()) == ["[BOW]usti[EOW]"]
 
     # Variant 2: [Variant=2] -> 'ist
-    inf2_str = "[PrefixClass=a_stem][Pro=3sg.B][H_alt=none][AspectClass=become][Variant=2][Aspect=infinitive][TenseClass=a_present][Tense=infinitive]"
+    inf2_str = "[PrefixClass=a_stem][Pro=3sg.B][H_alt=none][AspectClass=become][Variant=2][Aspect=infinitive][Tense=infinitive]"
     out2_fst = pynini.compose(word_fsa(inf2_str), inflect_fst)
     assert fsm_strings(pynini.project(out2_fst, "output").optimize()) == ["[BOW]u'isti[EOW]"]
 
     # Variant 3: [Variant=3] -> yhst
-    inf3_str = "[PrefixClass=a_stem][Pro=3sg.B][H_alt=none][AspectClass=become][Variant=3][Aspect=infinitive][TenseClass=a_present][Tense=infinitive]"
+    inf3_str = "[PrefixClass=a_stem][Pro=3sg.B][H_alt=none][AspectClass=become][Variant=3][Aspect=infinitive][Tense=infinitive]"
     out3_fst = pynini.compose(word_fsa(inf3_str), inflect_fst)
     assert fsm_strings(pynini.project(out3_fst, "output").optimize()) == ["[BOW]uyhsti[EOW]"]
 
     # Variant 4: [Variant=4] -> ist
-    inf4_str = "[PrefixClass=a_stem][Pro=3sg.B][H_alt=none][AspectClass=become][Variant=4][Aspect=infinitive][TenseClass=a_present][Tense=infinitive]"
+    inf4_str = "[PrefixClass=a_stem][Pro=3sg.B][H_alt=none][AspectClass=become][Variant=4][Aspect=infinitive][Tense=infinitive]"
     out4_fst = pynini.compose(word_fsa(inf4_str), inflect_fst)
     assert fsm_strings(pynini.project(out4_fst, "output").optimize()) == ["[BOW]uisti[EOW]"]
 

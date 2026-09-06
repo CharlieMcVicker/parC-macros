@@ -118,7 +118,6 @@ SLOT_NAME_TO_INPLACE_TAG: dict[str, str] = {
     "aspect_class": "AspectClass",
     "variant": "Variant",
     "aspect": "Aspect",
-    "tense_present_class": "TenseClass",
     "tense": "Tense",
 }
 
@@ -147,7 +146,6 @@ INPLACE_SLOT_TAG_MAP: dict[str, str] = {
     "AspectClass": "aspect_class",
     "Variant": "variant",
     "Aspect": "aspect",
-    "TenseClass": "tense_present_class",
     "Tense": "tense",
 }
 
@@ -242,8 +240,6 @@ def read_inplace_parse(s: str) -> ParseData:
                 variant = int(v) if v.isdigit() else 1
             elif k == "Aspect":
                 aspect = v
-            elif k == "TenseClass":
-                tense_present_class = v
             elif k == "Tense":
                 tense = v
             elif k == "DIST":
@@ -584,7 +580,7 @@ def get_roots_for_parses(lexicals: list[set[tuple[tuple[str, str], ...]]]):
     return possible_lexical_roots if possible_lexical_roots else set()
 
 def get_just_root(s: str):
-    # s is something like [PrefixClass=a_stem][Pro=3sg.A]tateka[AspectClass=a][Aspect=completive][TenseClass=a_present][Tense=immediate]
+    # s is something like [PrefixClass=a_stem][Pro=3sg.A]tateka[AspectClass=a][Aspect=completive][Tense=immediate]
     # don't use a regexp, just read [ and ] and find the part that isn't in brackets, keeping in mind there are several bracketed parts at the beginning and end
     chars = []
     bracket_depth = 0

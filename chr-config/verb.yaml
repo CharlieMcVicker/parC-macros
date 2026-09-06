@@ -13,7 +13,8 @@ stages:
 # Inflectional Features (originally from verb_features.yaml)
 features:
   # tense:
-  #   - present
+  #   - present_a
+  #   - present_i
   #   - immediate
   #   - habitual
   #   - future_prog
@@ -55,10 +56,9 @@ features:
 
 # Lexical features and metadata (originally from verb.yaml)
 # lexical_features:
-  # - tense_present_class
   # - prefix_class
   # - aspect_class
 
 paradigm:
   generate_contingent_markers: true
-  open_root_template: "<PrepronominalPrefixes><PrefixClass><Pro><H_alt><Root><AspectClass><Variant><Aspect><TenseClass><Tense>"
+  open_root_template: "<PrepronominalPrefixes><PrefixClass><Pro><H_alt><Root><AspectClass><Variant><Aspect><Tense>"

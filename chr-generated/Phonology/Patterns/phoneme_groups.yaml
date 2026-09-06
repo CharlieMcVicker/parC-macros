@@ -24,15 +24,12 @@ patterns:
 - name: Aspect
   ref: <Aspect>
   pattern: '[Aspect=present]|[Aspect=incompletive]|[Aspect=completive]|[Aspect=immediate]|[Aspect=infinitive]'
-- name: TenseClass
-  ref: <TenseClass>
-  pattern: '[TenseClass=a_present]|[TenseClass=i_present]'
 - name: Tense
   ref: <Tense>
-  pattern: '[Tense=present]|[Tense=immediate]|[Tense=habitual]|[Tense=future_prog]|[Tense=assertive]|[Tense=reported]|[Tense=infinitive]'
+  pattern: '[Tense=present_a]|[Tense=present_i]|[Tense=immediate]|[Tense=habitual]|[Tense=future_prog]|[Tense=assertive]|[Tense=reported]|[Tense=infinitive]'
 - name: Morpheme
   ref: <Morpheme>
-  pattern: <PrefixClass>|<Pro>|<AspectClass>|<Aspect>|<TenseClass>|<Tense>|<PPP>|<H_alt>|[WI]|[DIST]|[DIST=de]|[DIST=di]|[Variant=2]|[Variant=3]|[Variant=4]
+  pattern: <PrefixClass>|<Pro>|<AspectClass>|<Aspect>|<Tense>|<PPP>|<H_alt>|[WI]|[DIST]|[DIST=de]|[DIST=di]|[Variant=2]|[Variant=3]|[Variant=4]
 - name: H_alt
   ref: <H_alt>
   pattern: <H_alt>

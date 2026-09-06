@@ -112,23 +112,23 @@ def test_clean_inplace_parity_against_reference(generated_clean_dir):
         assert gen_data == ref_data, f"YAML content mismatch in {rel_p}"
 
 
-def test_clean_inplace_inflect_graph_compilation_940_states():
-    """Compiles open inflect graph with parC and verifies exact 940 states."""
+def test_clean_inplace_inflect_graph_compilation_932_states():
+    """Compiles open inflect graph with parC and verifies exact 932 states."""
     from parC.grammar.paradigm_compilation import get_open_inflect_graph
 
     # Compile with infer_lexical_features=False
     inflect_no_infer = get_open_inflect_graph("verb", infer_lexical_features=False)
     assert inflect_no_infer is not None
-    assert inflect_no_infer.num_states() == 940
+    assert inflect_no_infer.num_states() == 932
 
     # Compile with infer_lexical_features=True
     inflect_infer = get_open_inflect_graph("verb", infer_lexical_features=True)
     assert inflect_infer is not None
-    assert inflect_infer.num_states() == 940
+    assert inflect_infer.num_states() == 932
 
 
-def test_clean_inplace_parse_graph_compilation_940_states():
-    """Compiles open parse graph with parC and verifies exact 940 states."""
+def test_clean_inplace_parse_graph_compilation_932_states():
+    """Compiles open parse graph with parC and verifies exact 932 states."""
     from parC.grammar.paradigm_compilation import get_open_parse_graph
 
     # Compile with infer_lexical_features=False
@@ -136,14 +136,14 @@ def test_clean_inplace_parse_graph_compilation_940_states():
         "verb", infer_lexical_features=False, non_deterministic_cleanup=True
     )
     assert parse_no_infer is not None
-    assert parse_no_infer.num_states() == 940
+    assert parse_no_infer.num_states() == 932
 
     # Compile with infer_lexical_features=True
     parse_infer = get_open_parse_graph(
         "verb", infer_lexical_features=True, non_deterministic_cleanup=True
     )
     assert parse_infer is not None
-    assert parse_infer.num_states() == 940
+    assert parse_infer.num_states() == 932
 
 
 def test_clean_inplace_roundtrip_inflection_and_parse():
@@ -154,7 +154,7 @@ def test_clean_inplace_roundtrip_inflection_and_parse():
     inflect_fst = get_open_inflect_graph("verb", infer_lexical_features=False)
     parse_fst = get_open_parse_graph("verb", infer_lexical_features=False, non_deterministic_cleanup=True)
 
-    tag_str = "[PrefixClass=a_stem][Pro=1sg.A][H_alt=none][AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present]"
+    tag_str = "[PrefixClass=a_stem][Pro=1sg.A][H_alt=none][AspectClass=a][Aspect=present][Tense=present_a]"
     input_fsa = word_fsa(tag_str)
     out_fst = pynini.compose(input_fsa, inflect_fst)
     out_proj = pynini.project(out_fst, "output").optimize()

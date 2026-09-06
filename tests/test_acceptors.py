@@ -133,50 +133,50 @@ def test_compile_morphotactic_acceptor_ac2():
 
     # 1. [DIST=de] licenses indicative tenses
     indicative_tenses = [
-        "[Tense=present]",
+        "[Tense=present_a]",
         "[Tense=habitual]",
         "[Tense=future_prog]",
         "[Tense=assertive]",
         "[Tense=reported]",
     ]
     for t in indicative_tenses:
-        asp = "[Aspect=present]" if t == "[Tense=present]" else "[Aspect=incompletive]"
-        tokens = ["[DIST=de]"] + base_tokens + [asp, "[TenseClass=a_present]", t]
+        asp = "[Aspect=present]" if t == "[Tense=present_a]" else "[Aspect=incompletive]"
+        tokens = ["[DIST=de]"] + base_tokens + [asp, t]
         assert morph_accepts(tokens), f"[DIST=de] should accept indicative tense {t}"
 
     # 2. [DIST=de] rejects non-indicative tenses
     non_indicative_tenses = ["[Tense=immediate]", "[Tense=infinitive]"]
     for t in non_indicative_tenses:
-        tokens = ["[DIST=de]"] + base_tokens + ["[Aspect=present]", "[TenseClass=a_present]", t]
+        tokens = ["[DIST=de]"] + base_tokens + ["[Aspect=present]", t]
         assert not morph_accepts(tokens), f"[DIST=de] must reject non-indicative tense {t}"
 
     # 3. [DIST=di] licenses non-indicative tenses (immediate, infinitive)
     for t in non_indicative_tenses:
-        tokens = ["[DIST=di]"] + base_tokens + ["[Aspect=immediate]" if t == "[Tense=immediate]" else "[Aspect=infinitive]", "[TenseClass=a_present]", t]
+        tokens = ["[DIST=di]"] + base_tokens + ["[Aspect=immediate]" if t == "[Tense=immediate]" else "[Aspect=infinitive]", t]
         assert morph_accepts(tokens), f"[DIST=di] should accept non-indicative tense {t}"
 
     # 4. [DIST=di] rejects indicative tenses
     for t in indicative_tenses:
-        asp = "[Aspect=present]" if t == "[Tense=present]" else "[Aspect=incompletive]"
-        tokens = ["[DIST=di]"] + base_tokens + [asp, "[TenseClass=a_present]", t]
+        asp = "[Aspect=present]" if t == "[Tense=present_a]" else "[Aspect=incompletive]"
+        tokens = ["[DIST=di]"] + base_tokens + [asp, t]
         assert not morph_accepts(tokens), f"[DIST=di] must reject indicative tense {t}"
 
     # 5. [Aspect=immediate] licenses only [Tense=immediate]
-    tokens_imm_ok = base_tokens + ["[Aspect=immediate]", "[TenseClass=a_present]", "[Tense=immediate]"]
+    tokens_imm_ok = base_tokens + ["[Aspect=immediate]", "[Tense=immediate]"]
     assert morph_accepts(tokens_imm_ok)
-    tokens_imm_bad = base_tokens + ["[Aspect=immediate]", "[TenseClass=a_present]", "[Tense=present]"]
+    tokens_imm_bad = base_tokens + ["[Aspect=immediate]", "[Tense=present_a]"]
     assert not morph_accepts(tokens_imm_bad)
 
     # 6. [Aspect=infinitive] licenses only [Tense=infinitive]
-    tokens_inf_ok = base_tokens + ["[Aspect=infinitive]", "[TenseClass=a_present]", "[Tense=infinitive]"]
+    tokens_inf_ok = base_tokens + ["[Aspect=infinitive]", "[Tense=infinitive]"]
     assert morph_accepts(tokens_inf_ok)
-    tokens_inf_bad = base_tokens + ["[Aspect=infinitive]", "[TenseClass=a_present]", "[Tense=present]"]
+    tokens_inf_bad = base_tokens + ["[Aspect=infinitive]", "[Tense=present_a]"]
     assert not morph_accepts(tokens_inf_bad)
 
     # 7. Unconstrained when no triggers present
-    tokens_plain_pres = base_tokens + ["[TenseClass=a_present]", "[Tense=present]"]
+    tokens_plain_pres = base_tokens + ["[Tense=present_a]"]
     assert morph_accepts(tokens_plain_pres)
-    tokens_plain_imm = base_tokens + ["[TenseClass=a_present]", "[Tense=immediate]"]
+    tokens_plain_imm = base_tokens + ["[Tense=immediate]"]
     assert morph_accepts(tokens_plain_imm)
 
     # 8. TASK-109: Pronominal H_alt morphotactics
@@ -195,7 +195,7 @@ def test_compile_morphotactic_acceptor_ac2():
     assert not morph_accepts(tokens_2sg_glot)
 
     # 9. Stative aspect morphotactics: stative classes license ONLY present and incompletive aspects
-    tokens_stative_pres = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", "a", "t", "a", "t", "[AspectClass=stative-k]", "[Aspect=present]", "[Tense=present]"]
+    tokens_stative_pres = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", "a", "t", "a", "t", "[AspectClass=stative-k]", "[Aspect=present]", "[Tense=present_a]"]
     assert morph_accepts(tokens_stative_pres)
     tokens_stative_incomp = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", "a", "t", "a", "t", "[AspectClass=stative-k]", "[Aspect=incompletive]", "[Tense=habitual]"]
     assert morph_accepts(tokens_stative_incomp)
@@ -228,7 +228,7 @@ def test_compile_prefix_stem_shape_acceptor_ac3():
         res = pynini.intersect(test_fsa, stem_fsa)
         return res.num_states() > 0 and res.start() != pynini.NO_STATE_ID
 
-    tail = ["[AspectClass=a]", "[Aspect=present]", "[TenseClass=a_present]", "[Tense=present]"]
+    tail = ["[AspectClass=a]", "[Aspect=present]", "[Tense=present_a]"]
 
     # Valid combinations for all 7 classes
     valid_cases = [
@@ -294,23 +294,23 @@ def test_compile_cascade_domain_acceptor_ac4_ac5():
 
     valid_parses = [
         # a_stem with initial 'a'
-        "[BOW][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
+        "[BOW][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][Tense=present_a][EOW][rules=+]",
         # cons_stem with consonant 't'
-        "[BOW][PrefixClass=cons_stem][Pro=3sg.A]that[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
+        "[BOW][PrefixClass=cons_stem][Pro=3sg.A]that[AspectClass=a][Aspect=present][Tense=present_a][EOW][rules=+]",
         # [DIST=de] with indicative present tense
-        "[BOW][DIST=de][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
+        "[BOW][DIST=de][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][Tense=present_a][EOW][rules=+]",
         # [DIST=di] with non-indicative immediate tense
-        "[BOW][DIST=di][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=immediate][TenseClass=a_present][Tense=immediate][EOW][rules=+]",
+        "[BOW][DIST=di][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=immediate][Tense=immediate][EOW][rules=+]",
         # [DIST=di] with cons_stem and immediate tense
-        "[BOW][DIST=di][PrefixClass=cons_stem][Pro=3sg.A]that[AspectClass=a][Aspect=immediate][TenseClass=a_present][Tense=immediate][EOW][rules=+]",
+        "[BOW][DIST=di][PrefixClass=cons_stem][Pro=3sg.A]that[AspectClass=a][Aspect=immediate][Tense=immediate][EOW][rules=+]",
         # [WI] prepronominal prefix
-        "[BOW][WI][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
+        "[BOW][WI][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][Tense=present_a][EOW][rules=+]",
         # [WI] + [DIST=de]
-        "[BOW][WI][DIST=de][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
+        "[BOW][WI][DIST=de][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][Tense=present_a][EOW][rules=+]",
         # [H_alt=drop] with a_stem and 1sg.A (trigger)
-        "[BOW][PrefixClass=a_stem][Pro=1sg.A][H_alt=drop]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
+        "[BOW][PrefixClass=a_stem][Pro=1sg.A][H_alt=drop]atat[AspectClass=a][Aspect=present][Tense=present_a][EOW][rules=+]",
         # Without trailing [rules=+]
-        "[BOW][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW]",
+        "[BOW][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][Tense=present_a][EOW]",
     ]
 
     for vp in valid_parses:
@@ -318,25 +318,25 @@ def test_compile_cascade_domain_acceptor_ac4_ac5():
 
     invalid_parses = [
         # TASK-108: a_stem before consonant root 'that'
-        "[BOW][PrefixClass=a_stem][Pro=3sg.A]that[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
+        "[BOW][PrefixClass=a_stem][Pro=3sg.A]that[AspectClass=a][Aspect=present][Tense=present_a][EOW][rules=+]",
         # TASK-108 with [H_alt=drop]: a_stem with [H_alt=drop] before consonant root 'that'
-        "[BOW][PrefixClass=a_stem][Pro=1sg.A][H_alt=drop]that[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
+        "[BOW][PrefixClass=a_stem][Pro=1sg.A][H_alt=drop]that[AspectClass=a][Aspect=present][Tense=present_a][EOW][rules=+]",
         # TASK-109: Non-trigger 3sg.A with active [H_alt=drop] (violates pro_morphotactics)
-        "[BOW][PrefixClass=a_stem][Pro=3sg.A][H_alt=drop]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
+        "[BOW][PrefixClass=a_stem][Pro=3sg.A][H_alt=drop]atat[AspectClass=a][Aspect=present][Tense=present_a][EOW][rules=+]",
         # cons_stem before vowel root 'atat'
-        "[BOW][PrefixClass=cons_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
+        "[BOW][PrefixClass=cons_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][Tense=present_a][EOW][rules=+]",
         # [DIST=de] with immediate tense (violates morphotactics)
-        "[BOW][DIST=de][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=immediate][EOW][rules=+]",
+        "[BOW][DIST=de][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][Tense=immediate][EOW][rules=+]",
         # [DIST=di] with present tense (violates morphotactics)
-        "[BOW][DIST=di][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
+        "[BOW][DIST=di][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][Tense=present_a][EOW][rules=+]",
         # [Aspect=immediate] with present tense
-        "[BOW][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=immediate][TenseClass=a_present][Tense=present][EOW][rules=+]",
+        "[BOW][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=immediate][Tense=present_a][EOW][rules=+]",
         # [Aspect=infinitive] with present tense
-        "[BOW][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=infinitive][TenseClass=a_present][Tense=present][EOW][rules=+]",
+        "[BOW][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=infinitive][Tense=present_a][EOW][rules=+]",
         # Missing [BOW]
-        "[PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][EOW][rules=+]",
+        "[PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][Tense=present_a][EOW][rules=+]",
         # Missing [EOW]
-        "[BOW][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][TenseClass=a_present][Tense=present][rules=+]",
+        "[BOW][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][Tense=present_a][rules=+]",
     ]
 
     for ip in invalid_parses:
@@ -348,7 +348,7 @@ def test_tokenize_parse_str_and_parse_to_fsa():
     syms = get_default_symbol_table()
 
     # In-place string with AspectClass and Variant tags
-    s = "[BOW][PrefixClass=a_stem][Pro=1sg.A]atat[AspectClass=become][Variant=2][Aspect=infinitive][TenseClass=a_present][Tense=infinitive][EOW][rules=+]"
+    s = "[BOW][PrefixClass=a_stem][Pro=1sg.A]atat[AspectClass=become][Variant=2][Aspect=infinitive][Tense=infinitive][EOW][rules=+]"
     tokens = tokenize_parse_str(s)
     assert tokens[0] == "[BOW]"
     assert tokens[1] == "[PrefixClass=a_stem]"
@@ -357,10 +357,9 @@ def test_tokenize_parse_str_and_parse_to_fsa():
     assert tokens[7] == "[AspectClass=become]"
     assert tokens[8] == "[Variant=2]"
     assert tokens[9] == "[Aspect=infinitive]"
-    assert tokens[10] == "[TenseClass=a_present]"
-    assert tokens[11] == "[Tense=infinitive]"
-    assert tokens[12] == "[EOW]"
-    assert tokens[13] == "[rules=+]"
+    assert tokens[10] == "[Tense=infinitive]"
+    assert tokens[11] == "[EOW]"
+    assert tokens[12] == "[rules=+]"
 
     fsa = parse_to_fsa(s, syms)
     assert fsa.num_states() == len(tokens) + 1

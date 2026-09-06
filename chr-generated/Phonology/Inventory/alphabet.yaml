@@ -165,15 +165,11 @@ data:
   - '[Aspect=completive]'
   - '[Aspect=immediate]'
   - '[Aspect=infinitive]'
-- name: TenseClass
-  ref: <TenseClass>
-  tags:
-  - '[TenseClass=a_present]'
-  - '[TenseClass=i_present]'
 - name: Tense
   ref: <Tense>
   tags:
-  - '[Tense=present]'
+  - '[Tense=present_a]'
+  - '[Tense=present_i]'
   - '[Tense=immediate]'
   - '[Tense=habitual]'
   - '[Tense=future_prog]'

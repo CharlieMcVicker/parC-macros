@@ -78,7 +78,7 @@ def test_verb_form_definitions_and_immutability():
     assert PRES_3RD.name == "3rd_present"
     assert PRES_3RD.corpus_key == "present"
     assert PRES_3RD.aspect == "present"
-    assert PRES_3RD.tense == "present"
+    assert PRES_3RD.tense == ("present_a", "present_i")
     assert PRES_3RD.person == "3rd"
     assert PRES_3RD.allows_set_a is True
 
@@ -103,9 +103,9 @@ def test_verb_form_definitions_and_immutability():
 def test_verb_form_matching():
     """Verify matches method against various ParseData instances."""
     # 3rd Present
-    p_pres_3a = ParseData(root="ga", aspect="present", tense="present", pronominal="3sg.A")
-    p_pres_3b = ParseData(root="ga", aspect="present", tense="present", pronominal="3sg.B")
-    p_pres_1a = ParseData(root="ga", aspect="present", tense="present", pronominal="1sg.A")
+    p_pres_3a = ParseData(root="ga", aspect="present", tense="present_a", pronominal="3sg.A")
+    p_pres_3b = ParseData(root="ga", aspect="present", tense="present_i", pronominal="3sg.B")
+    p_pres_1a = ParseData(root="ga", aspect="present", tense="present_a", pronominal="1sg.A")
     p_comp_3b = ParseData(root="ga", aspect="completive", tense="assertive", pronominal="3sg.B")
     p_comp_3a = ParseData(root="ga", aspect="completive", tense="assertive", pronominal="3sg.A")
 
@@ -155,7 +155,7 @@ def test_verb_form_matching():
     assert INFINITIVE_3RD.matches(p_inf_a) is False
 
     # Empty pronominal
-    p_empty = ParseData(root="ga", aspect="present", tense="present", pronominal="")
+    p_empty = ParseData(root="ga", aspect="present", tense="present_a", pronominal="")
     assert PRES_3RD.matches(p_empty) is False
 
 

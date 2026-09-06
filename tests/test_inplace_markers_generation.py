@@ -95,9 +95,9 @@ def test_inplace_2_tag_rules_generation_ac1():
             tense_rules = yaml.safe_load(f)
         assert validate_yaml_content(tense_rules) is True
         tense_map = dict(tense_rules["rules"][0]["string_map"])
-        assert tense_map["[TenseClass=a_present][Tense=present]"] == "a"
-        assert tense_map["[TenseClass=a_present][Tense=immediate]"] == ""
-        assert tense_map["[TenseClass=i_present][Tense=present]"] == "i"
+        assert tense_map["[Tense=present_a]"] == "a"
+        assert tense_map["[Tense=immediate]"] == ""
+        assert tense_map["[Tense=present_i]"] == "i"
 
 
 def test_inplace_paradigm_generation_ac2():
@@ -281,5 +281,5 @@ def test_inplace_aspect_variants_generation_task_111_2():
         tense_map = dict(tense_data["rules"][0]["string_map"])
         for pattern in tense_map.keys():
             assert "[Variant=" not in pattern, f"Unexpected Variant tag in tense rule: {pattern}"
-            assert pattern.startswith("[TenseClass=") and "[Tense=" in pattern
+            assert pattern.startswith("[Tense=") and "[TenseClass=" not in pattern
 

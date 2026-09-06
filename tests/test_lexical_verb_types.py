@@ -84,7 +84,7 @@ def test_verb_template_projection():
     assert tmpl.root == "a[H_NONE]li"
     assert tmpl.prefix_class == "cons_stem"
     assert tmpl.aspect_class == "go"
-    assert tmpl.tense_present_class == "a_present"
+    assert tmpl.tense_present_class == ""
     assert tmpl.variant == 1
     assert tmpl.distributive is True
     assert tmpl.translocutive is False
@@ -97,7 +97,7 @@ def test_verb_template_projection():
     labels = tmpl.lexical_labels()
     assert labels["aspect_class"] == "go"
     assert labels["prefix_class"] == "cons_stem"
-    assert labels["tense_present_class"] == "a_present"
+    assert "tense_present_class" not in labels
     assert labels["distributive"] == "+"
     assert "variant" not in labels  # Default variant 1 omitted
 

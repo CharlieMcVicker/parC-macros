@@ -139,11 +139,13 @@ def _derive_category(
         tmpl = VerbTemplate.from_parse(p_data)
         pref = tmpl.prefix_class
         asp = tmpl.aspect_class
-        t_pres = tmpl.tense_present_class
         pro_tag = p_data.pronominal
         pres_var = tmpl.variant
-        if not pref or not asp or not t_pres or not pro_tag:
+        if not pref or not asp or not pro_tag:
             continue
+
+        # Form 1 (present) determines present_a vs present_i directly from p_data.tense
+        is_i_pres = (p_data.tense == "present_i")
 
         pro = Pronominal.from_tag(pro_tag)
         is_plural = pro.number in ("ns", "pl", "dl")
@@ -190,6 +192,7 @@ def _derive_category(
                         is_plural=pl,
                         animate_objects=anim,
                         aspect_variants=aspect_variants,
+                        is_i_present=is_i_pres,
                     )
                     candidate_hypotheses.add(
                         LexicalVerb(
@@ -227,8 +230,8 @@ def _derive_category(
         allowed_asp_classes = {h.aspect_class for h in candidate_hypotheses}
 
         # Group parses by (p_asp, p_t_pres)
-        parsed_by_asp_tense: Dict[
-            Tuple[str, str],
+        parsed_by_asp: Dict[
+            str,
             List[Tuple[ParseData, VerbTemplate, str, bool, bool, bool, bool, int]],
         ] = {}
         for p in parses:
@@ -244,10 +247,9 @@ def _derive_category(
             p_tmpl = VerbTemplate.from_parse(p_data)
             p_pref = p_tmpl.prefix_class
             p_asp = p_tmpl.aspect_class
-            p_t_pres = p_tmpl.tense_present_class
             pro_tag = p_data.pronominal
             p_var = p_tmpl.variant
-            if not p_pref or not p_asp or not p_t_pres or not pro_tag:
+            if not p_pref or not p_asp or not pro_tag:
                 continue
 
             pro = Pronominal.from_tag(pro_tag)
@@ -264,22 +266,20 @@ def _derive_category(
             if not validate_h_alternation_trigger(pro_tag, has_h_alt=has_mutation):
                 continue
 
-            key = (p_asp, p_t_pres)
-            if key not in parsed_by_asp_tense:
-                parsed_by_asp_tense[key] = []
-            parsed_by_asp_tense[key].append(
+            key = p_asp
+            if key not in parsed_by_asp:
+                parsed_by_asp[key] = []
+            parsed_by_asp[key].append(
                 (p_data, p_tmpl, pro_tag, p_plural, p_set_a, p_trans, p_is_glottal, p_var)
             )
 
-        if not parsed_by_asp_tense:
+        if not parsed_by_asp:
             return set()
 
         surviving: Set[LexicalVerb] = set()
 
         for hyp in candidate_hypotheses:
-            matching_items = parsed_by_asp_tense.get(
-                (hyp.aspect_class, hyp.tense_present_class)
-            )
+            matching_items = parsed_by_asp.get(hyp.aspect_class)
             if not matching_items:
                 continue
 
@@ -288,12 +288,16 @@ def _derive_category(
                     continue
 
                 # Enforce present-tense variant consistency: template_3sg.variant == template_1sg.variant
+                # and present-tense category agreement (present_i vs present_a)
                 if (
                     form.name == "1st_present"
                     or form.corpus_key == "present_1sg"
                     or (hasattr(form, "meta_label_id") and form.meta_label_id == "[FORM=1ST_PRES]")
                 ):
                     if p_var != hyp.template.variant:
+                        continue
+                    expected_tense = "present_i" if hyp.metadata.is_i_present else "present_a"
+                    if p_data.tense != expected_tense:
                         continue
 
                 if p_plural != hyp.plural:
@@ -344,6 +348,7 @@ def _derive_category(
                     is_plural=hyp.metadata.is_plural,
                     animate_objects=hyp.metadata.animate_objects,
                     aspect_variants=new_aspect_variants,
+                    is_i_present=hyp.metadata.is_i_present,
                 )
 
                 # Determine canonical prefix class
@@ -357,7 +362,6 @@ def _derive_category(
                     root=hyp.template.root,
                     prefix_class=canon_pref,
                     aspect_class=hyp.template.aspect_class,
-                    tense_present_class=hyp.template.tense_present_class,
                     variant=hyp.template.variant,
                     distributive=hyp.template.distributive,
                     translocutive=hyp.template.translocutive,

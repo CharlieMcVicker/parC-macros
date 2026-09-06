@@ -53,13 +53,13 @@ def test_pronominal_struct_and_filters():
 
 def test_step1a_feature_tuples():
     # Direct VerbForm features
-    assert PRES_3RD.tense == "present"
+    assert PRES_3RD.tense == ("present_a", "present_i")
     assert PRES_3RD.aspect == "present"
 
 
 def test_step2_infer_meta_labels():
     # Pure VerbForm matching
-    parse_str = "[BOW]gawoniha[EOW][tense=present][aspect=present][pronominal=3sg.A]"
+    parse_str = "[BOW]gawoniha[EOW][tense=present_a][aspect=present][pronominal=3sg.A]"
     p_data = parse_string_to_parse_data(parse_str)
     assert PRES_3RD.matches(p_data) is True
     assert PRES_1SG.matches(p_data) is False
@@ -382,7 +382,7 @@ def test_memoized_inflect_caching():
     root = "[Pro]atat[Aspect][Tense]"
     features = {
         "aspect": "present",
-        "tense": "present",
+        "tense": "present_a",
         "pronominal": "3sg.A",
         "aspect_class": "go-in",
         "prefix_class": "a_stem",

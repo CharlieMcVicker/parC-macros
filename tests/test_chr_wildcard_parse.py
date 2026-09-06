@@ -59,6 +59,8 @@ def test_cherokee_wildcard_parsing(surface, root, lexical, infl):
             continue
         lex_match = True
         for k, v in lexical.items():
+            if k == "tense_present_class":
+                continue
             base_v = v.split("[")[0] if "[" in v else v
             if p_labels.get(k) not in (v, base_v):
                 lex_match = False

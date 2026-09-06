@@ -5,31 +5,19 @@ rules:
 - name: tense_replace
   description: In-place morpheme replacement rule for [Tense]
   string_map:
-  - - '[TenseClass=a_present][Tense=assertive]'
+  - - '[Tense=assertive]'
     - v'i
-  - - '[TenseClass=a_present][Tense=future_prog]'
+  - - '[Tense=future_prog]'
     - esti
-  - - '[TenseClass=a_present][Tense=habitual]'
+  - - '[Tense=habitual]'
     - o'i
-  - - '[TenseClass=a_present][Tense=immediate]'
+  - - '[Tense=immediate]'
     - ''
-  - - '[TenseClass=a_present][Tense=infinitive]'
+  - - '[Tense=infinitive]'
     - i
-  - - '[TenseClass=a_present][Tense=present]'
+  - - '[Tense=present_a]'
     - a
-  - - '[TenseClass=a_present][Tense=reported]'
-    - e'i
-  - - '[TenseClass=i_present][Tense=assertive]'
-    - v'i
-  - - '[TenseClass=i_present][Tense=future_prog]'
-    - esti
-  - - '[TenseClass=i_present][Tense=habitual]'
-    - o'i
-  - - '[TenseClass=i_present][Tense=immediate]'
-    - ''
-  - - '[TenseClass=i_present][Tense=infinitive]'
+  - - '[Tense=present_i]'
     - i
-  - - '[TenseClass=i_present][Tense=present]'
-    - i
-  - - '[TenseClass=i_present][Tense=reported]'
+  - - '[Tense=reported]'
     - e'i

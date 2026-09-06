@@ -80,7 +80,7 @@ def test_read_labels_inplace_and_legacy_compatibility():
     # 2. In-place
     inplace_str = (
         "[BOW][PrefixClass=a_stem][Pro=3sg.A]tateka[AspectClass=a][Aspect=present]"
-        "[TenseClass=a_present][Tense=present][EOW][aspect_class=a][prefix_class=a_stem][tense_present_class=a_present]"
+        "[Tense=present_a][EOW][aspect_class=a][prefix_class=a_stem]"
     )
     form_ip, labels_ip = read_labels(inplace_str)
     assert form_ip == "tateka"
@@ -88,5 +88,4 @@ def test_read_labels_inplace_and_legacy_compatibility():
     assert labels_ip["pronominal"] == "3sg.A"
     assert labels_ip["aspect_class"] == "a"
     assert labels_ip["aspect"] == "present"
-    assert labels_ip["tense_present_class"] == "a_present"
-    assert labels_ip["tense"] == "present"
+    assert labels_ip["tense"] == "present_a"

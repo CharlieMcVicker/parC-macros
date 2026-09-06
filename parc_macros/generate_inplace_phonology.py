@@ -62,7 +62,18 @@ def extract_inplace_data(config_dir: Path) -> dict[str, Any]:
     prefix_classes, pronominals = _parse_csv_matrix(config_dir / "verb-pronominal.csv")
 
     # 2. Tenses and tense classes
-    tense_classes, tenses = _parse_csv_matrix(config_dir / "verb-tense.csv")
+    tense_csv_path = config_dir / "verb-tense.csv"
+    with open(tense_csv_path, "r", encoding="utf-8") as f:
+        tense_lines = f.readlines()
+    has_class_feature = any(l.lower().startswith("# class_feature:") for l in tense_lines)
+    tense_rows = [r for r in csv.reader(tense_lines) if r and not r[0].startswith("#")]
+    if has_class_feature:
+        tense_header = tense_rows[0]
+        tense_classes = [r[0].strip() for r in tense_rows[1:] if r and r[0].strip()]
+        tenses = [h.strip() for h in tense_header[1:] if h.strip()]
+    else:
+        tense_classes = []
+        tenses = [h.strip() for h in tense_rows[0] if h.strip()]
 
     # 3. Aspects, aspect classes, variants, and drop-final triggers from verb-aspect.csv and optional verb-aspect-stative.csv
     aspect_csv_files = [config_dir / "verb-aspect.csv"]
@@ -261,11 +272,12 @@ def generate_inplace_alphabet(
     })
 
     # TenseClass
-    new_data.append({
-        "name": "TenseClass",
-        "ref": "<TenseClass>",
-        "tags": [f"[TenseClass={c}]" for c in data["tense_classes"]],
-    })
+    if data.get("tense_classes"):
+        new_data.append({
+            "name": "TenseClass",
+            "ref": "<TenseClass>",
+            "tags": [f"[TenseClass={c}]" for c in data["tense_classes"]],
+        })
 
     # Tense
     new_data.append({
@@ -339,7 +351,8 @@ def generate_inplace_patterns(
     pro_pat = "|".join(f"[Pro={p}]" for p in data["pronominals"])
     aspect_class_pat = "|".join(f"[AspectClass={c}]" for c in data["aspect_classes"])
     aspect_pat = "|".join(f"[Aspect={a}]" for a in data["aspects"])
-    tense_class_pat = "|".join(f"[TenseClass={c}]" for c in data["tense_classes"])
+    tense_classes = data.get("tense_classes", [])
+    tense_class_pat = "|".join(f"[TenseClass={c}]" for c in tense_classes)
     tense_pat = "|".join(f"[Tense={t}]" for t in data["tenses"])
 
     variants = data.get("variants", [])
@@ -352,8 +365,9 @@ def generate_inplace_patterns(
         "|" + "|".join(f"[Variant={v}]" for v in variants) if variants else ""
     )
 
+    tense_class_morpheme = "|<TenseClass>" if tense_class_pat else ""
     morpheme_pat = (
-        f"<PrefixClass>|<Pro>|<AspectClass>|<Aspect>|<TenseClass>|<Tense>"
+        f"<PrefixClass>|<Pro>|<AspectClass>|<Aspect>{tense_class_morpheme}|<Tense>"
         f"|<PPP>|<H_alt>|[WI]|[DIST]|[DIST=de]|[DIST=di]{variant_morphemes}"
     )
 
@@ -394,11 +408,14 @@ def generate_inplace_patterns(
             "ref": "<Aspect>",
             "pattern": aspect_pat,
         },
-        {
+    ]
+    if tense_class_pat:
+        new_patterns.append({
             "name": "TenseClass",
             "ref": "<TenseClass>",
             "pattern": tense_class_pat,
-        },
+        })
+    new_patterns.extend([
         {
             "name": "Tense",
             "ref": "<Tense>",
@@ -417,7 +434,7 @@ def generate_inplace_patterns(
         not_lar_pat,
         son_h_pat,
         h_target_pat,
-    ]
+    ])
 
     pats_yaml["kind"] = "Patterns"
     pats_yaml["patterns"] = new_patterns

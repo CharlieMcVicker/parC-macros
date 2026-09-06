@@ -18,7 +18,6 @@ def build_inplace_tag_str(root: str, feature_values: dict[str, str]) -> str:
     if isinstance(var, str):
         var = int(var) if var.isdigit() else 1
     asp = feature_values.get("aspect", "")
-    tense_cls = feature_values.get("tense_present_class", "")
     tense = feature_values.get("tense", "")
 
     parts: list[str] = []
@@ -53,8 +52,6 @@ def build_inplace_tag_str(root: str, feature_values: dict[str, str]) -> str:
         parts.append(f"[Variant={var}]")
     if asp:
         parts.append(f"[Aspect={asp}]")
-    if tense_cls:
-        parts.append(f"[TenseClass={tense_cls}]")
     if tense:
         parts.append(f"[Tense={tense}]")
     return "".join(parts)

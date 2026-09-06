@@ -64,7 +64,7 @@ def test_h_drop_entry_22():
     """Entry 22: [Pro][H_DROP]atawhahthvhit[Aspect][Tense] -> 1sg katawahthvhitoha
     1st h in wh drops, subsequent ah, th, vh remain.
     """
-    tag_str = "[PrefixClass=a_stem][Pro=1sg.A][H_alt=drop]atawhahthvhit[AspectClass=be-at][Aspect=present][TenseClass=a_present][Tense=present]"
+    tag_str = "[PrefixClass=a_stem][Pro=1sg.A][H_alt=drop]atawhahthvhit[AspectClass=be-at][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
     assert "katawahthvhitoha" in forms
 
@@ -73,7 +73,7 @@ def test_h_drop_entry_214():
     """Entry 214: [Pro][H_alt=drop]whahthvhit[Aspect][Tense] -> 1sg tsiwahthvhitoha
     1st h in wh drops, subsequent ah, th, vh remain.
     """
-    tag_str = "[PrefixClass=cons_stem][Pro=1sg>3sg][H_alt=drop]whahthvhit[AspectClass=be-at][Aspect=present][TenseClass=a_present][Tense=present]"
+    tag_str = "[PrefixClass=cons_stem][Pro=1sg>3sg][H_alt=drop]whahthvhit[AspectClass=be-at][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
     assert "tsiwahthvhitoha" in forms
 
@@ -82,7 +82,7 @@ def test_h_drop_entry_218():
     """Entry 218: [Pro][H_alt=drop]yhahkhets[Aspect][Tense] -> 1sg tsiyahkhetska
     1st h in yh drops, subsequent hk remains.
     """
-    tag_str = "[PrefixClass=cons_stem][Pro=1sg>3sg][H_alt=drop]yhahkhets[AspectClass=stative-k][Aspect=present][TenseClass=a_present][Tense=present]"
+    tag_str = "[PrefixClass=cons_stem][Pro=1sg>3sg][H_alt=drop]yhahkhets[AspectClass=stative-k][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
     assert "tsiyahkhetska" in forms
 
@@ -91,7 +91,7 @@ def test_h_drop_entry_537():
     """Entry 537: [Pro][H_alt=drop]yvwhahth[Aspect][Tense] -> 1sg tsiyvwahthiha
     1st h in wh drops, subsequent th remains.
     """
-    tag_str = "[PrefixClass=cons_stem][Pro=1sg>3sg][H_alt=drop]yvwhahth[AspectClass=ih-vh][Aspect=present][TenseClass=a_present][Tense=present]"
+    tag_str = "[PrefixClass=cons_stem][Pro=1sg>3sg][H_alt=drop]yvwhahth[AspectClass=ih-vh][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
     assert "tsiyvwahthiha" in forms
 
@@ -100,7 +100,7 @@ def test_h_glot_entry_65():
     """Entry 65: [Pro][H_alt=glot]atehohist[Aspect][Tense] -> 1sg tsiyate'ohistiha
     1st h becomes ', 2nd h in histiha remains.
     """
-    tag_str = "[PrefixClass=a_stem][Pro=1sg>3sg][H_alt=glot]atehohist[AspectClass=cause][Aspect=present][TenseClass=a_present][Tense=present]"
+    tag_str = "[PrefixClass=a_stem][Pro=1sg>3sg][H_alt=glot]atehohist[AspectClass=cause][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
     assert "tsiyate'ohistiha" in forms
 
@@ -109,7 +109,7 @@ def test_h_glot_entry_321():
     """Entry 321: [Pro][H_alt=glot]alihelitsh[Aspect][Tense] -> 1sg tsiyali'elitsheha
     1st h becomes ', subsequent tsh remains.
     """
-    tag_str = "[PrefixClass=a_stem][Pro=1sg>3sg][H_alt=glot]alihelitsh[AspectClass=apl][Aspect=present][TenseClass=a_present][Tense=present]"
+    tag_str = "[PrefixClass=a_stem][Pro=1sg>3sg][H_alt=glot]alihelitsh[AspectClass=apl][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
     assert "tsiyali'elitsheha" in forms
 
@@ -118,7 +118,7 @@ def test_h_glot_entry_1045():
     """Entry 1045: [Pro][H_alt=glot]ohiyhtan[Aspect][Tense] -> 1sg tsiyo'iyhtaneha
     1st h becomes ', subsequent yht remains.
     """
-    tag_str = "[PrefixClass=vowel_stem][Pro=1sg>3sg][H_alt=glot]ohiyhtan[AspectClass=apl][Aspect=present][TenseClass=a_present][Tense=present]"
+    tag_str = "[PrefixClass=vowel_stem][Pro=1sg>3sg][H_alt=glot]ohiyhtan[AspectClass=apl][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
     assert "tsiyo'iyhtaneha" in forms
 
@@ -127,7 +127,7 @@ def test_h_lat_entry_175():
     """Entry 175: [Pro][H_alt=lat]alhawitht[Aspect][Tense] -> 1sg tsiyatlawithtiha
     1st lh becomes tl, subsequent th and ht remain.
     """
-    tag_str = "[PrefixClass=a_stem][Pro=1sg>3sg][H_alt=lat]alhawitht[AspectClass=cause][Aspect=present][TenseClass=a_present][Tense=present]"
+    tag_str = "[PrefixClass=a_stem][Pro=1sg>3sg][H_alt=lat]alhawitht[AspectClass=cause][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
     assert "tsiyatlawithtiha" in forms
 
@@ -136,7 +136,7 @@ def test_h_lat_entry_173():
     """Entry 173: [Pro][H_alt=lat]alhawit[Aspect][Tense] -> 1sg katlawitiha
     1st lh becomes tl.
     """
-    tag_str = "[PrefixClass=a_stem][Pro=1sg.A][H_alt=lat]alhawit[AspectClass=ih-vh][Aspect=present][TenseClass=a_present][Tense=present]"
+    tag_str = "[PrefixClass=a_stem][Pro=1sg.A][H_alt=lat]alhawit[AspectClass=ih-vh][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
     assert "katlawitiha" in forms
 
@@ -145,7 +145,7 @@ def test_h_lat_entry_563():
     """Entry 563: [DIST=de][Pro][H_alt=lat]alhilost[Aspect][Tense] -> 1sg tetsiyatlilostiha
     1st lh becomes tl.
     """
-    tag_str = "[DIST=de][PrefixClass=a_stem][Pro=1sg>3sg][H_alt=lat]alhilost[AspectClass=cause][Aspect=present][TenseClass=a_present][Tense=present]"
+    tag_str = "[DIST=de][PrefixClass=a_stem][Pro=1sg>3sg][H_alt=lat]alhilost[AspectClass=cause][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
     assert "tetsiyatlilostiha" in forms
 
@@ -154,7 +154,7 @@ def test_h_vowel_entry_45():
     """Entry 45: [Pro][H_alt=vowel]atanhthehil[Aspect][Tense] -> 1sg katanvthehilo'a
     Vowel v restored at 1st h, subsequent th and hil remain.
     """
-    tag_str = "[PrefixClass=a_stem][Pro=1sg.A][H_alt=vowel]atanhthehil[AspectClass=o][Aspect=present][TenseClass=a_present][Tense=present]"
+    tag_str = "[PrefixClass=a_stem][Pro=1sg.A][H_alt=vowel]atanhthehil[AspectClass=o][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
     assert "katanvthehilo'a" in forms
 
@@ -163,7 +163,7 @@ def test_h_vowel_entry_186():
     """Entry 186: [Pro][H_alt=vowel]alhkhotht[Aspect][Tense] -> 1sg kalikhothtiha
     Vowel i restored in lh, subsequent kh and th remain.
     """
-    tag_str = "[PrefixClass=a_stem][Pro=1sg.A][H_alt=vowel]alhkhotht[AspectClass=cause][Aspect=present][TenseClass=a_present][Tense=present]"
+    tag_str = "[PrefixClass=a_stem][Pro=1sg.A][H_alt=vowel]alhkhotht[AspectClass=cause][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
     assert "kalikhothtiha" in forms
 
@@ -172,7 +172,7 @@ def test_h_vowel_entry_280():
     """Entry 280: [Pro][H_alt=vowel]khtha[Aspect][Tense] -> 1sg tsikathaha
     Vowel a restored in kh, subsequent th remains.
     """
-    tag_str = "[PrefixClass=cons_stem][Pro=1sg>3sg][H_alt=vowel]khtha[AspectClass=stative-h][Aspect=present][TenseClass=a_present][Tense=present]"
+    tag_str = "[PrefixClass=cons_stem][Pro=1sg>3sg][H_alt=vowel]khtha[AspectClass=stative-h][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
     assert "tsikathaha" in forms
 

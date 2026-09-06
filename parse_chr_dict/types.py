@@ -96,8 +96,6 @@ class ParseData:
             parts.append(f"[Variant={self.variant}]")
         if self.aspect:
             parts.append(f"[Aspect={self.aspect}]")
-        if self.tense_present_class:
-            parts.append(f"[TenseClass={self.tense_present_class}]")
         if self.tense:
             parts.append(f"[Tense={self.tense}]")
         return "".join(parts)
@@ -203,7 +201,6 @@ class VerbTemplate:
             root=parse.root,
             prefix_class=parse.prefix_class,
             aspect_class=parse.aspect_class,
-            tense_present_class=parse.tense_present_class,
             variant=parse.variant,
             distributive=parse.has_distributive,
             translocutive=parse.has_translocutive,
@@ -214,8 +211,9 @@ class VerbTemplate:
         d = {
             "aspect_class": self.aspect_class,
             "prefix_class": self.prefix_class,
-            "tense_present_class": self.tense_present_class,
         }
+        if self.tense_present_class:
+            d["tense_present_class"] = self.tense_present_class
         if self.variant != 1:
             d["variant"] = str(self.variant)
         if self.translocutive:
@@ -312,13 +310,23 @@ class VerbForm:
     name: str
     corpus_key: str
     aspect: str
-    tense: str
+    tense: str | tuple[str, ...]
     person: str
     allows_set_a: bool
 
     def matches(self, p: ParseData) -> bool:
-        if p.aspect != self.aspect or p.tense != self.tense:
+        if p.aspect != self.aspect:
             return False
+        # Match tense: note there is no generic "present", only "present_a" and "present_i"
+        if isinstance(self.tense, (tuple, list, set)):
+            if p.tense not in self.tense:
+                return False
+        elif self.tense in ("present", "present_a", "present_i"):
+            if p.tense not in ("present_a", "present_i"):
+                return False
+        elif p.tense != self.tense:
+            return False
+
         if not p.pronominal:
             return False
         pro = Pronominal.from_tag(p.pronominal)
@@ -334,7 +342,7 @@ PRES_3RD = VerbForm(
     name="3rd_present",
     corpus_key="present",
     aspect="present",
-    tense="present",
+    tense=("present_a", "present_i"),
     person="3rd",
     allows_set_a=True,
 )
@@ -342,7 +350,7 @@ PRES_1SG = VerbForm(
     name="1st_present",
     corpus_key="present_1sg",
     aspect="present",
-    tense="present",
+    tense=("present_a", "present_i"),
     person="1st",
     allows_set_a=True,
 )
@@ -456,6 +464,7 @@ class VerbMetadata:
     is_plural: bool = False
     animate_objects: bool = False
     aspect_variants: AspectVariants = field(default_factory=AspectVariants)
+    is_i_present: bool = False
 
     def __init__(
         self,
@@ -464,18 +473,23 @@ class VerbMetadata:
         is_plural: Optional[bool] = None,
         animate_objects: bool = False,
         aspect_variants: Optional[AspectVariants] = None,
+        is_i_present: bool = False,
         *,
         set_a: Optional[bool] = None,
         plural: Optional[bool] = None,
+        tense_present_class: Optional[str] = None,
     ):
         actual_set_a = set_a if set_a is not None else (is_set_a if is_set_a is not None else True)
         actual_plural = plural if plural is not None else (is_plural if is_plural is not None else False)
         actual_variants = aspect_variants if aspect_variants is not None else AspectVariants()
+        if tense_present_class is not None:
+            is_i_present = (tense_present_class == "i_present")
         object.__setattr__(self, "entry_type", entry_type)
         object.__setattr__(self, "is_set_a", actual_set_a)
         object.__setattr__(self, "is_plural", actual_plural)
         object.__setattr__(self, "animate_objects", animate_objects)
         object.__setattr__(self, "aspect_variants", actual_variants)
+        object.__setattr__(self, "is_i_present", is_i_present)
 
     @property
     def set_a(self) -> bool:
@@ -484,6 +498,10 @@ class VerbMetadata:
     @property
     def plural(self) -> bool:
         return self.is_plural
+
+    @property
+    def tense_present_class(self) -> str:
+        return "i_present" if self.is_i_present else "a_present"
 
     @classmethod
     def all_combinations(cls, entry_type: str | VerbEntryType = "Eventful"):
@@ -504,6 +522,7 @@ class VerbMetadata:
             is_plural=self.is_plural,
             animate_objects=self.animate_objects,
             aspect_variants=self.aspect_variants.with_variant(aspect, variant),
+            is_i_present=self.is_i_present,
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -513,6 +532,8 @@ class VerbMetadata:
             "set_a": self.is_set_a,
             "plural": self.is_plural,
             "animate_objects": self.animate_objects,
+            "is_i_present": self.is_i_present,
+            "tense_present_class": self.tense_present_class,
             **self.aspect_variants.to_dict(),
         }
 
@@ -574,13 +595,13 @@ class LexicalVerb:
         aspect_variants: Optional[AspectVariants] = None,
         entry_type: str = "Eventful",
     ):
+        is_i_pres = (tense_present_class == "i_present")
         if template is None:
             var_int = int(present_variant) if str(present_variant).isdigit() else 1
             template = VerbTemplate(
                 root=h_root or "",
                 prefix_class=prefix_class,
                 aspect_class=aspect_class,
-                tense_present_class=tense_present_class,
                 variant=var_int,
                 distributive=distributive,
                 translocutive=translocutive,
@@ -595,6 +616,17 @@ class LexicalVerb:
                 is_plural=plural,
                 animate_objects=animate_objects,
                 aspect_variants=aspect_variants,
+                is_i_present=is_i_pres,
+            )
+        elif tense_present_class:
+            # If explicit tense_present_class was passed with existing metadata, update metadata
+            metadata = VerbMetadata(
+                entry_type=metadata.entry_type,
+                is_set_a=metadata.is_set_a,
+                is_plural=metadata.is_plural,
+                animate_objects=metadata.animate_objects,
+                aspect_variants=metadata.aspect_variants,
+                is_i_present=is_i_pres,
             )
         object.__setattr__(self, "template", template)
         object.__setattr__(self, "metadata", metadata)
@@ -617,7 +649,7 @@ class LexicalVerb:
 
     @property
     def tense_present_class(self) -> str:
-        return self.template.tense_present_class
+        return self.metadata.tense_present_class
 
     @property
     def set_a(self) -> bool:
@@ -664,7 +696,7 @@ class LexicalVerb:
         d["h_alt_tag"] = self.h_alt_tag or "[H_alt=none]"
         d["aspect_class"] = self.template.aspect_class
         d["prefix_class"] = self.template.prefix_class
-        d["tense_present_class"] = self.template.tense_present_class
+        d["tense_present_class"] = self.tense_present_class
         d["set_a"] = self.metadata.is_set_a
         d["plural"] = self.metadata.is_plural
         d["animate_objects"] = self.metadata.animate_objects
@@ -672,7 +704,9 @@ class LexicalVerb:
         return d
 
     def lexical_labels(self) -> dict[str, str]:
-        return self.template.lexical_labels()
+        d = self.template.lexical_labels()
+        d["tense_present_class"] = self.tense_present_class
+        return d
 
     def lexical_tuple(self) -> tuple[str, str, tuple[tuple[str, str], ...]]:
         return (
@@ -700,6 +734,11 @@ class LexicalVerb:
         pros = self.metadata.get_pronominal_candidates(form.person, form.allows_set_a)
         prefixes = (self.prefix_class, "k_a_stem") if self.prefix_class == "a_stem" else (self.prefix_class,)
 
+        if form.aspect == "present" or form.tense in (("present_a", "present_i"), "present", "present_a", "present_i"):
+            tense = "present_i" if self.metadata.is_i_present else "present_a"
+        else:
+            tense = form.tense if isinstance(form.tense, str) else form.tense[0]
+
         results: set[str] = set()
         for pro in pros:
             h_alt = self.h_alt_tag or "[H_alt=none]" if is_h_alternation_trigger(pro) else "[H_alt=none]"
@@ -711,8 +750,7 @@ class LexicalVerb:
                     "aspect_class": self.aspect_class,
                     "variant": str(var),
                     "aspect": form.aspect,
-                    "tense_present_class": self.tense_present_class,
-                    "tense": form.tense,
+                    "tense": tense,
                     "distributive": "+" if self.template.distributive else "",
                     "translocutive": "+" if self.template.translocutive else "",
                     "rules": "+",

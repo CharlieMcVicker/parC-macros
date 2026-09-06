@@ -1,7 +1,7 @@
 # kind: morphotactic_licensing
 # trigger_slot: Aspect
 trigger,target_slot,licensed
-[Aspect=present],Tense,[Tense=present]
+[Aspect=present],Tense,[Tense=present_a]|[Tense=present_i]
 [Aspect=immediate],Tense,[Tense=immediate]
 [Aspect=incompletive],Tense,[Tense=habitual]|[Tense=future_prog]|[Tense=assertive]|[Tense=reported]
 [Aspect=completive],Tense,[Tense=assertive]|[Tense=reported]
