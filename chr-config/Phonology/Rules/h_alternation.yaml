@@ -1,18 +1,83 @@
 kind: Rules
 rules:
-- name: mark_h_vowel
-  input_pattern: '[H_alt=vowel]'
-  output_pattern: '[TEMP_VOWEL]'
+- name: mark_h_vowel_a
+  input_pattern: '[H_alt=vowel_a]'
+  output_pattern: '[TEMP_VOWEL_A]'
   right_context: <NotLar>*<C>h<C>
-- name: tag_h_vowel
+- name: tag_h_vowel_a
   input_pattern: h
-  output_pattern: '[TEMP_VOWEL_H]'
-  left_context: '[TEMP_VOWEL]<NotLar>*<C>'
+  output_pattern: '[TEMP_VOWEL_A_H]'
+  left_context: '[TEMP_VOWEL_A]<NotLar>*<C>'
   right_context: <C>
-- name: delete_trigger_vowel
-  input_pattern: '[TEMP_VOWEL]'
+- name: delete_trigger_vowel_a
+  input_pattern: '[TEMP_VOWEL_A]'
   output_pattern: ''
-  right_context: <NotLar>*[TEMP_VOWEL_H]
+  right_context: <NotLar>*[TEMP_VOWEL_A_H]
+- name: mark_h_vowel_e
+  input_pattern: '[H_alt=vowel_e]'
+  output_pattern: '[TEMP_VOWEL_E]'
+  right_context: <NotLar>*<C>h<C>
+- name: tag_h_vowel_e
+  input_pattern: h
+  output_pattern: '[TEMP_VOWEL_E_H]'
+  left_context: '[TEMP_VOWEL_E]<NotLar>*<C>'
+  right_context: <C>
+- name: delete_trigger_vowel_e
+  input_pattern: '[TEMP_VOWEL_E]'
+  output_pattern: ''
+  right_context: <NotLar>*[TEMP_VOWEL_E_H]
+- name: mark_h_vowel_i
+  input_pattern: '[H_alt=vowel_i]'
+  output_pattern: '[TEMP_VOWEL_I]'
+  right_context: <NotLar>*<C>h<C>
+- name: tag_h_vowel_i
+  input_pattern: h
+  output_pattern: '[TEMP_VOWEL_I_H]'
+  left_context: '[TEMP_VOWEL_I]<NotLar>*<C>'
+  right_context: <C>
+- name: delete_trigger_vowel_i
+  input_pattern: '[TEMP_VOWEL_I]'
+  output_pattern: ''
+  right_context: <NotLar>*[TEMP_VOWEL_I_H]
+- name: mark_h_vowel_o
+  input_pattern: '[H_alt=vowel_o]'
+  output_pattern: '[TEMP_VOWEL_O]'
+  right_context: <NotLar>*<C>h<C>
+- name: tag_h_vowel_o
+  input_pattern: h
+  output_pattern: '[TEMP_VOWEL_O_H]'
+  left_context: '[TEMP_VOWEL_O]<NotLar>*<C>'
+  right_context: <C>
+- name: delete_trigger_vowel_o
+  input_pattern: '[TEMP_VOWEL_O]'
+  output_pattern: ''
+  right_context: <NotLar>*[TEMP_VOWEL_O_H]
+- name: mark_h_vowel_u
+  input_pattern: '[H_alt=vowel_u]'
+  output_pattern: '[TEMP_VOWEL_U]'
+  right_context: <NotLar>*<C>h<C>
+- name: tag_h_vowel_u
+  input_pattern: h
+  output_pattern: '[TEMP_VOWEL_U_H]'
+  left_context: '[TEMP_VOWEL_U]<NotLar>*<C>'
+  right_context: <C>
+- name: delete_trigger_vowel_u
+  input_pattern: '[TEMP_VOWEL_U]'
+  output_pattern: ''
+  right_context: <NotLar>*[TEMP_VOWEL_U_H]
+- name: mark_h_vowel_v
+  input_pattern: '[H_alt=vowel_v]'
+  output_pattern: '[TEMP_VOWEL_V]'
+  right_context: <NotLar>*<C>h<C>
+- name: tag_h_vowel_v
+  input_pattern: h
+  output_pattern: '[TEMP_VOWEL_V_H]'
+  left_context: '[TEMP_VOWEL_V]<NotLar>*<C>'
+  right_context: <C>
+- name: delete_trigger_vowel_v
+  input_pattern: '[TEMP_VOWEL_V]'
+  output_pattern: ''
+  right_context: <NotLar>*[TEMP_VOWEL_V_H]
 - name: mark_h_lat
   input_pattern: '[H_alt=lat]'
   output_pattern: '[TEMP_LAT]'
@@ -81,8 +146,19 @@ rules:
   output_pattern: ''
   right_context: <NotLar>*[TEMP_GLOT_H]
 - name: realize_h_vowel
-  input_pattern: '[TEMP_VOWEL_H]'
-  output_pattern: <V>
+  string_map:
+  - - '[TEMP_VOWEL_A_H]'
+    - a
+  - - '[TEMP_VOWEL_E_H]'
+    - e
+  - - '[TEMP_VOWEL_I_H]'
+    - i
+  - - '[TEMP_VOWEL_O_H]'
+    - o
+  - - '[TEMP_VOWEL_U_H]'
+    - u
+  - - '[TEMP_VOWEL_V_H]'
+    - v
 - name: realize_h_lat
   string_map:
   - - '[TEMP_LAT_H]'
@@ -100,9 +176,24 @@ rules:
   left_context: <Pro>|[Pro]
 - name: h_alternation
   rule_sequence:
-  - $mark_h_vowel
-  - $tag_h_vowel
-  - $delete_trigger_vowel
+  - $mark_h_vowel_a
+  - $tag_h_vowel_a
+  - $delete_trigger_vowel_a
+  - $mark_h_vowel_e
+  - $tag_h_vowel_e
+  - $delete_trigger_vowel_e
+  - $mark_h_vowel_i
+  - $tag_h_vowel_i
+  - $delete_trigger_vowel_i
+  - $mark_h_vowel_o
+  - $tag_h_vowel_o
+  - $delete_trigger_vowel_o
+  - $mark_h_vowel_u
+  - $tag_h_vowel_u
+  - $delete_trigger_vowel_u
+  - $mark_h_vowel_v
+  - $tag_h_vowel_v
+  - $delete_trigger_vowel_v
   - $mark_h_lat
   - $tag_h_lat
   - $delete_trigger_lat

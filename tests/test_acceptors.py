@@ -247,7 +247,7 @@ def test_compile_prefix_stem_shape_acceptor_ac3():
         assert stem_accepts(tokens), f"Expected valid parse for {pclass} with root starting {root_chars[0]}"
 
     # Optional H_ALT tags
-    for h_tag in ["[H_alt=none]", "[H_alt=drop]", "[H_alt=glot]", "[H_alt=lat]", "[H_alt=vowel]"]:
+    for h_tag in ["[H_alt=none]", "[H_alt=drop]", "[H_alt=glot]", "[H_alt=lat]", "[H_alt=vowel_a]"]:
         tokens_h_a = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", h_tag, "a", "t", "a", "t"] + tail
         assert stem_accepts(tokens_h_a), f"Expected acceptance of a_stem with {h_tag} and initial 'a'"
         tokens_h_cons = ["[PrefixClass=cons_stem]", "[Pro=3sg.A]", h_tag, "t", "h", "a", "t"] + tail

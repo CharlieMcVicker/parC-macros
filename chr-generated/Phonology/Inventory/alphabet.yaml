@@ -36,6 +36,12 @@ data:
   tags:
   - '[TEMP]'
   - '[TEMP_VOWEL]'
+  - '[TEMP_VOWEL_A]'
+  - '[TEMP_VOWEL_E]'
+  - '[TEMP_VOWEL_I]'
+  - '[TEMP_VOWEL_O]'
+  - '[TEMP_VOWEL_U]'
+  - '[TEMP_VOWEL_V]'
   - '[TEMP_LAT]'
   - '[TEMP_DROP]'
   - '[TEMP_GLOT]'
@@ -43,6 +49,12 @@ data:
   - '[TEMP_LAT_H]'
   - '[TEMP_GLOT_H]'
   - '[TEMP_VOWEL_H]'
+  - '[TEMP_VOWEL_A_H]'
+  - '[TEMP_VOWEL_E_H]'
+  - '[TEMP_VOWEL_I_H]'
+  - '[TEMP_VOWEL_O_H]'
+  - '[TEMP_VOWEL_U_H]'
+  - '[TEMP_VOWEL_V_H]'
 - name: PPP
   ref: <PPP>
   tags:
@@ -57,7 +69,12 @@ data:
   - '[H_alt=drop]'
   - '[H_alt=glot]'
   - '[H_alt=lat]'
-  - '[H_alt=vowel]'
+  - '[H_alt=vowel_a]'
+  - '[H_alt=vowel_e]'
+  - '[H_alt=vowel_i]'
+  - '[H_alt=vowel_o]'
+  - '[H_alt=vowel_u]'
+  - '[H_alt=vowel_v]'
 - name: PrefixClass
   ref: <PrefixClass>
   tags:

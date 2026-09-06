@@ -11,13 +11,22 @@ H_ALTERNATION_TRIGGER_PRONOMINALS: Set[str] = {
 }
 
 
+VOWEL_H_ALT_TAGS: Set[str] = {
+    "[H_alt=vowel_a]",
+    "[H_alt=vowel_e]",
+    "[H_alt=vowel_i]",
+    "[H_alt=vowel_o]",
+    "[H_alt=vowel_u]",
+    "[H_alt=vowel_v]",
+}
+
 NEW_H_ALT_TAGS: Set[str] = {
     "[H_alt=drop]",
     "[H_alt=glot]",
     "[H_alt=lat]",
     "[H_alt=none]",
     "[H_alt=vowel]",
-}
+} | VOWEL_H_ALT_TAGS
 
 LEGACY_H_ALT_TAGS: Set[str] = {
     "[H_DROP]",
@@ -88,6 +97,8 @@ def determine_h_alt_glottal_root(h_root: str, p_root: str) -> Optional[str]:
         return None
     active_tags = (
         "[H_alt=drop]", "[H_alt=glot]", "[H_alt=lat]", "[H_alt=vowel]",
+        "[H_alt=vowel_a]", "[H_alt=vowel_e]", "[H_alt=vowel_i]",
+        "[H_alt=vowel_o]", "[H_alt=vowel_u]", "[H_alt=vowel_v]",
         "[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_VOWEL]",
     )
     if any(tag in p_root for tag in active_tags):

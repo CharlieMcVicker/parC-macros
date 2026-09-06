@@ -524,7 +524,19 @@ def test_fine_grained_h_alternation_tag_helpers_and_validation():
     from parse_chr_dict.h_alternation import H_ALT_TAGS, NEW_H_ALT_TAGS, validate_h_alternation_trigger, strip_h_alt_tags
 
     # 1. H_ALT_TAGS constant
-    assert NEW_H_ALT_TAGS == {"[H_alt=drop]", "[H_alt=glot]", "[H_alt=lat]", "[H_alt=none]", "[H_alt=vowel]"}
+    assert NEW_H_ALT_TAGS == {
+        "[H_alt=drop]",
+        "[H_alt=glot]",
+        "[H_alt=lat]",
+        "[H_alt=none]",
+        "[H_alt=vowel]",
+        "[H_alt=vowel_a]",
+        "[H_alt=vowel_e]",
+        "[H_alt=vowel_i]",
+        "[H_alt=vowel_o]",
+        "[H_alt=vowel_u]",
+        "[H_alt=vowel_v]",
+    }
     assert {"[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_NONE]", "[H_VOWEL]"}.issubset(H_ALT_TAGS)
 
     # 2. strip_h_alt_tags
@@ -580,7 +592,7 @@ def test_strict_h_alternation_trigger_rejection():
 
 
 def test_h_vowel_row_39_43_thinking_derivation():
-    """Verify that row 39,43 ('he/she is thinking') matches and derives hypotheses containing [H_VOWEL]."""
+    """Verify that row 39,43 ('he/she is thinking') matches and derives hypotheses containing [H_alt=vowel_v]."""
     from parse_chr_dict.derive import derive_hypotheses_for_forms
     from parse_chr_dict.create_aspect_class_csv import respell_consonants
 
@@ -590,8 +602,8 @@ def test_h_vowel_row_39_43_thinking_derivation():
     ]
     hyps = derive_hypotheses_for_forms(forms)
     assert len(hyps) > 0
-    h_vowel_hyps = [h for h in hyps if h.h_alt_tag in ("[H_VOWEL]", "[H_alt=vowel]")]
-    assert len(h_vowel_hyps) > 0, "Expected at least one hypothesis with [H_VOWEL]"
+    h_vowel_hyps = [h for h in hyps if h.h_alt_tag == "[H_alt=vowel_v]"]
+    assert len(h_vowel_hyps) > 0, "Expected at least one hypothesis with [H_alt=vowel_v]"
     for h in h_vowel_hyps:
-        assert h.h_alt_tag in ("[H_VOWEL]", "[H_alt=vowel]")
+        assert h.h_alt_tag == "[H_alt=vowel_v]"
         assert "atanh" in h.h_root

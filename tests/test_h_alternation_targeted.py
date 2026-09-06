@@ -151,30 +151,30 @@ def test_h_lat_entry_563():
 
 
 def test_h_vowel_entry_45():
-    """Entry 45: [Pro][H_alt=vowel]atanhthehil[Aspect][Tense] -> 1sg katanvthehilo'a
-    Vowel v restored at 1st h, subsequent th and hil remain.
+    """Entry 45: [Pro][H_alt=vowel_v]atanhthehil[Aspect][Tense] -> 1sg katanvthehilo'a
+    Vowel v restored at 1st h deterministically (no other vowel variants).
     """
-    tag_str = "[PrefixClass=a_stem][Pro=1sg.A][H_alt=vowel]atanhthehil[AspectClass=o][Aspect=present][Tense=present_a]"
+    tag_str = "[PrefixClass=a_stem][Pro=1sg.A][H_alt=vowel_v]atanhthehil[AspectClass=o][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
-    assert "katanvthehilo'a" in forms
+    assert forms == ["katanvthehilo'a"]
 
 
 def test_h_vowel_entry_186():
-    """Entry 186: [Pro][H_alt=vowel]alhkhotht[Aspect][Tense] -> 1sg kalikhothtiha
-    Vowel i restored in lh, subsequent kh and th remain.
+    """Entry 186: [Pro][H_alt=vowel_i]alhkhotht[Aspect][Tense] -> 1sg kalikhothtiha
+    Vowel i restored in lh deterministically.
     """
-    tag_str = "[PrefixClass=a_stem][Pro=1sg.A][H_alt=vowel]alhkhotht[AspectClass=cause][Aspect=present][Tense=present_a]"
+    tag_str = "[PrefixClass=a_stem][Pro=1sg.A][H_alt=vowel_i]alhkhotht[AspectClass=cause][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
-    assert "kalikhothtiha" in forms
+    assert forms == ["kalikhothtiha"]
 
 
 def test_h_vowel_entry_280():
-    """Entry 280: [Pro][H_alt=vowel]khtha[Aspect][Tense] -> 1sg tsikathaha
-    Vowel a restored in kh, subsequent th remains.
+    """Entry 280: [Pro][H_alt=vowel_a]khtha[Aspect][Tense] -> 1sg tsikathaha
+    Vowel a restored in kh deterministically.
     """
-    tag_str = "[PrefixClass=cons_stem][Pro=1sg>3sg][H_alt=vowel]khtha[AspectClass=stative-h][Aspect=present][Tense=present_a]"
+    tag_str = "[PrefixClass=cons_stem][Pro=1sg>3sg][H_alt=vowel_a]khtha[AspectClass=stative-h][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
-    assert "tsikathaha" in forms
+    assert forms == ["tsikathaha"]
 
 
 # =========================================================================
