@@ -368,7 +368,7 @@ def compile_prefix_stem_shape_acceptor(
                 allowed_phones = resolve_phones_for_pattern(pattern, alphabet)
                 class_rules.append((pclass, allowed_phones))
 
-    bad_seqs: list[pynini.Fst] = []
+    inner_bad_seqs: list[pynini.Fst] = []
     prefix_class_fsas: list[pynini.Fst] = []
 
     for pclass, allowed_phones in class_rules:
@@ -379,11 +379,8 @@ def compile_prefix_stem_shape_acceptor(
         disallowed_phones = [p for p in all_phones if p not in allowed_phones]
         if disallowed_phones:
             dis_fsa = pynini.union(*[pynini.accep(p, token_type=syms) for p in disallowed_phones]).optimize()
-            bad_phone_seq = pynini.concat(
-                sigma_star,
-                pynini.concat(c_fsa, pynini.concat(pro_fsa, pynini.concat(h_alt_opt, pynini.concat(dis_fsa, sigma_star)))),
-            )
-            bad_seqs.append(bad_phone_seq)
+            inner_bad = pynini.concat(c_fsa, pynini.concat(pro_fsa, pynini.concat(h_alt_opt, dis_fsa)))
+            inner_bad_seqs.append(inner_bad)
 
     all_pclasses_fsa = pynini.union(*prefix_class_fsas).optimize()
 
@@ -391,26 +388,21 @@ def compile_prefix_stem_shape_acceptor(
     non_pro_syms = [s for s in all_syms if not s.startswith("[Pro=")]
     if non_pro_syms:
         non_pro_fsa = pynini.union(*[pynini.accep(s, token_type=syms) for s in non_pro_syms]).optimize()
-        bad_no_pro = pynini.concat(
-            sigma_star,
-            pynini.concat(all_pclasses_fsa, pynini.concat(non_pro_fsa, sigma_star)),
-        )
-        bad_seqs.append(bad_no_pro)
+        bad_no_pro_inner = pynini.concat(all_pclasses_fsa, non_pro_fsa)
+        inner_bad_seqs.append(bad_no_pro_inner)
 
     # Disallow [PrefixClass=c] Pro (H_ALT)? followed by non-phone (e.g. adjacent morpheme tag)
     non_phone_syms = [s for s in all_syms if s not in all_phones and not s.startswith("[H_")]
     if non_phone_syms:
         non_phone_fsa = pynini.union(*[pynini.accep(s, token_type=syms) for s in non_phone_syms]).optimize()
-        bad_no_phone = pynini.concat(
-            sigma_star,
-            pynini.concat(
-                all_pclasses_fsa,
-                pynini.concat(pro_fsa, pynini.concat(h_alt_opt, pynini.concat(non_phone_fsa, sigma_star))),
-            ),
+        bad_no_phone_inner = pynini.concat(
+            all_pclasses_fsa,
+            pynini.concat(pro_fsa, pynini.concat(h_alt_opt, non_phone_fsa)),
         )
-        bad_seqs.append(bad_no_phone)
+        inner_bad_seqs.append(bad_no_phone_inner)
 
-    total_bad = pynini.union(*bad_seqs).optimize()
+    combined_inner_bad = pynini.union(*inner_bad_seqs).optimize()
+    total_bad = pynini.concat(sigma_star, pynini.concat(combined_inner_bad, sigma_star)).optimize()
     stem_shape_dfa = pynini.difference(sigma_star, total_bad).optimize()
     return stem_shape_dfa
 

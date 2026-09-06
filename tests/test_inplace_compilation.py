@@ -45,9 +45,6 @@ def setup_inplace_env():
 
     yield
 
-    # Restore chr-generated from chr-config
-    generate_markers(str(INPLACE_CONFIG_DIR), str(INPLACE_GEN_DIR), in_place=True)
-
     # Restore original YAML_DIR and clear caches
     clear_all_caches()
     parse_mod.PARSE_GRAPH = None

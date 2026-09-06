@@ -240,11 +240,13 @@ ENTRY_TYPES_BY_NAME: Dict[str, EntryTypeSpec] = {e.name: e for e in PRIMARY_ENTR
 
 
 # Deprecated pre-defined Meta Labels
-META_LABELS: Dict[str, MetaLabelDefinition] = {
-    "[FORM=3RD_PRES]": MetaLabelDefinition(
-        id="[FORM=3RD_PRES]",
-        description="3rd person present form",
-        constraints=[
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", DeprecationWarning)
+    META_LABELS: Dict[str, MetaLabelDefinition] = {
+        "[FORM=3RD_PRES]": MetaLabelDefinition(
+            id="[FORM=3RD_PRES]",
+            description="3rd person present form",
+            constraints=[
             FeatureConstraint(slot_name="tense", mode=MatchMode.EXACT, values=["present"]),
             FeatureConstraint(slot_name="aspect", mode=MatchMode.EXACT, values=["present"]),
             FeatureConstraint(slot_name="pronominal", mode=MatchMode.ONE_OF, values=filter_pronominals(person="3rd")),

@@ -1,4 +1,3 @@
-import subprocess
 import sys
 import pytest
 from parse_chr_dict.parse import get_parse_graph
@@ -7,6 +6,7 @@ from parse_chr_dict.segment import (
     segment_alignment,
     format_segmentation,
     process_word,
+    main as segment_main,
 )
 
 
@@ -76,30 +76,23 @@ def test_get_arc_alignment_invalid_surface(parse_graph):
     assert alignment is None
 
 
-def test_cli_argument_execution():
-    res = subprocess.run(
-        [sys.executable, "-m", "parse_chr_dict.segment", "katateka"],
-        capture_output=True,
-        text=True,
-        check=True,
-    )
-    assert "WORD: katateka" in res.stdout
-    assert "Segmentation: k-atat-e-k-a" in res.stdout
-    assert "Arc Alignment:" in res.stdout
-    assert "Parses (total:" in res.stdout
+def test_cli_argument_execution(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", ["segment", "katateka"])
+    segment_main()
+    captured = capsys.readouterr()
+    assert "WORD: katateka" in captured.out
+    assert "Segmentation: k-atat-e-k-a" in captured.out
+    assert "Arc Alignment:" in captured.out
+    assert "Parses (total:" in captured.out
 
 
-def test_cli_interactive_execution():
-    proc = subprocess.Popen(
-        [sys.executable, "-m", "parse_chr_dict.segment"],
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
-    )
-    stdout, stderr = proc.communicate("katateka\n\n")
-    assert proc.returncode == 0
-    assert "Interactive segmentation & parsing" in stdout
-    assert "SEGMENT:" in stdout
-    assert "Segmentation: k-atat-e-k-a" in stdout
-    assert "Parses (total:" in stdout
+def test_cli_interactive_execution(monkeypatch, capsys):
+    import io
+    monkeypatch.setattr(sys, "argv", ["segment"])
+    monkeypatch.setattr("sys.stdin", io.StringIO("katateka\n\n"))
+    segment_main()
+    captured = capsys.readouterr()
+    assert "Interactive segmentation & parsing" in captured.out
+    assert "SEGMENT:" in captured.out
+    assert "Segmentation: k-atat-e-k-a" in captured.out
+    assert "Parses (total:" in captured.out
