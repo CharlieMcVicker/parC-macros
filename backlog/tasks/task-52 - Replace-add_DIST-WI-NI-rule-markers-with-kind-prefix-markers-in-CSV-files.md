@@ -1,11 +1,11 @@
 ---
 id: TASK-52
 title: 'Replace add_DIST/WI/NI rule-markers with kind:prefix markers in CSV files'
-status: In Progress
+status: Done
 assignee:
   - '@agent'
 created_date: '2026-07-16 23:25'
-updated_date: '2026-07-16 23:25'
+updated_date: '2026-09-06 17:21'
 labels: []
 dependencies: []
 ordinal: 51000
@@ -19,10 +19,16 @@ The two-stage dummy-token strategy fails because add_DIST/add_WI/add_NI use epsi
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Update verb-distributive.csv to use kind:prefix value:[DIST] instead of kind:rule value:$add_DIST
-- [ ] #2 Update verb-wi.csv to use kind:prefix value:[WI] instead of kind:rule value:$add_WI
-- [ ] #3 Update verb-partitive.csv to use kind:prefix value:[NI] instead of kind:rule value:$add_NI
-- [ ] #4 Regenerate chr-generated configs
-- [ ] #5 Update minimal-optional-test grammar to also use kind:prefix
-- [ ] #6 Run tests to verify the fix
+- [x] #1 Update verb-distributive.csv to use kind:prefix value:[DIST] instead of kind:rule value:$add_DIST
+- [x] #2 Update verb-wi.csv to use kind:prefix value:[WI] instead of kind:rule value:$add_WI
+- [x] #3 Update verb-partitive.csv to use kind:prefix value:[NI] instead of kind:rule value:$add_NI
+- [x] #4 Regenerate chr-generated configs
+- [x] #5 Update minimal-optional-test grammar to also use kind:prefix
+- [x] #6 Run tests to verify the fix
 <!-- AC:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Closed as superseded/obsolete. Prefix CSV files (verb-distributive.csv, verb-wi.csv, verb-partitive.csv) were dropped in favor of direct template-based prepronominal prefix insertion (<PrepronominalPrefixes>) and chr-config/insertions/.
+<!-- SECTION:FINAL_SUMMARY:END -->
