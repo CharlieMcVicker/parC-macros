@@ -31,7 +31,7 @@ def write_metadata(dest: IO[str], *metadata: str):
     dest.writelines([line + "\n" for line in metadata])
 
 
-def setup_inplace_aspect_class_writer(dest: IO[str], fieldnames: list[str] | None = None):
+def setup_aspect_class_writer(dest: IO[str], fieldnames: list[str] | None = None):
     write_metadata(
         dest,
         "# kind: morpheme_replace",
@@ -202,7 +202,7 @@ def generate_aspect_effects_csv(effects: list[dict], dest_path: str) -> None:
             writer.writerow(eff)
 
 
-def generate_inplace_aspect_config(
+def generate_aspect_config(
     src_path: str = "chr-data/classes.csv",
     dest_path: str = "chr-config/verb-aspect.csv",
     stative_dest_path: str | None = "chr-config/verb-aspect-stative.csv",
@@ -228,13 +228,13 @@ def generate_inplace_aspect_config(
 
         Path(dest_path).parent.mkdir(parents=True, exist_ok=True)
         with open(dest_path, "w", encoding="utf-8") as f:
-            writer = setup_inplace_aspect_class_writer(f)
+            writer = setup_aspect_class_writer(f)
             for r in eventful_rows:
                 writer.writerow(r)
 
         Path(stative_dest_path).parent.mkdir(parents=True, exist_ok=True)
         with open(stative_dest_path, "w", encoding="utf-8") as f:
-            stative_writer = setup_inplace_aspect_class_writer(
+            stative_writer = setup_aspect_class_writer(
                 f, fieldnames=["paradigm"] + list(STATIVE_DATA_COLS.keys())
             )
             for r in stative_rows:
@@ -255,7 +255,7 @@ def generate_inplace_aspect_config(
 
         Path(dest_path).parent.mkdir(parents=True, exist_ok=True)
         with open(dest_path, "w", encoding="utf-8") as f:
-            writer = setup_inplace_aspect_class_writer(f)
+            writer = setup_aspect_class_writer(f)
             for r in rows_out:
                 writer.writerow(r)
 
@@ -337,7 +337,7 @@ def main():
     )
     args = parser.parse_args()
 
-    result = generate_inplace_aspect_config(
+    result = generate_aspect_config(
         src_path=args.src,
         dest_path=args.dest,
         stative_dest_path=args.stative_dest,

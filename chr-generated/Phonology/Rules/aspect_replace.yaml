@@ -1,9 +1,9 @@
 # This is a Rules config file
-# Generated automatically by generate_morpheme_replace_rules.py (in-place)
+# Generated automatically by generate_morpheme_replace_rules.py
 kind: Rules
 rules:
 - name: aspect_replace
-  description: In-place morpheme replacement rule for [Aspect]
+  description: Morpheme replacement rule for [Aspect]
   string_map:
   - - '[AspectClass=a][Aspect=completive]'
     - ''

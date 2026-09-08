@@ -33,7 +33,7 @@ def setup_inplace_env():
     orig_yaml_dir = os.environ.get("YAML_DIR")
 
     # AC 1: Generate chr-generated from chr-config
-    generate_markers(str(INPLACE_CONFIG_DIR), str(INPLACE_GEN_DIR), in_place=True)
+    generate_markers(str(INPLACE_CONFIG_DIR), str(INPLACE_GEN_DIR))
 
     # Clear caches and set YAML_DIR to chr-generated
     clear_all_caches()
@@ -151,13 +151,13 @@ def test_inplace_distributive_allomorph_realization():
     """AC 5: Verify phonological realization across indicative (te-), imperative (th-), and infinitive (tsu-) forms."""
     from parC.grammar.paradigm_compilation import get_open_inflect_graph, get_open_parse_graph
     from parC.grammar.acceptor_compilation import fsm_strings, word_fsa
-    from parse_chr_dict.parse import parse, read_inplace_parse
+    from parse_chr_dict.parse import parse, read_parse
 
     # 1. Imperative distributive with [DIST=di] before h yields 'th-'
     imperative_parses = parse("thatanhesaka")
     di_imperatives = [p for p in imperative_parses if "[DIST=di]" in p]
     assert len(di_imperatives) > 0
-    cfg_imp = read_inplace_parse(di_imperatives[0])
+    cfg_imp = read_parse(di_imperatives[0])
     assert "[DIST=di]" in cfg_imp.prepronominal_prefixes
     assert cfg_imp.to_labels_dict()["distributive"] == "+"
 
@@ -165,7 +165,7 @@ def test_inplace_distributive_allomorph_realization():
     infinitive_parses = parse("tsutanhesesti")
     di_infinitives = [p for p in infinitive_parses if "[DIST=di]" in p]
     assert len(di_infinitives) > 0
-    cfg_inf = read_inplace_parse(di_infinitives[0])
+    cfg_inf = read_parse(di_infinitives[0])
     assert "[DIST=di]" in cfg_inf.prepronominal_prefixes
     assert cfg_inf.to_labels_dict()["distributive"] == "+"
 
@@ -173,7 +173,7 @@ def test_inplace_distributive_allomorph_realization():
     indicative_parses = parse("tetanheseka")
     de_indicatives = [p for p in indicative_parses if "[DIST=de]" in p]
     assert len(de_indicatives) > 0
-    cfg_ind = read_inplace_parse(de_indicatives[0])
+    cfg_ind = read_parse(de_indicatives[0])
     assert "[DIST=de]" in cfg_ind.prepronominal_prefixes
     assert cfg_ind.to_labels_dict()["distributive"] == "+"
 

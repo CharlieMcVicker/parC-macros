@@ -31,27 +31,27 @@ from parse_chr_dict.acceptors import (
 )
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
-INPLACE_CONFIG_DIR = REPO_ROOT / "chr-config"
-INPLACE_GEN_DIR = REPO_ROOT / "chr-generated"
+CONFIG_DIR = REPO_ROOT / "chr-config"
+GEN_DIR = REPO_ROOT / "chr-generated"
 
 
 @pytest.fixture(scope="module", autouse=True)
 def setup_acceptor_env():
-    """Ensure in-place generated environment is set up and configured."""
+    """Ensure generated environment is set up and configured."""
     from parC.constants import set_yaml_dir
     from parC.grammar.paradigm_compilation import clear_all_caches
     import parse_chr_dict.parse as parse_mod
 
     orig_yaml_dir = os.environ.get("YAML_DIR")
 
-    generate_markers(str(INPLACE_CONFIG_DIR), str(INPLACE_GEN_DIR), in_place=True)
+    generate_markers(str(CONFIG_DIR), str(GEN_DIR))
 
     clear_all_caches()
     parse_mod.PARSE_GRAPH = None
     parse_mod.INFLECT_GRAPH = None
     parse_mod._READ_LABELS_CACHE.clear()
-    set_yaml_dir(str(INPLACE_GEN_DIR))
-    os.environ["YAML_DIR"] = str(INPLACE_GEN_DIR)
+    set_yaml_dir(str(GEN_DIR))
+    os.environ["YAML_DIR"] = str(GEN_DIR)
 
     yield
 
@@ -388,9 +388,8 @@ def test_get_cascade_domain_acceptor_caching(tmp_path):
 
 def test_get_parse_graph_inplace_composition():
     """Verify get_parse_graph composes cascade domain acceptor and filters invalid parses."""
-    from parse_chr_dict.parse import get_parse_graph, parse, is_inplace_grammar
+    from parse_chr_dict.parse import get_parse_graph, parse
 
-    assert is_inplace_grammar() is True
     graph = get_parse_graph()
     assert graph is not None
 

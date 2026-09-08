@@ -1,7 +1,7 @@
 """
-parc_macros/generate_inplace_phonology.py
+parc_macros/generate_phonology.py
 
-Dynamic in-memory generation of in-place phonology configuration:
+Dynamic in-memory generation of phonology configuration:
 - Alphabet tags (PrefixClass, Pro, AspectClass, Variant, Aspect, TenseClass, Tense)
 - Phoneme group patterns (PrepronominalPrefixes, Root, morpheme unions)
 - Dropping rules (drop_root_final.yaml, drop_stem_initial_vowel.yaml) from annotations/CSVs
@@ -51,7 +51,7 @@ def _parse_rule_triggers(path: Path) -> list[tuple[str, str]]:
     return triggers
 
 
-def extract_inplace_data(config_dir: Path) -> dict[str, Any]:
+def extract_phonology_data(config_dir: Path) -> dict[str, Any]:
     """
     Extracts all classes, inflectional features, variants, and rule triggers
     from configuration CSV files.
@@ -202,13 +202,13 @@ def extract_inplace_data(config_dir: Path) -> dict[str, Any]:
     }
 
 
-def generate_inplace_alphabet(
+def generate_alphabet(
     base_alphabet_path: Path,
     output_alphabet_path: Path,
     data: dict[str, Any],
 ) -> None:
     """
-    Generates Inventory alphabet.yaml dynamically merging base inventory with in-place tags.
+    Generates Inventory alphabet.yaml dynamically merging base inventory with morpheme tags.
     """
     base_alphabet_path = Path(base_alphabet_path)
     output_alphabet_path = Path(output_alphabet_path)
@@ -292,13 +292,13 @@ def generate_inplace_alphabet(
         yaml.dump(inv, f, sort_keys=False, default_flow_style=False)
 
 
-def generate_inplace_patterns(
+def generate_patterns(
     base_patterns_path: Path,
     output_patterns_path: Path,
     data: dict[str, Any],
 ) -> None:
     """
-    Generates Patterns phoneme_groups.yaml with dynamically generated in-place pattern groups.
+    Generates Patterns phoneme_groups.yaml with dynamically generated pattern groups.
     """
     base_patterns_path = Path(base_patterns_path)
     output_patterns_path = Path(output_patterns_path)
@@ -432,7 +432,7 @@ def generate_inplace_patterns(
         yaml.dump(pats_yaml, f, sort_keys=False, default_flow_style=False)
 
 
-def generate_inplace_rules(
+def generate_phonology_rules(
     config_dir: Path,
     output_rules_dir: Path,
     data: dict[str, Any],
@@ -454,13 +454,13 @@ def generate_inplace_rules(
         "rules": [
             {
                 "name": "mark_final",
-                "description": "mark the final phone for deletion based on in-place aspect triggers",
+                "description": "mark the final phone for deletion based on aspect triggers",
                 "string_map": [["<Phone>", "[TEMP]"]],
                 "right_context": drop_final_rc,
             },
             {
                 "name": "mark_final_two",
-                "description": "mark the final two phones for deletion based on in-place aspect triggers",
+                "description": "mark the final two phones for deletion based on aspect triggers",
                 "string_map": [["<Phone><Phone>?", "[TEMP]"]],
                 "right_context": drop_final_two_rc,
             },
@@ -482,7 +482,7 @@ def generate_inplace_rules(
             },
             {
                 "name": "drop_root_final",
-                "description": "drop final root phone(s) conditioned on in-place aspect class and aspect tags",
+                "description": "drop final root phone(s) conditioned on aspect class and aspect tags",
                 "rule_sequence": [
                     "$drop_final_two",
                     "$drop_final",

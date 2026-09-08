@@ -57,7 +57,7 @@ def test_valid_rules():
     assert validate_yaml_content(valid_data) is True
 
 
-def test_chr_inplace_config_yamls():
+def test_chr_config_yamls():
     from pathlib import Path
     import yaml
     from parc_macros.yaml_validation import validate_yaml_file
@@ -99,7 +99,7 @@ def test_chr_inplace_config_yamls():
     assert "<H_alt>" in inv_map
 
 
-def test_chr_inplace_generated_yamls():
+def test_chr_generated_yamls():
     from pathlib import Path
     import yaml
     from parc_macros.yaml_validation import validate_yaml_file

@@ -45,8 +45,8 @@ def test_parse_data_immutability_and_fields():
     assert labels["translocutive"] == "+"
     assert labels["rules"] == "+"
 
-    # to_inplace_string
-    s = p.to_inplace_string()
+    # to_tag_string
+    s = p.to_tag_string()
     assert "[PrefixClass=a_stem]" in s
     assert "[Pro=3sg.A]" in s
     assert "[H_alt=none]atat" in s

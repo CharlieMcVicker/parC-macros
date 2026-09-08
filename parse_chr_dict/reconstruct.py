@@ -8,7 +8,7 @@ from parse_chr_dict.h_alternation import (
 _INFLECT_CACHE: dict[tuple[str, frozenset[tuple[str, str]], str, bool, bool], list[str]] = {}
 
 
-def build_inplace_tag_str(root: str, feature_values: dict[str, str]) -> str:
+def build_tag_str(root: str, feature_values: dict[str, str]) -> str:
     pref = feature_values.get("prefix_class", "")
     pro = feature_values.get("pronominal", "")
     h_alt = feature_values.get("h_alt_tag", "")
@@ -56,7 +56,7 @@ def build_inplace_tag_str(root: str, feature_values: dict[str, str]) -> str:
     return "".join(parts)
 
 
-def inflect_inplace_string(tag_str: str) -> list[str]:
+def inflect_tag_str(tag_str: str) -> list[str]:
     import pynini
     from parC.grammar.acceptor_compilation import fsm_strings, word_fsa
     from parse_chr_dict.parse import get_inflect_graph
@@ -75,8 +75,7 @@ def memoized_inflect(
 ) -> list[str]:
     """
     Memoized wrapper around inflect() to avoid repeated FST operations
-    for identical root and feature configurations. Supports both in-place
-    and legacy grammars.
+    for identical root and feature configurations.
     """
     if isinstance(feature_values, dict):
         feat_key = frozenset(feature_values.items())
@@ -90,8 +89,8 @@ def memoized_inflect(
         return _INFLECT_CACHE[cache_key]
 
     try:
-        tag_str = build_inplace_tag_str(root, dict(feat_key))
-        res = inflect_inplace_string(tag_str)
+        tag_str = build_tag_str(root, dict(feat_key))
+        res = inflect_tag_str(tag_str)
     except Exception:
         res = []
 

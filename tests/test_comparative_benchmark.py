@@ -67,22 +67,13 @@ def test_comparative_benchmark_metrics():
     assert runtime["all_581_forms_across_100_rows"]["inplace_total_seconds"] < runtime["all_581_forms_across_100_rows"]["baseline_total_seconds"]
 
 
-def test_read_labels_inplace_and_legacy_compatibility():
-    """Verify read_labels behaves identically for legacy and in-place slot tags."""
-    # 1. Legacy
-    legacy_str = "[BOW]gawoniha[EOW][tense=present][aspect=present][pronominal=3sg.A]"
-    form, labels = read_labels(legacy_str)
-    assert form == "gawoniha"
-    assert labels["tense"] == "present"
-    assert labels["aspect"] == "present"
-    assert labels["pronominal"] == "3sg.A"
-
-    # 2. In-place
-    inplace_str = (
+def test_read_labels():
+    """Verify read_labels behaves correctly for in-place slot tags."""
+    tag_str = (
         "[BOW][PrefixClass=a_stem][Pro=3sg.A]tateka[AspectClass=a][Aspect=present]"
-        "[Tense=present_a][EOW][aspect_class=a][prefix_class=a_stem]"
+        "[Tense=present_a][EOW]"
     )
-    form_ip, labels_ip = read_labels(inplace_str)
+    form_ip, labels_ip = read_labels(tag_str)
     assert form_ip == "tateka"
     assert labels_ip["prefix_class"] == "a_stem"
     assert labels_ip["pronominal"] == "3sg.A"

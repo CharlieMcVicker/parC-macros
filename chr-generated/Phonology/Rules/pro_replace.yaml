@@ -1,9 +1,9 @@
 # This is a Rules config file
-# Generated automatically by generate_morpheme_replace_rules.py (in-place)
+# Generated automatically by generate_morpheme_replace_rules.py
 kind: Rules
 rules:
 - name: pro_replace
-  description: In-place morpheme replacement rule for [Pro]
+  description: Morpheme replacement rule for [Pro]
   string_map:
   - - '[PrefixClass=a_stem][Pro=1sg.A]'
     - k

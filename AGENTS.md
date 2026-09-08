@@ -17,7 +17,7 @@ Guidance and operational constraints for AI coding agents working in `parC-macro
   - Stative verbs: Stative aspect classes (`chr-config/verb-aspect-stative.csv`) are restricted to `present` and `incompletive`. In `parse_chr_dict`, statives enforce `aspect_class.startswith("stative")` and `INCOMPLETIVE_ASSERTIVE_3RD`.
 - **Data Flow**:
   - `chr-data/classes.csv` -> `parse_chr_dict/create_aspect_class_csv.py` -> `chr-config/verb-aspect*.csv` + `chr-config/aspect_effects.csv`.
-  - `chr-config/` -> `parc_macros/generate_markers.py --in-place` -> `chr-generated/`.
+  - `chr-config/` -> `parc_macros/generate_markers.py` -> `chr-generated/`.
   - `chr-generated/` + `chr-corpus/corpus.csv` -> `parse_chr_dict/__main__.py` -> `roots.csv` + `errors.csv`.
 
 ## 2. Directory Boundaries & Layering Rules
@@ -54,7 +54,7 @@ PYTHONPATH=. pytest tests/test_derive_pipeline.py -k test_real_plural_verb_entry
 ### Build, Generation & Validation
 ```bash
 # Regenerate all grammar YAML assets from chr-config/ into chr-generated/
-python parc_macros/generate_markers.py chr-config chr-generated --in-place
+python parc_macros/generate_markers.py chr-config chr-generated
 
 # Regenerate aspect CSV matrices and effect triggers from chr-data/
 python parse_chr_dict/create_aspect_class_csv.py
@@ -102,7 +102,7 @@ parC-macros/
 ├── chr-corpus/           # corpus.csv (708 dictionary entries)
 ├── chr-data/             # classes.csv (source inflectional classification)
 ├── parc_macros/          # Generic YAML/FST generator (language-agnostic)
-│   ├── generate_markers.py # Main grammar compiler (--in-place)
+│   ├── generate_markers.py # Main grammar compiler
 │   ├── yaml_validation.py  # JSON schema validator (parc_macros/schemas/)
 │   └── generate_*_rules.py # Phonology, insertion & replace rule generators
 ├── parse_chr_dict/       # Cherokee root derivation & FST parsing engine

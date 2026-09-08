@@ -34,27 +34,6 @@ PARSE_GRAPH = None
 INFLECT_GRAPH = None
 
 
-def is_inplace_grammar() -> bool:
-    """Detects whether the active grammar uses in-place morpheme tags."""
-    yaml_dir = os.environ.get("YAML_DIR", "")
-    if "chr-generated" in str(yaml_dir) or "inplace" in str(yaml_dir):
-        return True
-    try:
-        from parC.constants import get_yaml_dir
-
-        yd = Path(get_yaml_dir())
-        if "chr-generated" in str(yd) or "inplace" in yd.name or "inplace" in str(yd):
-            return True
-        paradigm_path = yd / "Morphotactics" / "Paradigm" / "verb.yaml"
-        if paradigm_path.exists():
-            content = paradigm_path.read_text(encoding="utf-8")
-            if "<PrefixClass>" in content or "<AspectClass>" in content:
-                return True
-    except Exception:
-        pass
-    return False
-
-
 def get_parse_graph():
     global PARSE_GRAPH
     if PARSE_GRAPH is not None:
@@ -62,16 +41,13 @@ def get_parse_graph():
     raw_parse = get_open_parse_graph(
         "verb", infer_lexical_features=True, non_deterministic_cleanup=True
     )
-    if is_inplace_grammar():
-        syms = raw_parse.output_symbols() or get_default_symbol_table()
-        domain_acceptor = get_cascade_domain_acceptor(syms=syms)
-        PARSE_GRAPH = pynini.compose(raw_parse, domain_acceptor).optimize()
-        if syms is not None:
-            if raw_parse.input_symbols() is not None:
-                PARSE_GRAPH.set_input_symbols(raw_parse.input_symbols())
-            PARSE_GRAPH.set_output_symbols(syms)
-    else:
-        PARSE_GRAPH = raw_parse
+    syms = raw_parse.output_symbols() or get_default_symbol_table()
+    domain_acceptor = get_cascade_domain_acceptor(syms=syms)
+    PARSE_GRAPH = pynini.compose(raw_parse, domain_acceptor).optimize()
+    if syms is not None:
+        if raw_parse.input_symbols() is not None:
+            PARSE_GRAPH.set_input_symbols(raw_parse.input_symbols())
+        PARSE_GRAPH.set_output_symbols(syms)
     return PARSE_GRAPH
 
 
@@ -80,7 +56,6 @@ def parse(surface: str, labels: list[tuple[str, str]] = None) -> list[str]:
     if PARSE_GRAPH is None:
         PARSE_GRAPH = get_parse_graph()
 
-    # Let's parse the surface form cant-o_a
     if labels is None:
         labels = []
     surface_fsa = word_fsa(surface)
@@ -97,21 +72,16 @@ def parse(surface: str, labels: list[tuple[str, str]] = None) -> list[str]:
     return fsm_strings(output_lattice_with_tag, strip_all_tags=False)
 
 
-
-
 def get_inflect_graph():
     global INFLECT_GRAPH
     if INFLECT_GRAPH is not None:
         return INFLECT_GRAPH
     from parC.grammar.paradigm_compilation import get_open_inflect_graph
-    if is_inplace_grammar():
-        INFLECT_GRAPH = get_open_inflect_graph("verb", infer_lexical_features=False)
-    else:
-        INFLECT_GRAPH = get_open_inflect_graph("verb", infer_lexical_features=True, non_deterministic_cleanup=False)
+    INFLECT_GRAPH = get_open_inflect_graph("verb", infer_lexical_features=False)
     return INFLECT_GRAPH
 
 
-SLOT_NAME_TO_INPLACE_TAG: dict[str, str] = {
+SLOT_NAME_TO_TAG: dict[str, str] = {
     "prefix_class": "PrefixClass",
     "pronominal": "Pro",
     "h_alt_tag": "H_alt",
@@ -123,10 +93,8 @@ SLOT_NAME_TO_INPLACE_TAG: dict[str, str] = {
 
 
 def feature_tag(feature: str, value: str) -> str:
-    if is_inplace_grammar():
-        slot = SLOT_NAME_TO_INPLACE_TAG.get(feature, feature)
-        return f"[{slot}={value}]"
-    return f"[{feature}={value}]"
+    slot = SLOT_NAME_TO_TAG.get(feature, feature)
+    return f"[{slot}={value}]"
 
 
 from parse_chr_dict.types import (
@@ -137,7 +105,7 @@ from parse_chr_dict.types import (
     LexicalVerb,
 )
 
-INPLACE_SLOT_TAG_MAP: dict[str, str] = {
+SLOT_TAG_MAP: dict[str, str] = {
     "PrefixClass": "prefix_class",
     "Pro": "pronominal",
     "H_alt": "h_alt_tag",
@@ -149,20 +117,18 @@ INPLACE_SLOT_TAG_MAP: dict[str, str] = {
 }
 
 _READ_LABELS_CACHE: dict[str, tuple[str, dict[str, str]]] = {}
+_READ_PARSE_CACHE: dict[str, ParseData] = {}
 
 
-_READ_INPLACE_PARSE_CACHE: dict[str, ParseData] = {}
-
-
-def read_inplace_parse(s: str) -> ParseData:
+def read_parse(s: str) -> ParseData:
     """
-    Parses an in-place morpheme parse string into a ParseData object.
+    Parses a morpheme parse string into a ParseData object.
     Uses bracket-depth tracking to safely handle nested brackets (e.g. [AspectClass=become[inf2]]).
     Slot tags ([PrefixClass=...], [Pro=...], [AspectClass=...], etc.) and PPP tags ([WI], [DIST])
     are extracted as metadata; any internal root mutation tags (like [H_alt=none]) remain in the root.
-    Memoized directly via _READ_INPLACE_PARSE_CACHE.
+    Memoized directly via _READ_PARSE_CACHE.
     """
-    cached = _READ_INPLACE_PARSE_CACHE.get(s)
+    cached = _READ_PARSE_CACHE.get(s)
     if cached is not None:
         return cached
 
@@ -197,7 +163,7 @@ def read_inplace_parse(s: str) -> ParseData:
             tok = clean_s[start:i]
             inner = tok[1:-1]
             eq_idx = inner.find("=")
-            if eq_idx != -1 and inner[:eq_idx] in INPLACE_SLOT_TAG_MAP:
+            if eq_idx != -1 and inner[:eq_idx] in SLOT_TAG_MAP:
                 tokens.append(tok)
             elif tok in ("[WI]", "[DIST]", "[DIST=de]", "[DIST=di]") or tok.startswith("[DIST="):
                 tokens.append(tok)
@@ -264,42 +230,19 @@ def read_inplace_parse(s: str) -> ParseData:
         prepronominal_prefixes=tuple(prepronominal_prefixes),
         raw_tokens=tuple(tokens),
     )
-    _READ_INPLACE_PARSE_CACHE[s] = res
+    _READ_PARSE_CACHE[s] = res
     return res
 
 
-def read_labels(s: str):
+def read_labels(s: str) -> tuple[str, dict[str, str]]:
     cached = _READ_LABELS_CACHE.get(s)
     if cached is not None:
         form, labels_dict = cached
         return form, dict(labels_dict)
 
-    # s is a str like [BOW]foo[EOW][label=value][label2=value2]
-    eow_idx = s.find("[EOW]")
-    if eow_idx == -1 or not s.startswith("[BOW]"):
-        _READ_LABELS_CACHE[s] = (s, {})
-        return s, {}
-
-    # Detect in-place morpheme tags
-    form_candidate = s[5:eow_idx]
-    if "[" in form_candidate and ("PrefixClass=" in form_candidate or "AspectClass=" in form_candidate or "Pro=" in form_candidate):
-        cfg = read_inplace_parse(s)
-        form = cfg.root
-        labels_dict = cfg.to_labels_dict()
-        _READ_LABELS_CACHE[s] = (form, labels_dict)
-        return form, dict(labels_dict)
-
-    # Legacy trailing-tag format
-    form = form_candidate
-    labels_str = s[eow_idx + 5 :]
-
-    labels_dict = {}
-    if labels_str and labels_str.startswith("[") and labels_str.endswith("]"):
-        for chunk in labels_str[1:-1].split("]["):
-            eq_idx = chunk.find("=")
-            if eq_idx != -1:
-                labels_dict[chunk[:eq_idx]] = chunk[eq_idx + 1 :]
-
+    parsed = read_parse(s)
+    form = parsed.root
+    labels_dict = parsed.to_labels_dict()
     _READ_LABELS_CACHE[s] = (form, labels_dict)
     return form, dict(labels_dict)
 
@@ -323,13 +266,10 @@ def get_specialized_parse_graph(form: Any, is_stative: bool = False) -> pynini.F
         return _SPECIALIZED_PARSE_GRAPHS[key]
 
     base_graph = get_parse_graph()
-    if not is_inplace_grammar():
-        _SPECIALIZED_PARSE_GRAPHS[key] = base_graph
-        return base_graph
-
     syms = base_graph.output_symbols() or get_default_symbol_table()
     if syms is None:
         _SPECIALIZED_PARSE_GRAPHS[key] = base_graph
+        return base_graph
         return base_graph
     all_syms = [syms.find(i) for i in range(1, syms.num_symbols())]
     sigma = pynini.union(*[pynini.accep(s, token_type=syms) for s in all_syms]).optimize()
@@ -393,8 +333,6 @@ def build_root_filter_fsa(allowed_roots: Iterable[str]) -> pynini.Fst | None:
     match only roots in allowed_roots.
     Boundary structure: sigma* + [H_alt=...] + root_union + [AspectClass=...] + sigma*
     """
-    if not is_inplace_grammar():
-        return None
     key = frozenset(allowed_roots)
     if not key:
         return None
@@ -483,7 +421,7 @@ def parse_surface(
         _SURFACE_FSA_CACHE[surface] = surface_fsa
 
     output_lattice = pynini.compose(surface_fsa, graph).optimize()
-    if roots_key and is_inplace_grammar():
+    if roots_key:
         root_filter = build_root_filter_fsa(roots_key)
         if root_filter is not None:
             output_lattice = pynini.compose(output_lattice, root_filter).optimize()
@@ -498,48 +436,12 @@ def parse_surface(
 
 
 def parse_string_to_parse_data(p: str) -> ParseData:
-    """Converts a raw parse string (in-place morphemes or legacy trailing tags) to ParseData."""
+    """Converts a raw parse string to ParseData."""
     cached = _PARSE_DATA_CACHE.get(p)
     if cached is not None:
         return cached
 
-    if "[" in p and ("PrefixClass=" in p or "AspectClass=" in p or "Pro=" in p):
-        res = read_inplace_parse(p)
-        _PARSE_DATA_CACHE[p] = res
-        return res
-
-    form, labels = read_labels(p)
-    var_raw = labels.get("variant", 1)
-    var = int(var_raw) if str(var_raw).isdigit() else 1
-    h_alt_tag = labels.get("h_alt_tag", "")
-    if not h_alt_tag:
-        for tag in (
-            "[H_alt=drop]",
-            "[H_alt=glot]",
-            "[H_alt=lat]",
-            "[H_alt=vowel_a]",
-            "[H_alt=vowel_e]",
-            "[H_alt=vowel_i]",
-            "[H_alt=vowel_o]",
-            "[H_alt=vowel_u]",
-            "[H_alt=vowel_v]",
-            "[H_alt=vowel]",
-            "[H_alt=none]",
-        ):
-            if tag in form:
-                h_alt_tag = tag
-                break
-    res = ParseData(
-        root=form,
-        prefix_class=labels.get("prefix_class", ""),
-        pronominal=labels.get("pronominal", ""),
-        h_alt_tag=h_alt_tag,
-        aspect_class=labels.get("aspect_class", ""),
-        variant=var,
-        aspect=labels.get("aspect", ""),
-        tense_present_class=labels.get("tense_present_class", ""),
-        tense=labels.get("tense", ""),
-    )
+    res = read_parse(p)
     _PARSE_DATA_CACHE[p] = res
     return res
 

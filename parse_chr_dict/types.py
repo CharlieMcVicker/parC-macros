@@ -8,7 +8,7 @@ from typing import Any, List, Optional, Set, Tuple
 class ParseData:
     """
     Concrete parse data representing a single FST parse string.
-    Isomorphic to the in-place morpheme tag sequence.
+    Isomorphic to the linear morpheme tag sequence.
     """
     root: str
     prefix_class: str = ""
@@ -63,8 +63,8 @@ class ParseData:
             d["h_alt_tag"] = self.h_alt_tag
         return {k: v for k, v in d.items() if v}
 
-    def to_inplace_string(self) -> str:
-        """Serializes back to an in-place morpheme sequence for FST transduction."""
+    def to_tag_string(self) -> str:
+        """Serializes back to a linear morpheme tag sequence for FST transduction."""
         parts: list[str] = []
         for p in self.prepronominal_prefixes:
             parts.append(p)

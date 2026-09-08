@@ -58,7 +58,7 @@ def test_step1a_feature_tuples():
 
 def test_step2_infer_meta_labels():
     # Pure VerbForm matching
-    parse_str = "[BOW]gawoniha[EOW][tense=present_a][aspect=present][pronominal=3sg.A]"
+    parse_str = "[BOW][PrefixClass=a_stem][Pro=3sg.A]gawoniha[AspectClass=a][Aspect=present][Tense=present_a][EOW]"
     p_data = parse_string_to_parse_data(parse_str)
     assert PRES_3RD.matches(p_data) is True
     assert PRES_1SG.matches(p_data) is False

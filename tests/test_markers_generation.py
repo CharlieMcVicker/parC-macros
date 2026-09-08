@@ -15,30 +15,12 @@ from pathlib import Path
 import pytest
 import yaml
 
-from parc_macros.generate_markers import generate_markers, generate_inplace_paradigm_config
+from parc_macros.generate_markers import generate_markers, generate_paradigm_config
 from parc_macros.generate_morpheme_replace_rules import (
     generate_morpheme_replace_rules,
-    is_in_place_mode,
     get_class_tag_title,
 )
 from parc_macros.yaml_validation import validate_yaml_file, validate_yaml_content
-
-
-def test_is_in_place_mode_detection():
-    """Verify in-place mode detection across configs and templates."""
-    # chr-config has <PrefixClass> in open_root_template
-    assert is_in_place_mode("chr-config") is True
-
-    # Legacy configs should be detected as False
-    assert is_in_place_mode("tests/fixtures/spanish-config") is False
-    assert is_in_place_mode("tests/fixtures/min-min-config") is False
-
-    # Dictionary configs
-    assert is_in_place_mode({"paradigm": {"in_place": True}}) is True
-    assert is_in_place_mode({"paradigm": {"use_in_place_tags": True}}) is True
-    assert is_in_place_mode({"paradigm": {"open_root_template": "<PrefixClass><Pro><Root>"}}) is True
-    assert is_in_place_mode({"paradigm": {"open_root_template": "[WI]?[DIST]?[Pro]<Root>[Aspect]"}}) is False
-    assert is_in_place_mode(None) is False
 
 
 def test_get_class_tag_title():
@@ -57,7 +39,7 @@ def test_inplace_2_tag_rules_generation_ac1():
     ([PrefixClass=...][Pro=...], [AspectClass=...][Aspect=...], [TenseClass=...][Tense=...])
     """
     with tempfile.TemporaryDirectory() as tmp_dir:
-        generate_morpheme_replace_rules("chr-config", tmp_dir, in_place=True)
+        generate_morpheme_replace_rules("chr-config", tmp_dir)
 
         rules_dir = Path(tmp_dir) / "Phonology/Rules"
         assert rules_dir.exists()
@@ -190,29 +172,6 @@ def test_explicit_global_markers_in_verb_yaml_ac2():
         assert res["global_markers"][7]["value"] == "$insert_wi"
 
 
-def test_backwards_compatibility_ac3():
-    """
-    AC 3: Ensure strict backwards compatibility with standard trailing-label configs
-    (tests/fixtures/spanish-config, tests/fixtures/min-min-config).
-    """
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        # 1. min-min-config
-        min_out = Path(tmp_dir) / "min_out"
-        generate_markers("tests/fixtures/min-min-config", str(min_out))
-        cfm_files = list((min_out / "Exponence/ContingentFeatureMarkers").glob("*.yaml"))
-        assert len(cfm_files) == 1, f"Expected 1 CFM file for min-min-config, got {len(cfm_files)}"
-        with open(min_out / "Morphotactics/Paradigm/verb.yaml", "r", encoding="utf-8") as f:
-            min_paradigm = yaml.safe_load(f)
-        assert "contingent_markers" in min_paradigm
-        assert "global_markers" not in min_paradigm
-
-        # 2. spanish-config
-        sp_out = Path(tmp_dir) / "sp_out"
-        generate_markers("tests/fixtures/spanish-config", str(sp_out))
-        sp_paradigms = list((sp_out / "Morphotactics/Paradigm").glob("*.yaml"))
-        assert len(sp_paradigms) >= 4
-
-
 def test_yaml_schema_validation_ac4():
     """
     AC 4: Verify generated YAML configs pass JSON schema validation.
@@ -236,7 +195,7 @@ def test_inplace_aspect_variants_generation_task_111_2():
     - Non-varying classes (e.g. prefix_class, tense_class) emit clean 2-tag rules without [Variant=N]
     """
     with tempfile.TemporaryDirectory() as tmp_dir:
-        generate_morpheme_replace_rules("chr-config", tmp_dir, in_place=True)
+        generate_morpheme_replace_rules("chr-config", tmp_dir)
 
         rules_dir = Path(tmp_dir) / "Phonology/Rules"
         aspect_file = rules_dir / "aspect_replace.yaml"

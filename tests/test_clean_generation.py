@@ -29,10 +29,10 @@ INPLACE_GEN_DIR = REPO_ROOT / "chr-generated"
 @pytest.fixture(scope="module")
 def generated_clean_dir():
     """Generates marker configuration from chr-config to a temporary directory."""
-    tmpdir = tempfile.mkdtemp(prefix="clean_inplace_gen_")
+    tmpdir = tempfile.mkdtemp(prefix="clean_gen_")
     out_path = Path(tmpdir)
 
-    generate_markers(str(CLEAN_CONFIG_DIR), str(out_path), in_place=True)
+    generate_markers(str(CLEAN_CONFIG_DIR), str(out_path))
 
     yield out_path
 

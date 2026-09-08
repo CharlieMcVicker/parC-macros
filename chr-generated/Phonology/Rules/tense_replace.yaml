@@ -1,9 +1,9 @@
 # This is a Rules config file
-# Generated automatically by generate_morpheme_replace_rules.py (in-place)
+# Generated automatically by generate_morpheme_replace_rules.py
 kind: Rules
 rules:
 - name: tense_replace
-  description: In-place morpheme replacement rule for [Tense]
+  description: Morpheme replacement rule for [Tense]
   string_map:
   - - '[Tense=assertive]'
     - v'i

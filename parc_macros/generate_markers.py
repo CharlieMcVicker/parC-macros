@@ -14,13 +14,12 @@ from parc_macros.generate_insertion_rules import generate_insertion_rules
 from parc_macros.generate_morpheme_replace_rules import (
     generate_morpheme_replace_rules,
     sanitize_rule_name,
-    is_in_place_mode,
 )
-from parc_macros.generate_inplace_phonology import (
-    extract_inplace_data,
-    generate_inplace_alphabet,
-    generate_inplace_patterns,
-    generate_inplace_rules,
+from parc_macros.generate_phonology import (
+    extract_phonology_data,
+    generate_alphabet,
+    generate_patterns,
+    generate_phonology_rules,
 )
 
 
@@ -267,322 +266,8 @@ def reduce_csv_mappings(mapped_results):
     return paradigms_metadata, paradigms_markers, class_features_paradigms
 
 
-def generate_paradigm_configs(
-    paradigm_name,
-    meta,
-    markers,
-    pos_name,
-    output_dir,
-    feature_markers_keys,
-    filename_suffix_keys,
-    stage_order,
-    optional_features=None,
-):
-    """
-    Generates and saves the FeatureMarkers and Paradigm YAML configuration files
-    for a specific paradigm.
 
-    This function creates:
-    1. A FeatureMarkers YAML file (located in Exponence/FeatureMarkers) containing the
-       mappings of abstract features (like person/number) to concrete morphotactic markers.
-    2. A Paradigm YAML file (located in Morphotactics/Paradigm) containing references
-       to the FeatureMarkers, part of speech, lexical/class filters, and optional
-       stage ordering requirements for phonological rule application.
-
-    Args:
-        paradigm_name (str): The identifier of the paradigm (e.g., 'ar_regular').
-        meta (dict): Metadata associated with this paradigm.
-        markers (dict): The feature-to-marker mappings for this paradigm.
-        pos_name (str): The name of the part of speech (e.g., 'verb').
-        output_dir (str): Path to the destination directory.
-        feature_markers_keys (list): Configuration keys defining which metadata keys should
-          be propagated as additional feature_markers.
-        filename_suffix_keys (list): Configuration keys to extract suffixes for filenames.
-        stage_order (list or None): Explicit execution order for morphological/phonological stages.
-        optional_features (list, optional): List of optional features.
-    """
-    # Ensure it has correct prefix
-    filename_base = paradigm_name
-    if not filename_base.startswith(f"{pos_name}_"):
-        filename_base = f"{pos_name}_{filename_base}"
-
-    # 1. Generate FeatureMarker YAML
-    fm_dir = os.path.join(output_dir, "Exponence", "FeatureMarkers")
-    os.makedirs(fm_dir, exist_ok=True)
-    fm_file = os.path.join(fm_dir, f"{filename_base}.yaml")
-
-    markers_dict = {}
-    all_cols = sorted(list(set(markers.keys())))
-
-    for col in all_cols:
-        entries = markers.get(col, [])
-        if entries:
-            markers_dict[col] = entries
-        else:
-            markers_dict[col] = None
-
-    if optional_features and meta.get("feature") in optional_features:
-        stage_name = meta.get("stage", meta["feature"])
-        if "UNMARKED" not in markers_dict:
-            markers_dict["UNMARKED"] = [
-                {"kind": "rule", "value": "$no_op", "stage": stage_name}
-            ]
-
-    markers_dict = {k: markers_dict[k] for k in sorted(markers_dict.keys())}
-
-    fm_content = {
-        "kind": "FeatureMarkers",
-        "feature": meta["feature"],
-        "markers": markers_dict,
-    }
-
-    with open(fm_file, "w", encoding="utf-8") as f:
-        f.write("# This is a FeatureMarkers config file\n")
-        f.write("# Generated automatically from CSV\n")
-        yaml.dump(
-            fm_content,
-            f,
-            Dumper=Dumper,
-            default_flow_style=False,
-            allow_unicode=True,
-            sort_keys=False,
-        )
-
-    print(f"Generated FeatureMarkers: {fm_file}")
-
-    # 2. Generate Paradigm YAML
-    paradigm_dir = os.path.join(output_dir, "Morphotactics", "Paradigm")
-    os.makedirs(paradigm_dir, exist_ok=True)
-    suffixes = [meta[k] for k in filename_suffix_keys if k in meta]
-    suffix_str = f"_{'_'.join(suffixes)}" if suffixes else ""
-    paradigm_file = os.path.join(paradigm_dir, f"{filename_base}{suffix_str}.yaml")
-
-    paradigm_content = {
-        "kind": "Paradigm",
-        "part_of_speech": meta["part_of_speech"],
-        "feature_markers": {
-            meta["feature"]: f"${filename_base}",
-        },
-    }
-    for key in feature_markers_keys:
-        if key in meta:
-            paradigm_content["feature_markers"][key] = meta[key]
-
-    # Add stage_order if defined and this paradigm has markers in multiple stages
-    used_stages = set()
-    for col, entries in markers_dict.items():
-        if entries:
-            for entry in entries:
-                if "stage" in entry:
-                    used_stages.add(entry["stage"])
-
-    if stage_order and len(used_stages) > 1:
-        paradigm_content["stage_order"] = stage_order
-
-    # Add filter
-    paradigm_content["filter"] = {
-        "lexical_features": {meta["class_feature"]: paradigm_name}
-    }
-
-    with open(paradigm_file, "w", encoding="utf-8") as f:
-        f.write("# This is a Paradigm config file\n")
-        f.write("# Generated automatically from CSV\n")
-        yaml.dump(
-            paradigm_content,
-            f,
-            Dumper=Dumper,
-            default_flow_style=False,
-            allow_unicode=True,
-            sort_keys=False,
-        )
-
-    print(f"Generated Paradigm: {paradigm_file}")
-
-
-def generate_standard_feature_markers(
-    feature_name, pos_name, markers, output_dir, optional_features=None
-):
-    filename_base = f"{pos_name}_{feature_name}"
-    fm_dir = os.path.join(output_dir, "Exponence", "FeatureMarkers")
-    os.makedirs(fm_dir, exist_ok=True)
-    fm_file = os.path.join(fm_dir, f"{filename_base}.yaml")
-
-    markers_dict = dict(markers)
-
-    if optional_features and feature_name in optional_features:
-        if "UNMARKED" not in markers_dict:
-            markers_dict["UNMARKED"] = [
-                {"kind": "rule", "value": "$no_op", "stage": feature_name}
-            ]
-
-    markers_dict = {k: markers_dict[k] for k in sorted(markers_dict.keys())}
-
-    fm_content = {
-        "kind": "FeatureMarkers",
-        "feature": feature_name,
-        "markers": markers_dict,
-    }
-
-    with open(fm_file, "w", encoding="utf-8") as f:
-        f.write("# This is a FeatureMarkers config file\n")
-        f.write("# Generated automatically from CSV\n")
-        yaml.dump(
-            fm_content,
-            f,
-            Dumper=Dumper,
-            default_flow_style=False,
-            allow_unicode=True,
-            sort_keys=False,
-        )
-    print(f"Generated FeatureMarkers: {fm_file}")
-    return f"${filename_base}"
-
-
-def generate_contingent_configs(
-    mapped_results,
-    pos_name,
-    output_dir,
-    stage_order,
-    open_root_template,
-    optional_features=None,
-):
-    """
-    Generates ContingentFeatureMarkers and standard FeatureMarkers,
-    and a single unified Paradigm config when use_contingent_features is enabled.
-    """
-    contingent_results = [r for r in mapped_results if r["class_feature"] is not None]
-    non_contingent_results = [r for r in mapped_results if r["class_feature"] is None]
-
-    contingent_groups = {}
-    for res in contingent_results:
-        cf = res["class_feature"]
-        feat = res["metadata"]["feature"]
-        key = (cf, feat)
-        if key not in contingent_groups:
-            contingent_groups[key] = {}
-        for paradigm_name, feature_markers in res["paradigms_markers"].items():
-            if paradigm_name not in contingent_groups[key]:
-                contingent_groups[key][paradigm_name] = {}
-            for col, entries in feature_markers.items():
-                if col not in contingent_groups[key][paradigm_name]:
-                    contingent_groups[key][paradigm_name][col] = []
-                contingent_groups[key][paradigm_name][col].extend(entries)
-
-    contingent_files = []
-    cfm_dir = os.path.join(output_dir, "Exponence", "ContingentFeatureMarkers")
-    os.makedirs(cfm_dir, exist_ok=True)
-
-    for (cf, feat), class_mappings in sorted(contingent_groups.items()):
-        # maybe not...
-        basename = f"{pos_name}_{feat}_{cf}_contingent"
-        filename = f"{basename}.yaml"
-        cfm_file = os.path.join(cfm_dir, filename)
-
-        # Sort class names and feature values to ensure deterministic output
-        sorted_mappings = {}
-        for c_name in sorted(class_mappings.keys()):
-            sorted_mappings[c_name] = {}
-            for f_val in sorted(class_mappings[c_name].keys()):
-                sorted_mappings[c_name][f_val] = class_mappings[c_name][f_val]
-
-            if optional_features and feat in optional_features:
-                if "UNMARKED" not in sorted_mappings[c_name]:
-                    sorted_mappings[c_name]["UNMARKED"] = [
-                        {"kind": "rule", "value": "$no_op", "stage": feat}
-                    ]
-
-            sorted_mappings[c_name] = {
-                k: sorted_mappings[c_name][k]
-                for k in sorted(sorted_mappings[c_name].keys())
-            }
-
-        cfm_content = {
-            "kind": "ContingentFeatureMarkers",
-            "features": [cf, feat],
-            "markers": sorted_mappings,
-        }
-
-        with open(cfm_file, "w", encoding="utf-8") as f:
-            f.write("# This is a ContingentFeatureMarkers config file\n")
-            f.write("# Generated automatically from CSVs\n")
-            yaml.dump(
-                cfm_content,
-                f,
-                Dumper=Dumper,
-                default_flow_style=False,
-                allow_unicode=True,
-                sort_keys=False,
-            )
-        print(f"Generated ContingentFeatureMarkers: {cfm_file}")
-        contingent_files.append(basename)
-
-    # Group standard FeatureMarkers for non-contingent features by feature
-    non_contingent_groups = {}
-    for res in non_contingent_results:
-        feat = res["metadata"]["feature"]
-        markers = res["paradigms_markers"].get("", {})
-        if feat not in non_contingent_groups:
-            non_contingent_groups[feat] = {}
-        for col, entries in markers.items():
-            if col not in non_contingent_groups[feat]:
-                non_contingent_groups[feat][col] = []
-            non_contingent_groups[feat][col].extend(entries)
-
-    # Generate standard FeatureMarkers for non-contingent features
-    standard_feature_refs = {}
-    for feat, markers in sorted(non_contingent_groups.items()):
-        # Sort marker entries for determinism
-        sorted_markers = {}
-        for f_val in sorted(markers.keys()):
-            sorted_markers[f_val] = markers[f_val]
-
-        ref = generate_standard_feature_markers(
-            feat, pos_name, sorted_markers, output_dir, optional_features
-        )
-        standard_feature_refs[feat] = ref
-
-    # Generate a single unified Paradigm config at Morphotactics/Paradigm/{pos_name}.yaml
-    paradigm_dir = os.path.join(output_dir, "Morphotactics", "Paradigm")
-    os.makedirs(paradigm_dir, exist_ok=True)
-    paradigm_file = os.path.join(paradigm_dir, f"{pos_name}.yaml")
-
-    features_in_contingent = sorted(
-        list(set(feat for (cf, feat) in contingent_groups.keys()))
-    )
-    feature_markers = {feat: None for feat in features_in_contingent}
-
-    # Merge standard non-contingent feature markers references
-    for feat, ref in standard_feature_refs.items():
-        feature_markers[feat] = ref
-
-    paradigm_content = {
-        "kind": "Paradigm",
-        "part_of_speech": f"${pos_name}",
-        "feature_markers": feature_markers,
-        "contingent_markers": sorted(contingent_files),
-    }
-
-    if stage_order:
-        paradigm_content["stage_order"] = stage_order
-
-    if open_root_template:
-        paradigm_content["open_root_template"] = open_root_template
-
-    with open(paradigm_file, "w", encoding="utf-8") as f:
-        f.write("# This is a Paradigm config file\n")
-        f.write("# Generated automatically from CSVs\n")
-        yaml.dump(
-            paradigm_content,
-            f,
-            Dumper=Dumper,
-            default_flow_style=False,
-            allow_unicode=True,
-            sort_keys=False,
-        )
-    print(f"Generated Paradigm: {paradigm_file}")
-
-
-def generate_inplace_paradigm_config(
+def generate_paradigm_config(
     pos_name,
     verb_config,
     stage_order,
@@ -591,8 +276,7 @@ def generate_inplace_paradigm_config(
     open_root_template,
 ):
     """
-    Generates a lean unified Paradigm config using global_markers without ContingentFeatureMarkers
-    for in-place morpheme architectures (as specified in doc-1 section 4.3).
+    Generates a lean unified Paradigm config using global_markers without ContingentFeatureMarkers.
     """
     paradigm_config = verb_config.get("paradigm", {})
     paradigm_dir = os.path.join(output_dir, "Morphotactics", "Paradigm")
@@ -710,19 +394,17 @@ def generate_inplace_paradigm_config(
             allow_unicode=True,
             sort_keys=False,
         )
-    print(f"Generated In-Place Paradigm: {paradigm_file}")
+    print(f"Generated Paradigm: {paradigm_file}")
 
 
 def update_feature_definitions(
-    output_dir, pos_name, verb_config, class_features_paradigms, config_path=None, in_place=False
+    output_dir, pos_name, verb_config, class_features_paradigms, config_path=None
 ):
     """
-    Updates the global FeatureDefinitions configuration file with the dynamically
-    discovered class feature values (paradigms) and configured inflectional features.
+    Updates the global FeatureDefinitions configuration file with configured inflectional features.
 
     This ensures that the YAML configurations match schema specifications and that the
-    underlying parser has a full index of valid inflectional categories and lexical
-    class feature values.
+    underlying parser has a full index of valid inflectional categories.
 
     Args:
         output_dir (str): Path to the destination directory.
@@ -730,7 +412,6 @@ def update_feature_definitions(
         verb_config (dict): Global configuration dictionary.
         class_features_paradigms (dict): Map of class features to set of paradigm values.
         config_path (str, optional): Path to the config directory.
-        in_place (bool): Whether in-place mode is active.
     """
     fd_file = os.path.join(
         output_dir, "Exponence", "FeatureDefinitions", f"{pos_name}_features.yaml"
@@ -787,75 +468,6 @@ def update_feature_definitions(
                 else:
                     fd_content["features"][feat] = vals
 
-        # Add lexical features with definitions from verb.yaml (only in trailing-tag mode)
-        if not in_place and "lexical_features" in verb_config:
-            for item in verb_config["lexical_features"]:
-                if isinstance(item, dict):
-                    if len(item) == 1:
-                        feat = list(item.keys())[0]
-                        definition = item[feat]
-                        fd_content["features"][feat] = definition
-                    else:
-                        none_keys = [k for k, v in item.items() if v is None]
-                        if none_keys:
-                            feat = none_keys[0]
-                            definition = {k: v for k, v in item.items() if k != feat}
-                            fd_content["features"][feat] = definition
-
-        # Combine only features that are dynamically updated (class features or feature acceptors)
-        # In in-place mode, class features and feature acceptors are NOT external features
-        if in_place:
-            update_targets = set()
-        else:
-            update_targets = set(class_features_paradigms.keys()) | set(
-                feature_acceptors.keys()
-            )
-
-        for cf in sorted(update_targets):
-            if cf not in fd_content["features"]:
-                fd_content["features"][cf] = []
-
-            is_dict = (
-                isinstance(fd_content["features"][cf], dict)
-                and "values" in fd_content["features"][cf]
-            )
-            if is_dict:
-                cc_list = fd_content["features"][cf]["values"]
-            else:
-                cc_list = fd_content["features"][cf]
-                if not isinstance(cc_list, list):
-                    cc_list = []
-
-            # Build map of existing values: name -> item (string or dict)
-            existing_map = {}
-            for item in cc_list:
-                if isinstance(item, dict) and "name" in item:
-                    existing_map[item["name"]] = item
-                elif isinstance(item, str):
-                    existing_map[item] = item
-
-            # Add new dynamically discovered class feature values
-            if cf in class_features_paradigms:
-                for cc in class_features_paradigms[cf]:
-                    if cc not in existing_map:
-                        existing_map[cc] = cc
-
-            # Apply/merge feature acceptors
-            if cf in feature_acceptors:
-                for name, acc in feature_acceptors[cf].items():
-                    existing_map[name] = {"name": name, "acceptor": acc}
-
-            # Reconstruct list sorted by name/string value
-            sorted_names = sorted(list(existing_map.keys()))
-            new_cc_list = []
-            for name in sorted_names:
-                new_cc_list.append(existing_map[name])
-
-            if is_dict:
-                fd_content["features"][cf]["values"] = new_cc_list
-            else:
-                fd_content["features"][cf] = new_cc_list
-
         with open(fd_file, "w", encoding="utf-8") as f:
             f.write("# This is a FeatureDefinitions config file\n")
             f.write("# Generated/Updated automatically from CSV\n")
@@ -871,19 +483,17 @@ def update_feature_definitions(
         print(f"Updated FeatureDefinitions: {fd_file}")
 
 
-def generate_part_of_speech_config(output_dir, pos_name, verb_config, in_place=False):
+def generate_part_of_speech_config(output_dir, pos_name, verb_config):
     """
     Generates the PartOfSpeech YAML configuration file for the language parser.
 
-    This configuration specifies the name of the part of speech, lists its relevant
-    grammatical features, and includes any other structural/lexical features
-    defined in the config.
+    This configuration specifies the name of the part of speech and lists its relevant
+    grammatical features.
 
     Args:
         output_dir (str): Path to the destination directory.
         pos_name (str): The part of speech name.
         verb_config (dict): Global configuration dictionary.
-        in_place (bool): Whether in-place mode is active.
     """
     pos_dir = os.path.join(output_dir, "Lexicon", "PartOfSpeech")
     os.makedirs(pos_dir, exist_ok=True)
@@ -894,21 +504,6 @@ def generate_part_of_speech_config(output_dir, pos_name, verb_config, in_place=F
         "name": pos_name,
         "features": list(verb_config.get("features", {}).keys()),
     }
-    if not in_place and "lexical_features" in verb_config:
-        simplified_lexical_features = []
-        for item in verb_config["lexical_features"]:
-            if isinstance(item, dict):
-                if len(item) == 1:
-                    simplified_lexical_features.append(list(item.keys())[0])
-                else:
-                    none_keys = [k for k, v in item.items() if v is None]
-                    if none_keys:
-                        simplified_lexical_features.append(none_keys[0])
-                    else:
-                        simplified_lexical_features.append(list(item.keys())[0])
-            else:
-                simplified_lexical_features.append(item)
-        pos_content["lexical_features"] = simplified_lexical_features
 
     with open(pos_file, "w", encoding="utf-8") as f:
         f.write("# This is a PartOfSpeech config file\n")
@@ -924,10 +519,9 @@ def generate_part_of_speech_config(output_dir, pos_name, verb_config, in_place=F
     print(f"Generated PartOfSpeech: {pos_file}")
 
 
-def generate_markers(config_path: str, output_dir: str, in_place: bool | None = None) -> None:
+def generate_markers(config_path: str, output_dir: str) -> None:
     """
     Main orchestrator for generating marker and paradigm configs from CSVs.
-    Supports both in-place mode and standard trailing-label configs.
     """
     if not os.path.exists(config_path):
         print(f"Error: Config path not found at {config_path}")
@@ -1028,46 +622,32 @@ def generate_markers(config_path: str, output_dir: str, in_place: bool | None = 
     feature_markers_keys = paradigm_config.get("feature_markers_keys", [])
     filename_suffix_keys = paradigm_config.get("filename_suffix_keys", [])
 
-    # Check in-place mode
-    if in_place is None:
-        in_place = is_in_place_mode(verb_config)
-
-    # Phonology setup: dynamic in-place vs static legacy
-    if in_place:
-        cfg_p = Path(config_path)
-        out_p = Path(output_dir)
-        inplace_data = extract_inplace_data(cfg_p)
-        generate_inplace_alphabet(
-            cfg_p / "Phonology" / "Inventory" / "alphabet.yaml",
-            out_p / "Phonology" / "Inventory" / "alphabet.yaml",
-            inplace_data,
-        )
-        generate_inplace_patterns(
-            cfg_p / "Phonology" / "Patterns" / "phoneme_groups.yaml",
-            out_p / "Phonology" / "Patterns" / "phoneme_groups.yaml",
-            inplace_data,
-        )
-        generate_inplace_rules(
-            cfg_p,
-            out_p / "Phonology" / "Rules",
-            inplace_data,
-        )
-    else:
-        # Legacy trailing-label configs: copy entire Phonology dir as-is
-        if os.path.isdir(config_path):
-            phonology_dir = os.path.join(config_path, "Phonology")
-            if os.path.exists(phonology_dir) and os.path.isdir(phonology_dir):
-                dest_phonology = os.path.join(output_dir, "Phonology")
-                if os.path.exists(dest_phonology):
-                    shutil.rmtree(dest_phonology)
-                shutil.copytree(phonology_dir, dest_phonology)
+    # Phonology setup: dynamic generation
+    cfg_p = Path(config_path)
+    out_p = Path(output_dir)
+    phonology_data = extract_phonology_data(cfg_p)
+    generate_alphabet(
+        cfg_p / "Phonology" / "Inventory" / "alphabet.yaml",
+        out_p / "Phonology" / "Inventory" / "alphabet.yaml",
+        phonology_data,
+    )
+    generate_patterns(
+        cfg_p / "Phonology" / "Patterns" / "phoneme_groups.yaml",
+        out_p / "Phonology" / "Patterns" / "phoneme_groups.yaml",
+        phonology_data,
+    )
+    generate_phonology_rules(
+        cfg_p,
+        out_p / "Phonology" / "Rules",
+        phonology_data,
+    )
 
     # Generate insertion rules and morpheme replace rules
     if os.path.isdir(config_path):
         generate_insertion_rules(config_path, output_dir)
-        generate_morpheme_replace_rules(config_path, output_dir, in_place=in_place)
+        generate_morpheme_replace_rules(config_path, output_dir)
 
-    # Identify optional features and modify verb_config['features'] in-place
+    # Identify optional features and modify verb_config['features']
     optional_features = []
     if "features" in verb_config:
         for feat_name, feat_def in verb_config["features"].items():
@@ -1091,45 +671,17 @@ def generate_markers(config_path: str, output_dir: str, in_place: bool | None = 
     # Always ensure Exponence/FeatureMarkers directory exists for parC compatibility
     os.makedirs(os.path.join(output_dir, "Exponence", "FeatureMarkers"), exist_ok=True)
 
-    use_contingent_features = paradigm_config.get(
-        "generate_contingent_markers", False
-    ) or paradigm_config.get("use_contingent_features", False)
-
     open_root_template = paradigm_config.get("open_root_template", None)
 
-    # Output paradigm files
-    if in_place:
-        generate_inplace_paradigm_config(
-            pos_name=pos_name,
-            verb_config=verb_config,
-            stage_order=stage_order,
-            mapped_results=mapped_results,
-            output_dir=output_dir,
-            open_root_template=open_root_template,
-        )
-    elif use_contingent_features:
-        generate_contingent_configs(
-            mapped_results=mapped_results,
-            pos_name=pos_name,
-            output_dir=output_dir,
-            stage_order=stage_order,
-            open_root_template=open_root_template,
-            optional_features=optional_features,
-        )
-    else:
-        for paradigm_name, meta in paradigms_metadata.items():
-            markers = paradigms_markers.get(paradigm_name, {})
-            generate_paradigm_configs(
-                paradigm_name=paradigm_name,
-                meta=meta,
-                markers=markers,
-                pos_name=pos_name,
-                output_dir=output_dir,
-                feature_markers_keys=feature_markers_keys,
-                filename_suffix_keys=filename_suffix_keys,
-                stage_order=stage_order,
-                optional_features=optional_features,
-            )
+    # Output paradigm file
+    generate_paradigm_config(
+        pos_name=pos_name,
+        verb_config=verb_config,
+        stage_order=stage_order,
+        mapped_results=mapped_results,
+        output_dir=output_dir,
+        open_root_template=open_root_template,
+    )
 
     # Update global FeatureDefinitions configuration
     update_feature_definitions(
@@ -1138,7 +690,6 @@ def generate_markers(config_path: str, output_dir: str, in_place: bool | None = 
         verb_config=verb_config,
         class_features_paradigms=class_features_paradigms,
         config_path=config_path,
-        in_place=in_place,
     )
 
     # Generate PartOfSpeech configuration
@@ -1146,22 +697,17 @@ def generate_markers(config_path: str, output_dir: str, in_place: bool | None = 
         output_dir=output_dir,
         pos_name=pos_name,
         verb_config=verb_config,
-        in_place=in_place,
     )
 
 
 def main():
-    args = [a for a in sys.argv[1:] if a not in ("--in-place", "--inplace")]
-    explicit_inplace = len(args) < len(sys.argv[1:])
-    if len(args) < 2:
-        print(
-            "Usage: python generate_markers.py <path_to_config_dir_or_csv> <output_dir> [--in-place]"
-        )
+    if len(sys.argv) < 3:
+        print("Usage: python generate_markers.py <path_to_config_dir_or_csv> <output_dir>")
         sys.exit(1)
 
-    config_path = args[0]
-    output_dir = args[1]
-    generate_markers(config_path, output_dir, in_place=True if explicit_inplace else None)
+    config_path = sys.argv[1]
+    output_dir = sys.argv[2]
+    generate_markers(config_path, output_dir)
 
 
 if __name__ == "__main__":
