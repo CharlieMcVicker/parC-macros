@@ -17,6 +17,8 @@ from pathlib import Path
 from typing import Any
 import yaml
 
+from parc_macros.generate_markers import derive_open_root_template
+
 
 def _parse_csv_matrix(path: Path) -> tuple[list[str], list[str]]:
     """
@@ -324,6 +326,8 @@ def generate_slots_manifest(
 
     paradigm_config = verb_config.get("paradigm", {})
     open_root_template = paradigm_config.get("open_root_template", "")
+    if not open_root_template:
+        open_root_template = derive_open_root_template(verb_config)
     template_tokens = re.findall(r"<[^>]+>", open_root_template)
 
     root_boundaries = {"left": None, "right": None}

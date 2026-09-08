@@ -96,6 +96,13 @@
       "type": "string",
       "description": "Morphotactic template for open root inflection and parsing."
     },
+    "template": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Linear morphological template sequence referencing slots (slot:<name>) and patterns (<Pattern>)."
+    },
     "slots": {
       "type": "array",
       "description": "Morphological slot configurations.",

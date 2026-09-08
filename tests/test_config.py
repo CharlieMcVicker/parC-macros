@@ -3,6 +3,8 @@ from pathlib import Path
 import pytest
 import yaml
 
+from parc_macros.generate_markers import derive_open_root_template
+
 CONFIG_DIR = Path(__file__).parent.parent / "chr-config"
 GEN_DIR = Path(__file__).parent.parent / "chr-generated"
 import parC.constants as c
@@ -122,7 +124,7 @@ def test_open_root_template_compiles():
     with open(CONFIG_DIR / "verb.yaml", "r", encoding="utf-8") as f:
         verb_data = yaml.safe_load(f)
 
-    template = verb_data["paradigm"]["open_root_template"]
+    template = verb_data["paradigm"].get("open_root_template") or derive_open_root_template(verb_data)
     tpl_fst = _parse_pattern(
         template, token_map, phone_starts, compiled_patterns, syms, special_fsas["sigma"], special_fsas
     )

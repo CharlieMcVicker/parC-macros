@@ -37,6 +37,13 @@ global_markers:
   stage: insert_wi
   value: $insert_WI
 open_root_template: <PrepronominalPrefixes><PrefixClass><Pro><H_alt><Root><AspectClass><Variant><Aspect><Tense>
+template:
+- <PrepronominalPrefixes>
+- slot:pronominal
+- <H_alt>
+- <Root>
+- slot:aspect
+- slot:tense
 slots:
 - name: pronominal
   role: prefix

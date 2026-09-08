@@ -10,18 +10,55 @@ import shutil
 import sys
 import yaml
 import re
+from typing import Any
 from parc_macros.generate_insertion_rules import generate_insertion_rules
 from parc_macros.generate_morpheme_replace_rules import (
     generate_morpheme_replace_rules,
     sanitize_rule_name,
 )
-from parc_macros.generate_phonology import (
-    extract_phonology_data,
-    generate_alphabet,
-    generate_patterns,
-    generate_phonology_rules,
-    generate_slots_manifest,
-)
+
+
+def derive_open_root_template(verb_config: dict[str, Any]) -> str:
+    """
+    Derives the full open root template from slot spec and template definition.
+
+    If open_root_template is already explicitly present in verb_config.get("paradigm", {}),
+    returns it (for backwards compatibility with fixtures like min-min-config).
+    Otherwise, reads template from paradigm (or top-level) and expands each slot
+    into its constituent <TagGroup> patterns defined in slots.
+    """
+    paradigm_config = verb_config.get("paradigm", {})
+    if paradigm_config.get("open_root_template"):
+        return paradigm_config["open_root_template"]
+    if verb_config.get("open_root_template"):
+        return verb_config["open_root_template"]
+
+    template = paradigm_config.get("template") or verb_config.get("template")
+    if not template:
+        return ""
+
+    slots = verb_config.get("slots", []) or paradigm_config.get("slots", [])
+    slots_by_name = {s["name"]: s for s in slots if "name" in s}
+
+    expanded = []
+    for el in template:
+        if el.startswith("slot:"):
+            slot_name = el[5:]
+        elif el in slots_by_name:
+            slot_name = el
+        else:
+            slot_name = None
+
+        if slot_name and slot_name in slots_by_name:
+            for comp in slots_by_name[slot_name].get("structure", []):
+                expanded.append(f"<{comp['TagGroup']}>")
+        else:
+            expanded.append(el)
+
+    return "".join(expanded)
+
+
+import parc_macros.generate_phonology as gp
 
 
 
@@ -275,6 +312,7 @@ def generate_paradigm_config(
     mapped_results,
     output_dir,
     open_root_template,
+    template=None,
 ):
     """
     Generates a lean unified Paradigm config using global_markers without ContingentFeatureMarkers.
@@ -383,6 +421,11 @@ def generate_paradigm_config(
 
     if open_root_template:
         paradigm_content["open_root_template"] = open_root_template
+
+    if template is None:
+        template = paradigm_config.get("template") or verb_config.get("template")
+    if template:
+        paradigm_content["template"] = template
 
     slots = verb_config.get("slots") or paradigm_config.get("slots")
     if slots:
@@ -634,23 +677,23 @@ def generate_markers(config_path: str, output_dir: str) -> None:
     # Phonology setup: dynamic generation
     cfg_p = Path(config_path)
     out_p = Path(output_dir)
-    phonology_data = extract_phonology_data(cfg_p, verb_config=verb_config)
-    generate_alphabet(
+    phonology_data = gp.extract_phonology_data(cfg_p, verb_config=verb_config)
+    gp.generate_alphabet(
         cfg_p / "Phonology" / "Inventory" / "alphabet.yaml",
         out_p / "Phonology" / "Inventory" / "alphabet.yaml",
         phonology_data,
     )
-    generate_patterns(
+    gp.generate_patterns(
         cfg_p / "Phonology" / "Patterns" / "phoneme_groups.yaml",
         out_p / "Phonology" / "Patterns" / "phoneme_groups.yaml",
         phonology_data,
     )
-    generate_phonology_rules(
+    gp.generate_phonology_rules(
         cfg_p,
         out_p / "Phonology" / "Rules",
         phonology_data,
     )
-    generate_slots_manifest(
+    gp.generate_slots_manifest(
         out_p / "slots.json",
         verb_config,
     )
@@ -684,7 +727,8 @@ def generate_markers(config_path: str, output_dir: str) -> None:
     # Always ensure Exponence/FeatureMarkers directory exists for parC compatibility
     os.makedirs(os.path.join(output_dir, "Exponence", "FeatureMarkers"), exist_ok=True)
 
-    open_root_template = paradigm_config.get("open_root_template", None)
+    open_root_template = derive_open_root_template(verb_config)
+    template = paradigm_config.get("template") or verb_config.get("template")
 
     # Output paradigm file
     generate_paradigm_config(
@@ -694,6 +738,7 @@ def generate_markers(config_path: str, output_dir: str) -> None:
         mapped_results=mapped_results,
         output_dir=output_dir,
         open_root_template=open_root_template,
+        template=template,
     )
 
     # Update global FeatureDefinitions configuration

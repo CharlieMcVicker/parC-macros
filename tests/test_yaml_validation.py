@@ -1,5 +1,9 @@
+from pathlib import Path
 import pytest
-from parc_macros.yaml_validation import validate_yaml_content
+import yaml
+
+from parc_macros.generate_markers import derive_open_root_template
+from parc_macros.yaml_validation import validate_yaml_content, validate_yaml_file
 
 
 def test_valid_feature_definitions():
@@ -58,10 +62,6 @@ def test_valid_rules():
 
 
 def test_chr_config_yamls():
-    from pathlib import Path
-    import yaml
-    from parc_macros.yaml_validation import validate_yaml_file
-
     config_dir = Path(__file__).parent.parent / "chr-config"
     assert config_dir.exists(), "chr-config directory must exist"
 
@@ -70,8 +70,16 @@ def test_chr_config_yamls():
     assert verb_yaml.exists()
     with open(verb_yaml, "r", encoding="utf-8") as f:
         verb_data = yaml.safe_load(f)
+    assert verb_data["paradigm"]["template"] == [
+        "<PrepronominalPrefixes>",
+        "slot:pronominal",
+        "<H_alt>",
+        "<Root>",
+        "slot:aspect",
+        "slot:tense",
+    ]
     assert (
-        verb_data["paradigm"]["open_root_template"]
+        derive_open_root_template(verb_data)
         == "<PrepronominalPrefixes><PrefixClass><Pro><H_alt><Root><AspectClass><Variant><Aspect><Tense>"
     )
 
@@ -100,10 +108,6 @@ def test_chr_config_yamls():
 
 
 def test_chr_generated_yamls():
-    from pathlib import Path
-    import yaml
-    from parc_macros.yaml_validation import validate_yaml_file
-
     gen_dir = Path(__file__).parent.parent / "chr-generated"
     assert gen_dir.exists(), "chr-generated directory must exist"
 

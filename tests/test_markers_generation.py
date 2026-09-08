@@ -15,7 +15,11 @@ from pathlib import Path
 import pytest
 import yaml
 
-from parc_macros.generate_markers import generate_markers, generate_paradigm_config
+from parc_macros.generate_markers import (
+    derive_open_root_template,
+    generate_markers,
+    generate_paradigm_config,
+)
 from parc_macros.generate_morpheme_replace_rules import (
     generate_morpheme_replace_rules,
     get_class_tag_title,
@@ -303,4 +307,69 @@ def test_paradigm_yaml_contains_slots_and_validates():
         assert "slots" in paradigm_data
         assert len(paradigm_data["slots"]) == 3
         assert validate_yaml_content(paradigm_data) is True
+
+
+def test_derive_open_root_template():
+    """
+    Test derive_open_root_template() with:
+    - Backwards compatibility (explicit open_root_template in paradigm or verb_config)
+    - Slot expansion with single tag group (e.g. tense -> <Tense>)
+    - Slot expansion with composite tag groups (e.g. pronominal -> <PrefixClass><Pro>)
+    - Slot expansion with optional tag group (e.g. aspect -> <AspectClass><Variant><Aspect>)
+    - Direct pattern elements (<Pattern>)
+    - slot:name and plain name slot references
+    - Empty or missing template fallback
+    """
+    # 1. Backwards compatibility: explicit open_root_template preserved
+    cfg_legacy = {
+        "paradigm": {
+            "open_root_template": "[WI]?[DIST]?<Phone>*"
+        }
+    }
+    assert derive_open_root_template(cfg_legacy) == "[WI]?[DIST]?<Phone>*"
+
+    # 2. Template expansion with single, composite, and optional tag groups
+    cfg_dynamic = {
+        "slots": [
+            {
+                "name": "pronominal",
+                "structure": [
+                    {"TagGroup": "PrefixClass", "optional": False},
+                    {"TagGroup": "Pro", "optional": False},
+                ],
+            },
+            {
+                "name": "aspect",
+                "structure": [
+                    {"TagGroup": "AspectClass", "optional": False},
+                    {"TagGroup": "Variant", "optional": True},
+                    {"TagGroup": "Aspect", "optional": False},
+                ],
+            },
+            {
+                "name": "tense",
+                "structure": [
+                    {"TagGroup": "Tense", "optional": False},
+                ],
+            },
+        ],
+        "paradigm": {
+            "template": [
+                "<PrepronominalPrefixes>",
+                "slot:pronominal",
+                "<H_alt>",
+                "<Root>",
+                "slot:aspect",
+                "tense",  # plain name reference
+            ]
+        },
+    }
+    derived = derive_open_root_template(cfg_dynamic)
+    expected = "<PrepronominalPrefixes><PrefixClass><Pro><H_alt><Root><AspectClass><Variant><Aspect><Tense>"
+    assert derived == expected
+
+    # 3. Empty or missing template fallback
+    assert derive_open_root_template({}) == ""
+    assert derive_open_root_template({"paradigm": {}}) == ""
+
 

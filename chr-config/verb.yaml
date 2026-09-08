@@ -101,4 +101,10 @@ features:
 
 paradigm:
   generate_contingent_markers: true
-  open_root_template: "<PrepronominalPrefixes><PrefixClass><Pro><H_alt><Root><AspectClass><Variant><Aspect><Tense>"
+  template:
+    - "<PrepronominalPrefixes>"
+    - slot:pronominal
+    - "<H_alt>"
+    - "<Root>"
+    - slot:aspect
+    - slot:tense
