@@ -1,9 +1,11 @@
 ---
 id: TASK-136
 title: Delete dead and unreferenced standalone scripts in parse_chr_dict
-status: To Do
-assignee: []
+status: Done
+assignee:
+  - '@supervisor'
 created_date: '2026-09-06 18:07'
+updated_date: '2026-09-08 12:39'
 labels: []
 dependencies: []
 priority: low
@@ -19,8 +21,14 @@ Delete obsolete, broken, and unreferenced standalone Python scripts in parse_chr
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Delete parse_chr_dict/build_h_alt_test_corpus.py (broken imports, unused)
-- [ ] #2 Delete parse_chr_dict/test_glasses.py (ad-hoc scratch script, unused)
-- [ ] #3 Delete parse_chr_dict/fix_corpus.py (one-off legacy migration script, unused)
-- [ ] #4 Verify pytest suite passes cleanly with zero errors or warnings
+- [x] #1 Delete parse_chr_dict/build_h_alt_test_corpus.py (broken imports, unused)
+- [x] #2 Delete parse_chr_dict/test_glasses.py (ad-hoc scratch script, unused)
+- [x] #3 Delete parse_chr_dict/fix_corpus.py (one-off legacy migration script, unused)
+- [x] #4 Verify pytest suite passes cleanly with zero errors or warnings
 <!-- AC:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Deleted unreferenced standalone scripts build_h_alt_test_corpus.py, test_glasses.py, and fix_corpus.py from parse_chr_dict/. Verified all 417 unit and integration tests pass cleanly with zero errors or warnings.
+<!-- SECTION:FINAL_SUMMARY:END -->

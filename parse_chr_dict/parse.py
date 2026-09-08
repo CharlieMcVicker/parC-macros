@@ -131,7 +131,6 @@ def feature_tag(feature: str, value: str) -> str:
 
 from parse_chr_dict.types import (
     ParseData,
-    InPlaceParseConfig,
     VerbTemplate,
     AspectVariants,
     VerbMetadata,
@@ -157,10 +156,10 @@ _READ_INPLACE_PARSE_CACHE: dict[str, ParseData] = {}
 
 def read_inplace_parse(s: str) -> ParseData:
     """
-    Parses an in-place morpheme parse string into a ParseData (InPlaceParseConfig) object.
+    Parses an in-place morpheme parse string into a ParseData object.
     Uses bracket-depth tracking to safely handle nested brackets (e.g. [AspectClass=become[inf2]]).
     Slot tags ([PrefixClass=...], [Pro=...], [AspectClass=...], etc.) and PPP tags ([WI], [DIST])
-    are extracted as metadata; any internal root mutation tags (like [H_NONE]) remain in the root.
+    are extracted as metadata; any internal root mutation tags (like [H_alt=none]) remain in the root.
     Memoized directly via _READ_INPLACE_PARSE_CACHE.
     """
     cached = _READ_INPLACE_PARSE_CACHE.get(s)
@@ -203,7 +202,7 @@ def read_inplace_parse(s: str) -> ParseData:
             elif tok in ("[WI]", "[DIST]", "[DIST=de]", "[DIST=di]") or tok.startswith("[DIST="):
                 tokens.append(tok)
             else:
-                # Internal root tag (e.g. [H_NONE], [H_GLOT], [H_DROP]) or phonological tag
+                # Internal root tag (e.g. [H_alt=none], [H_alt=glot], [H_alt=drop]) or phonological tag
                 tokens.append(tok)
                 root_parts.append(tok)
         else:
@@ -249,7 +248,7 @@ def read_inplace_parse(s: str) -> ParseData:
         else:
             if tok in ("[WI]", "[DIST]"):
                 prepronominal_prefixes.append(tok)
-            elif tok.startswith("[H_") or tok.startswith("[H_alt=") or tok.startswith("[TEMP"):
+            elif tok.startswith("[TEMP"):
                 h_alt_tag = tok
 
     res = ParseData(
@@ -526,11 +525,6 @@ def parse_string_to_parse_data(p: str) -> ParseData:
             "[H_alt=vowel_v]",
             "[H_alt=vowel]",
             "[H_alt=none]",
-            "[H_DROP]",
-            "[H_GLOT]",
-            "[H_LAT]",
-            "[H_VOWEL]",
-            "[H_NONE]",
         ):
             if tag in form:
                 h_alt_tag = tag
@@ -550,41 +544,6 @@ def parse_string_to_parse_data(p: str) -> ParseData:
     return res
 
 
-def str_to_lexical_hashable(parse_str: str, lexical_features: set[str]):
-    root, labels = read_labels(parse_str)
-    label_tuple = tuple(
-        sorted(
-            [(k, v) for k, v in labels.items() if k in lexical_features],
-            key=lambda x: x[0],
-        )
-    )
-    return root, label_tuple
-
-
-def parses_by_form(
-    forms: Iterable[tuple[str, list[tuple[str, str]]]], lexical_features: set[str]
-):
-    for surface, constraints in forms:
-        if not surface:
-            continue
-        strings = parse(surface, labels=constraints)
-        lexicals = set(
-            str_to_lexical_hashable(s, lexical_features=lexical_features)
-            for s in strings
-        )
-        yield surface, lexicals
-
-
-def get_roots_for_parses(lexicals: list[set[tuple[tuple[str, str], ...]]]):
-    possible_lexical_roots: set = None
-    for form_lexicals in lexicals:
-        if possible_lexical_roots is None:
-            possible_lexical_roots = form_lexicals
-        else:
-            possible_lexical_roots = possible_lexical_roots.intersection(form_lexicals)
-
-    return possible_lexical_roots if possible_lexical_roots else set()
-
 def get_just_root(s: str):
     # s is something like [PrefixClass=a_stem][Pro=3sg.A]tateka[AspectClass=a][Aspect=completive][Tense=immediate]
     # don't use a regexp, just read [ and ] and find the part that isn't in brackets, keeping in mind there are several bracketed parts at the beginning and end
@@ -603,66 +562,3 @@ def get_just_root(s: str):
             chars.append(ch)
 
     return "".join(chars)
-
-
-def main():
-    import readline
-
-    root = "atat"
-    lexical = [
-        # ("aspect_class", "go"),
-        # ("prefix_class", "a_stem"),
-        ("tense_present_class", "a_present"),
-    ]
-    inflectional = [
-        # ("pronominal", "3sg.A"),
-        # ("aspect", "present"),
-        ("tense", "present"),
-        # ("translocutive", "+"),
-        # ("distributive", "-"),
-        # ("partitive", "+"),
-    ]
-
-    # words = inflect(
-    #     "[BOW][Pro]atat[Aspect][Tense][EOW][aspect_class=go][prefix_class=a_stem][tense_present_class=a_present][aspect=present][pronominal=3sg.A][rules=+][tense=present]"
-    # )
-    # print(words)
-
-    print("interactive parsing - newline to quit, . to flip modes")
-    MODE = "PARSE"
-    while True:
-        surface = input(f"{MODE}: ").strip()
-        if not surface:
-            break
-
-        # if MODE == "INFLECT":
-        #     if surface == ".":
-        #         MODE = "PARSE"
-        #         continue
-        #     forms = inflect(surface, [], [])
-        #     for p in forms:
-        #         print("\t", p)
-
-        elif MODE == "PARSE":
-            if surface == ".":
-                MODE = "INFLECT"
-                continue
-            parses = parse(surface)
-            groups = {}
-            for p in parses:
-                parsed_word, labels = p.split("[EOW]")
-                parsed_word = parsed_word[5:] # cut off [BOW]
-                root = get_just_root(parsed_word)
-                if not root in groups:
-                    groups[root] = []
-                groups[root].append(parsed_word)
-            root_list = sorted(groups.keys(), key=lambda x: len(x))
-            for root in root_list[:10]:
-                print("\t", root)
-                for parsed_word in groups[root][:10]:
-                    print("\t\t",parsed_word)
-            print(len(parses), "parses found with", len(groups), "distinct roots")
-
-
-if __name__ == "__main__":
-    main()

@@ -2,14 +2,10 @@ import pytest
 from dataclasses import FrozenInstanceError
 from parse_chr_dict.types import (
     ParseData,
-    InPlaceParseConfig,
     VerbTemplate,
     AspectVariants,
     VerbMetadata,
     LexicalVerb,
-    DerivationHypothesis,
-    LexicalVerbHypothesis,
-    LexicalVerbEntry,
 )
 
 
@@ -58,21 +54,18 @@ def test_parse_data_immutability_and_fields():
     assert "[Aspect=present]" in s
 
 
-def test_parse_data_alias_and_string_variant():
-    # InPlaceParseConfig is ParseData
-    assert InPlaceParseConfig is ParseData
-    p = InPlaceParseConfig(root="ali", variant="3", prepronominal_prefixes=["[DIST=de]"])
+def test_parse_data_string_variant():
+    p = ParseData(root="ali", variant="3", prepronominal_prefixes=["[DIST=de]"])
     assert p.variant == 3
     assert p.has_distributive is True
-    assert p.canonical_root == "[Pro]ali[Aspect][Tense]"
 
 
 def test_verb_template_projection():
     p = ParseData(
-        root="a[H_NONE]li",
+        root="a[H_alt=none]li",
         prefix_class="cons_stem",
         pronominal="3sg.A",
-        h_alt_tag="[H_NONE]",
+        h_alt_tag="[H_alt=none]",
         aspect_class="go",
         variant=1,
         aspect="present",
@@ -81,14 +74,14 @@ def test_verb_template_projection():
         prepronominal_prefixes=["[DIST]"],
     )
     tmpl = VerbTemplate.from_parse(p)
-    assert tmpl.root == "a[H_NONE]li"
+    assert tmpl.root == "a[H_alt=none]li"
     assert tmpl.prefix_class == "cons_stem"
     assert tmpl.aspect_class == "go"
     assert tmpl.tense_present_class == ""
     assert tmpl.variant == 1
     assert tmpl.distributive is True
     assert tmpl.translocutive is False
-    assert tmpl.h_alt_tag == "[H_NONE]"
+    assert tmpl.h_alt_tag == "[H_alt=none]"
 
     # Immutability
     with pytest.raises(FrozenInstanceError):
@@ -153,7 +146,7 @@ def test_verb_metadata_pure_functional():
 
 def test_lexical_verb_product_and_serialization():
     tmpl = VerbTemplate(
-        root="a[H_NONE]li",
+        root="a[H_alt=none]li",
         prefix_class="a_stem",
         aspect_class="become",
         tense_present_class="a_present",
@@ -215,12 +208,8 @@ def test_lexical_verb_product_and_serialization():
     assert row_dict["entry_type"] == "Eventful"
 
 
-def test_lexical_verb_legacy_init_and_aliases():
-    assert DerivationHypothesis is LexicalVerb
-    assert LexicalVerbHypothesis is LexicalVerb
-    assert LexicalVerbEntry is LexicalVerb
-
-    hyp = DerivationHypothesis(
+def test_lexical_verb_init():
+    hyp = LexicalVerb(
         h_root="[Pro]atat[Aspect][Tense]",
         glottal_root=None,
         prefix_class="a_stem",

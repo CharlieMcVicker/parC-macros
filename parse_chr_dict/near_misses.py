@@ -10,20 +10,16 @@ from parse_chr_dict.types import (
     PRIMARY_VERB_ENTRY_TYPES,
     VERB_FORMS_BY_NAME,
     LexicalVerb,
-    DerivationHypothesis,
 )
 
 
 def validate_form_subset(
-    hypothesis: DerivationHypothesis | LexicalVerb,
+    hypothesis: LexicalVerb,
     forms: List[tuple[str, VerbForm | Any]],
-    compiler: Optional[Any] = None,
 ) -> bool:
     for surf, form_item in forms:
         if isinstance(form_item, VerbForm):
             form = form_item
-        elif hasattr(form_item, "to_verb_form"):
-            form = form_item.to_verb_form()
         else:
             form = VERB_FORMS_BY_NAME.get(getattr(form_item, "name", str(form_item)))
         if form:
@@ -33,14 +29,11 @@ def validate_form_subset(
 
 
 def generate_for_slot(
-    hypothesis: DerivationHypothesis | LexicalVerb,
+    hypothesis: LexicalVerb,
     parsing_meta: VerbForm | Any,
-    compiler: Optional[Any] = None,
 ) -> List[str]:
     if isinstance(parsing_meta, VerbForm):
         form = parsing_meta
-    elif hasattr(parsing_meta, "to_verb_form"):
-        form = parsing_meta.to_verb_form()
     else:
         form = VERB_FORMS_BY_NAME.get(getattr(parsing_meta, "name", str(parsing_meta)))
     if form:

@@ -1,12 +1,11 @@
 import pytest
 from parse_chr_dict.derive import (
-    derive_lexical_features_4step,
     derive_hypotheses_for_forms,
 )
 from parse_chr_dict.types import (
     Pronominal,
     filter_pronominals,
-    DerivationHypothesis,
+    LexicalVerb,
     VerbForm,
     VerbEntryType,
     ALL_VERB_FORMS,
@@ -100,7 +99,7 @@ def test_4step_derivation_flow_multi_form():
         ("atateka", PRES_3RD),
         ("atatekaha", HABITUAL_3RD),
     ]
-    res = derive_lexical_features_4step(forms)
+    res = derive_hypotheses_for_forms(forms)
     assert isinstance(res, set)
 
 
@@ -110,7 +109,7 @@ def test_4step_meta_label_propagation():
         ("atatekaha", HABITUAL_3RD),
         ("atatekea", COMPLETIVE_3RD),  # allows_set_a = False, overrides to Set B
     ]
-    res = derive_lexical_features_4step(forms)
+    res = derive_hypotheses_for_forms(forms)
     assert isinstance(res, set)
 
 
@@ -233,16 +232,8 @@ def test_real_animate_verb_entry_788():
     assert len(derived) > 0, f"Animate verb entry 788 ('{row['present']}') failed multi-form derivation"
 
 
-def test_derivation_hypothesis_dataclass_and_aliases():
-    from parse_chr_dict.types import (
-        DerivationHypothesis,
-        LexicalVerbHypothesis,
-        LexicalVerbEntry,
-    )
-    assert LexicalVerbHypothesis is DerivationHypothesis
-    assert LexicalVerbEntry is DerivationHypothesis
-
-    hyp = DerivationHypothesis(
+def test_lexical_verb_dataclass_fields():
+    hyp = LexicalVerb(
         h_root="[Pro]atat[Aspect][Tense]",
         h_alt_tag="[H_alt=none]",
         prefix_class="a_stem",
@@ -280,13 +271,6 @@ def test_derivation_hypothesis_dataclass_and_aliases():
         "tense_present_class": "a_present",
     }
 
-    lex_tup = hyp.lexical_tuple()
-    assert lex_tup[0] == "[Pro]atat[Aspect][Tense]"
-    assert lex_tup[1] == "[H_alt=none]"
-    assert ("aspect_class", "go-in") in lex_tup[2]
-    assert ("prefix_class", "a_stem") in lex_tup[2]
-    assert ("tense_present_class", "a_present") in lex_tup[2]
-
     assert hyp.set_a is True
     assert hyp.plural is False
     assert hyp.animate_objects is False
@@ -308,7 +292,7 @@ def test_derive_hypotheses_for_forms_direct():
     hyps = derive_hypotheses_for_forms(forms)
     assert isinstance(hyps, set)
     assert len(hyps) > 0
-    assert all(isinstance(h, DerivationHypothesis) for h in hyps)
+    assert all(isinstance(h, LexicalVerb) for h in hyps)
     assert any(h.h_root in ("atat", "[Pro]atat[Aspect][Tense]") and h.aspect_class == "go-in" for h in hyps)
 
 
@@ -326,7 +310,7 @@ def test_validate_hypothesis_and_row_reconstruction():
         "imperative": "hatatuka",
         "infinitive": "utatinvti",
     }
-    valid_hyp = DerivationHypothesis(
+    valid_hyp = LexicalVerb(
         h_root="[Pro]atat[Aspect][Tense]",
         prefix_class="a_stem",
         aspect_class="go-in",
@@ -339,7 +323,7 @@ def test_validate_hypothesis_and_row_reconstruction():
     assert valid_hyp.validate(row, EVENTFUL) is True
 
     # Invalid hypothesis (unknown aspect_class) should fail validation safely
-    invalid_hyp = DerivationHypothesis(
+    invalid_hyp = LexicalVerb(
         h_root="[Pro]atat[Aspect][Tense]",
         prefix_class="a_stem",
         aspect_class="wrong_aspect",
@@ -351,7 +335,7 @@ def test_validate_hypothesis_and_row_reconstruction():
     assert validate_hypothesis(invalid_hyp, row, EVENTFUL) is False
 
     # Mismatched valid aspect_class should fail validation
-    mismatched_hyp = DerivationHypothesis(
+    mismatched_hyp = LexicalVerb(
         h_root="[Pro]atat[Aspect][Tense]",
         prefix_class="a_stem",
         aspect_class="become",
@@ -491,7 +475,7 @@ def test_h_alternation_trigger_external_validation():
         "imperative": "hatatuka",
         "infinitive": "utatinvti",
     }
-    hyp = DerivationHypothesis(
+    hyp = LexicalVerb(
         h_root="[Pro]atat[Aspect][Tense]",
         h_alt_tag="[H_alt=none]",
         prefix_class="a_stem",
@@ -515,16 +499,15 @@ def test_h_alternation_trigger_external_validation():
     specs = reconstruct_row(
         row_with_roots,
         entry_type,
-        ["prefix_class", "aspect_class", "tense_present_class"],
     )
     assert len(specs) > 0
 
 
 def test_fine_grained_h_alternation_tag_helpers_and_validation():
-    from parse_chr_dict.h_alternation import H_ALT_TAGS, NEW_H_ALT_TAGS, validate_h_alternation_trigger, strip_h_alt_tags
+    from parse_chr_dict.h_alternation import H_ALT_TAGS, validate_h_alternation_trigger, strip_h_alt_tags
 
     # 1. H_ALT_TAGS constant
-    assert NEW_H_ALT_TAGS == {
+    assert H_ALT_TAGS == {
         "[H_alt=drop]",
         "[H_alt=glot]",
         "[H_alt=lat]",
@@ -537,36 +520,35 @@ def test_fine_grained_h_alternation_tag_helpers_and_validation():
         "[H_alt=vowel_u]",
         "[H_alt=vowel_v]",
     }
-    assert {"[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_NONE]", "[H_VOWEL]"}.issubset(H_ALT_TAGS)
 
     # 2. strip_h_alt_tags
-    cleaned = strip_h_alt_tags("[Pro][H_DROP]atanhoy[Aspect][Tense]")
+    cleaned = strip_h_alt_tags("[Pro][H_alt=drop]atanhoy[Aspect][Tense]")
     assert cleaned == "[Pro]atanhoy[Aspect][Tense]"
 
-    cleaned_vowel = strip_h_alt_tags("[Pro][H_VOWEL]atanhth[Aspect][Tense]")
+    cleaned_vowel = strip_h_alt_tags("[Pro][H_alt=vowel]atanhth[Aspect][Tense]")
     assert cleaned_vowel == "[Pro]atanhth[Aspect][Tense]"
 
-    cleaned_none = strip_h_alt_tags("[Pro][H_NONE]atanhoy[Aspect][Tense]")
+    cleaned_none = strip_h_alt_tags("[Pro][H_alt=none]atanhoy[Aspect][Tense]")
     assert cleaned_none == "[Pro]atanhoy[Aspect][Tense]"
 
     cleaned_raw = strip_h_alt_tags("[Pro]atanhoy[Aspect][Tense]")
     assert cleaned_raw == "[Pro]atanhoy[Aspect][Tense]"
 
     # 3. validate_h_alternation_trigger with fine-grained tags
-    assert validate_h_alternation_trigger("1sg>3sg", "[H_DROP]") is True
-    assert validate_h_alternation_trigger("2sg>3sg", "[H_GLOT]") is True
-    assert validate_h_alternation_trigger("1sg.A", "[H_LAT]") is True
-    assert validate_h_alternation_trigger("1sg.A", "[H_VOWEL]") is True
-    assert validate_h_alternation_trigger("3sg.A", "[H_DROP]") is False
-    assert validate_h_alternation_trigger("3sg.B", "[H_GLOT]") is False
-    assert validate_h_alternation_trigger("1sg.B", "[H_LAT]") is False
-    assert validate_h_alternation_trigger("3sg.A", "[H_VOWEL]") is False
-    assert validate_h_alternation_trigger("3sg.A", "[H_NONE]") is True
+    assert validate_h_alternation_trigger("1sg>3sg", "[H_alt=drop]") is True
+    assert validate_h_alternation_trigger("2sg>3sg", "[H_alt=glot]") is True
+    assert validate_h_alternation_trigger("1sg.A", "[H_alt=lat]") is True
+    assert validate_h_alternation_trigger("1sg.A", "[H_alt=vowel]") is True
+    assert validate_h_alternation_trigger("3sg.A", "[H_alt=drop]") is False
+    assert validate_h_alternation_trigger("3sg.B", "[H_alt=glot]") is False
+    assert validate_h_alternation_trigger("1sg.B", "[H_alt=lat]") is False
+    assert validate_h_alternation_trigger("3sg.A", "[H_alt=vowel]") is False
+    assert validate_h_alternation_trigger("3sg.A", "[H_alt=none]") is True
     assert validate_h_alternation_trigger("3sg.A", None) is True
 
 
 def test_strict_h_alternation_trigger_rejection():
-    """Verify that when a trigger form shows H-mutation, unmutated [H_NONE] fallbacks for that root are pruned."""
+    """Verify that when a trigger form shows H-mutation, unmutated [H_alt=none] fallbacks for that root are pruned."""
     from parse_chr_dict.derive import derive_hypotheses_for_forms
     from parse_chr_dict.create_aspect_class_csv import respell_consonants
 
@@ -578,7 +560,7 @@ def test_strict_h_alternation_trigger_rejection():
     hyps_mut = derive_hypotheses_for_forms(forms_mutating)
     assert len(hyps_mut) > 0
     for h in hyps_mut:
-        assert h.h_alt_tag in ("[H_alt=drop]", "[H_alt=glot]", "[H_alt=lat]", "[H_DROP]", "[H_GLOT]", "[H_LAT]")
+        assert h.h_alt_tag in ("[H_alt=drop]", "[H_alt=glot]", "[H_alt=lat]")
 
     # atateka (3sg) + katateka (1sg trigger without H-mutation)
     forms_non_mutating = [
@@ -588,7 +570,7 @@ def test_strict_h_alternation_trigger_rejection():
     hyps_non_mut = derive_hypotheses_for_forms(forms_non_mutating)
     assert len(hyps_non_mut) > 0
     for h in hyps_non_mut:
-        assert h.h_alt_tag in ("[H_alt=none]", "[H_NONE]", "")
+        assert h.h_alt_tag in ("[H_alt=none]", "")
 
 
 def test_h_vowel_row_39_43_thinking_derivation():

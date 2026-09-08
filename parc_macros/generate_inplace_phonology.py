@@ -2,7 +2,7 @@
 parc_macros/generate_inplace_phonology.py
 
 Dynamic in-memory generation of in-place phonology configuration:
-- Alphabet tags (PrefixClass, Pro, AspectClass, Variant, Aspect, TenseClass, Tense, LegacyTags)
+- Alphabet tags (PrefixClass, Pro, AspectClass, Variant, Aspect, TenseClass, Tense)
 - Phoneme group patterns (PrepronominalPrefixes, Root, morpheme unions)
 - Dropping rules (drop_root_final.yaml, drop_stem_initial_vowel.yaml) from annotations/CSVs
 """
@@ -286,21 +286,10 @@ def generate_inplace_alphabet(
         "tags": [f"[Tense={t}]" for t in data["tenses"]],
     })
 
-    # Legacy Tags
-    new_data.append({
-        "name": "Legacy Tags",
-        "ref": "<LegacyTags>",
-        "tags": ["[Pro]", "[Aspect]", "[Tense]"],
-    })
-
     inv["data"] = new_data
     output_alphabet_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_alphabet_path, "w", encoding="utf-8") as f:
         yaml.dump(inv, f, sort_keys=False, default_flow_style=False)
-
-
-# Alias for compatibility
-generate_inplace_inventory = generate_inplace_alphabet
 
 
 def generate_inplace_patterns(

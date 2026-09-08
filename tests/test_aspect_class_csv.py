@@ -4,7 +4,7 @@ import pytest
 
 from parse_chr_dict.create_aspect_class_csv import (
     parse_classes_csv,
-    generate_inplace_aspect_csv,
+    generate_inplace_aspect_config,
     generate_aspect_effects_csv,
     respell_consonants,
 )
@@ -120,7 +120,7 @@ def test_drop_final_csvs(tmp_path):
     """Verify drop-final CSV files generated from classes.csv."""
     drop_final_csv = tmp_path / "verb-aspect-drop-final.csv"
     drop_final_two_csv = tmp_path / "verb-aspect-drop-final-two.csv"
-    generate_inplace_aspect_csv(
+    generate_inplace_aspect_config(
         src_path=str(CLASSES_CSV),
         dest_path=str(tmp_path / "verb-aspect.csv"),
         drop_final_path=str(drop_final_csv),

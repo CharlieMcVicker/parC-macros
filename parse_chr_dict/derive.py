@@ -45,8 +45,6 @@ VERB_FORMS_BY_META_ID: Dict[str, VerbForm] = {
 
 def derive_hypotheses_for_forms(
     forms: List[Tuple[str, VerbForm | Any]],
-    compiler: Optional[Any] = None,
-    lexical_features: Optional[Set[str]] = None,
     entry_type: Optional[Any] = None,
 ) -> Set[LexicalVerb]:
     """
@@ -63,8 +61,6 @@ def derive_hypotheses_for_forms(
     for surface, spec_or_form in forms:
         if isinstance(spec_or_form, VerbForm):
             v_form = spec_or_form
-        elif hasattr(spec_or_form, "to_verb_form"):
-            v_form = spec_or_form.to_verb_form()
         elif isinstance(spec_or_form, str):
             if spec_or_form in VERB_FORMS_BY_META_ID:
                 v_form = VERB_FORMS_BY_META_ID[spec_or_form]
@@ -395,17 +391,3 @@ def _derive_category(
         candidate_hypotheses = surviving
 
     return candidate_hypotheses
-
-
-def derive_lexical_features_4step(
-    forms: List[Tuple[str, Any]],
-    compiler: Optional[Any] = None,
-    lexical_features: Optional[Set[str]] = None,
-) -> Set[Tuple[str, Tuple[Tuple[str, str], ...]]]:
-    """
-    Legacy derivation wrapper returning lexical tuples for backwards compatibility.
-    """
-    hypotheses = derive_hypotheses_for_forms(
-        forms, compiler=compiler, lexical_features=lexical_features
-    )
-    return {h.lexical_tuple() for h in hypotheses}

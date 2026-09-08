@@ -18,7 +18,7 @@ from parc_macros.generate_morpheme_replace_rules import (
 )
 from parc_macros.generate_inplace_phonology import (
     extract_inplace_data,
-    generate_inplace_inventory,
+    generate_inplace_alphabet,
     generate_inplace_patterns,
     generate_inplace_rules,
 )
@@ -1037,7 +1037,7 @@ def generate_markers(config_path: str, output_dir: str, in_place: bool | None = 
         cfg_p = Path(config_path)
         out_p = Path(output_dir)
         inplace_data = extract_inplace_data(cfg_p)
-        generate_inplace_inventory(
+        generate_inplace_alphabet(
             cfg_p / "Phonology" / "Inventory" / "alphabet.yaml",
             out_p / "Phonology" / "Inventory" / "alphabet.yaml",
             inplace_data,

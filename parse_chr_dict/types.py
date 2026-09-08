@@ -43,19 +43,6 @@ class ParseData:
     def rules(self) -> str:
         return "+"
 
-    @property
-    def canonical_root(self) -> str:
-        """Returns the root wrapped in legacy marker format for backwards compatibility."""
-        h_part = (
-            self.h_alt_tag
-            if self.h_alt_tag and self.h_alt_tag not in self.root
-            else ""
-        )
-        clean_root = (
-            self.root.replace("[DIST=de]", "[DIST]").replace("[DIST=di]", "[DIST]")
-        )
-        return f"[Pro]{h_part}{clean_root}[Aspect][Tense]"
-
     def to_labels_dict(self) -> dict[str, str]:
         d: dict[str, str] = {
             "prefix_class": self.prefix_class,
@@ -99,10 +86,6 @@ class ParseData:
         if self.tense:
             parts.append(f"[Tense={self.tense}]")
         return "".join(parts)
-
-
-# Backward compatibility alias
-InPlaceParseConfig = ParseData
 
 
 @dataclass(frozen=True)
@@ -708,17 +691,6 @@ class LexicalVerb:
         d["tense_present_class"] = self.tense_present_class
         return d
 
-    def lexical_tuple(self) -> tuple[str, str, tuple[tuple[str, str], ...]]:
-        return (
-            self.h_root,
-            self.h_alt_tag or "[H_alt=none]",
-            (
-                ("aspect_class", self.aspect_class),
-                ("prefix_class", self.prefix_class),
-                ("tense_present_class", self.tense_present_class),
-            ),
-        )
-
     def get_pronominal_candidates(self, person: str, allow_set_a: bool) -> list[str]:
         return self.metadata.get_pronominal_candidates(person, allow_set_a)
 
@@ -773,13 +745,6 @@ class LexicalVerb:
         self,
         row: dict[str, str],
         entry_type: Any,
-        compiler: Optional[Any] = None,
     ) -> bool:
         from parse_chr_dict.reconstruct import validate_hypothesis
-        return validate_hypothesis(self, row, entry_type, compiler=compiler)
-
-
-# Backward compatibility aliases
-DerivationHypothesis = LexicalVerb
-LexicalVerbHypothesis = LexicalVerb
-LexicalVerbEntry = LexicalVerb
+        return validate_hypothesis(self, row, entry_type)

@@ -28,9 +28,9 @@ data:
   - name: Pro
     ref: <Pro>
     tags: ["[Pro]"]
-  - name: H_ALT
-    ref: <H_ALT>
-    tags: ["[H_DROP]", "[H_GLOT]", "[H_LAT]", "[H_NONE]"]
+  - name: H_alt
+    ref: <H_alt>
+    tags: ["[H_alt=drop]", "[H_alt=glot]", "[H_alt=lat]", "[H_alt=none]"]
   - name: Tense
     ref: <Tense>
     tags: ["[Tense]"]

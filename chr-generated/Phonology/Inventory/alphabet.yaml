@@ -193,9 +193,3 @@ data:
   - '[Tense=assertive]'
   - '[Tense=reported]'
   - '[Tense=infinitive]'
-- name: Legacy Tags
-  ref: <LegacyTags>
-  tags:
-  - '[Pro]'
-  - '[Aspect]'
-  - '[Tense]'

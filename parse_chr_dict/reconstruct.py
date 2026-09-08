@@ -4,7 +4,6 @@ from parse_chr_dict.h_alternation import (
     is_h_alternation_trigger,
     validate_h_alternation_trigger,
 )
-from parC.grammar.paradigm_compilation import inflect
 
 _INFLECT_CACHE: dict[tuple[str, frozenset[tuple[str, str]], str, bool, bool], list[str]] = {}
 
@@ -90,28 +89,11 @@ def memoized_inflect(
     if cache_key in _INFLECT_CACHE:
         return _INFLECT_CACHE[cache_key]
 
-    from parse_chr_dict.parse import is_inplace_grammar
-    if is_inplace_grammar():
-        try:
-            tag_str = build_inplace_tag_str(root, dict(feat_key))
-            res = inflect_inplace_string(tag_str)
-        except Exception:
-            res = []
-    else:
-        legacy_features = {
-            k: v for k, v in dict(feat_key).items()
-            if v and k != "h_alt_tag" and not (k == "variant" and str(v) in ("", "1"))
-        }
-        try:
-            res = inflect(
-                root,
-                feature_values=legacy_features,
-                name=name,
-                open_root=open_root,
-                infer_lexical_features=infer_lexical_features,
-            )
-        except (ValueError, KeyError):
-            res = []
+    try:
+        tag_str = build_inplace_tag_str(root, dict(feat_key))
+        res = inflect_inplace_string(tag_str)
+    except Exception:
+        res = []
 
     _INFLECT_CACHE[cache_key] = res
     return res
@@ -121,10 +103,9 @@ def validate_hypothesis(
     hypothesis: Any,
     row: dict,
     entry_type: Any,
-    compiler: Optional[Any] = None,
 ) -> bool:
     """
-    Validates a LexicalVerb / DerivationHypothesis against all non-empty forms in a row.
+    Validates a LexicalVerb against all non-empty forms in a row.
     Returns True if every non-empty form in the row reconstructs to the exact surface form.
     Fails fast immediately if any form fails.
     """
@@ -156,8 +137,6 @@ def validate_hypothesis(
 def reconstruct_row(
     row: dict,
     entry_type: Any,
-    lexical_fields: Optional[list[str]] = None,
-    compiler: Optional[Any] = None,
 ) -> list[Any]:
     from parse_chr_dict.types import VerbMetadata, LexicalVerb
 
@@ -174,7 +153,7 @@ def reconstruct_row(
             plural=meta.is_plural,
             animate_objects=meta.animate_objects,
         )
-        if validate_hypothesis(hypothesis, row, entry_type, compiler=compiler):
+        if validate_hypothesis(hypothesis, row, entry_type):
             passing_metas.append(meta)
     return passing_metas
 
