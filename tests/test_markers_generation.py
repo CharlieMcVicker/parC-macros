@@ -113,10 +113,10 @@ def test_inplace_paradigm_generation_ac2():
         expected_stages = [
             "final_dropping",
             "aspect_suffix",
+            "tense",
             "h_alternation",
             "drop_stem_initial_vowel",
             "pronominal",
-            "tense",
             "insert_dist",
             "insert_wi",
         ]

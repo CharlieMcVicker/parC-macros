@@ -5,10 +5,10 @@ part_of_speech: $verb
 stage_order:
 - final_dropping
 - aspect_suffix
+- tense
 - h_alternation
 - drop_stem_initial_vowel
 - pronominal
-- tense
 - insert_dist
 - insert_wi
 global_markers:
@@ -19,6 +19,9 @@ global_markers:
   stage: aspect_suffix
   value: $aspect_replace
 - kind: rule
+  stage: tense
+  value: $tense_replace
+- kind: rule
   stage: h_alternation
   value: $h_alternation
 - kind: rule
@@ -27,9 +30,6 @@ global_markers:
 - kind: rule
   stage: pronominal
   value: $pro_replace
-- kind: rule
-  stage: tense
-  value: $tense_replace
 - kind: rule
   stage: insert_dist
   value: $insert_DIST

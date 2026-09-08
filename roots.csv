@@ -8,6 +8,7 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 18,22,he/she is visiting,atawhahthvhitoha,katawahthvhitoha,atawhahthvhitoho'i,utawhahthvhitolv'i,hatawhahthvhita,utawhahthvhitasti,Eventful,atawhahthvhit,[H_alt=drop],be-at,a_stem,a_present,True,False,False,1,1,1,1,1
 19,23,he/she is stretching,atayhastiha,katayastiha,atayhastisko'i,utayhasthanv'i,hatayhasta,utayhastohti,Eventful,atayhast,[H_alt=drop],cause,a_stem,a_present,True,False,False,1,1,1,1,1
 22,26,he/she is committing adultery,atayhoneha,katayoneha,atayhoneho'i,utayhonelv'i,hatayhonvla,utayhonehti,Eventful,atayhon,[H_alt=drop],apl,a_stem,a_present,True,False,False,1,1,1,4,1
+25,29,it’s ripping,atatsakaliha,katatsakali'a,atatsakalisko'i,utatsakalvhv'i,hatatsakala,utatsakalhti,Eventful,atatsakal,[H_alt=glot],ih-vh,a_stem,a_present,True,False,False,1,1,1,1,1
 27,31,he/she is looking at himself/herself in a mirror,atakheha,katakheha,atakhesko'i,utakhehv'i,hatakhvla,utakhehti,Eventful,atakh,[H_alt=none],apl-active,a_stem,a_present,True,False,False,1,1,1,1,1
 29,33,it’s beginning,ataleniha,,atalenisko'i,utalenvhv'i,,utalenhti,Eventful,atalen,[H_alt=none],ih-vh,a_stem,a_present,True,False,False,1,1,1,1,1
 29,33,it’s beginning,ataleniha,,atalenisko'i,utalenvhv'i,,utalenhti,Eventful,atalen,[H_alt=none],ih-vh,a_stem,a_present,True,False,True,1,1,1,1,1
@@ -38,12 +39,14 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 70,74,he/she is going around a curve,ateyoha,kateyoha,ateyoho'i,uteyolv'i,hateyaka,uteyhsti,Eventful,atey,[H_alt=none],oh-ol,a_stem,a_present,True,False,False,1,1,1,1,2
 72,76,he/she is laying it down (refers to a long object),ati'a,tsiti'a,atisko'i,utv'i,hita,utisti,Eventful,t,[H_alt=none],i-a-i,cons_stem,a_present,True,False,False,1,1,1,1,1
 72,76,he/she is laying it down (refers to a long object),ati'a,tsiti'a,atisko'i,utv'i,hita,utisti,Eventful,t,[H_alt=none],i-a-i,cons_stem,a_present,True,False,True,1,1,1,1,1
+73,77,he/she is rising (from a prone position),atitiha,katiti'a,atitisko'i,utitvhv'i,hatita,utithti,Eventful,atit,[H_alt=glot],ih-vh,a_stem,a_present,True,False,False,1,1,1,1,1
 74,78,he/she is scattering it,atikaleya'a,katikaleya'a,atikaleyasko'i,utikaleyv'i,hatikaleya,utikaleyasti,Eventful,atikaley,[H_alt=none],a,a_stem,a_present,True,False,False,1,1,1,1,1
 75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,Eventful,atikaleyo,[H_alt=none],become,a_stem,a_present,True,False,False,1,1,1,1,3
 75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,Eventful,atikaleyo,[H_alt=none],become,a_stem,a_present,True,False,True,1,1,1,1,3
 75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,Eventful,tikaleyo,[H_alt=none],become,cons_stem,a_present,True,False,False,1,1,1,1,3
 75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,Eventful,tikaleyo,[H_alt=none],become,cons_stem,a_present,True,False,True,1,1,1,1,3
 76,80,he/she is spinning,atikwalvteyoha,katikwalvteyoha,atikwalvteyoho'i,utikwalvteyolv'i,hatikwalvteyaka,utikwalvteyhsti,Eventful,atikwalvtey,[H_alt=none],oh-ol,a_stem,a_present,True,False,False,1,1,1,1,2
+77,81,he/she is saying it,atiha,kati'a,atisko'i,utvnhv'i,hata,uthti,Eventful,at,[H_alt=glot],vnh-ih-a,a_stem,a_present,True,False,False,1,1,1,1,1
 78,82,he/she is running over him/her,atinvtiha,tsiyatinvtiha,atinvtisko'i,utinvthanv'i,hiyatinvta,utinvtohti,Eventful,atinvt,[H_alt=none],cause,a_stem,a_present,True,False,True,1,1,1,1,1
 79,83,he/she is hiding,atiskalhvska,katiskalhvska,atiskalhvsko'i,utiskalhanv'i,hatiskalhvka,utiskalhti,Eventful,atiskal,[H_alt=none],hvsk-han,a_stem,a_present,True,False,False,1,1,1,1,1
 80,84,he/she is leaving it behind (refers to a long object),atisiya'a,tsitisiya'a,atisiyasko'i,utisiyv'i,hitisiya,utisiyasti,Eventful,tisiy,[H_alt=none],a,cons_stem,a_present,True,False,False,1,1,1,1,1
@@ -56,6 +59,8 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 94,98,it’s pouring into a container (refers to liquid),atlika,,atliko'i,utlitsv'i,,utliyhsti,Eventful,atli,[H_alt=none],become,a_stem,a_present,True,False,True,1,1,1,1,3
 94,98,it’s pouring into a container (refers to liquid),atlika,,atliko'i,utlitsv'i,,utliyhsti,Eventful,tli,[H_alt=none],become,cons_stem,a_present,True,False,False,1,1,1,1,3
 94,98,it’s pouring into a container (refers to liquid),atlika,,atliko'i,utlitsv'i,,utliyhsti,Eventful,tli,[H_alt=none],become,cons_stem,a_present,True,False,True,1,1,1,1,3
+95,99,he/she is drawing a liquid out of a container,atliha,tsitli'a,atlisko'i,utlvhv'i,hitla,utlvhti,Eventful,tl,[H_alt=glot],ih-vh,cons_stem,a_present,True,False,False,1,1,1,1,2
+95,99,he/she is drawing a liquid out of a container,atliha,tsitli'a,atlisko'i,utlvhv'i,hitla,utlvhti,Eventful,tl,[H_alt=glot],ih-vh,cons_stem,a_present,True,False,True,1,1,1,1,2
 96,100,he/she is pouring a liquid into a container,atlistiha,tsitlistiha,atlistisko'i,utlisthanv'i,hitlista,utlistohti,Eventful,tlist,[H_alt=none],cause,cons_stem,a_present,True,False,False,1,1,1,1,1
 96,100,he/she is pouring a liquid into a container,atlistiha,tsitlistiha,atlistisko'i,utlisthanv'i,hitlista,utlistohti,Eventful,tlist,[H_alt=none],cause,cons_stem,a_present,True,False,True,1,1,1,1,1
 101,105,he/she is catching up with him/her,atlvthaska,tsiyatlvthaska,atlvthasko'i,utlvthahv'i,hiyatlvtha,utlvthasti,Eventful,atlvtha,[H_alt=none],sk-h,a_stem,a_present,True,False,True,1,1,1,2,1
@@ -216,6 +221,7 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 306,313,he/she is standing in a certain spot,alehvska,kale'vska,alehvsko'i,ulenhv'i,halehvka,ulehti,Eventful,ale,[H_alt=glot],hvsk-nh,a_stem,a_present,True,False,False,1,1,1,1,1
 307,314,he/she is stopping,alewhistiha,kalewistiha,alewhistisko'i,ulewhisthanv'i,halewhista,ulewhistohti,Eventful,alewhist,[H_alt=drop],cause,a_stem,a_present,True,False,False,1,1,1,1,1
 308,315,he/she is stopping him/her,alewhistohtiha,tsiyalewistohtiha,alewhistohtisko'i,ulewhistohthanv'i,hiyalewistohta,ulewhistohtohti,Eventful,alewhistoht,[H_alt=drop],cause,a_stem,a_present,True,False,True,1,1,1,1,1
+309,316,he/she is starting,aleniha,kaleni'a,alenisko'i,ulenvhv'i,halena,ulenhti,Eventful,alen,[H_alt=glot],ih-vh,a_stem,a_present,True,False,False,1,1,1,1,1
 314,321,he/she is thanking him/her,alihelitsheha,tsiyali'elitsheha,alihelitsheho'i,ulihelitshelv'i,hiyali'elitshisi,ulihelitshehti,Eventful,alihelitsh,[H_alt=glot],apl,a_stem,a_present,True,False,True,1,1,1,3,1
 315,322,he/she is happy,alihelika,kali'elika,aliheliko'i,ulihelitsv'i,haliheliki,ulihelisti,Eventful,aliheli,[H_alt=glot],become,a_stem,a_present,True,False,False,1,1,1,1,1
 317,324,he/she is exchanging it,ali'iti'a,kali'iti'a,ali'itisko'i,uli'itv'i,hali'ita,uli'itisti,Eventful,ali'it,[H_alt=none],i-a-i,a_stem,a_present,True,False,False,1,1,1,1,1
@@ -392,6 +398,8 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 509,516,he/she is waking him/her up,aye'istiha,tsiye'istiha,aye'istisko'i,uye'isthanv'i,hiye'ista,uye'istohti,Eventful,ye'ist,[H_alt=none],cause,cons_stem,a_present,True,False,False,1,1,1,1,1
 509,516,he/she is waking him/her up,aye'istiha,tsiye'istiha,aye'istisko'i,uye'isthanv'i,hiye'ista,uye'istohti,Eventful,ye'ist,[H_alt=none],cause,cons_stem,a_present,True,False,True,1,1,1,1,1
 511,518,he/she is putting him/her inside (refers to somewhere large enough to move around in),ayhtiha,tsiyvtiha,ayhtisko'i,uyhthanv'i,hiyvta,uyhtohti,Eventful,yht,[H_alt=vowel_v],cause,cons_stem,a_present,True,False,True,1,1,1,1,1
+513,520,he/she is getting it (refers to a long object),ayiha,tsiyi'a,ayisko'i,uyvhv'i,hiya,uyhti,Eventful,y,[H_alt=glot],ih-vh,cons_stem,a_present,True,False,False,1,1,1,1,1
+513,520,he/she is getting it (refers to a long object),ayiha,tsiyi'a,ayisko'i,uyvhv'i,hiya,uyhti,Eventful,y,[H_alt=glot],ih-vh,cons_stem,a_present,True,False,True,1,1,1,1,1
 515,522,it’s breaking,ayoka,tsiyoka,ayoko'i,uyotsv'i,hiyoki,uyoyhsti,Eventful,yo,[H_alt=none],become,cons_stem,a_present,True,False,False,1,1,1,1,3
 515,522,it’s breaking,ayoka,tsiyoka,ayoko'i,uyotsv'i,hiyoki,uyoyhsti,Eventful,yo,[H_alt=none],become,cons_stem,a_present,True,False,True,1,1,1,1,3
 516,523,he/she is shooting him/her,ayohiha,tsiyo'iha,ayohiho'i,uyolhv'i,hiyo'a,uyosti,Eventful,yo,[H_alt=glot],hih-lh,cons_stem,a_present,True,False,True,1,1,1,2,1
@@ -523,6 +531,8 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 740,758,he/she is releasing it (refers to voluntarily releasing),tuyoska,takiyoska,tuyosko'i,tuyosv'i,titsayohi,tsuyohisti,Eventful,yo,[H_alt=none],sk-s-hi-hihst,cons_stem,a_present,False,False,False,1,1,1,1,1
 740,758,he/she is releasing it (refers to voluntarily releasing),tuyoska,takiyoska,tuyosko'i,tuyosv'i,titsayohi,tsuyohisti,Eventful,yo,[H_alt=none],sk-s-hi-hihst,r_stem,a_present,False,False,False,1,1,1,1,1
 742,765,he/she is walking around,etoha,ketoha,etoho'i,uwetolv'i,heta,uwetasti,Eventful,et,[H_alt=none],be-at,e_stem,a_present,True,False,False,1,1,1,1,1
+746,769,he/she lives,eha,ke'a,eho'i,,hehesti,,StativeFutProg,e,[H_alt=glot],stative-h,e_stem,a_present,True,False,False,1,1,1,1,1
+746,769,he/she lives,eha,ke'a,eho'i,,hehesti,,StativeFutProg,eh,[H_alt=glot],stative,e_stem,a_present,True,False,False,1,1,1,1,1
 752,776,he/she thinks so,eli'a,keli'a,elisko'i,uwelisv'i,hela,uwelisti,Eventful,el,[H_alt=none],i-a-i,e_stem,a_present,True,False,False,1,1,2,1,1
 759,789,it is hanging (refers to flexible object),kata'a,kata'a,kata'o'i,,hata'esti,,StativeFutProg,at,[H_alt=none],stative-a',a_stem,a_present,True,False,False,1,1,1,1,1
 759,789,it is hanging (refers to flexible object),kata'a,kata'a,kata'o'i,,hata'esti,,StativeFutProg,at,[H_alt=none],stative-a',vowel_stem,a_present,True,False,False,1,1,1,1,1
@@ -694,6 +704,8 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 938,968,he/she is missing him/her (refers to as a target),kanvti'a,tsinvti'a,kanvtisko'i,unvtv'i,hinvta,unvtisti,Eventful,nvt,[H_alt=none],i-a-i,r_stem,a_present,True,False,True,1,1,1,1,1
 940,970,he/she is falling from an upright position,kanvka,tsinvka,kanvko'i,unvtsv'i,hinvki,unv'isti,Eventful,nv,[H_alt=none],become,r_stem,a_present,True,False,False,1,1,1,1,2
 940,970,he/she is falling from an upright position,kanvka,tsinvka,kanvko'i,unvtsv'i,hinvki,unv'isti,Eventful,nv,[H_alt=none],become,r_stem,a_present,True,False,True,1,1,1,1,2
+941,971,he/she is cleaning him/her,kanvkaliha,tsinvkali'a,kanvkalisko'i,unvkalvhv'i,hinvkala,unvkalhti,Eventful,nvkal,[H_alt=glot],ih-vh,r_stem,a_present,True,False,False,1,1,1,1,1
+941,971,he/she is cleaning him/her,kanvkaliha,tsinvkali'a,kanvkalisko'i,unvkalvhv'i,hinvkala,unvkalhti,Eventful,nvkal,[H_alt=glot],ih-vh,r_stem,a_present,True,False,True,1,1,1,1,1
 942,972,he/she is hammering it,kanvkwalo'a,tsinvkwalo'a,kanvkwalosko'i,unvkwalo'v'i,hinvkwalotsa,unvkwalosti,Eventful,nvkwal,[H_alt=none],o,r_stem,a_present,True,False,False,1,1,1,1,1
 942,972,he/she is hammering it,kanvkwalo'a,tsinvkwalo'a,kanvkwalosko'i,unvkwalo'v'i,hinvkwalotsa,unvkwalosti,Eventful,nvkwal,[H_alt=none],o,r_stem,a_present,True,False,True,1,1,1,1,1
 946,976,he/she is tying up a leg,kanvlhohiha,tsinvlhohiha,kanvlhohiho'i,unvlholhv'i,hinvlhoka,unvlhosti,Eventful,nvlho,[H_alt=none],hih-lh,r_stem,a_present,True,False,False,1,1,1,1,1
@@ -801,6 +813,7 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 1507,1573,he/she wants it,utuliha,akwatuliha,utulisko'i,utulvhv'i,tsatula,utulhti,Eventful,atul,[H_alt=none],ih-vh,a_stem,a_present,False,False,False,1,1,1,1,1
 1508,1574,he/she is willing,utvnv'isti,akwatvnv'isti,utvnv'isto'i,utvnv'istv'i,tsatvnv'istesti,,StativeFutProg,atvnv'ist,[H_alt=none],stative,a_stem,i_present,False,False,False,1,1,1,1,1
 1514,1580,he/she is becoming warm,ukanawoska,akikanawoska,ukanawosko'i,ukanawosv'i,tsakanawohi,ukanawohisti,Eventful,kanawo,[H_alt=none],sk-s-hi-hihst,cons_stem,a_present,False,False,False,1,1,1,1,1
+1516,1582,he/she is possessive of him/her,ukeyuha,tsikeyu'a,ukeyuso'i,ukeyusv'i,hikeyusesti,ukeyhti,StativeFutProg,keyu,[H_alt=glot],stative-s,cons_stem,a_present,False,False,True,1,1,1,1,1
 1523,1589,he/she is late,ukonhiyoka,akikonhiyoka,ukonhiyoko'i,ukonhiyotsv'i,tsakonhiyoki,ukonhiyosti,Eventful,konhiyo,[H_alt=none],become,cons_stem,a_present,False,False,False,1,1,1,1,1
 1524,1590,it’s decaying,ukoska,akikoska,ukosko'i,ukosv'i,tsakohi,ukohisti,Eventful,ko,[H_alt=none],sk-s-hi-hihst,cons_stem,a_present,False,False,False,1,1,1,1,1
 1530,1596,he/she has an object (refers to a solid object),uha,akiha,uho'i,uhv'i,tsahesti,,StativeFutProg,h,[H_alt=none],stative,cons_stem,a_present,False,False,False,1,1,1,1,1
