@@ -20,6 +20,7 @@ from parc_macros.generate_phonology import (
     generate_alphabet,
     generate_patterns,
     generate_phonology_rules,
+    generate_slots_manifest,
 )
 
 
@@ -383,6 +384,10 @@ def generate_paradigm_config(
     if open_root_template:
         paradigm_content["open_root_template"] = open_root_template
 
+    slots = verb_config.get("slots") or paradigm_config.get("slots")
+    if slots:
+        paradigm_content["slots"] = slots
+
     with open(paradigm_file, "w", encoding="utf-8") as f:
         f.write("# This is a Paradigm config file\n")
         f.write("# Generated automatically from CSVs (in-place morphemes)\n")
@@ -529,9 +534,13 @@ def generate_markers(config_path: str, output_dir: str) -> None:
 
     # Clean output_dir
     if os.path.exists(output_dir):
-        for subdir in os.listdir(output_dir):
-            if not subdir == ".cache":
-                shutil.rmtree(output_dir + "/" + subdir)
+        for item in os.listdir(output_dir):
+            if item != ".cache":
+                item_path = os.path.join(output_dir, item)
+                if os.path.isdir(item_path):
+                    shutil.rmtree(item_path)
+                else:
+                    os.remove(item_path)
     os.makedirs(output_dir, exist_ok=True)
 
     # Ensure full standard directory structure exists under output_dir
@@ -625,7 +634,7 @@ def generate_markers(config_path: str, output_dir: str) -> None:
     # Phonology setup: dynamic generation
     cfg_p = Path(config_path)
     out_p = Path(output_dir)
-    phonology_data = extract_phonology_data(cfg_p)
+    phonology_data = extract_phonology_data(cfg_p, verb_config=verb_config)
     generate_alphabet(
         cfg_p / "Phonology" / "Inventory" / "alphabet.yaml",
         out_p / "Phonology" / "Inventory" / "alphabet.yaml",
@@ -641,11 +650,15 @@ def generate_markers(config_path: str, output_dir: str) -> None:
         out_p / "Phonology" / "Rules",
         phonology_data,
     )
+    generate_slots_manifest(
+        out_p / "slots.json",
+        verb_config,
+    )
 
     # Generate insertion rules and morpheme replace rules
     if os.path.isdir(config_path):
         generate_insertion_rules(config_path, output_dir)
-        generate_morpheme_replace_rules(config_path, output_dir)
+        generate_morpheme_replace_rules(config_path, output_dir, verb_config=verb_config)
 
     # Identify optional features and modify verb_config['features']
     optional_features = []

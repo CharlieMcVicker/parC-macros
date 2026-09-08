@@ -21,6 +21,7 @@ import pynini
 from parC.grammar.acceptor_compilation import fsm_strings
 from parC.grammar.paradigm_compilation import (
     fsa,
+    get_open_inflect_graph,
     get_open_parse_graph,
     inflect,
     word_fsa,
@@ -28,6 +29,17 @@ from parC.grammar.paradigm_compilation import (
 from parse_chr_dict.acceptors import (
     get_cascade_domain_acceptor,
     get_default_symbol_table,
+)
+from parse_chr_dict.slots import (
+    get_root_boundary_tag_prefixes,
+    get_slot_tag_map,
+)
+from parse_chr_dict.types import (
+    AspectVariants,
+    LexicalVerb,
+    ParseData,
+    VerbMetadata,
+    VerbTemplate,
 )
 
 PARSE_GRAPH = None
@@ -76,45 +88,17 @@ def get_inflect_graph():
     global INFLECT_GRAPH
     if INFLECT_GRAPH is not None:
         return INFLECT_GRAPH
-    from parC.grammar.paradigm_compilation import get_open_inflect_graph
     INFLECT_GRAPH = get_open_inflect_graph("verb", infer_lexical_features=False)
     return INFLECT_GRAPH
 
 
-SLOT_NAME_TO_TAG: dict[str, str] = {
-    "prefix_class": "PrefixClass",
-    "pronominal": "Pro",
-    "h_alt_tag": "H_alt",
-    "aspect_class": "AspectClass",
-    "variant": "Variant",
-    "aspect": "Aspect",
-    "tense": "Tense",
-}
+SLOT_TAG_MAP: dict[str, str] = get_slot_tag_map()
+SLOT_NAME_TO_TAG: dict[str, str] = {v: k for k, v in SLOT_TAG_MAP.items() if k != "H_ALT"}
 
 
 def feature_tag(feature: str, value: str) -> str:
     slot = SLOT_NAME_TO_TAG.get(feature, feature)
     return f"[{slot}={value}]"
-
-
-from parse_chr_dict.types import (
-    ParseData,
-    VerbTemplate,
-    AspectVariants,
-    VerbMetadata,
-    LexicalVerb,
-)
-
-SLOT_TAG_MAP: dict[str, str] = {
-    "PrefixClass": "prefix_class",
-    "Pro": "pronominal",
-    "H_alt": "h_alt_tag",
-    "H_ALT": "h_alt_tag",
-    "AspectClass": "aspect_class",
-    "Variant": "variant",
-    "Aspect": "aspect",
-    "Tense": "tense",
-}
 
 _READ_LABELS_CACHE: dict[str, tuple[str, dict[str, str]]] = {}
 _READ_PARSE_CACHE: dict[str, ParseData] = {}
@@ -331,7 +315,8 @@ def build_root_filter_fsa(allowed_roots: Iterable[str]) -> pynini.Fst | None:
     """
     Constructs an optimized FSA filter that restricts the output of a parse graph to
     match only roots in allowed_roots.
-    Boundary structure: sigma* + [H_alt=...] + root_union + [AspectClass=...] + sigma*
+    Boundary structure dynamically derived from slot manifest:
+    sigma* + pre_root_fsa + root_union + post_root_fsa + sigma*
     """
     key = frozenset(allowed_roots)
     if not key:
@@ -348,17 +333,19 @@ def build_root_filter_fsa(allowed_roots: Iterable[str]) -> pynini.Fst | None:
     sigma = pynini.union(*[pynini.accep(s, token_type=syms) for s in all_syms]).optimize()
     sigma_star = sigma.star.optimize()
 
-    # Pre-root boundary tags: all [H_alt=...] tags
-    h_alt_tags = [s for s in all_syms if s.startswith("[H_alt=")]
-    if not h_alt_tags:
-        return None
-    h_alt_fsa = pynini.union(*[pynini.accep(t, token_type=syms) for t in h_alt_tags if syms.member(t)]).optimize()
+    left_prefix, right_prefix = get_root_boundary_tag_prefixes()
 
-    # Post-root boundary tags: all [AspectClass=...] tags
-    asp_tags = [s for s in all_syms if s.startswith("[AspectClass=")]
-    if not asp_tags:
+    # Pre-root boundary tags: all tags starting with left_prefix (e.g. [H_alt=)
+    pre_root_tags = [s for s in all_syms if s.startswith(left_prefix)]
+    if not pre_root_tags:
         return None
-    asp_fsa = pynini.union(*[pynini.accep(t, token_type=syms) for t in asp_tags if syms.member(t)]).optimize()
+    pre_root_fsa = pynini.union(*[pynini.accep(t, token_type=syms) for t in pre_root_tags if syms.member(t)]).optimize()
+
+    # Post-root boundary tags: all tags starting with right_prefix (e.g. [AspectClass=)
+    post_root_tags = [s for s in all_syms if s.startswith(right_prefix)]
+    if not post_root_tags:
+        return None
+    post_root_fsa = pynini.union(*[pynini.accep(t, token_type=syms) for t in post_root_tags if syms.member(t)]).optimize()
 
     root_fsas = []
     for r in key:
@@ -375,8 +362,8 @@ def build_root_filter_fsa(allowed_roots: Iterable[str]) -> pynini.Fst | None:
     exact_root_filter = pynini.concat(
         sigma_star,
         pynini.concat(
-            h_alt_fsa,
-            pynini.concat(root_fsa, pynini.concat(asp_fsa, sigma_star))
+            pre_root_fsa,
+            pynini.concat(root_fsa, pynini.concat(post_root_fsa, sigma_star))
         )
     ).optimize()
 

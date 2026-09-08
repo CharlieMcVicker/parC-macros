@@ -10,6 +10,7 @@ Dynamic in-memory generation of phonology configuration:
 from __future__ import annotations
 
 import csv
+import json
 import re
 import shutil
 from pathlib import Path
@@ -51,35 +52,111 @@ def _parse_rule_triggers(path: Path) -> list[tuple[str, str]]:
     return triggers
 
 
-def extract_phonology_data(config_dir: Path) -> dict[str, Any]:
+def extract_phonology_data(
+    config_dir: Path, verb_config: dict[str, Any] | None = None
+) -> dict[str, Any]:
     """
     Extracts all classes, inflectional features, variants, and rule triggers
-    from configuration CSV files.
+    from configuration CSV files, parameterized by verb_config slots and phonology_effects.
     """
     config_dir = Path(config_dir)
 
+    if verb_config is None:
+        for spec_name in ("verb.yaml", "verb_spec.yaml"):
+            spec_file = config_dir / spec_name
+            if spec_file.exists():
+                try:
+                    with open(spec_file, "r", encoding="utf-8") as f:
+                        verb_config = yaml.safe_load(f) or {}
+                    break
+                except Exception:
+                    pass
+
+    slots: list[dict[str, Any]] = []
+    phonology_effects: dict[str, str] = {}
+    if verb_config:
+        slots = verb_config.get("slots") or verb_config.get("paradigm", {}).get("slots") or []
+        phonology_effects = verb_config.get("phonology_effects") or verb_config.get("phonology", {}).get("effects") or {}
+
     # 1. Pronominals and prefix classes
-    prefix_classes, pronominals = _parse_csv_matrix(config_dir / "verb-pronominal.csv")
+    pro_slot = next(
+        (
+            s for s in slots
+            if s.get("name") == "pronominal"
+            or any(tg.get("TagGroup") == "Pro" for tg in s.get("structure", []))
+        ),
+        None,
+    )
+    if pro_slot and pro_slot.get("sources"):
+        prefix_classes: list[str] = []
+        pronominals: list[str] = []
+        for src in pro_slot["sources"]:
+            p_path = config_dir / src
+            if p_path.exists():
+                p_cls, pros = _parse_csv_matrix(p_path)
+                for c in p_cls:
+                    if c not in prefix_classes:
+                        prefix_classes.append(c)
+                for p in pros:
+                    if p not in pronominals:
+                        pronominals.append(p)
+    else:
+        prefix_classes, pronominals = _parse_csv_matrix(config_dir / "verb-pronominal.csv")
 
     # 2. Tenses and tense classes
-    tense_csv_path = config_dir / "verb-tense.csv"
-    with open(tense_csv_path, "r", encoding="utf-8") as f:
-        tense_lines = f.readlines()
-    has_class_feature = any(l.lower().startswith("# class_feature:") for l in tense_lines)
-    tense_rows = [r for r in csv.reader(tense_lines) if r and not r[0].startswith("#")]
-    if has_class_feature:
-        tense_header = tense_rows[0]
-        tense_classes = [r[0].strip() for r in tense_rows[1:] if r and r[0].strip()]
-        tenses = [h.strip() for h in tense_header[1:] if h.strip()]
-    else:
-        tense_classes = []
-        tenses = [h.strip() for h in tense_rows[0] if h.strip()]
+    tense_slot = next(
+        (
+            s for s in slots
+            if s.get("name") == "tense"
+            or any(tg.get("TagGroup") == "Tense" for tg in s.get("structure", []))
+        ),
+        None,
+    )
+    tense_sources = tense_slot.get("sources", []) if tense_slot else ["verb-tense.csv"]
+    if not tense_sources:
+        tense_sources = ["verb-tense.csv"]
 
-    # 3. Aspects, aspect classes, variants, and drop-final triggers from verb-aspect.csv and optional verb-aspect-stative.csv
-    aspect_csv_files = [config_dir / "verb-aspect.csv"]
-    stative_csv_path = config_dir / "verb-aspect-stative.csv"
-    if stative_csv_path.exists():
-        aspect_csv_files.append(stative_csv_path)
+    tense_classes: list[str] = []
+    tenses: list[str] = []
+    for src in tense_sources:
+        tense_csv_path = config_dir / src
+        if not tense_csv_path.exists():
+            continue
+        with open(tense_csv_path, "r", encoding="utf-8") as f:
+            tense_lines = f.readlines()
+        has_class_feature = any(l.lower().startswith("# class_feature:") for l in tense_lines)
+        tense_rows = [r for r in csv.reader(tense_lines) if r and not r[0].startswith("#")]
+        if not tense_rows:
+            continue
+        if has_class_feature or (tense_slot and len(tense_slot.get("structure", [])) > 1):
+            tense_header = tense_rows[0]
+            for r in tense_rows[1:]:
+                if r and r[0].strip() and r[0].strip() not in tense_classes:
+                    tense_classes.append(r[0].strip())
+            for h in tense_header[1:]:
+                if h.strip() and h.strip() not in tenses:
+                    tenses.append(h.strip())
+        else:
+            for h in tense_rows[0]:
+                if h.strip() and h.strip() not in tenses:
+                    tenses.append(h.strip())
+
+    # 3. Aspects, aspect classes, variants, and drop-final triggers
+    aspect_slot = next(
+        (
+            s for s in slots
+            if s.get("name") == "aspect"
+            or any(tg.get("TagGroup") == "Aspect" for tg in s.get("structure", []))
+        ),
+        None,
+    )
+    if aspect_slot and aspect_slot.get("sources"):
+        aspect_csv_files = [config_dir / src for src in aspect_slot["sources"]]
+    else:
+        aspect_csv_files = [config_dir / "verb-aspect.csv"]
+        stative_csv_path = config_dir / "verb-aspect-stative.csv"
+        if stative_csv_path.exists():
+            aspect_csv_files.append(stative_csv_path)
 
     aspect_classes: list[str] = []
     aspects: list[str] = []
@@ -128,12 +205,16 @@ def extract_phonology_data(config_dir: Path) -> dict[str, Any]:
     mark_final_two_triggers: list[str] = []
 
     effects_file = None
-    if (config_dir / "aspect_effects.csv").exists():
+    if phonology_effects.get("aspect_drop"):
+        effects_file = config_dir / phonology_effects["aspect_drop"]
+    elif phonology_effects.get("aspect_effects"):
+        effects_file = config_dir / phonology_effects["aspect_effects"]
+    elif (config_dir / "aspect_effects.csv").exists():
         effects_file = config_dir / "aspect_effects.csv"
     elif (config_dir / "rule_effects.csv").exists():
         effects_file = config_dir / "rule_effects.csv"
 
-    if effects_file is not None:
+    if effects_file is not None and effects_file.exists():
         with open(effects_file, "r", encoding="utf-8") as f:
             reader = csv.DictReader(r for r in f if not r.startswith("#"))
             for row in reader:
@@ -175,13 +256,19 @@ def extract_phonology_data(config_dir: Path) -> dict[str, Any]:
                     mark_final_two_triggers.append(f"[AspectClass={cls_expr}][Aspect={feat}]")
 
     # 4. Stem-initial vowel drop triggers
-    drop_first_a_csv = config_dir / "verb-pronominal-drop-first-a.csv"
+    drop_a_src = phonology_effects.get("drop_stem_initial_a")
+    drop_first_a_csv = (
+        config_dir / drop_a_src if drop_a_src else config_dir / "verb-pronominal-drop-first-a.csv"
+    )
     if drop_first_a_csv.exists():
         drop_first_a_triggers = _parse_rule_triggers(drop_first_a_csv)
     else:
         drop_first_a_triggers = [("a_stem", "3sg.A"), ("a_stem", "3sg.B")]
 
-    drop_first_v_csv = config_dir / "verb-pronominal-drop-first-v.csv"
+    drop_v_src = phonology_effects.get("drop_stem_initial_v")
+    drop_first_v_csv = (
+        config_dir / drop_v_src if drop_v_src else config_dir / "verb-pronominal-drop-first-v.csv"
+    )
     if drop_first_v_csv.exists():
         drop_first_v_triggers = _parse_rule_triggers(drop_first_v_csv)
     else:
@@ -200,6 +287,66 @@ def extract_phonology_data(config_dir: Path) -> dict[str, Any]:
         "drop_first_a_triggers": drop_first_a_triggers,
         "drop_first_v_triggers": drop_first_v_triggers,
     }
+
+
+def generate_slots_manifest(
+    output_path: Path | str,
+    verb_config: dict[str, Any],
+) -> dict[str, Any] | None:
+    """
+    Writes out slots.json containing:
+    - slots: list of slots with name, role, rule, tags
+    - template: list of template tokens
+    - tag_to_slot: mapping of TagGroup to slot name
+    - root_boundaries: {"left": "<H_alt>", "right": "<AspectClass>"} (derived from open_root_template position relative to <Root>)
+    """
+    slots_config = verb_config.get("slots") or verb_config.get("paradigm", {}).get("slots")
+    if not slots_config:
+        return None
+
+    slots_list = []
+    tag_to_slot = {}
+    for slot in slots_config:
+        slot_name = slot.get("name", "")
+        role = slot.get("role", "")
+        rule_raw = slot.get("rule", "")
+        rule_name = rule_raw.lstrip("$")
+        structure = slot.get("structure", [])
+        tags = [item["TagGroup"] for item in structure if "TagGroup" in item]
+        for t in tags:
+            tag_to_slot[t] = slot_name
+        slots_list.append({
+            "name": slot_name,
+            "role": role,
+            "rule": rule_name,
+            "tags": tags,
+        })
+
+    paradigm_config = verb_config.get("paradigm", {})
+    open_root_template = paradigm_config.get("open_root_template", "")
+    template_tokens = re.findall(r"<[^>]+>", open_root_template)
+
+    root_boundaries = {"left": None, "right": None}
+    if "<Root>" in template_tokens:
+        root_idx = template_tokens.index("<Root>")
+        if root_idx > 0:
+            root_boundaries["left"] = template_tokens[root_idx - 1]
+        if root_idx + 1 < len(template_tokens):
+            root_boundaries["right"] = template_tokens[root_idx + 1]
+
+    manifest = {
+        "slots": slots_list,
+        "template": template_tokens,
+        "tag_to_slot": tag_to_slot,
+        "root_boundaries": root_boundaries,
+    }
+
+    out_p = Path(output_path)
+    out_p.parent.mkdir(parents=True, exist_ok=True)
+    with open(out_p, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, indent=2)
+    print(f"Generated slots manifest: {out_p}")
+    return manifest
 
 
 def generate_alphabet(

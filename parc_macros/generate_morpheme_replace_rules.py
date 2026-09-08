@@ -172,23 +172,172 @@ def _generate_rules(csv_files: list[str], rules_out_dir: str) -> None:
         print(f"Generated morpheme replace rules: {out_path}")
 
 
+def _generate_rules_from_slots(
+    config_dir: Path, rules_out_dir: str, slots: list[dict]
+) -> None:
+    for slot in slots:
+        slot_name = slot.get("name", "")
+        rule_raw = slot.get("rule", f"${slot_name}_replace")
+        rule_name = rule_raw.lstrip("$")
+        sources = slot.get("sources", [])
+        structure = slot.get("structure", [])
+
+        if not structure:
+            continue
+
+        feature_tag_title = structure[-1]["TagGroup"]
+        mappings: dict[str, str] = {}
+
+        for src in sources:
+            src_path = config_dir / src
+            if not src_path.exists():
+                continue
+
+            with open(src_path, "r", encoding="utf-8") as fh:
+                data_lines = [
+                    line for line in fh
+                    if line.strip() and not line.strip().startswith("#")
+                ]
+
+            if not data_lines:
+                continue
+
+            reader = csv.DictReader(io.StringIO("".join(data_lines)))
+            if not reader.fieldnames:
+                continue
+
+            if len(structure) == 1:
+                # 1 TagGroup (e.g. Tense): [Tense={val}] -> surface
+                tag_group = structure[0]["TagGroup"]
+                for row in reader:
+                    for col in reader.fieldnames:
+                        feat_name = col.strip()
+                        val = row.get(col, "").strip()
+                        pattern = f"[{tag_group}={feat_name}]"
+                        mappings[pattern] = val
+
+            elif len(structure) == 2:
+                # 2 TagGroups (e.g. PrefixClass, Pro): [PrefixClass={row}][Pro={col}] -> surface
+                class_tag = structure[0]["TagGroup"]
+                feat_tag = structure[1]["TagGroup"]
+                id_col = reader.fieldnames[0]
+                feature_cols = reader.fieldnames[1:]
+
+                for row in reader:
+                    class_name = row.get(id_col, "").strip()
+                    if not class_name:
+                        continue
+                    for col in feature_cols:
+                        feat_name = col.strip()
+                        val = row.get(col, "").strip()
+                        pattern = f"[{class_tag}={class_name}][{feat_tag}={feat_name}]"
+                        mappings[pattern] = val
+
+            elif len(structure) == 3:
+                # 3 TagGroups (e.g. AspectClass, Variant, Aspect):
+                # Variant 1 (optional omitted): [AspectClass={row}][Aspect={col}] -> surface
+                # Variant N (optional present): [AspectClass={row}][Variant={N}][Aspect={col}] -> surface
+                class_tag = structure[0]["TagGroup"]
+                opt_tag = structure[1]["TagGroup"]
+                feat_tag = structure[2]["TagGroup"]
+                id_col = reader.fieldnames[0]
+                feature_cols = reader.fieldnames[1:]
+
+                for row in reader:
+                    class_name = row.get(id_col, "").strip()
+                    if not class_name:
+                        continue
+                    for col in feature_cols:
+                        feat_name = col.strip()
+                        val = row.get(col, "").strip()
+                        if ";" in val:
+                            variants = val.split(";")
+                            for idx, v in enumerate(variants, start=1):
+                                clean_v = v.strip()
+                                if idx == 1:
+                                    pattern = f"[{class_tag}={class_name}][{feat_tag}={feat_name}]"
+                                else:
+                                    pattern = f"[{class_tag}={class_name}][{opt_tag}={idx}][{feat_tag}={feat_name}]"
+                                mappings[pattern] = clean_v
+                        else:
+                            clean_v = val.strip()
+                            pattern = f"[{class_tag}={class_name}][{feat_tag}={feat_name}]"
+                            mappings[pattern] = clean_v
+
+        rules_filename = f"{rule_name}.yaml"
+        out_path = os.path.join(rules_out_dir, rules_filename)
+
+        string_map = [
+            [inp, val] for inp, val in sorted(mappings.items(), key=lambda x: x[0])
+        ]
+
+        doc = {
+            "kind": "Rules",
+            "rules": [
+                {
+                    "name": rule_name,
+                    "description": f"Morpheme replacement rule for [{feature_tag_title}]",
+                    "string_map": string_map,
+                }
+            ],
+        }
+
+        with open(out_path, "w", encoding="utf-8") as fh:
+            fh.write("# This is a Rules config file\n")
+            fh.write(
+                "# Generated automatically by generate_morpheme_replace_rules.py\n"
+            )
+            yaml.dump(
+                doc,
+                fh,
+                Dumper=_ReplaceRulesDumper,
+                default_flow_style=False,
+                allow_unicode=True,
+                sort_keys=False,
+            )
+        print(f"Generated morpheme replace rules: {out_path}")
+
+
 def generate_morpheme_replace_rules(
-    config_path: str, output_dir: str
+    config_path: str, output_dir: str, verb_config: dict | None = None
 ) -> None:
     """
-    Scan config directory (and subfolders) for any CSV files containing kind: morpheme_replace.
-    Generates adjacent 2-tag string_map rules:
-    [<ClassFeatureTitle>=<class_name>][<FeatureTitle>=<feature_name>] -> surface replacement.
+    Scan config directory (and subfolders) for any CSV files containing kind: morpheme_replace,
+    or generate rules from slots declared in verb_config.
+    Generates adjacent string_map rules:
     Grouping by morpheme slot (e.g. pro_replace, aspect_replace, tense_replace).
     """
-    # Find all CSV files recursively in config_path
-    csv_files = []
-    for root, _, files in os.walk(config_path):
-        for f in files:
-            if f.endswith(".csv"):
-                csv_files.append(os.path.join(root, f))
-
     rules_out_dir = os.path.join(output_dir, "Phonology", "Rules")
     os.makedirs(rules_out_dir, exist_ok=True)
+
+    cfg_dir = Path(config_path)
+    if verb_config is None and cfg_dir.is_dir():
+        for spec_name in ("verb.yaml", "verb_spec.yaml"):
+            spec_file = cfg_dir / spec_name
+            if spec_file.exists():
+                try:
+                    with open(spec_file, "r", encoding="utf-8") as fh:
+                        verb_config = yaml.safe_load(fh) or {}
+                    break
+                except Exception:
+                    pass
+
+    slots = []
+    if verb_config:
+        slots = verb_config.get("slots") or verb_config.get("paradigm", {}).get("slots") or []
+
+    if slots and cfg_dir.is_dir():
+        _generate_rules_from_slots(cfg_dir, rules_out_dir, slots)
+        return
+
+    # Fallback to individual CSV processing
+    csv_files = []
+    if cfg_dir.is_dir():
+        for root, _, files in os.walk(config_path):
+            for f in files:
+                if f.endswith(".csv"):
+                    csv_files.append(os.path.join(root, f))
+    else:
+        csv_files.append(config_path)
 
     _generate_rules(csv_files, rules_out_dir)

@@ -242,3 +242,65 @@ def test_inplace_aspect_variants_generation_task_111_2():
             assert "[Variant=" not in pattern, f"Unexpected Variant tag in tense rule: {pattern}"
             assert pattern.startswith("[Tense=") and "[TenseClass=" not in pattern
 
+
+def test_slots_json_manifest_generation():
+    """Verify slots.json generation with slot definitions, template tokens, and root boundaries."""
+    import json
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        out_dir = Path(tmp_dir) / "out"
+        generate_markers("chr-config", str(out_dir))
+
+        slots_file = out_dir / "slots.json"
+        assert slots_file.exists()
+        with open(slots_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        assert "slots" in data
+        assert len(data["slots"]) == 3
+        slot_names = [s["name"] for s in data["slots"]]
+        assert slot_names == ["pronominal", "aspect", "tense"]
+
+        # Check tag_to_slot
+        assert data["tag_to_slot"]["PrefixClass"] == "pronominal"
+        assert data["tag_to_slot"]["Pro"] == "pronominal"
+        assert data["tag_to_slot"]["AspectClass"] == "aspect"
+        assert data["tag_to_slot"]["Variant"] == "aspect"
+        assert data["tag_to_slot"]["Aspect"] == "aspect"
+        assert data["tag_to_slot"]["Tense"] == "tense"
+
+        # Check template
+        expected_template = [
+            "<PrepronominalPrefixes>",
+            "<PrefixClass>",
+            "<Pro>",
+            "<H_alt>",
+            "<Root>",
+            "<AspectClass>",
+            "<Variant>",
+            "<Aspect>",
+            "<Tense>",
+        ]
+        assert data["template"] == expected_template
+
+        # Check root boundaries
+        assert data["root_boundaries"] == {
+            "left": "<H_alt>",
+            "right": "<AspectClass>",
+        }
+
+
+def test_paradigm_yaml_contains_slots_and_validates():
+    """Verify Morphotactics/Paradigm/verb.yaml contains slots and validates against Paradigm.json."""
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        out_dir = Path(tmp_dir) / "out"
+        generate_markers("chr-config", str(out_dir))
+
+        paradigm_file = out_dir / "Morphotactics/Paradigm/verb.yaml"
+        assert paradigm_file.exists()
+        with open(paradigm_file, "r", encoding="utf-8") as f:
+            paradigm_data = yaml.safe_load(f)
+
+        assert "slots" in paradigm_data
+        assert len(paradigm_data["slots"]) == 3
+        assert validate_yaml_content(paradigm_data) is True
+

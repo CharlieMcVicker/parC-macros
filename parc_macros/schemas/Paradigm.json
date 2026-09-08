@@ -95,6 +95,60 @@
     "open_root_template": {
       "type": "string",
       "description": "Morphotactic template for open root inflection and parsing."
+    },
+    "slots": {
+      "type": "array",
+      "description": "Morphological slot configurations.",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "role",
+          "rule",
+          "sources",
+          "structure"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "prefix",
+              "suffix",
+              "infix"
+            ]
+          },
+          "rule": {
+            "type": "string"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "structure": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "TagGroup",
+                "optional"
+              ],
+              "properties": {
+                "TagGroup": {
+                  "type": "string"
+                },
+                "optional": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

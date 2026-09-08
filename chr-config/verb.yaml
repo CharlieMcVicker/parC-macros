@@ -10,6 +10,46 @@ stages:
   - insert_dist
   - insert_wi
 
+slots:
+  - name: pronominal
+    role: prefix
+    rule: $pro_replace
+    sources:
+      - verb-pronominal.csv
+    structure:
+      - TagGroup: PrefixClass
+        optional: false
+      - TagGroup: Pro
+        optional: false
+
+  - name: aspect
+    role: suffix
+    rule: $aspect_replace
+    sources:
+      - verb-aspect.csv
+      - verb-aspect-stative.csv
+    structure:
+      - TagGroup: AspectClass
+        optional: false
+      - TagGroup: Variant
+        optional: true
+      - TagGroup: Aspect
+        optional: false
+
+  - name: tense
+    role: suffix
+    rule: $tense_replace
+    sources:
+      - verb-tense.csv
+    structure:
+      - TagGroup: Tense
+        optional: false
+
+phonology_effects:
+  aspect_drop: aspect_effects.csv
+  drop_stem_initial_a: verb-pronominal-drop-first-a.csv
+  drop_stem_initial_v: verb-pronominal-drop-first-v.csv
+
 # Inflectional Features (originally from verb_features.yaml)
 features:
   # tense:
