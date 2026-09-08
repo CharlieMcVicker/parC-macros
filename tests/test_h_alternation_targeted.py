@@ -24,6 +24,7 @@ import pynini
 from parC.constants import set_yaml_dir
 from parC.grammar.acceptor_compilation import fsm_strings, word_fsa
 from parC.grammar.paradigm_compilation import get_open_inflect_graph, clear_all_caches
+import parse_chr_dict.parse as parse_mod
 from parse_chr_dict.parse import parse, get_just_root
 
 
@@ -37,7 +38,6 @@ def setup_env():
     os.environ["YAML_DIR"] = str(INPLACE_GEN_DIR)
     set_yaml_dir(str(INPLACE_GEN_DIR))
     clear_all_caches()
-    import parse_chr_dict.parse as parse_mod
     parse_mod.PARSE_GRAPH = None
 
     yield

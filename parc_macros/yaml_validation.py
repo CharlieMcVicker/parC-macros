@@ -4,6 +4,7 @@ Uses JSON schemas located in the schemas/ directory to validate YAML outputs.
 """
 
 import json
+import sys
 import yaml
 from pathlib import Path
 from typing import Dict, Any, Optional
@@ -131,7 +132,6 @@ def validate_yaml_file(file_path: Path) -> bool:
         return False
 
 if __name__ == "__main__":
-    import sys
     if len(sys.argv) < 2:
         print("Usage: python yaml_validation.py <path_to_yaml_file_or_directory>")
         sys.exit(1)

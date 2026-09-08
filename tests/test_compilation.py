@@ -16,6 +16,11 @@ import pynini
 
 from parc_macros.generate_markers import generate_markers
 from parc_macros.yaml_validation import validate_yaml_file
+from parC.constants import set_yaml_dir
+from parC.grammar.acceptor_compilation import fsm_strings, word_fsa
+from parC.grammar.paradigm_compilation import clear_all_caches, get_open_inflect_graph, get_open_parse_graph
+import parse_chr_dict.parse as parse_mod
+from parse_chr_dict.parse import parse, read_parse
 
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
@@ -26,10 +31,6 @@ INPLACE_GEN_DIR = REPO_ROOT / "chr-generated"
 @pytest.fixture(scope="module", autouse=True)
 def setup_inplace_env():
     """Ensure chr-generated exists, configure parC YAML_DIR, and restore after."""
-    from parC.constants import set_yaml_dir
-    from parC.grammar.paradigm_compilation import clear_all_caches
-    import parse_chr_dict.parse as parse_mod
-
     orig_yaml_dir = os.environ.get("YAML_DIR")
 
     # AC 1: Generate chr-generated from chr-config
@@ -79,8 +80,6 @@ def test_yaml_schema_validation_ac2():
 
 def test_compile_open_inflect_graph_ac3():
     """AC 3: Compile open inflect graph with parC (infer_lexical_features=False and True) and verify zero errors."""
-    from parC.grammar.paradigm_compilation import get_open_inflect_graph
-
     # Compile with infer_lexical_features=False
     inflect_no_infer = get_open_inflect_graph("verb", infer_lexical_features=False)
     assert inflect_no_infer is not None
@@ -96,8 +95,6 @@ def test_compile_open_inflect_graph_ac3():
 
 def test_compile_open_parse_graph_ac4():
     """AC 4: Compile open parse graph with parC (infer_lexical_features=False and True) and verify zero errors."""
-    from parC.grammar.paradigm_compilation import get_open_parse_graph
-
     # Compile with infer_lexical_features=False, non_deterministic_cleanup=True
     parse_no_infer = get_open_parse_graph(
         "verb", infer_lexical_features=False, non_deterministic_cleanup=True
@@ -117,9 +114,6 @@ def test_compile_open_parse_graph_ac4():
 
 def test_inplace_inflection_and_parse_roundtrip():
     """Test that open inflect and open parse graphs correctly transduce in-place tag strings."""
-    from parC.grammar.paradigm_compilation import get_open_inflect_graph, get_open_parse_graph
-    from parC.grammar.acceptor_compilation import fsm_strings, word_fsa
-
     inflect_fst = get_open_inflect_graph("verb", infer_lexical_features=False)
     parse_fst = get_open_parse_graph("verb", infer_lexical_features=False, non_deterministic_cleanup=True)
 
@@ -149,10 +143,6 @@ def test_inplace_inflection_and_parse_roundtrip():
 
 def test_inplace_distributive_allomorph_realization():
     """AC 5: Verify phonological realization across indicative (te-), imperative (th-), and infinitive (tsu-) forms."""
-    from parC.grammar.paradigm_compilation import get_open_inflect_graph, get_open_parse_graph
-    from parC.grammar.acceptor_compilation import fsm_strings, word_fsa
-    from parse_chr_dict.parse import parse, read_parse
-
     # 1. Imperative distributive with [DIST=di] before h yields 'th-'
     imperative_parses = parse("thatanhesaka")
     di_imperatives = [p for p in imperative_parses if "[DIST=di]" in p]
@@ -180,9 +170,6 @@ def test_inplace_distributive_allomorph_realization():
 
 def test_aspect_variants_and_elimination_of_overgeneration():
     """TASK-111.4: Verify that present tense has zero variant overgeneration and infinitive variants inflect."""
-    from parC.grammar.paradigm_compilation import get_open_inflect_graph
-    from parC.grammar.acceptor_compilation import fsm_strings, word_fsa
-
     inflect_fst = get_open_inflect_graph("verb", infer_lexical_features=False)
 
     # 1. Present tense for class 'become' - ONLY ONE path exists (no duplicate inf2, inf3, inf4 variants!)

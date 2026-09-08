@@ -1,3 +1,4 @@
+import io
 import sys
 import pytest
 from parse_chr_dict.parse import get_parse_graph
@@ -87,7 +88,6 @@ def test_cli_argument_execution(monkeypatch, capsys):
 
 
 def test_cli_interactive_execution(monkeypatch, capsys):
-    import io
     monkeypatch.setattr(sys, "argv", ["segment"])
     monkeypatch.setattr("sys.stdin", io.StringIO("katateka\n\n"))
     segment_main()

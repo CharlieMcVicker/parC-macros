@@ -1,11 +1,19 @@
 import pytest
 from dataclasses import FrozenInstanceError
+from parse_chr_dict.reconstruct import validate_hypothesis
 from parse_chr_dict.types import (
     ParseData,
     VerbTemplate,
     AspectVariants,
     VerbMetadata,
     LexicalVerb,
+    EVENTFUL,
+    PRES_3RD,
+    PRES_1SG,
+    HABITUAL_3RD,
+    COMPLETIVE_3RD,
+    IMPERATIVE_2ND,
+    INFINITIVE_3RD,
 )
 
 
@@ -229,14 +237,6 @@ def test_lexical_verb_init():
 
 
 def test_lexical_verb_inflect_form_and_validate_form():
-    from parse_chr_dict.types import (
-        PRES_3RD,
-        PRES_1SG,
-        HABITUAL_3RD,
-        COMPLETIVE_3RD,
-        IMPERATIVE_2ND,
-        INFINITIVE_3RD,
-    )
     verb = LexicalVerb(
         h_root="[Pro]atat[Aspect][Tense]",
         prefix_class="a_stem",
@@ -267,9 +267,6 @@ def test_lexical_verb_inflect_form_and_validate_form():
 
 
 def test_lexical_verb_validate_hypothesis_direct():
-    from parse_chr_dict.reconstruct import validate_hypothesis
-    from parse_chr_dict.types import EVENTFUL
-
     row = {
         "corpus_id": "4",
         "entry_no": "8",

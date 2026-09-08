@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Dict, List, Optional, Set, Tuple, Any
+from typing import Dict, List, Optional, Set, Tuple
 import warnings
 
 from parse_chr_dict.parse import (
@@ -23,6 +23,7 @@ from parse_chr_dict.types import (
     IMPERATIVE_2ND,
     FUT_PROG_2ND,
     INFINITIVE_3RD,
+    VerbEntryType,
 )
 from parse_chr_dict.h_alternation import (
     H_ALT_TAGS,
@@ -44,8 +45,8 @@ VERB_FORMS_BY_META_ID: Dict[str, VerbForm] = {
 
 
 def derive_hypotheses_for_forms(
-    forms: List[Tuple[str, VerbForm | Any]],
-    entry_type: Optional[Any] = None,
+    forms: List[Tuple[str, VerbForm | str]],
+    entry_type: Optional[VerbEntryType | str] = None,
 ) -> Set[LexicalVerb]:
     """
     Derives and iteratively narrows candidate LexicalVerb objects form-by-form across a row

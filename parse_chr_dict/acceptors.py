@@ -16,6 +16,9 @@ from pathlib import Path
 from typing import Iterable, Set
 
 import pynini
+from parC.constants import get_yaml_dir
+from parC.grammar.acceptor_compilation import fsa, get_symbol_table
+from parC.grammar.blueprints.alphabet import AlphabetBlueprint
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
 DEFAULT_CONFIG_DIR = REPO_ROOT / "chr-config"
@@ -26,13 +29,11 @@ DEFAULT_PREFIX_CLASS_CSV = DEFAULT_FEATURE_ACCEPTORS_DIR / "prefix_class.csv"
 
 def get_default_symbol_table() -> pynini.SymbolTable:
     """Returns the default symbol table for the active in-place grammar."""
-    from parC.grammar.acceptor_compilation import get_symbol_table
     return get_symbol_table()
 
 
 def get_default_alphabet():
     """Returns the default AlphabetBlueprint for the active in-place grammar."""
-    from parC.grammar.blueprints.alphabet import AlphabetBlueprint
     return AlphabetBlueprint.from_config()
 
 
@@ -202,8 +203,6 @@ def compile_morphotactic_acceptor(
 
     rule_files = resolve_morphotactic_rule_files(rules_csv)
     _, sigma_star, all_syms = get_template_sigma(syms)
-
-    from parC.grammar.acceptor_compilation import fsa
 
     def get_slot_fsa(slot_name: str) -> pynini.Fst:
         ref = slot_name if (slot_name.startswith("<") and slot_name.endswith(">")) else f"<{slot_name}>"
@@ -506,7 +505,6 @@ def get_cascade_domain_acceptor(
     if cache_dir is not None:
         c_dir = Path(cache_dir)
     else:
-        from parC.constants import get_yaml_dir
         yd = Path(get_yaml_dir())
         if not yd.is_absolute():
             yd = REPO_ROOT / yd

@@ -19,6 +19,10 @@ import yaml
 
 from parc_macros.generate_markers import generate_markers
 from parc_macros.yaml_validation import validate_yaml_file
+from parC.constants import set_yaml_dir
+from parC.grammar.acceptor_compilation import fsm_strings, word_fsa
+from parC.grammar.paradigm_compilation import clear_all_caches, get_open_inflect_graph, get_open_parse_graph
+import parse_chr_dict.parse as parse_mod
 
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
@@ -43,10 +47,6 @@ def generated_clean_dir():
 @pytest.fixture(scope="module", autouse=True)
 def setup_clean_env(generated_clean_dir):
     """Sets up parC YAML_DIR and caches pointing to generated_clean_dir, and restores after."""
-    from parC.constants import set_yaml_dir
-    from parC.grammar.paradigm_compilation import clear_all_caches
-    import parse_chr_dict.parse as parse_mod
-
     orig_yaml_dir = os.environ.get("YAML_DIR")
 
     clear_all_caches()
@@ -114,8 +114,6 @@ def test_clean_inplace_parity_against_reference(generated_clean_dir):
 
 def test_clean_inplace_inflect_graph_compilation_932_states():
     """Compiles open inflect graph with parC and verifies exact 932 states."""
-    from parC.grammar.paradigm_compilation import get_open_inflect_graph
-
     # Compile with infer_lexical_features=False
     inflect_no_infer = get_open_inflect_graph("verb", infer_lexical_features=False)
     assert inflect_no_infer is not None
@@ -129,8 +127,6 @@ def test_clean_inplace_inflect_graph_compilation_932_states():
 
 def test_clean_inplace_parse_graph_compilation_932_states():
     """Compiles open parse graph with parC and verifies exact 1312 states."""
-    from parC.grammar.paradigm_compilation import get_open_parse_graph
-
     # Compile with infer_lexical_features=False
     parse_no_infer = get_open_parse_graph(
         "verb", infer_lexical_features=False, non_deterministic_cleanup=True
@@ -148,9 +144,6 @@ def test_clean_inplace_parse_graph_compilation_932_states():
 
 def test_clean_inplace_roundtrip_inflection_and_parse():
     """Tests end-to-end transduction of in-place tag strings on graphs compiled from clean config."""
-    from parC.grammar.paradigm_compilation import get_open_inflect_graph, get_open_parse_graph
-    from parC.grammar.acceptor_compilation import fsm_strings, word_fsa
-
     inflect_fst = get_open_inflect_graph("verb", infer_lexical_features=False)
     parse_fst = get_open_parse_graph("verb", infer_lexical_features=False, non_deterministic_cleanup=True)
 

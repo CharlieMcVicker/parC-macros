@@ -2,7 +2,7 @@ import functools
 import os
 import re
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Iterable
 
 # Ensure YAML_DIR defaults to chr-generated
 if "YAML_DIR" not in os.environ:
@@ -35,11 +35,9 @@ from parse_chr_dict.slots import (
     get_slot_tag_map,
 )
 from parse_chr_dict.types import (
-    AspectVariants,
-    LexicalVerb,
     ParseData,
-    VerbMetadata,
-    VerbTemplate,
+    VerbForm,
+    filter_pronominals,
 )
 
 PARSE_GRAPH = None
@@ -238,7 +236,7 @@ _SPECIALIZED_PARSE_GRAPHS: dict[tuple[bool, str], pynini.Fst] = {}
 _ROOT_FILTER_CACHE: dict[frozenset[str], pynini.Fst] = {}
 
 
-def get_specialized_parse_graph(form: Any, is_stative: bool = False) -> pynini.Fst:
+def get_specialized_parse_graph(form: VerbForm | str, is_stative: bool = False) -> pynini.Fst:
     """
     Returns an optimized FST specialized for a specific VerbForm and entry type category
     (Eventful vs. Stative), restricting the output domain to only licensed aspect class,
@@ -253,7 +251,6 @@ def get_specialized_parse_graph(form: Any, is_stative: bool = False) -> pynini.F
     syms = base_graph.output_symbols() or get_default_symbol_table()
     if syms is None:
         _SPECIALIZED_PARSE_GRAPHS[key] = base_graph
-        return base_graph
         return base_graph
     all_syms = [syms.find(i) for i in range(1, syms.num_symbols())]
     sigma = pynini.union(*[pynini.accep(s, token_type=syms) for s in all_syms]).optimize()
@@ -273,7 +270,6 @@ def get_specialized_parse_graph(form: Any, is_stative: bool = False) -> pynini.F
         f_asp_cls = sigma_star
 
     # 2. Pronominal filter
-    from parse_chr_dict.types import filter_pronominals
     person = getattr(form, "person", None)
     allows_set_a = getattr(form, "allows_set_a", True)
     p_set = "B" if not allows_set_a else None
@@ -374,7 +370,7 @@ def build_root_filter_fsa(allowed_roots: Iterable[str]) -> pynini.Fst | None:
 def parse_surface(
     surface: str,
     parse_graph: pynini.Fst | None = None,
-    form: Any | None = None,
+    form: VerbForm | str | None = None,
     is_stative: bool = False,
     allowed_roots: Iterable[str] | None = None,
 ) -> list[str]:

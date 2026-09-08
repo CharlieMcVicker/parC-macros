@@ -1,6 +1,6 @@
 import csv
 from collections import Counter
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Optional
 from tqdm import tqdm
 
 from parse_chr_dict.create_aspect_class_csv import respell_consonants
@@ -15,7 +15,7 @@ from parse_chr_dict.types import (
 
 def validate_form_subset(
     hypothesis: LexicalVerb,
-    forms: List[tuple[str, VerbForm | Any]],
+    forms: List[tuple[str, VerbForm | str]],
 ) -> bool:
     for surf, form_item in forms:
         if isinstance(form_item, VerbForm):
@@ -30,7 +30,7 @@ def validate_form_subset(
 
 def generate_for_slot(
     hypothesis: LexicalVerb,
-    parsing_meta: VerbForm | Any,
+    parsing_meta: VerbForm | str,
 ) -> List[str]:
     if isinstance(parsing_meta, VerbForm):
         form = parsing_meta
@@ -48,7 +48,7 @@ def find_near_misses(
     with open(errors_csv_path, mode="r", encoding="utf-8") as f:
         reader = list(csv.DictReader(f))
 
-    near_miss_rows: List[Dict[str, Any]] = []
+    near_miss_rows: List[Dict[str, str | bool]] = []
     slot_failure_counter = Counter()
 
     for row in tqdm(reader, desc="Analyzing near misses"):

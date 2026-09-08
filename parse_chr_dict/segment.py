@@ -1,8 +1,7 @@
 import argparse
 import os
-import sys
 from pathlib import Path
-from typing import Any
+import sys
 
 # Ensure YAML_DIR defaults to chr-generated
 if "YAML_DIR" not in os.environ:
@@ -10,15 +9,22 @@ if "YAML_DIR" not in os.environ:
     gen_dir = repo_root / "chr-generated"
     if gen_dir.exists():
         os.environ["YAML_DIR"] = str(gen_dir)
-        try:
-            from parC.constants import set_yaml_dir
-            set_yaml_dir(str(gen_dir))
-        except ImportError:
-            pass
+
+try:
+    import readline  # noqa: F401
+except ImportError:
+    pass
 
 import pynini
-
+from parC.constants import set_yaml_dir
+from parC.grammar.paradigm_compilation import get_symbol_table, word_fsa
 from parse_chr_dict.parse import get_just_root, get_parse_graph, parse
+
+if "YAML_DIR" in os.environ:
+    try:
+        set_yaml_dir(os.environ["YAML_DIR"])
+    except Exception:
+        pass
 
 
 def get_arc_alignment(fst: pynini.Fst, surface_str: str) -> list[tuple[str, str]] | None:
@@ -29,7 +35,6 @@ def get_arc_alignment(fst: pynini.Fst, surface_str: str) -> list[tuple[str, str]
     syms = fst.input_symbols()
     if syms is None:
         try:
-            from parC.grammar.paradigm_compilation import get_symbol_table
             syms = get_symbol_table()
         except Exception:
             syms = None
@@ -37,7 +42,6 @@ def get_arc_alignment(fst: pynini.Fst, surface_str: str) -> list[tuple[str, str]
     input_fst = None
     if syms is not None:
         try:
-            from parC.grammar.paradigm_compilation import word_fsa
             input_fst = word_fsa(surface_str)
             input_fst.set_input_symbols(syms)
             input_fst.set_output_symbols(syms)
@@ -115,7 +119,7 @@ def _categorize_arc(in_char: str, out_char: str, current_stage: str) -> str:
         return current_stage
 
 
-def segment_alignment(alignment: list[tuple[str, str]]) -> list[dict[str, Any]]:
+def segment_alignment(alignment: list[tuple[str, str]]) -> list[dict[str, str | list[str]]]:
     """
     Groups arc alignments into segmented morpheme units.
     Filters out boundary tags ([BOW], [EOW]) and associates each segment with its
@@ -155,7 +159,7 @@ def segment_alignment(alignment: list[tuple[str, str]]) -> list[dict[str, Any]]:
     return result
 
 
-def format_segmentation(segments: list[dict[str, Any]]) -> str:
+def format_segmentation(segments: list[dict[str, str | list[str]]]) -> str:
     """Formats segmented morphemes into hyphenated surface form e.g. k-atat-e-k-a."""
     parts = [s["surface"] for s in segments if s["surface"]]
     return "-".join(parts)
@@ -247,11 +251,6 @@ def main():
         return
 
     # Interactive REPL mode (modeled after parse_chr_dict/parse.py)
-    try:
-        import readline  # noqa: F401
-    except ImportError:
-        pass
-
     print("Interactive segmentation & parsing - empty line or Ctrl-C/D to quit.")
     while True:
         try:

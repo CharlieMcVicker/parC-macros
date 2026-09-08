@@ -1,7 +1,14 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 import functools
-from typing import Any, List, Optional, Set, Tuple
+from typing import List, Optional, Set, Tuple
+
+from parse_chr_dict.create_aspect_class_csv import respell_consonants
+from parse_chr_dict.h_alternation import (
+    is_h_alternation_trigger,
+    strip_h_alt_tags,
+)
+
 
 
 @dataclass(frozen=True)
@@ -508,7 +515,7 @@ class VerbMetadata:
             is_i_present=self.is_i_present,
         )
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> dict[str, str | bool | int]:
         entry_val = self.entry_type.name if isinstance(self.entry_type, VerbEntryType) else str(self.entry_type)
         return {
             "entry_type": entry_val,
@@ -619,7 +626,6 @@ class LexicalVerb:
     @property
     def h_root(self) -> str:
         """The base/non-alternating root grade."""
-        from parse_chr_dict.h_alternation import strip_h_alt_tags
         return strip_h_alt_tags(self.template.root)
 
     @property
@@ -654,7 +660,7 @@ class LexicalVerb:
     def present_variant(self) -> str:
         return str(self.template.variant) if self.template.variant > 1 else ""
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> dict[str, str | bool | int]:
         return {
             "h_root": self.h_root,
             "h_alt_tag": self.h_alt_tag or "[H_alt=none]",
@@ -668,7 +674,7 @@ class LexicalVerb:
             **self.metadata.aspect_variants.to_dict(),
         }
 
-    def to_row_dict(self, base_row: dict[str, str], entry_type: Optional[str] = None) -> dict[str, Any]:
+    def to_row_dict(self, base_row: dict[str, str], entry_type: Optional[str] = None) -> dict[str, str | bool | int]:
         """Pure serialization into roots.csv row schema."""
         d = {k: base_row.get(k, "") for k in [
             "corpus_id", "entry_no", "definition", "present", "present_1sg",
@@ -699,9 +705,7 @@ class LexicalVerb:
 
 
     def inflect_form(self, form: VerbForm) -> list[str]:
-        from parse_chr_dict.h_alternation import is_h_alternation_trigger
         from parse_chr_dict.reconstruct import memoized_inflect
-
         var = self.metadata.aspect_variants.get_variant(form.corpus_key)
         pros = self.metadata.get_pronominal_candidates(form.person, form.allows_set_a)
         prefixes = (self.prefix_class, "k_a_stem") if self.prefix_class == "a_stem" else (self.prefix_class,)
@@ -738,13 +742,12 @@ class LexicalVerb:
         return sorted(list(results))
 
     def validate_form(self, form: VerbForm, reference_form: str) -> bool:
-        from parse_chr_dict.create_aspect_class_csv import respell_consonants
         return respell_consonants(reference_form) in self.inflect_form(form)
 
     def validate(
         self,
         row: dict[str, str],
-        entry_type: Any,
+        entry_type: VerbEntryType | str,
     ) -> bool:
         from parse_chr_dict.reconstruct import validate_hypothesis
         return validate_hypothesis(self, row, entry_type)

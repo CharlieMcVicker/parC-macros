@@ -1,6 +1,21 @@
+import csv
 import pytest
+
+from parse_chr_dict.create_aspect_class_csv import respell_consonants
 from parse_chr_dict.derive import (
     derive_hypotheses_for_forms,
+)
+from parse_chr_dict.h_alternation import (
+    H_ALT_TAGS,
+    strip_h_alt_tags,
+    validate_h_alternation_trigger,
+)
+from parse_chr_dict.parse import parse_surface, parse_string_to_parse_data
+from parse_chr_dict.reconstruct import (
+    _INFLECT_CACHE,
+    memoized_inflect,
+    reconstruct_row,
+    validate_hypothesis,
 )
 from parse_chr_dict.types import (
     Pronominal,
@@ -8,6 +23,7 @@ from parse_chr_dict.types import (
     LexicalVerb,
     VerbForm,
     VerbEntryType,
+    VerbTemplate,
     ALL_VERB_FORMS,
     PRIMARY_VERB_ENTRY_TYPES,
     PRES_3RD,
@@ -21,7 +37,6 @@ from parse_chr_dict.types import (
     EVENTFUL,
     STATIVE_FUT_PROG,
 )
-from parse_chr_dict.parse import parse_surface, parse_string_to_parse_data
 
 
 def test_meta_label_definitions():
@@ -74,7 +89,6 @@ def test_4step_derivation_flow():
 
 
 def test_verb_form_filtering_and_template_extraction():
-    from parse_chr_dict.types import VerbTemplate
     parses = parse_surface("atateka")
     assert len(parses) > 0
     matched = []
@@ -114,7 +128,6 @@ def test_4step_meta_label_propagation():
 
 
 def test_real_plural_verb_entry_355():
-    import csv
     with open("chr-corpus/corpus.csv") as f:
         reader = csv.DictReader(
             f,
@@ -144,7 +157,6 @@ def test_real_plural_verb_entry_355():
 
 
 def test_real_plural_verb_entry_598():
-    import csv
     with open("chr-corpus/corpus.csv") as f:
         reader = csv.DictReader(
             f,
@@ -174,7 +186,6 @@ def test_real_plural_verb_entry_598():
 
 
 def test_real_animate_verb_entry_776():
-    import csv
     with open("chr-corpus/corpus.csv") as f:
         reader = csv.DictReader(
             f,
@@ -204,7 +215,6 @@ def test_real_animate_verb_entry_776():
 
 
 def test_real_animate_verb_entry_788():
-    import csv
     with open("chr-corpus/corpus.csv") as f:
         reader = csv.DictReader(
             f,
@@ -280,9 +290,6 @@ def test_lexical_verb_dataclass_fields():
 
 
 def test_derive_hypotheses_for_forms_direct():
-    from parse_chr_dict.derive import derive_hypotheses_for_forms
-    from parse_chr_dict.create_aspect_class_csv import respell_consonants
-
     forms = [
         (respell_consonants("atateka"), PRES_3RD),
         (respell_consonants("katateka"), PRES_1SG),
@@ -297,8 +304,6 @@ def test_derive_hypotheses_for_forms_direct():
 
 
 def test_validate_hypothesis_and_row_reconstruction():
-    from parse_chr_dict.reconstruct import validate_hypothesis
-
     row = {
         "corpus_id": "4",
         "entry_no": "8",
@@ -348,7 +353,6 @@ def test_validate_hypothesis_and_row_reconstruction():
 
 
 def test_parse_surface_caching():
-    from parse_chr_dict.parse import parse_surface
     surface = "atateka"
 
     # Initial parse
@@ -361,8 +365,6 @@ def test_parse_surface_caching():
 
 
 def test_memoized_inflect_caching():
-    from parse_chr_dict.reconstruct import memoized_inflect, _INFLECT_CACHE
-
     root = "[Pro]atat[Aspect][Tense]"
     features = {
         "aspect": "present",
@@ -389,8 +391,6 @@ def test_memoized_inflect_caching():
 
 
 def test_hypothesis_pruning_efficiency():
-    from parse_chr_dict.derive import derive_hypotheses_for_forms
-
     # Provide 4 consistent forms
     forms = [
         ("atateka", PRES_3RD),
@@ -410,8 +410,6 @@ def test_hypothesis_pruning_efficiency():
 
 
 def test_entry_1759_derivation_and_validation():
-    from parse_chr_dict.derive import derive_hypotheses_for_forms
-
     row = {
         "present": "uthvtasti",
         "present_1sg": "tsiyathvtasti",
@@ -439,9 +437,6 @@ def test_entry_1759_derivation_and_validation():
 
 
 def test_h_alternation_verb_derivation():
-    from parse_chr_dict.derive import derive_hypotheses_for_forms
-    from parse_chr_dict.create_aspect_class_csv import respell_consonants
-
     # Test with a pair of forms where 3rd person has H-grade and 1st person triggers H-alternation
     forms = [
         (respell_consonants("atateka"), PRES_3RD),
@@ -453,9 +448,6 @@ def test_h_alternation_verb_derivation():
 
 
 def test_h_alternation_trigger_external_validation():
-    from parse_chr_dict.h_alternation import validate_h_alternation_trigger
-    from parse_chr_dict.reconstruct import validate_hypothesis, reconstruct_row
-
     # Test standalone trigger validation logic
     assert validate_h_alternation_trigger("1sg>3sg", has_h_alt=True) is True
     assert validate_h_alternation_trigger("2sg>3sg", has_h_alt=True) is True
@@ -504,8 +496,6 @@ def test_h_alternation_trigger_external_validation():
 
 
 def test_fine_grained_h_alternation_tag_helpers_and_validation():
-    from parse_chr_dict.h_alternation import H_ALT_TAGS, validate_h_alternation_trigger, strip_h_alt_tags
-
     # 1. H_ALT_TAGS constant
     assert H_ALT_TAGS == {
         "[H_alt=drop]",
@@ -549,9 +539,6 @@ def test_fine_grained_h_alternation_tag_helpers_and_validation():
 
 def test_strict_h_alternation_trigger_rejection():
     """Verify that when a trigger form shows H-mutation, unmutated [H_alt=none] fallbacks for that root are pruned."""
-    from parse_chr_dict.derive import derive_hypotheses_for_forms
-    from parse_chr_dict.create_aspect_class_csv import respell_consonants
-
     # atanhoyeha (3sg) + katanoyeha (1sg trigger with H_DROP mutation)
     forms_mutating = [
         (respell_consonants("atanhoyeha"), PRES_3RD),
@@ -575,9 +562,6 @@ def test_strict_h_alternation_trigger_rejection():
 
 def test_h_vowel_row_39_43_thinking_derivation():
     """Verify that row 39,43 ('he/she is thinking') matches and derives hypotheses containing [H_alt=vowel_v]."""
-    from parse_chr_dict.derive import derive_hypotheses_for_forms
-    from parse_chr_dict.create_aspect_class_csv import respell_consonants
-
     forms = [
         (respell_consonants("atanhtheha"), PRES_3RD),
         (respell_consonants("katanvtheha"), PRES_1SG),

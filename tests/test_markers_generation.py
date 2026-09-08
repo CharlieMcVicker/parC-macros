@@ -8,6 +8,7 @@ Unit and integration tests for TASK-102.3:
 - JSON schema validation of generated YAML files (AC 4)
 """
 
+import json
 import os
 import shutil
 import tempfile
@@ -249,7 +250,6 @@ def test_inplace_aspect_variants_generation_task_111_2():
 
 def test_slots_json_manifest_generation():
     """Verify slots.json generation with slot definitions, template tokens, and root boundaries."""
-    import json
     with tempfile.TemporaryDirectory() as tmp_dir:
         out_dir = Path(tmp_dir) / "out"
         generate_markers("chr-config", str(out_dir))

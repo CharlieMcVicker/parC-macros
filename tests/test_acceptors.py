@@ -9,26 +9,33 @@ Comprehensive test suite for in-place stem-shape and morphotactic acceptor syste
 - AC 5: Verification of invalid hypothesis pruning with minimal state footprint (~15-35 states)
 """
 
+import csv
 import os
 from pathlib import Path
 import pytest
 import pynini
 
+from parC.constants import set_yaml_dir
+from parC.grammar.paradigm_compilation import clear_all_caches
 from parc_macros.generate_markers import generate_markers
 from parse_chr_dict.acceptors import (
     DEFAULT_CONFIG_DIR,
     DEFAULT_MORPHOTACTICS_CSV,
     DEFAULT_PREFIX_CLASS_CSV,
+    _CASCADE_DOMAIN_CACHE,
     compile_morphotactic_acceptor,
     compile_prefix_stem_shape_acceptor,
     compile_cascade_domain_acceptor,
     accepts_parse,
+    get_cascade_domain_acceptor,
     resolve_phones_for_pattern,
     tokenize_parse_str,
     parse_to_fsa,
     get_default_symbol_table,
     get_default_alphabet,
 )
+import parse_chr_dict.parse as parse_mod
+from parse_chr_dict.parse import get_parse_graph, parse
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
 CONFIG_DIR = REPO_ROOT / "chr-config"
@@ -38,10 +45,6 @@ GEN_DIR = REPO_ROOT / "chr-generated"
 @pytest.fixture(scope="module", autouse=True)
 def setup_acceptor_env():
     """Ensure generated environment is set up and configured."""
-    from parC.constants import set_yaml_dir
-    from parC.grammar.paradigm_compilation import clear_all_caches
-    import parse_chr_dict.parse as parse_mod
-
     orig_yaml_dir = os.environ.get("YAML_DIR")
 
     generate_markers(str(CONFIG_DIR), str(GEN_DIR))
@@ -84,7 +87,6 @@ def test_prefix_class_csv_audit_ac1():
         "r_stem": set("lywmn"),  # <Son>|<N>
     }
 
-    import csv
     with open(DEFAULT_PREFIX_CLASS_CSV, "r", encoding="utf-8") as f:
         reader = csv.reader(f)
         classes_found = {}
@@ -367,8 +369,6 @@ def test_tokenize_parse_str_and_parse_to_fsa():
 
 def test_get_cascade_domain_acceptor_caching(tmp_path):
     """Verify persistent disk caching of cascade domain acceptor."""
-    from parse_chr_dict.acceptors import get_cascade_domain_acceptor, _CASCADE_DOMAIN_CACHE
-
     syms = get_default_symbol_table()
     custom_cache = tmp_path / ".cache"
 
@@ -388,8 +388,6 @@ def test_get_cascade_domain_acceptor_caching(tmp_path):
 
 def test_get_parse_graph_inplace_composition():
     """Verify get_parse_graph composes cascade domain acceptor and filters invalid parses."""
-    from parse_chr_dict.parse import get_parse_graph, parse
-
     graph = get_parse_graph()
     assert graph is not None
 

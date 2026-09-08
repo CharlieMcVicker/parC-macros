@@ -1,9 +1,34 @@
-from typing import Any, Optional
+from __future__ import annotations
+import re
+from typing import Optional
+
+import pynini
+from parC.grammar.acceptor_compilation import fsm_strings, word_fsa
+from parC.grammar.paradigm_compilation import get_open_inflect_graph
 from parse_chr_dict.create_aspect_class_csv import respell_consonants
 from parse_chr_dict.h_alternation import (
     is_h_alternation_trigger,
     validate_h_alternation_trigger,
 )
+from parse_chr_dict.types import (
+    VerbForm,
+    VERB_FORMS_BY_NAME,
+    VERB_ENTRY_TYPES_BY_NAME,
+    VerbEntryType,
+    VerbMetadata,
+    LexicalVerb,
+)
+
+INFLECT_GRAPH = None
+
+
+def get_inflect_graph():
+    global INFLECT_GRAPH
+    if INFLECT_GRAPH is not None:
+        return INFLECT_GRAPH
+    INFLECT_GRAPH = get_open_inflect_graph("verb", infer_lexical_features=False)
+    return INFLECT_GRAPH
+
 
 _INFLECT_CACHE: dict[tuple[str, frozenset[tuple[str, str]], str, bool, bool], list[str]] = {}
 
@@ -42,7 +67,6 @@ def build_tag_str(root: str, feature_values: dict[str, str]) -> str:
         parts.append(h_alt)
     elif not any(root.startswith(t) for t in ("[H_", "[TEMP")):
         parts.append("[H_alt=none]")
-    import re
     clean_root = re.sub(r"\[(Pro|Aspect|Tense)\]", "", root)
     parts.append(clean_root)
     if asp_cls:
@@ -57,9 +81,6 @@ def build_tag_str(root: str, feature_values: dict[str, str]) -> str:
 
 
 def inflect_tag_str(tag_str: str) -> list[str]:
-    import pynini
-    from parC.grammar.acceptor_compilation import fsm_strings, word_fsa
-    from parse_chr_dict.parse import get_inflect_graph
     inflect_fst = get_inflect_graph()
     out_fst = pynini.compose(word_fsa(tag_str), inflect_fst)
     out_proj = pynini.project(out_fst, "output").optimize()
@@ -99,33 +120,23 @@ def memoized_inflect(
 
 
 def validate_hypothesis(
-    hypothesis: Any,
-    row: dict,
-    entry_type: Any,
+    hypothesis: LexicalVerb,
+    row: dict[str, str],
+    entry_type: VerbEntryType | str,
 ) -> bool:
     """
     Validates a LexicalVerb against all non-empty forms in a row.
     Returns True if every non-empty form in the row reconstructs to the exact surface form.
     Fails fast immediately if any form fails.
     """
-    from parse_chr_dict.types import VerbForm, VERB_FORMS_BY_NAME, VERB_ENTRY_TYPES_BY_NAME
+    resolved_entry_type: VerbEntryType | None = (
+        VERB_ENTRY_TYPES_BY_NAME.get(entry_type)
+        if isinstance(entry_type, str)
+        else entry_type
+    )
 
-    if isinstance(entry_type, str):
-        if entry_type in VERB_ENTRY_TYPES_BY_NAME:
-            entry_type = VERB_ENTRY_TYPES_BY_NAME[entry_type]
-
-    forms = getattr(entry_type, "forms", ())
-    for form_item in forms:
-        if isinstance(form_item, VerbForm):
-            form = form_item
-        elif isinstance(form_item, str):
-            form = VERB_FORMS_BY_NAME.get(form_item)
-        else:
-            continue
-
-        if not form:
-            continue
-
+    forms = resolved_entry_type.forms if resolved_entry_type else ()
+    for form in forms:
         reference_form = row.get(form.corpus_key)
         if reference_form and " " not in reference_form:
             if not hypothesis.validate_form(form, reference_form):
@@ -134,11 +145,9 @@ def validate_hypothesis(
 
 
 def reconstruct_row(
-    row: dict,
-    entry_type: Any,
-) -> list[Any]:
-    from parse_chr_dict.types import VerbMetadata, LexicalVerb
-
+    row: dict[str, str],
+    entry_type: VerbEntryType | str,
+) -> list[VerbMetadata]:
     passing_metas: list[VerbMetadata] = []
     entry_type_name = getattr(entry_type, "name", str(entry_type))
     for meta in VerbMetadata.all_combinations(entry_type=entry_type_name):
