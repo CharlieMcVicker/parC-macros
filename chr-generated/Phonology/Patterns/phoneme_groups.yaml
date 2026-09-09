@@ -20,7 +20,7 @@ patterns:
   ref: <Coda>
 - name: Root
   ref: <Root>
-  pattern: <Phone>*
+  pattern: <V>?<Coda>?(<Onset><V><Coda>)*<Onset>?
 - name: PrefixClass
   ref: <PrefixClass>
   pattern: '[PrefixClass=a_stem]|[PrefixClass=v_stem]|[PrefixClass=e_stem]|[PrefixClass=k_a_stem]|[PrefixClass=vowel_stem]|[PrefixClass=cons_stem]|[PrefixClass=r_stem]|[PrefixClass=long_stem]'

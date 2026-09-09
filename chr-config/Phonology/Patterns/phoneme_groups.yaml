@@ -20,8 +20,7 @@ patterns:
   ref: <Coda>
 - name: Root
   ref: <Root>
-  # pattern: <V>?<Coda>?(<Onset><V><Coda>)*<Onset>?
-  pattern: <Phone>*
+  pattern: <V>?<Coda>?(<Onset><V><Coda>)*<Onset>?
 - name: SonH
   pattern: nh|lh|yh|wh|mh
   ref: <SonH>
