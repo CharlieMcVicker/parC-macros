@@ -181,6 +181,50 @@ rules:
     - it
   - - '[PrefixClass=k_a_stem][Pro=Ipl.B]'
     - ik
+  - - '[PrefixClass=long_stem][Pro=1sg.A]'
+    - tsi
+  - - '[PrefixClass=long_stem][Pro=1sg.B]'
+    - aki
+  - - '[PrefixClass=long_stem][Pro=1sg>3sg]'
+    - tsiya
+  - - '[PrefixClass=long_stem][Pro=2dl.A]'
+    - sti
+  - - '[PrefixClass=long_stem][Pro=2dl.B]'
+    - sti
+  - - '[PrefixClass=long_stem][Pro=2pl.A]'
+    - itsi
+  - - '[PrefixClass=long_stem][Pro=2pl.B]'
+    - itsi
+  - - '[PrefixClass=long_stem][Pro=2sg.A]'
+    - hi
+  - - '[PrefixClass=long_stem][Pro=2sg.B]'
+    - tsa
+  - - '[PrefixClass=long_stem][Pro=2sg>3sg]'
+    - hiya
+  - - '[PrefixClass=long_stem][Pro=3ns.A]'
+    - ani
+  - - '[PrefixClass=long_stem][Pro=3ns.B]'
+    - uni
+  - - '[PrefixClass=long_stem][Pro=3sg.A]'
+    - ka
+  - - '[PrefixClass=long_stem][Pro=3sg.B]'
+    - uwa
+  - - '[PrefixClass=long_stem][Pro=Edl.A]'
+    - osti
+  - - '[PrefixClass=long_stem][Pro=Edl.B]'
+    - okini
+  - - '[PrefixClass=long_stem][Pro=Epl.A]'
+    - otsi
+  - - '[PrefixClass=long_stem][Pro=Epl.B]'
+    - oki
+  - - '[PrefixClass=long_stem][Pro=Idl.A]'
+    - ini
+  - - '[PrefixClass=long_stem][Pro=Idl.B]'
+    - kini
+  - - '[PrefixClass=long_stem][Pro=Ipl.A]'
+    - iti
+  - - '[PrefixClass=long_stem][Pro=Ipl.B]'
+    - iki
   - - '[PrefixClass=r_stem][Pro=1sg.A]'
     - tsi
   - - '[PrefixClass=r_stem][Pro=1sg.B]'

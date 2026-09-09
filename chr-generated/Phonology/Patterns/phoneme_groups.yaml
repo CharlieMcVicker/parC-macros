@@ -11,7 +11,7 @@ patterns:
   pattern: <V>?(<C>+<V>)*<C>*
 - name: PrefixClass
   ref: <PrefixClass>
-  pattern: '[PrefixClass=a_stem]|[PrefixClass=v_stem]|[PrefixClass=e_stem]|[PrefixClass=k_a_stem]|[PrefixClass=vowel_stem]|[PrefixClass=cons_stem]|[PrefixClass=r_stem]'
+  pattern: '[PrefixClass=a_stem]|[PrefixClass=v_stem]|[PrefixClass=e_stem]|[PrefixClass=k_a_stem]|[PrefixClass=vowel_stem]|[PrefixClass=cons_stem]|[PrefixClass=r_stem]|[PrefixClass=long_stem]'
 - name: Pro
   ref: <Pro>
   pattern: '[Pro=1sg.A]|[Pro=Edl.A]|[Pro=Epl.A]|[Pro=Idl.A]|[Pro=Ipl.A]|[Pro=2sg.A]|[Pro=2dl.A]|[Pro=2pl.A]|[Pro=3sg.A]|[Pro=3ns.A]|[Pro=1sg.B]|[Pro=Edl.B]|[Pro=Epl.B]|[Pro=Idl.B]|[Pro=Ipl.B]|[Pro=2sg.B]|[Pro=2dl.B]|[Pro=2pl.B]|[Pro=3sg.B]|[Pro=3ns.B]|[Pro=1sg>3sg]|[Pro=2sg>3sg]'

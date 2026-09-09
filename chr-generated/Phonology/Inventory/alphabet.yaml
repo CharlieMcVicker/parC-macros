@@ -91,6 +91,7 @@ data:
   - '[PrefixClass=vowel_stem]'
   - '[PrefixClass=cons_stem]'
   - '[PrefixClass=r_stem]'
+  - '[PrefixClass=long_stem]'
 - name: Pro
   ref: <Pro>
   tags:
