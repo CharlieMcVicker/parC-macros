@@ -6,9 +6,21 @@ patterns:
 - name: PrepronominalPrefixes
   ref: <PrepronominalPrefixes>
   pattern: '[WI]?([DIST=de]|[DIST=di])?'
+- name: NotLarC
+  pattern: '{tkmnslyw}'
+  ref: <NotLarC>
+- name: NotLar
+  pattern: <NotLarC>|<V>
+  ref: <NotLar>
+- name: Onset
+  pattern: s?(<C>|((<NotLarC>|(tl)|(kw)|(ts))h?))
+  ref: <Onset>
+- name: Coda
+  pattern: s?((<NotLarC>|(ts)|(kw))?h?)|'
+  ref: <Coda>
 - name: Root
   ref: <Root>
-  pattern: <V>?(<C>+<V>)*<C>*
+  pattern: <V>?<Coda>?(<Onset><V><Coda>)*<Onset>?
 - name: PrefixClass
   ref: <PrefixClass>
   pattern: '[PrefixClass=a_stem]|[PrefixClass=v_stem]|[PrefixClass=e_stem]|[PrefixClass=k_a_stem]|[PrefixClass=vowel_stem]|[PrefixClass=cons_stem]|[PrefixClass=r_stem]|[PrefixClass=long_stem]'
@@ -30,15 +42,6 @@ patterns:
 - name: Morpheme
   ref: <Morpheme>
   pattern: <PrefixClass>|<Pro>|<AspectClass>|<Aspect>|<Tense>|<PPP>|[WI]|[DIST]|[DIST=de]|[DIST=di]|<H_alt>|[H_alt=none]|[H_alt=drop]|[H_alt=glot]|[H_alt=lat]|[H_alt=vowel_a]|[H_alt=vowel_e]|[H_alt=vowel_i]|[H_alt=vowel_o]|[H_alt=vowel_u]|[H_alt=vowel_v]|<H_metathesis>|[H_metathesis=none]|[H_metathesis=active]|[Variant=2]|[Variant=3]|[Variant=4]
-- name: H_alt
-  pattern: <H_alt>
-  ref: <H_alt>
-- name: NotLarC
-  pattern: '{tkmnslyw}'
-  ref: <NotLarC>
-- name: NotLar
-  pattern: <NotLarC>|<V>
-  ref: <NotLar>
 - name: SonH
   pattern: nh|lh|yh|wh|mh
   ref: <SonH>

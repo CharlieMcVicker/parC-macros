@@ -6,18 +6,21 @@ patterns:
 - name: PrepronominalPrefixes
   ref: <PrepronominalPrefixes>
   pattern: '[WI]?([DIST=de]|[DIST=di])?'
-- name: Root
-  ref: <Root>
-  pattern: <V>?(<C>+<V>)*<C>*
-- name: H_alt
-  pattern: <H_alt>
-  ref: <H_alt>
 - name: NotLarC
   pattern: '{tkmnslyw}'
   ref: <NotLarC>
 - name: NotLar
   pattern: <NotLarC>|<V>
   ref: <NotLar>
+- name: Onset
+  pattern: "s?(<C>|((<NotLarC>|(tl)|(kw)|(ts))h?))"
+  ref: <Onset>
+- name: Coda
+  pattern: "s?((<NotLarC>|(ts)|(kw))?h?)|'"
+  ref: <Coda>
+- name: Root
+  ref: <Root>
+  pattern: <V>?<Coda>?(<Onset><V><Coda>)*<Onset>?
 - name: SonH
   pattern: nh|lh|yh|wh|mh
   ref: <SonH>
