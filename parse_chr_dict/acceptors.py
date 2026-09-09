@@ -12,7 +12,6 @@ import functools
 import hashlib
 import json
 import os
-import re
 from pathlib import Path
 from typing import Iterable, Set
 
@@ -111,46 +110,6 @@ def get_template_sigma(syms: pynini.SymbolTable) -> tuple[pynini.Fst, pynini.Fst
     sigma = pynini.union(*[pynini.accep(s, token_type=syms) for s in sym_strings]).optimize()
     sigma_star = sigma.star.optimize()
     return sigma, sigma_star, sym_strings
-
-
-def resolve_phones_for_pattern(pattern: str, alphabet=None) -> set[str]:
-    """
-    Resolves a phonemic pattern or class reference into a set of Cherokee phone symbols.
-    Supports:
-      - Raw characters, e.g. 'a', 'v', 'e'
-      - Class references, e.g. '<V>', '<C>', '<Son>', '<N>', '<Stops>', '<Frc>'
-      - Alternations, e.g. '<Son>|<N>' or '(<Son>|<N>)'
-      - Legacy wrapped patterns, e.g. '<Morpheme>*a<Phone>*<Morpheme>*'
-    """
-    if alphabet is None:
-        alphabet = get_default_alphabet()
-
-    pat = pattern.strip()
-    # Strip legacy morpheme wrappers if present
-    pat = re.sub(r"^<Morpheme>\*", "", pat)
-    pat = re.sub(r"<Phone>\*<Morpheme>\*$", "", pat)
-    pat = pat.strip()
-
-    if pat.startswith("(") and pat.endswith(")"):
-        pat = pat[1:-1].strip()
-
-    parts = pat.split("|")
-    phones = set()
-    for part in parts:
-        part = part.strip()
-        if not part:
-            continue
-        if part == "<C>":
-            for group in ("<Stops>", "<Frc>", "<Son>", "<N>"):
-                if group in alphabet.inventory.item_map:
-                    phones.update(alphabet.inventory.item_map[group].phones)
-        elif part in alphabet.inventory.item_map:
-            phones.update(alphabet.inventory.item_map[part].phones)
-        elif part in alphabet.inventory.phones:
-            phones.add(part)
-        else:
-            raise ValueError(f"Cannot resolve phone or group '{part}' in pattern '{pattern}'")
-    return phones
 
 
 def resolve_morphotactic_rule_files(
@@ -366,7 +325,7 @@ def compile_prefix_stem_shape_acceptor(
     all_phones = sorted(list(alphabet.inventory.phones))
 
     # Read prefix class rules
-    class_rules: list[tuple[str, set[str]]] = []
+    class_rules: list[tuple[str, str]] = []
     with open(rules_path, "r", encoding="utf-8") as f:
         reader = csv.reader(f)
         header = None
@@ -379,20 +338,38 @@ def compile_prefix_stem_shape_acceptor(
             pclass = row[0].strip()
             pattern = row[1].strip() if len(row) > 1 else ""
             if pclass and pattern:
-                allowed_phones = resolve_phones_for_pattern(pattern, alphabet)
-                class_rules.append((pclass, allowed_phones))
+                class_rules.append((pclass, pattern))
 
     inner_bad_seqs: list[pynini.Fst] = []
     prefix_class_fsas: list[pynini.Fst] = []
 
-    for pclass, allowed_phones in class_rules:
+    for pclass, pattern in class_rules:
         tag_str = f"[PrefixClass={pclass}]"
         c_fsa = pynini.accep(tag_str, token_type=syms)
         prefix_class_fsas.append(c_fsa)
 
-        disallowed_phones = [p for p in all_phones if p not in allowed_phones]
-        if disallowed_phones:
-            dis_fsa = pynini.union(*[pynini.accep(p, token_type=syms) for p in disallowed_phones]).optimize()
+        pat_fsa = fsa(pattern)
+        allowed_strs = set(fsm_strings(pat_fsa))
+        single_allowed = {s for s in allowed_strs if len(s) == 1}
+        multi_allowed = {s for s in allowed_strs if len(s) > 1}
+        multi_starts = {s[0] for s in multi_allowed}
+        dis_singles = [p for p in all_phones if p not in single_allowed and p not in multi_starts]
+
+        dis_parts = []
+        if dis_singles:
+            dis_parts.append(pynini.union(*[pynini.accep(p, token_type=syms) for p in dis_singles]))
+
+        for prefix in multi_starts:
+            allowed_next = {s[1] for s in multi_allowed if s.startswith(prefix) and len(s) == 2}
+            if prefix not in single_allowed:
+                dis_next = [p for p in all_phones if p not in allowed_next]
+                p_fsa = pynini.accep(prefix, token_type=syms)
+                if dis_next:
+                    dn_fsa = pynini.union(*[pynini.accep(p, token_type=syms) for p in dis_next])
+                    dis_parts.append(pynini.concat(p_fsa, dn_fsa))
+
+        if dis_parts:
+            dis_fsa = pynini.union(*dis_parts).optimize()
             inner_bad = pynini.concat(c_fsa, pynini.concat(pro_meta_alt_opt, dis_fsa))
             inner_bad_seqs.append(inner_bad)
 

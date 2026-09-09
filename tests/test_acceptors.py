@@ -16,6 +16,7 @@ import pytest
 import pynini
 
 from parC.constants import set_yaml_dir
+from parC.grammar.acceptor_compilation import fsa, fsm_strings
 from parC.grammar.paradigm_compilation import clear_all_caches
 from parc_macros.generate_markers import generate_markers
 from parse_chr_dict.acceptors import (
@@ -28,7 +29,6 @@ from parse_chr_dict.acceptors import (
     compile_cascade_domain_acceptor,
     accepts_parse,
     get_cascade_domain_acceptor,
-    resolve_phones_for_pattern,
     tokenize_parse_str,
     parse_to_fsa,
     get_default_symbol_table,
@@ -72,19 +72,19 @@ def setup_acceptor_env():
 # ==============================================================================
 
 def test_prefix_class_csv_audit_ac1():
-    """Verify all 7 prefix classes are present and map to exact phoneme patterns."""
+    """Verify all prefix classes are present and map to exact phoneme patterns."""
     assert DEFAULT_PREFIX_CLASS_CSV.exists()
-    alphabet = get_default_alphabet()
 
-    # All 7 expected classes and their phone expectations
+    # All expected classes and their phone expectations
     expected_classes = {
         "a_stem": {"a"},
         "v_stem": {"v"},
         "e_stem": {"e"},
         "k_a_stem": {"a"},
-        "vowel_stem": set("aeiouv"),
-        "cons_stem": set("tk'mnshlyw"),
-        "r_stem": set("lywmn"),  # <Son>|<N>
+        "vowel_stem": {"e", "o", "u", "v"},
+        "cons_stem": {"t", "k", "'", "h", "s", "lh", "y", "yh", "w"},
+        "r_stem": {"m", "n", "l", "y", "w"},
+        "long_stem": {"t", "k", "'", "m", "n", "h", "s", "l", "y", "w"},
     }
 
     with open(DEFAULT_PREFIX_CLASS_CSV, "r", encoding="utf-8") as f:
@@ -103,7 +103,9 @@ def test_prefix_class_csv_audit_ac1():
 
     for pclass, expected_phones in expected_classes.items():
         pat = classes_found[pclass]
-        resolved = resolve_phones_for_pattern(pat, alphabet)
+        pat_fsa = fsa(pat)
+        assert pat_fsa is not None
+        resolved = set(fsm_strings(pat_fsa))
         assert resolved == expected_phones, (
             f"Class {pclass} pattern '{pat}' resolved to {resolved}, expected {expected_phones}"
         )
@@ -244,7 +246,7 @@ def test_compile_prefix_stem_shape_acceptor_ac3():
 
     tail = ["[AspectClass=a]", "[Aspect=present]", "[Tense=present_a]"]
 
-    # Valid combinations for all 7 classes
+    # Valid combinations for prefix classes
     valid_cases = [
         ("[PrefixClass=a_stem]", ["a", "t", "a", "t"]),
         ("[PrefixClass=v_stem]", ["v", "a", "t", "a", "t"]),
@@ -253,8 +255,11 @@ def test_compile_prefix_stem_shape_acceptor_ac3():
         ("[PrefixClass=vowel_stem]", ["o", "t", "a", "t"]),
         ("[PrefixClass=cons_stem]", ["t", "h", "a", "t"]),
         ("[PrefixClass=cons_stem]", ["s", "t", "a", "t"]),
+        ("[PrefixClass=cons_stem]", ["l", "h", "a", "t"]),
+        ("[PrefixClass=cons_stem]", ["y", "h", "a", "t"]),
         ("[PrefixClass=r_stem]", ["n", "a", "t", "a", "t"]),
         ("[PrefixClass=r_stem]", ["l", "a", "t", "a", "t"]),
+        ("[PrefixClass=long_stem]", ["t", "h", "a", "t"]),
     ]
     for pclass, root_chars in valid_cases:
         tokens = [pclass, "[Pro=3sg.A]"] + root_chars + tail
@@ -275,7 +280,9 @@ def test_compile_prefix_stem_shape_acceptor_ac3():
         ("[PrefixClass=k_a_stem]", ["t", "h", "a", "t"]),     # k_a_stem before 't'
         ("[PrefixClass=vowel_stem]", ["t", "h", "a", "t"]),   # vowel_stem before 't'
         ("[PrefixClass=cons_stem]", ["a", "t", "a", "t"]),    # cons_stem before 'a'
+        ("[PrefixClass=cons_stem]", ["l", "a", "t", "a", "t"]),  # cons_stem before 'l' without 'h'
         ("[PrefixClass=r_stem]", ["t", "a", "t", "a", "t"]),  # r_stem before 't' (not sonorant/nasal)
+        ("[PrefixClass=long_stem]", ["a", "t", "a", "t"]),    # long_stem before 'a'
     ]
     for pclass, root_chars in invalid_cases:
         tokens = [pclass, "[Pro=3sg.A]"] + root_chars + tail

@@ -4,6 +4,7 @@ a_stem,a
 v_stem,v
 e_stem,e
 k_a_stem,a
-vowel_stem,<V>
-cons_stem,<C>
+vowel_stem,e|o|u|v
+cons_stem,<Stops>|<Frc>|y|w|(lh)|(yh)
 r_stem,(<Son>|<N>)
+long_stem,<C>

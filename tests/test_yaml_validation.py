@@ -148,7 +148,7 @@ def test_chr_generated_yamls():
     with open(alphabet_yaml, "r", encoding="utf-8") as f:
         inv_data = yaml.safe_load(f)
     inv_map = {node["ref"]: node.get("tags", []) for node in inv_data["data"]}
-    assert len(inv_map["<PrefixClass>"]) == 7
+    assert len(inv_map["<PrefixClass>"]) == 8
     assert len(inv_map["<Pro>"]) == 22
     assert len(inv_map["<AspectClass>"]) == 55
     assert len(inv_map["<Variant>"]) == 3
