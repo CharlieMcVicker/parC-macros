@@ -59,7 +59,7 @@ def extract_phonology_data(
 ) -> dict[str, Any]:
     """
     Extracts all classes, inflectional features, variants, and rule triggers
-    from configuration CSV files, parameterized by verb_config slots and phonology_effects.
+    from configuration CSV files, parameterized dynamically by verb_config slots and phonology_effects.
     """
     config_dir = Path(config_dir)
 
@@ -80,128 +80,146 @@ def extract_phonology_data(
         slots = verb_config.get("slots") or verb_config.get("paradigm", {}).get("slots") or []
         phonology_effects = verb_config.get("phonology_effects") or verb_config.get("phonology", {}).get("effects") or {}
 
-    # 1. Pronominals and prefix classes
-    pro_slot = next(
-        (
-            s for s in slots
-            if s.get("name") == "pronominal"
-            or any(tg.get("TagGroup") == "Pro" for tg in s.get("structure", []))
-        ),
-        None,
-    )
-    if pro_slot and pro_slot.get("sources"):
-        prefix_classes: list[str] = []
-        pronominals: list[str] = []
-        for src in pro_slot["sources"]:
-            p_path = config_dir / src
-            if p_path.exists():
-                p_cls, pros = _parse_csv_matrix(p_path)
-                for c in p_cls:
-                    if c not in prefix_classes:
-                        prefix_classes.append(c)
-                for p in pros:
-                    if p not in pronominals:
-                        pronominals.append(p)
-    else:
-        prefix_classes, pronominals = _parse_csv_matrix(config_dir / "verb-pronominal.csv")
-
-    # 2. Tenses and tense classes
-    tense_slot = next(
-        (
-            s for s in slots
-            if s.get("name") == "tense"
-            or any(tg.get("TagGroup") == "Tense" for tg in s.get("structure", []))
-        ),
-        None,
-    )
-    tense_sources = tense_slot.get("sources", []) if tense_slot else ["verb-tense.csv"]
-    if not tense_sources:
-        tense_sources = ["verb-tense.csv"]
-
-    tense_classes: list[str] = []
-    tenses: list[str] = []
-    for src in tense_sources:
-        tense_csv_path = config_dir / src
-        if not tense_csv_path.exists():
-            continue
-        with open(tense_csv_path, "r", encoding="utf-8") as f:
-            tense_lines = f.readlines()
-        has_class_feature = any(l.lower().startswith("# class_feature:") for l in tense_lines)
-        tense_rows = [r for r in csv.reader(tense_lines) if r and not r[0].startswith("#")]
-        if not tense_rows:
-            continue
-        if has_class_feature or (tense_slot and len(tense_slot.get("structure", [])) > 1):
-            tense_header = tense_rows[0]
-            for r in tense_rows[1:]:
-                if r and r[0].strip() and r[0].strip() not in tense_classes:
-                    tense_classes.append(r[0].strip())
-            for h in tense_header[1:]:
-                if h.strip() and h.strip() not in tenses:
-                    tenses.append(h.strip())
-        else:
-            for h in tense_rows[0]:
-                if h.strip() and h.strip() not in tenses:
-                    tenses.append(h.strip())
-
-    # 3. Aspects, aspect classes, variants, and drop-final triggers
-    aspect_slot = next(
-        (
-            s for s in slots
-            if s.get("name") == "aspect"
-            or any(tg.get("TagGroup") == "Aspect" for tg in s.get("structure", []))
-        ),
-        None,
-    )
-    if aspect_slot and aspect_slot.get("sources"):
-        aspect_csv_files = [config_dir / src for src in aspect_slot["sources"]]
-    else:
-        aspect_csv_files = [config_dir / "verb-aspect.csv"]
-        stative_csv_path = config_dir / "verb-aspect-stative.csv"
-        if stative_csv_path.exists():
-            aspect_csv_files.append(stative_csv_path)
-
-    aspect_classes: list[str] = []
-    aspects: list[str] = []
+    tag_groups: dict[str, list[str]] = {}
+    slot_tag_groups: list[str] = []
     max_variants = 1
 
-    for aspect_csv_path in aspect_csv_files:
-        if not aspect_csv_path.exists():
-            continue
-        with open(aspect_csv_path, "r", encoding="utf-8") as f:
-            rows = [r for r in csv.reader(f) if r and not r[0].startswith("#")]
-
-        if not rows:
-            continue
-
-        header = rows[0]
-        for r in rows[1:]:
-            if r and r[0].strip():
-                cls_name = r[0].strip()
-                if cls_name not in aspect_classes:
-                    aspect_classes.append(cls_name)
-
-        for h in header[1:]:
-            feat_name = h.strip()
-            if feat_name and feat_name not in aspects:
-                aspects.append(feat_name)
-
-        for r in rows[1:]:
-            if not r or not r[0].strip():
+    if slots:
+        for slot in slots:
+            sources = slot.get("sources", [])
+            structure = slot.get("structure", [])
+            if not structure:
                 continue
-            for idx in range(1, len(header)):
-                if idx >= len(r):
-                    continue
-                raw_cell = r[idx].strip()
-                if not raw_cell:
-                    continue
-                cell_variants = [v.strip() for v in raw_cell.split(";")]
-                if len(cell_variants) > max_variants:
-                    max_variants = len(cell_variants)
 
-    if not aspect_classes:
-        raise ValueError(f"No aspect classes found in {aspect_csv_files}")
+            for st in structure:
+                tg_name = st.get("TagGroup")
+                if tg_name and tg_name not in tag_groups:
+                    tag_groups[tg_name] = []
+                if tg_name and tg_name not in slot_tag_groups:
+                    slot_tag_groups.append(tg_name)
+
+            for src in sources:
+                src_path = config_dir / src
+                if not src_path.exists():
+                    continue
+
+                with open(src_path, "r", encoding="utf-8") as fh:
+                    lines = [line for line in fh if line.strip() and not line.strip().startswith("#")]
+                if not lines:
+                    continue
+
+                reader = csv.reader(lines)
+                rows = list(reader)
+                if not rows:
+                    continue
+
+                header = rows[0]
+                if len(structure) == 1:
+                    tg = structure[0]["TagGroup"]
+                    for h in header:
+                        val = h.strip()
+                        if val and val not in tag_groups[tg]:
+                            tag_groups[tg].append(val)
+                elif len(structure) == 2:
+                    cls_tg = structure[0]["TagGroup"]
+                    feat_tg = structure[1]["TagGroup"]
+                    for r in rows[1:]:
+                        if r and r[0].strip():
+                            cls_val = r[0].strip()
+                            if cls_val not in tag_groups[cls_tg]:
+                                tag_groups[cls_tg].append(cls_val)
+                    for h in header[1:]:
+                        feat_val = h.strip()
+                        if feat_val and feat_val not in tag_groups[feat_tg]:
+                            tag_groups[feat_tg].append(feat_val)
+
+                    for r in rows[1:]:
+                        if not r or not r[0].strip():
+                            continue
+                        for idx in range(1, len(header)):
+                            if idx >= len(r):
+                                continue
+                            raw_cell = r[idx].strip()
+                            if not raw_cell:
+                                continue
+                            cell_vars = [v.strip() for v in raw_cell.split(";")]
+                            if len(cell_vars) > max_variants:
+                                max_variants = len(cell_vars)
+
+                elif len(structure) == 3:
+                    cls_tg = structure[0]["TagGroup"]
+                    var_tg = structure[1]["TagGroup"]
+                    feat_tg = structure[2]["TagGroup"]
+                    for r in rows[1:]:
+                        if r and r[0].strip():
+                            cls_val = r[0].strip()
+                            if cls_val not in tag_groups[cls_tg]:
+                                tag_groups[cls_tg].append(cls_val)
+                    for h in header[1:]:
+                        feat_val = h.strip()
+                        if feat_val and feat_val not in tag_groups[feat_tg]:
+                            tag_groups[feat_tg].append(feat_val)
+
+                    for r in rows[1:]:
+                        if not r or not r[0].strip():
+                            continue
+                        for idx in range(1, len(header)):
+                            if idx >= len(r):
+                                continue
+                            raw_cell = r[idx].strip()
+                            if not raw_cell:
+                                continue
+                            cell_vars = [v.strip() for v in raw_cell.split(";")]
+                            if len(cell_vars) > max_variants:
+                                max_variants = len(cell_vars)
+
+    else:
+        # Fallback if no slots defined in verb_config
+        p_path = config_dir / "verb-pronominal.csv"
+        if p_path.exists():
+            p_cls, pros = _parse_csv_matrix(p_path)
+            tag_groups["PrefixClass"] = p_cls
+            tag_groups["Pro"] = pros
+            slot_tag_groups.extend(["PrefixClass", "Pro"])
+
+        a_path = config_dir / "verb-aspect.csv"
+        if a_path.exists():
+            a_cls, asps = _parse_csv_matrix(a_path)
+            tag_groups["AspectClass"] = a_cls
+            tag_groups["Aspect"] = asps
+            slot_tag_groups.extend(["AspectClass", "Aspect"])
+
+        t_path = config_dir / "verb-tense.csv"
+        if t_path.exists():
+            with open(t_path, "r", encoding="utf-8") as f:
+                t_lines = f.readlines()
+            has_class_feature = any(l.lower().startswith("# class_feature:") for l in t_lines)
+            t_rows = [r for r in csv.reader(t_lines) if r and not r[0].startswith("#")]
+            if t_rows:
+                if has_class_feature:
+                    t_cls = [r[0].strip() for r in t_rows[1:] if r and r[0].strip()]
+                    t_feats = [h.strip() for h in t_rows[0][1:] if h.strip()]
+                    tag_groups["TenseClass"] = t_cls
+                    tag_groups["Tense"] = t_feats
+                    slot_tag_groups.extend(["TenseClass", "Tense"])
+                else:
+                    t_feats = [h.strip() for h in t_rows[0] if h.strip()]
+                    tag_groups["Tense"] = t_feats
+                    slot_tag_groups.append("Tense")
 
     variants = list(range(2, max_variants + 1)) if max_variants > 1 else []
+    if "Variant" in tag_groups or "Variant" in slot_tag_groups or variants:
+        tag_groups["Variant"] = [str(v) for v in variants]
+        if "Variant" not in slot_tag_groups:
+            slot_tag_groups.append("Variant")
+
+    # Map legacy keys for backward-compatibility with callers/tests
+    prefix_classes = tag_groups.get("PrefixClass", [])
+    pronominals = tag_groups.get("Pro", [])
+    aspect_classes = tag_groups.get("AspectClass", [])
+    aspects = tag_groups.get("Aspect", [])
+    tense_classes = tag_groups.get("TenseClass", [])
+    tenses = tag_groups.get("Tense", [])
 
     mark_final_triggers: list[str] = []
     mark_final_two_triggers: list[str] = []
@@ -257,7 +275,7 @@ def extract_phonology_data(
                 else:
                     mark_final_two_triggers.append(f"[AspectClass={cls_expr}][Aspect={feat}]")
 
-    # 4. Stem-initial vowel drop triggers
+    # Stem-initial vowel drop triggers
     drop_a_src = phonology_effects.get("drop_stem_initial_a")
     drop_first_a_csv = (
         config_dir / drop_a_src if drop_a_src else config_dir / "verb-pronominal-drop-first-a.csv"
@@ -277,6 +295,8 @@ def extract_phonology_data(
         drop_first_v_triggers = [("v_stem", "3sg.B")]
 
     return {
+        "tag_groups": tag_groups,
+        "slot_tag_groups": slot_tag_groups,
         "prefix_classes": prefix_classes,
         "pronominals": pronominals,
         "aspect_classes": aspect_classes,
@@ -367,16 +387,10 @@ def generate_alphabet(
     with open(base_alphabet_path, "r", encoding="utf-8") as f:
         inv = yaml.safe_load(f) or {}
 
-    filtered_refs = {
-        "<PrefixClass>",
-        "<Pro>",
-        "<AspectClass>",
-        "<Variant>",
-        "<Aspect>",
-        "<TenseClass>",
-        "<Tense>",
-        "<LegacyTags>",
-    }
+    tag_groups: dict[str, list[str]] = data.get("tag_groups", {})
+    slot_tag_groups: list[str] = data.get("slot_tag_groups", list(tag_groups.keys()))
+
+    filtered_refs = {f"<{tg}>" for tg in slot_tag_groups} | {"<LegacyTags>"}
 
     new_data: list[dict[str, Any]] = []
     for item in inv.get("data", []):
@@ -385,57 +399,15 @@ def generate_alphabet(
             continue
         new_data.append(item)
 
-    # PrefixClass
-    new_data.append({
-        "name": "PrefixClass",
-        "ref": "<PrefixClass>",
-        "tags": [f"[PrefixClass={c}]" for c in data["prefix_classes"]],
-    })
-
-    # Pro
-    new_data.append({
-        "name": "Pro",
-        "ref": "<Pro>",
-        "tags": [f"[Pro={p}]" for p in data["pronominals"]],
-    })
-
-    # AspectClass
-    new_data.append({
-        "name": "AspectClass",
-        "ref": "<AspectClass>",
-        "tags": [f"[AspectClass={c}]" for c in data["aspect_classes"]],
-    })
-
-    # Variant
-    variants = data.get("variants", [])
-    if variants:
+    for tg in slot_tag_groups:
+        vals = tag_groups.get(tg, [])
+        if not vals:
+            continue
         new_data.append({
-            "name": "Variant",
-            "ref": "<Variant>",
-            "tags": [f"[Variant={v}]" for v in variants],
+            "name": tg,
+            "ref": f"<{tg}>",
+            "tags": [f"[{tg}={v}]" for v in vals],
         })
-
-    # Aspect
-    new_data.append({
-        "name": "Aspect",
-        "ref": "<Aspect>",
-        "tags": [f"[Aspect={a}]" for a in data["aspects"]],
-    })
-
-    # TenseClass
-    if data.get("tense_classes"):
-        new_data.append({
-            "name": "TenseClass",
-            "ref": "<TenseClass>",
-            "tags": [f"[TenseClass={c}]" for c in data["tense_classes"]],
-        })
-
-    # Tense
-    new_data.append({
-        "name": "Tense",
-        "ref": "<Tense>",
-        "tags": [f"[Tense={t}]" for t in data["tenses"]],
-    })
 
     inv["data"] = new_data
     output_alphabet_path.parent.mkdir(parents=True, exist_ok=True)
@@ -457,114 +429,100 @@ def generate_patterns(
     with open(base_patterns_path, "r", encoding="utf-8") as f:
         pats_yaml = yaml.safe_load(f) or {}
 
-    retained_map: dict[str, dict[str, Any]] = {}
-    for pat in pats_yaml.get("patterns", []):
+    base_patterns = pats_yaml.get("patterns", [])
+
+    tag_groups: dict[str, list[str]] = data.get("tag_groups", {})
+    slot_tag_groups: list[str] = data.get("slot_tag_groups", list(tag_groups.keys()))
+
+    # Build dynamic pattern definitions for slot TagGroups
+    dynamic_tag_patterns: list[dict[str, Any]] = []
+    dynamic_tg_refs = set()
+
+    for tg in slot_tag_groups:
+        vals = tag_groups.get(tg, [])
+        if not vals:
+            continue
+        dynamic_tg_refs.add(f"<{tg}>")
+        if tg == "Variant":
+            # Variant pattern: optional group e.g. ([Variant=2]|[Variant=3]|[Variant=4])?
+            v_pat = "(" + "|".join(f"[Variant={v}]" for v in vals) + ")?"
+            dynamic_tag_patterns.append({
+                "name": "Variant",
+                "ref": "<Variant>",
+                "pattern": v_pat,
+            })
+        else:
+            pat_str = "|".join(f"[{tg}={v}]" for v in vals)
+            dynamic_tag_patterns.append({
+                "name": tg,
+                "ref": f"<{tg}>",
+                "pattern": pat_str,
+            })
+
+    # Compose <Morpheme> pattern dynamically:
+    # Slot TagGroups (excluding Variant which expands directly if present) + base inventory tags / TagGroups
+    morpheme_parts: list[str] = []
+    for tg in slot_tag_groups:
+        if tg == "Variant":
+            continue
+        vals = tag_groups.get(tg, [])
+        if vals:
+            morpheme_parts.append(f"<{tg}>")
+
+    # Read base alphabet.yaml to discover additional tags and inventory TagGroups
+    base_alphabet_path = base_patterns_path.parent.parent / "Inventory" / "alphabet.yaml"
+    if base_alphabet_path.exists():
+        with open(base_alphabet_path, "r", encoding="utf-8") as f:
+            base_inv = yaml.safe_load(f) or {}
+        for item in base_inv.get("data", []):
+            ref = item.get("ref", "")
+            tags = item.get("tags", [])
+            if not tags:
+                continue
+            if ref in dynamic_tg_refs or ref in ("<TempTags>", "<LegacyTags>"):
+                continue
+            if ref:
+                morpheme_parts.append(ref)
+            for t in tags:
+                if t not in morpheme_parts:
+                    morpheme_parts.append(t)
+
+    # If variants exist, add [Variant=N] to Morpheme union
+    variants = tag_groups.get("Variant", [])
+    for v in variants:
+        v_tag = f"[Variant={v}]"
+        if v_tag not in morpheme_parts:
+            morpheme_parts.append(v_tag)
+
+    morpheme_pattern = "|".join(morpheme_parts)
+
+    new_patterns: list[dict[str, Any]] = []
+    morpheme_added = False
+
+    for pat in base_patterns:
         ref = pat.get("ref")
-        if ref:
-            retained_map[ref] = pat
+        if ref in dynamic_tg_refs:
+            continue
+        if ref == "<Morpheme>":
+            continue
+        new_patterns.append(pat)
+        # Insert dynamic TagGroups right after <Root> (or after the first base patterns if <Root> is absent)
+        if ref == "<Root>":
+            new_patterns.extend(dynamic_tag_patterns)
+            new_patterns.append({
+                "name": "Morpheme",
+                "ref": "<Morpheme>",
+                "pattern": morpheme_pattern,
+            })
+            morpheme_added = True
 
-    c_pat = retained_map.get("<C>", {
-        "name": "Consonants",
-        "pattern": "<Stops>|<Frc>|<Son>|<N>",
-        "ref": "<C>",
-    })
-
-    generated_refs = {
-        "<C>", "<PrepronominalPrefixes>", "<Root>", "<PrefixClass>", "<Pro>",
-        "<AspectClass>", "<Variant>", "<Aspect>", "<TenseClass>", "<Tense>",
-        "<Morpheme>", "<H_alt>", "<H_ALT>"
-    }
-    custom_patterns = [
-        pat for pat in pats_yaml.get("patterns", [])
-        if pat.get("ref") not in generated_refs
-    ]
-
-    prefix_class_pat = "|".join(f"[PrefixClass={c}]" for c in data["prefix_classes"])
-    pro_pat = "|".join(f"[Pro={p}]" for p in data["pronominals"])
-    aspect_class_pat = "|".join(f"[AspectClass={c}]" for c in data["aspect_classes"])
-    aspect_pat = "|".join(f"[Aspect={a}]" for a in data["aspects"])
-    tense_classes = data.get("tense_classes", [])
-    tense_class_pat = "|".join(f"[TenseClass={c}]" for c in tense_classes)
-    tense_pat = "|".join(f"[Tense={t}]" for t in data["tenses"])
-
-    variants = data.get("variants", [])
-    variant_pat = (
-        "(" + "|".join(f"[Variant={v}]" for v in variants) + ")?"
-        if variants
-        else "([Variant=2]|[Variant=3]|[Variant=4])?"
-    )
-    variant_morphemes = (
-        "|" + "|".join(f"[Variant={v}]" for v in variants) if variants else ""
-    )
-
-    tense_class_morpheme = "|<TenseClass>" if tense_class_pat else ""
-    morpheme_pat = (
-        f"<PrefixClass>|<Pro>|<AspectClass>|<Aspect>{tense_class_morpheme}|<Tense>"
-        f"|<PPP>|<H_alt>|[WI]|[DIST]|[DIST=de]|[DIST=di]{variant_morphemes}"
-    )
-
-    new_patterns: list[dict[str, Any]] = [
-        c_pat,
-        {
-            "name": "PrepronominalPrefixes",
-            "ref": "<PrepronominalPrefixes>",
-            "pattern": "[WI]?([DIST=de]|[DIST=di])?",
-        },
-        {
-            "name": "Root",
-            "ref": "<Root>",
-            "pattern": "<V>?(<C>+<V>)*<C>*",
-        },
-        {
-            "name": "PrefixClass",
-            "ref": "<PrefixClass>",
-            "pattern": prefix_class_pat,
-        },
-        {
-            "name": "Pro",
-            "ref": "<Pro>",
-            "pattern": pro_pat,
-        },
-        {
-            "name": "AspectClass",
-            "ref": "<AspectClass>",
-            "pattern": aspect_class_pat,
-        },
-        {
-            "name": "Variant",
-            "ref": "<Variant>",
-            "pattern": variant_pat,
-        },
-        {
-            "name": "Aspect",
-            "ref": "<Aspect>",
-            "pattern": aspect_pat,
-        },
-    ]
-    if tense_class_pat:
+    if not morpheme_added:
+        new_patterns.extend(dynamic_tag_patterns)
         new_patterns.append({
-            "name": "TenseClass",
-            "ref": "<TenseClass>",
-            "pattern": tense_class_pat,
-        })
-    new_patterns.extend([
-        {
-            "name": "Tense",
-            "ref": "<Tense>",
-            "pattern": tense_pat,
-        },
-        {
             "name": "Morpheme",
             "ref": "<Morpheme>",
-            "pattern": morpheme_pat,
-        },
-        {
-            "name": "H_alt",
-            "ref": "<H_alt>",
-            "pattern": "<H_alt>",
-        },
-        *custom_patterns,
-    ])
+            "pattern": morpheme_pattern,
+        })
 
     pats_yaml["kind"] = "Patterns"
     pats_yaml["patterns"] = new_patterns

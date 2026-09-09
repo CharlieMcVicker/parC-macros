@@ -378,3 +378,95 @@ def test_derive_open_root_template():
     assert derive_open_root_template({"paradigm": {}}) == ""
 
 
+def test_dynamic_alphabet_and_patterns_language_agnostic():
+    """
+    TASK-154: Verify that alphabet and pattern generation dynamically adapt to
+    arbitrary slot TagGroups and base inventory configurations without hardcoded tags.
+    """
+    import parc_macros.generate_phonology as gp
+
+    custom_verb_config = {
+        "slots": [
+            {
+                "name": "agreement",
+                "structure": [
+                    {"TagGroup": "Person", "optional": False},
+                    {"TagGroup": "Number", "optional": False},
+                ],
+            },
+            {
+                "name": "tam",
+                "structure": [
+                    {"TagGroup": "Mood", "optional": False},
+                ],
+            },
+        ],
+    }
+
+    mock_data = {
+        "tag_groups": {
+            "Person": ["1", "2", "3"],
+            "Number": ["sg", "pl"],
+            "Mood": ["ind", "sbj"],
+        },
+        "slot_tag_groups": ["Person", "Number", "Mood"],
+    }
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_path = Path(tmp_dir)
+        inv_dir = tmp_path / "Phonology/Inventory"
+        pats_dir = tmp_path / "Phonology/Patterns"
+        inv_dir.mkdir(parents=True, exist_ok=True)
+        pats_dir.mkdir(parents=True, exist_ok=True)
+
+        base_inv_path = inv_dir / "base_alphabet.yaml"
+        out_inv_path = inv_dir / "alphabet.yaml"
+        base_pats_path = pats_dir / "base_phoneme_groups.yaml"
+        out_pats_path = pats_dir / "phoneme_groups.yaml"
+
+        base_inv_content = {
+            "kind": "Inventory",
+            "data": [
+                {"name": "Phones", "ref": "<V>", "phones": ["a", "i", "u"]},
+                {"name": "PrefixTag", "ref": "<CustTag>", "tags": ["[TAG_A]", "[TAG_B]"]},
+            ],
+        }
+        with open(base_inv_path, "w", encoding="utf-8") as f:
+            yaml.dump(base_inv_content, f)
+
+        base_pats_content = {
+            "kind": "Patterns",
+            "patterns": [
+                {"name": "Consonants", "ref": "<C>", "pattern": "p|t|k"},
+                {"name": "Root", "ref": "<Root>", "pattern": "<C><V><C>"},
+                {"name": "VowelHarm", "ref": "<VowelHarm>", "pattern": "<V>+"},
+            ],
+        }
+        with open(base_pats_path, "w", encoding="utf-8") as f:
+            yaml.dump(base_pats_content, f)
+
+        # 1. Test generate_alphabet
+        gp.generate_alphabet(base_inv_path, out_inv_path, mock_data)
+        assert validate_yaml_file(out_inv_path) is True
+        with open(out_inv_path, "r", encoding="utf-8") as f:
+            gen_inv = yaml.safe_load(f)
+
+        inv_refs = [item["ref"] for item in gen_inv["data"]]
+        assert inv_refs == ["<V>", "<CustTag>", "<Person>", "<Number>", "<Mood>"]
+        person_item = next(item for item in gen_inv["data"] if item["ref"] == "<Person>")
+        assert person_item["tags"] == ["[Person=1]", "[Person=2]", "[Person=3]"]
+
+        # 2. Test generate_patterns
+        gp.generate_patterns(base_pats_path, out_pats_path, mock_data)
+        assert validate_yaml_file(out_pats_path) is True
+        with open(out_pats_path, "r", encoding="utf-8") as f:
+            gen_pats = yaml.safe_load(f)
+
+        pat_refs = [pat["ref"] for pat in gen_pats["patterns"]]
+        assert pat_refs == ["<C>", "<Root>", "<Person>", "<Number>", "<Mood>", "<Morpheme>", "<VowelHarm>"]
+
+        morpheme_pat = next(pat for pat in gen_pats["patterns"] if pat["ref"] == "<Morpheme>")
+        assert morpheme_pat["pattern"] == "<Person>|<Number>|<Mood>|<CustTag>|[TAG_A]|[TAG_B]"
+
+
+

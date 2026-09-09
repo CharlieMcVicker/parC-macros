@@ -3,6 +3,12 @@ patterns:
 - name: Consonants
   pattern: <Stops>|<Frc>|<Son>|<N>
   ref: <C>
+- name: PrepronominalPrefixes
+  ref: <PrepronominalPrefixes>
+  pattern: '[WI]?([DIST=de]|[DIST=di])?'
+- name: Root
+  ref: <Root>
+  pattern: <V>?(<C>+<V>)*<C>*
 - name: H_alt
   pattern: <H_alt>
   ref: <H_alt>
