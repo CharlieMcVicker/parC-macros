@@ -13,14 +13,14 @@ patterns:
   pattern: <NotLarC>|<V>
   ref: <NotLar>
 - name: Onset
-  pattern: s?(<C>|((<NotLarC>|(tl)|(kw)|(ts))h?))
+  pattern: (hs)?(<C>|(hs)|((<NotLarC>|(tl)|(kw)|(ts))h?))
   ref: <Onset>
 - name: Coda
-  pattern: s?((<NotLarC>|(ts)|(kw))?h?)|'
+  pattern: ((hs)?((<NotLarC>|(ts)|(kw))?h?))|'
   ref: <Coda>
 - name: Root
   ref: <Root>
-  pattern: <V>?<Coda>?(<Onset><V><Coda>)*<Onset>?
+  pattern: <Phone>*
 - name: PrefixClass
   ref: <PrefixClass>
   pattern: '[PrefixClass=a_stem]|[PrefixClass=v_stem]|[PrefixClass=e_stem]|[PrefixClass=k_a_stem]|[PrefixClass=vowel_stem]|[PrefixClass=cons_stem]|[PrefixClass=r_stem]|[PrefixClass=long_stem]'

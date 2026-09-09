@@ -221,10 +221,10 @@ def test_inplace_aspect_variants_generation_task_111_2():
         assert "[AspectClass=become][Variant=2][Aspect=present]" not in aspect_map
 
         # 2. Varying cell with multiple variants: 'become' infinitive is 'st;'ist;yhst;ist'
-        assert aspect_map["[AspectClass=become][Aspect=infinitive]"] == "st"
-        assert aspect_map["[AspectClass=become][Variant=2][Aspect=infinitive]"] == "'ist"
+        assert aspect_map["[AspectClass=become][Aspect=infinitive]"] == "hst"
+        assert aspect_map["[AspectClass=become][Variant=2][Aspect=infinitive]"] == "'ihst"
         assert aspect_map["[AspectClass=become][Variant=3][Aspect=infinitive]"] == "yhst"
-        assert aspect_map["[AspectClass=become][Variant=4][Aspect=infinitive]"] == "ist"
+        assert aspect_map["[AspectClass=become][Variant=4][Aspect=infinitive]"] == "ihst"
 
         # 3. Row with leading empty variant: 'sk-s-hst' immediate is ';hi'
         assert aspect_map["[AspectClass=sk-s-hst][Aspect=immediate]"] == ""

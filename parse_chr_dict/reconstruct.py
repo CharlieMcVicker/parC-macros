@@ -1,18 +1,10 @@
 from __future__ import annotations
 import re
-from typing import Optional
 
 import pynini
 from parC.grammar.acceptor_compilation import fsm_strings, word_fsa
 from parC.grammar.paradigm_compilation import get_open_inflect_graph
-from parse_chr_dict.create_aspect_class_csv import respell_consonants
-from parse_chr_dict.h_alternation import (
-    is_h_alternation_trigger,
-    validate_h_alternation_trigger,
-)
 from parse_chr_dict.types import (
-    VerbForm,
-    VERB_FORMS_BY_NAME,
     VERB_ENTRY_TYPES_BY_NAME,
     VerbEntryType,
     VerbMetadata,

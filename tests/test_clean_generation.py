@@ -113,33 +113,33 @@ def test_clean_inplace_parity_against_reference(generated_clean_dir):
 
 
 def test_clean_inplace_inflect_graph_compilation_932_states():
-    """Compiles open inflect graph with parC and verifies exact 1895 states."""
+    """Compiles open inflect graph with parC and verifies exact 2249 states."""
     # Compile with infer_lexical_features=False
     inflect_no_infer = get_open_inflect_graph("verb", infer_lexical_features=False)
     assert inflect_no_infer is not None
-    assert inflect_no_infer.num_states() == 1895
+    assert inflect_no_infer.num_states() == 2249
 
     # Compile with infer_lexical_features=True
     inflect_infer = get_open_inflect_graph("verb", infer_lexical_features=True)
     assert inflect_infer is not None
-    assert inflect_infer.num_states() == 1895
+    assert inflect_infer.num_states() == 2249
 
 
 def test_clean_inplace_parse_graph_compilation_932_states():
-    """Compiles open parse graph with parC and verifies exact 1895 states."""
+    """Compiles open parse graph with parC and verifies exact 2249 states."""
     # Compile with infer_lexical_features=False
     parse_no_infer = get_open_parse_graph(
         "verb", infer_lexical_features=False, non_deterministic_cleanup=True
     )
     assert parse_no_infer is not None
-    assert parse_no_infer.num_states() == 1895
+    assert parse_no_infer.num_states() == 2249
 
     # Compile with infer_lexical_features=True
     parse_infer = get_open_parse_graph(
         "verb", infer_lexical_features=True, non_deterministic_cleanup=True
     )
     assert parse_infer is not None
-    assert parse_infer.num_states() == 1895
+    assert parse_infer.num_states() == 2249
 
 
 def test_clean_inplace_roundtrip_inflection_and_parse():

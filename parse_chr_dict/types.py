@@ -1,10 +1,9 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 import functools
-from typing import List, Optional, Set, Tuple
+from typing import Optional
 
 from parse_chr_dict.acceptors import is_h_metathesis_trigger
-from parse_chr_dict.create_aspect_class_csv import respell_consonants
 from parse_chr_dict.h_alternation import (
     is_h_alternation_trigger,
     strip_h_alt_tags,
@@ -793,7 +792,7 @@ class LexicalVerb:
         return sorted(list(results))
 
     def validate_form(self, form: VerbForm, reference_form: str) -> bool:
-        return respell_consonants(reference_form) in self.inflect_form(form)
+        return reference_form in self.inflect_form(form)
 
     def validate(
         self,

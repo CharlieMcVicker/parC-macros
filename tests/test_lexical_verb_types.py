@@ -253,11 +253,11 @@ def test_lexical_verb_inflect_form_and_validate_form():
     assert forms_3rd == sorted(list(set(forms_3rd)))
     assert "atateka" in forms_3rd
 
-    # validate_form with respell_consonants handling
+    # validate_form
     assert verb.validate_form(PRES_3RD, "atateka") is True
     assert verb.validate_form(PRES_1SG, "katateka") is True
     assert verb.validate_form(HABITUAL_3RD, "atateko'i") is True
-    assert verb.validate_form(COMPLETIVE_3RD, "utatinvsv'i") is True
+    assert verb.validate_form(COMPLETIVE_3RD, "utatinvhsv'i") is True
     assert verb.validate_form(IMPERATIVE_2ND, "hatatuka") is True
     assert verb.validate_form(INFINITIVE_3RD, "utatinvti") is True
 
@@ -274,7 +274,7 @@ def test_lexical_verb_validate_hypothesis_direct():
         "present": "atateka",
         "present_1sg": "katateka",
         "imperfective": "atateko'i",
-        "perfective": "utatinvsv'i",
+        "perfective": "utatinvhsv'i",
         "imperative": "hatatuka",
         "infinitive": "utatinvti",
     }

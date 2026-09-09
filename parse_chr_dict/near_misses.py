@@ -3,7 +3,6 @@ from collections import Counter
 from typing import List, Dict, Optional
 from tqdm import tqdm
 
-from parse_chr_dict.create_aspect_class_csv import respell_consonants
 from parse_chr_dict.derive import derive_hypotheses_for_forms
 from parse_chr_dict.types import (
     VerbForm,
@@ -59,7 +58,7 @@ def find_near_misses(
                 break
 
             entry_forms = [
-                (respell_consonants(row[form.corpus_key]), form)
+                (row[form.corpus_key], form)
                 for form in entry_type.forms
                 if row.get(form.corpus_key) and " " not in row[form.corpus_key]
             ]

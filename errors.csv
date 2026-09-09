@@ -1,154 +1,135 @@
 corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,imperative,infinitive
 21,25,he/she is denying him/her,atayhiha,tsiyata'yiha,atayhiho'i,utayhilv'i,hiyatayika,utayhsti
-42,46,he/she is making noise,atanoyhvlhistiha,katanoyvlistiha,atanoyhvlhistisko'i,utanoyhvlhisthanv'i,hatanoyhvlhista,utanoyhvlhistohti
-45,49,he/she is moving from one place to another,atanv'a,kata'nv'a,ata'nvsko'i,uta'nvsv'i,hata'nvna,uta'nvsti
-60,64,he/she is learning,atelhohkwa'a,katelohkwa'a,atelhohkwasko'i,utelhohkwa'v'i,hatelhohkwa,utelhohkwasti
-69,73,he/she is diving,atethvska,katetvska,atethvsko'i,utethinv'i,hatethvka,utethti
-92,96,he/she is pouring liquid into a container,atli'a,tsitli'a,atlisko'i,utlv'i,hitlika,utlisti
-98,102,he/she is crying,atloyhiha,katloyiha,atloyhiho'i,utloyhilv'i,hatloyhka,utloyhsti
-99,103,he/she is getting off,atloyhska,katloyhska,atloyhsko'i,utloyhsv'i,hatlohi,utlohisti
-100,104,he/she is bragging,atlvkwhska,katlvkwaska,atlvkwhsko'i,utlvkwhsv'i,hatlvkwha,utlvkwhisti
+42,46,he/she is making noise,atanoyhvlhihstiha,katanoyvlihstiha,atanoyhvlhihstihsko'i,utanoyhvlhihsthanv'i,hatanoyhvlhihsta,utanoyhvlhihstohti
+45,49,he/she is moving from one place to another,atanv'a,kata'nv'a,ata'nvhsko'i,uta'nvhsv'i,hata'nvna,uta'nvhsti
+60,64,he/she is learning,atelhohkwa'a,katelohkwa'a,atelhohkwahsko'i,utelhohkwa'v'i,hatelhohkwa,utelhohkwahsti
+69,73,he/she is diving,atethvhska,katetvhska,atethvhsko'i,utethinv'i,hatethvka,utethti
+92,96,he/she is pouring liquid into a container,atli'a,tsitli'a,atlihsko'i,utlv'i,hitlika,utlihsti
+99,103,he/she is getting off,atloyhska,katloyhska,atloyhsko'i,utloyhsv'i,hatlohi,utlohihsti
+100,104,he/she is bragging,atlvkwhska,katlvkwahska,atlvkwhsko'i,utlvkwhsv'i,hatlvkwha,utlvkwhihsti
 106,110,he/she is doing it,atvneha,katvneha,atvneho'i,utvnelv'i,hatvka,utvnhti
 113,117,he/she is breaking it (refers to a flexible object),akalhska,tsikalhska,akalhsko'i,ukalhsv'i,hika'la,ukalhsti
-119,123,it’s raining,akaska,,akasko'i,ukanhanv'i,,ukanhti
-143,148,he/she sees him/her,akowhthiha,tsikowhthiha,akowhthisko'i,ukohv'i,hikowahtha,ukowhthvhti
-149,154,he/she is chopping it up,akvhaluyhska,tsikv'aluyhska,akvhaluyhsko'i,ukvhaluyhv'i,hikvhaluyha,ukvhaluyhsti
-161,167,he/she is killing him/her,ahiha,tsi'iha,ahiho'i,ulhv'i,hiluka,uhisti
-162,168,he/she has possession of a vehicle,ahi'leha,tsi'ileha,ahi'leho'i,,,uhi'lvsti
-163,169,he/she is driving it (refers to a vehicle in motion or animal),ahi'li,tsi'ili,ahi'liso'i,uhi'lvsv'i,,uhi'lvsti
-186,192,he/she is changing his/her shirt,anhawa'iyv'a,kaniwa'iyv'a,anhawa'iyvsko'i,unhawa'iyvsv'i,hanhawa'iyvna,unhawa'iyvsti
-187,193,he/she is taking his/her shirt off,anhawe'a,kaniwe'a,anhawesko'i,unhawesv'i,hanhawaki,unhawesti
-189,195,he/she is putting on a shirt,anhawo'a,kaniwo'a,anhawosko'i,unhawo'v'i,hanhawotsa,unhawosti
-190,196,he/she is giving it to him/her,anheha,tsineha,anheho'i,unhelv'i,hi'vsi,unhehti
-194,200,he/she is frolicking,anhetsoska,kanetsoska,anhetsosko'i,unhetsonv'i,hanhetso'vka,unhetsoti
-206,212,he/she is setting it down,ahvska,tsi'vska,ahvsko'i,unhv'i,hihvka,uhti
-209,215,he/she is taking it somewhere,awhitiha,tsiwitiha,awhitisko'i,uwhitvhv'i,hiwhita,uwithti
+119,123,it’s raining,akahska,,akahsko'i,ukanhanv'i,,ukanhti
+143,148,he/she sees him/her,akowhthiha,tsikowhthiha,akowhthihsko'i,ukohv'i,hikowahtha,ukowhthvhti
+161,167,he/she is killing him/her,ahiha,tsi'iha,ahiho'i,ulhv'i,hiluka,uhihsti
+162,168,he/she has possession of a vehicle,ahi'leha,tsi'ileha,ahi'leho'i,,,uhi'lvhsti
+163,169,he/she is driving it (refers to a vehicle in motion or animal),ahi'li,tsi'ili,ahi'lihso'i,uhi'lvhsv'i,,uhi'lvhsti
+186,192,he/she is changing his/her shirt,anhawa'iyv'a,kaniwa'iyv'a,anhawa'iyvhsko'i,unhawa'iyvhsv'i,hanhawa'iyvna,unhawa'iyvhsti
+187,193,he/she is taking his/her shirt off,anhawe'a,kaniwe'a,anhawehsko'i,unhawehsv'i,hanhawaki,unhawehsti
+189,195,he/she is putting on a shirt,anhawo'a,kaniwo'a,anhawohsko'i,unhawo'v'i,hanhawotsa,unhawohsti
+190,196,he/she is giving it to him/her,anheha,tsineha,anheho'i,unhelv'i,hi'vhsi,unhehti
+194,200,he/she is frolicking,anhetsohska,kanetsohska,anhetsohsko'i,unhetsonv'i,hanhetso'vka,unhetsoti
+206,212,he/she is setting it down,ahvhska,tsi'vhska,ahvhsko'i,unhv'i,hihvka,uhti
+209,215,he/she is taking it somewhere,awhitiha,tsiwitiha,awhitihsko'i,uwhitvhv'i,hiwhita,uwithti
 212,218,he/she is peeling it,ayhahkhetska,tsiyahkhetska,ayhahkhetsko'i,uyhahkhetsv'i,hiyhahkhetsa,uyhahkhetsti
-214,220,it’s becoming frosty (refers to the ground),ayhahthvhvska,,ayhahthvhvsko'i,uyhahthvnhv'i,,uyhahthvthti
-219,225,he/she is making an incision,ayhelhoha,tsiyelhoha,ayhelhoho'i,uyhelhalv'i,hiyelaka,uyhelhsti
-222,228,he/she is looking for him/her,ayhoha,tsiyoha,ayhoho'i,uyhalv'i,hiyhka,uyhsti
-230,236,he/she is kicking him/her,ayhvhthe'a,tsiyayvhthe'a,ayhvhthesko'i,uyhvhthesv'i,hiyayhthaki,uyhvhthesti
-235,241,he/she is walking,a'i,ka'i,a'iso'i,a'isv'i,,
-240,246,he/she is getting in (in a car‚ box‚ etc),atsa'vska,katsa'vska,atsa'vsko'i,utsanv'i,hatsa'vka,utsoti
-244,250,he/she is spilling it (refers to a liquid or non-liquid like salt‚ sugar),atsewi'a,katsewi'a,atsewisko'i,utsewv'i,hatsewa,utsewasti
-263,270,he/she is swallowing it,akhiska,tsi'kiska,akhisko'i,ukhisv'i,hikhihi,ukhihisti
-283,290,he/she is waiting for him/her,akhthiya,tsikathiya,akhthiyo'i,ukhthitv'i,hikathita,ukhthitisti
-286,293,he/she is becoming wise,akhthohvska,tsikathohvska,akhthohvsko'i,ukhthohvsv'i,hikhtho'vhi,ukhtho'vhisti
-291,298,he/she is dipping liquid,akhuki'a,tsi'kuki'a,akhukisko'i,ukhukisv'i,hikhuki,ukhukisti
-305,312,he/she is placing it in an upright position (refers to a long object),alehtiha,kaletiha,alehtisko'i,ulehthanv'i,halehta,ulehtohti
-311,318,it’s boiling,alitliha,,alitlisko'i,ulitlvhv'i,,ulilhti
-324,331,he/she is spitting,altsikwhska,kaltsikwhska,altsikwhsko'i,ultsikwhv'i,haltsikwha,ultsikwhsti
-335,342,he/she is shaking his/her head,alhstvnhiha,kalistvnhiha,alhstvnhiho'i,ulhstvnhilv'i,halhstvnhka,ulhstvnhti
-342,349,he/she is putting his/her hat on,alhskwethuhvska,kaliskwethuhvska,alhskwethuhvsko'i,ulhskwethunhv'i,halhskwethuhvka,ulhskwethusti
-389,396,he/she is closing it,astuhvska,tsistuhvska,astuhvsko'i,ustunhv'i,histuhvka,ustuti
-395,402,he/she is showing him/her,aseheha,tsiyaseheha,aseheho'i,usehelv'i,hiyasehisi,ushehti
-401,408,he/she is afraid,askaha,tsiskaha,askaho'i,uskalv'i,hiskaya,uskasti
-402,409,he/she is biting him/her,askalhka,tsiskalhka,askalhko'i,uskalhtsv'i,hiskala,uskalhsti
-410,417,he/she is dreaming about him/her,askitska,tsiyaskitska,askitsko'i,uskitsv'i,hiyaskitsa,uskitsti
-412,419,he/she is mourning for him/her,askonhiha,tsiskonhiha,askonhiho'i,uskonhilv'i,hiskonhka,uskonhsti
-414,421,he/she is erasing it,askolvti'a,tsiskolvti'a,askolvtisko'i,uskolvti'i,hiskolvta,uskolvtisti
-424,431,he/she is breaking it (refers to a long object),askwalhska,tsiskwalhska,askwalhsko'i,uskwalhsv'i,hiskwala,uskwalhsti
-428,435,he/she is sucking it,askwanutska,tsiskwanutska,askwanutsko'i,uskwanutsv'i,hiskwanutsa,uskwanutsti
-437,444,he/she is building a fence,asoyhoha,kasoyhoha,asoyhoho'i,usoyhalv'i,hasoyhka,usoyhsti
-443,450,he/she is sopping it,asu'a,kasu'a,asusko'i,ususv'i,hasutsa,ususti
-458,465,he/she is touching him/her,asvnhiha,tsiyasvnhiha,asvnhiho'i,usvnhilv'i,hiyasvnhka,usvnhsti
-463,470,he/she is holding his/her breath,athawhostiha,ka'tawhostiha,athawhostisko'i,uthawhosthanv'i,hathawhosta,uthawhostohti
-465,472,he/she is drilling a hole,athaleska,tsithaleska,athalesko'i,uthalesv'i,hithalaka,uthalesti
-470,477,he/she is exploding it,athaskistiha,tsithaskistiha,athaskistisko'i,uthaskisthanv'i,hathaskista,uthaskistohti
-473,480,he/she is combing someone’s hair,athawo'a,tsithawo'a,athawosko'i,uthawo'v'i,hithawotsa,uthasosti
-475,482,he/she is joining,athelati'a,kate'lati'a,athelatisko'i,uthelatv'i,hathelata,uthelatisti
-480,487,he/she is arguing,athiyohiha,ka'tiyohiha,athiyohiho'i,uthiyolhv'i,hathiyoka,uthiyosti
-482,489,he/she is running,atlhi,katitlhi,atlhiso'i,,,
-487,494,he/she is borrowing him/her,atholhska,tsiyatholhska,atholhsko'i,utholhsv'i,hiyathola,utholhisti
-489,496,he/she is taking a bite,atste'a,katsiste'a,atstesko'i,utstesv'i,hatstaki,utstesti
-490,497,he/she is lying,atsko'vska,katsisko'vska,atsko'vsko'i,utskonv'i,hatsko'vka,utskoti
-491,498,he/she is taking a drink (refers to alcoholic beverage),athuki'a,ka'tuki'a,athukisko'i,uthukisv'i,hathuki,uthukisti
-497,504,he/she is raising him/her,athvhistiha,tsiya'tvhistiha,athvhistisko'i,uthvhisthanv'i,hiya'tvhista,uthvhistohti
-498,505,he/she is growing,athvska,ka'tvska,athvsko'i,uthvsv'i,hathvhi,uthvhisti
-504,511,he/she is distributing it,ayathohiha,tsiyathohiha,ayathohiho'i,uyatholhv'i,hiyathohi,uyathohisti
-512,519,it’s crowing (refers to a rooster),ayhka,kayhka,ayhko'i,uyvlhsv'i,hayvla,uyvlhisti
-517,524,he/she is taking a break,ayohistiha,tsi'yohistiha,ayohistisko'i,uyohisthanv'i,hiyohista,uyohistohti
-522,529,he/she is breaking it up,ayoliha,tsiyoliha,ayo'istisko'i,uyo'isthanv'i,hiyo'ista,uyo'istohti
-546,556,he/she is teaching,tateyhohvska,tekateyohvska,tateyhohvsko'i,tuteyonhv'i,thateyhohvka,tsuteyhohti
-547,557,he/she is weeping,tatloyhiha,tekatloyiha,tatloyhiho'i,tutloyhilv'i,thatloyhka,tsutloyhsti
-548,558,he/she is being married,takatshvstiha,tvkwatshvstiha,takatshvstisko'i,takatshvsthanv'i,witetsatshvsta,tsakatshvstohti
-557,567,he/she is changing clothes,tanhawa'iyv'a,tekaniwa'iyv'a,tanhawa'iyvsko'i,tunhawa'iyvsv'i,thanhawa'iyvna,tsunhawa'iyvsti
-558,568,he/she is undressing,tanhawe'a,tekaniwe'a,tanhawesko'i,tunhawesv'i,thanhawaki,tsunhawesti
-559,569,he/she is putting on clothes,tanhawo'a,tekaniwo'a,tanhawosko'i,tunhawo'v'i,thanhawotsa,tsunhawosti
-564,574,he/she is squatting,tatsilhuska,tekatsilhuska,tatsilhusko'i,tutsilhunv'i,thatsilhuka,tsukilhusti
-568,578,he/she is becoming blind,takhewaka,tetsi'kewaka,takhewako'i,tukhewatsv'i,thikhewaki,tsukhewa'isti
-579,589,he/she is sprinkling it (with a liquid‚ powder‚ salt‚ etc.),takwhayo'vska,tetsikwhayo'vska,takwhayo'vsko'i,tukwhayonv'i,thikwhayo'vka,tsukwhakoti
-585,595,he/she is helping him/her up,talehtiha,tetsiyaletiha,talehtisko'i,tulehthanv'i,thiyaleta,tsulehtohti
-613,623,he/she is ironing,tatheska,tetsitheska,tathesko'i,tuthesv'i,thithvla,tsuthesti
-621,632,he/she is crossing (refers to a road‚ bridge‚ etc.),tekanatiwhska,tetsinatiwhska,tekanatiwhsko'i,tunatiwhsv'i,thinatiwhi,tsunatiwhisti
-624,635,he/she is enduring it (idiom),tekethvska,teke'tvska,tekethvsko'i,tuwethinv'i,thethvka,tsuwethti
-634,645,he/she is washing (refers to flexible objects including clothes),tekhkilo'a,tekvkilo'a,tekhkilosko'i,tuhkilo'v'i,thvhkilotsa,tsuhkilosti
-727,745,he/she is sneezing,tuyhvstoyhska,takhiyvstoyhska,tuyhvstoyhsko'i,tuyhvstoyhv'i,titshayvstoyha,tsuyhvstoyhsti
-743,766,he/she is going,eka,keka,eko'i,uwenvsv'i,hena,uwenvsti
-810,840,he/she is tying him/her up,kalhv'iha,tsiya'lv'iha,kalhv'iho'i,ulhvlv'i,hiya'lvtsa,ulhvsti
-814,844,he/she is holding it (refers to a flexible object),kanheha,tsi'neha,kanhehv'i,kanheho'i,hinhehesti,
-825,855,he/she is stinging it,katsvyhska,tsiyatsvyhska,katsvyhsko'i,uwatsvyhv'i,hiyatsvyha,uwatsvyhsti
-834,864,he/she is climbing it,ka'leka,tsi'leka,ka'leko'i,ulvsv'i,hi'luka,ulvsti
-839,869,he/she is climbing around,ka'litoha,tsi'litoha,ka'litoho'i,ulitolv'i,hi'lita,ulitasti
-841,871,he/she is taking it out of a container (refers to a long object),kaliha,tsila'a,kalisko'i,ulvhv'i,hila,ulhti
+214,220,it’s becoming frosty (refers to the ground),ayhahthvhvhska,,ayhahthvhvhsko'i,uyhahthvnhv'i,,uyhahthvthti
+230,236,he/she is kicking him/her,ayhvhthe'a,tsiyayvhthe'a,ayhvhthehsko'i,uyhvhthehsv'i,hiyayhthaki,uyhvhthehsti
+235,241,he/she is walking,a'i,ka'i,a'ihso'i,a'ihsv'i,,
+240,246,he/she is getting in (in a car‚ box‚ etc),atsa'vhska,katsa'vhska,atsa'vhsko'i,utsanv'i,hatsa'vka,utsoti
+244,250,he/she is spilling it (refers to a liquid or non-liquid like salt‚ sugar),atsewi'a,katsewi'a,atsewihsko'i,utsewv'i,hatsewa,utsewahsti
+263,270,he/she is swallowing it,akhihska,tsi'kihska,akhihsko'i,ukhihsv'i,hikhihi,ukhihihsti
+283,290,he/she is waiting for him/her,akhthiya,tsikathiya,akhthiyo'i,ukhthitv'i,hikathita,ukhthitihsti
+286,293,he/she is becoming wise,akhthohvhska,tsikathohvhska,akhthohvhsko'i,ukhthohvhsv'i,hikhtho'vhi,ukhtho'vhihsti
+291,298,he/she is dipping liquid,akhuki'a,tsi'kuki'a,akhukihsko'i,ukhukihsv'i,hikhuki,ukhukihsti
+305,312,he/she is placing it in an upright position (refers to a long object),alehtiha,kaletiha,alehtihsko'i,ulehthanv'i,halehta,ulehtohti
+311,318,it’s boiling,alitliha,,alitlihsko'i,ulitlvhv'i,,ulilhti
+335,342,he/she is shaking his/her head,alhstvnhiha,kalihstvnhiha,alhstvnhiho'i,ulhstvnhilv'i,halhstvnhka,ulhstvnhti
+342,349,he/she is putting his/her hat on,alhskwethuhvhska,kalihskwethuhvhska,alhskwethuhvhsko'i,ulhskwethunhv'i,halhskwethuhvka,ulhskwethuhsti
+389,396,he/she is closing it,ahstuhvhska,tsihstuhvhska,ahstuhvhsko'i,uhstunhv'i,hihstuhvka,uhstuti
+395,402,he/she is showing him/her,ahseheha,tsiyahseheha,ahseheho'i,uhsehelv'i,hiyahsehihsi,uhshehti
+401,408,he/she is afraid,ahskaha,tsihskaha,ahskaho'i,uhskalv'i,hihskaya,uhskahsti
+402,409,he/she is biting him/her,ahskalhka,tsihskalhka,ahskalhko'i,uhskalhtsv'i,hihskala,uhskalhsti
+410,417,he/she is dreaming about him/her,ahskitska,tsiyahskitska,ahskitsko'i,uhskitsv'i,hiyahskitsa,uhskitsti
+414,421,he/she is erasing it,ahskolvti'a,tsihskolvti'a,ahskolvtihsko'i,uhskolvti'i,hihskolvta,uhskolvtihsti
+428,435,he/she is sucking it,ahskwanutska,tsihskwanutska,ahskwanutsko'i,uhskwanutsv'i,hihskwanutsa,uhskwanutsti
+443,450,he/she is sopping it,ahsu'a,kahsu'a,ahsuhsko'i,uhsuhsv'i,hahsutsa,uhsuhsti
+463,470,he/she is holding his/her breath,athawhohstiha,ka'tawhohstiha,athawhohstihsko'i,uthawhohsthanv'i,hathawhohsta,uthawhohstohti
+465,472,he/she is drilling a hole,athalehska,tsithalehska,athalehsko'i,uthalehsv'i,hithalaka,uthalehsti
+470,477,he/she is exploding it,athahskihstiha,tsithahskihstiha,athahskihstihsko'i,uthahskihsthanv'i,hathahskihsta,uthahskihstohti
+473,480,he/she is combing someone’s hair,athawo'a,tsithawo'a,athawohsko'i,uthawo'v'i,hithawotsa,uthahsohsti
+475,482,he/she is joining,athelati'a,kate'lati'a,athelatihsko'i,uthelatv'i,hathelata,uthelatihsti
+480,487,he/she is arguing,athiyohiha,ka'tiyohiha,athiyohiho'i,uthiyolhv'i,hathiyoka,uthiyohsti
+482,489,he/she is running,atlhi,katitlhi,atlhihso'i,,,
+489,496,he/she is taking a bite,atste'a,katsihste'a,atstehsko'i,utstehsv'i,hatstaki,utstehsti
+490,497,he/she is lying,atsko'vhska,katsihsko'vhska,atsko'vhsko'i,utskonv'i,hatsko'vka,utskoti
+491,498,he/she is taking a drink (refers to alcoholic beverage),athuki'a,ka'tuki'a,athukihsko'i,uthukihsv'i,hathuki,uthukihsti
+497,504,he/she is raising him/her,athvhihstiha,tsiya'tvhihstiha,athvhihstihsko'i,uthvhihsthanv'i,hiya'tvhihsta,uthvhihstohti
+498,505,he/she is growing,athvhska,ka'tvhska,athvhsko'i,uthvhsv'i,hathvhi,uthvhihsti
+504,511,he/she is distributing it,ayathohiha,tsiyathohiha,ayathohiho'i,uyatholhv'i,hiyathohi,uyathohihsti
+512,519,it’s crowing (refers to a rooster),ayhka,kayhka,ayhko'i,uyvlhsv'i,hayvla,uyvlhihsti
+517,524,he/she is taking a break,ayohihstiha,tsi'yohihstiha,ayohihstihsko'i,uyohihsthanv'i,hiyohihsta,uyohihstohti
+522,529,he/she is breaking it up,ayoliha,tsiyoliha,ayo'ihstihsko'i,uyo'ihsthanv'i,hiyo'ihsta,uyo'ihstohti
+546,556,he/she is teaching,tateyhohvhska,tekateyohvhska,tateyhohvhsko'i,tuteyonhv'i,thateyhohvka,tsuteyhohti
+548,558,he/she is being married,takatshvhstiha,tvkwatshvhstiha,takatshvhstihsko'i,takatshvhsthanv'i,witetsatshvhsta,tsakatshvhstohti
+557,567,he/she is changing clothes,tanhawa'iyv'a,tekaniwa'iyv'a,tanhawa'iyvhsko'i,tunhawa'iyvhsv'i,thanhawa'iyvna,tsunhawa'iyvhsti
+558,568,he/she is undressing,tanhawe'a,tekaniwe'a,tanhawehsko'i,tunhawehsv'i,thanhawaki,tsunhawehsti
+559,569,he/she is putting on clothes,tanhawo'a,tekaniwo'a,tanhawohsko'i,tunhawo'v'i,thanhawotsa,tsunhawohsti
+564,574,he/she is squatting,tatsilhuhska,tekatsilhuhska,tatsilhuhsko'i,tutsilhunv'i,thatsilhuka,tsukilhuhsti
+568,578,he/she is becoming blind,takhewaka,tetsi'kewaka,takhewako'i,tukhewatsv'i,thikhewaki,tsukhewa'ihsti
+572,582,he/she is blinking,takhthanawhska,tekakathanawhska,takhthanawhsko'i,tukhthanawhsv'i,thakhthanawha,tsukhthanawhsti
+579,589,he/she is sprinkling it (with a liquid‚ powder‚ salt‚ etc.),takwhayo'vhska,tetsikwhayo'vhska,takwhayo'vhsko'i,tukwhayonv'i,thikwhayo'vka,tsukwhakoti
+585,595,he/she is helping him/her up,talehtiha,tetsiyaletiha,talehtihsko'i,tulehthanv'i,thiyaleta,tsulehtohti
+613,623,he/she is ironing,tathehska,tetsithehska,tathehsko'i,tuthehsv'i,thithvla,tsuthehsti
+624,635,he/she is enduring it (idiom),tekethvhska,teke'tvhska,tekethvhsko'i,tuwethinv'i,thethvka,tsuwethti
+634,645,he/she is washing (refers to flexible objects including clothes),tekhkilo'a,tekvkilo'a,tekhkilohsko'i,tuhkilo'v'i,thvhkilotsa,tsuhkilohsti
+743,766,he/she is going,eka,keka,eko'i,uwenvhsv'i,hena,uwenvhsti
+810,840,he/she is tying him/her up,kalhv'iha,tsiya'lv'iha,kalhv'iho'i,ulhvlv'i,hiya'lvtsa,ulhvhsti
+814,844,he/she is holding it (refers to a flexible object),kanheha,tsi'neha,kanhehv'i,kanheho'i,hinhehehsti,
+834,864,he/she is climbing it,ka'leka,tsi'leka,ka'leko'i,ulvhsv'i,hi'luka,ulvhsti
+839,869,he/she is climbing around,ka'litoha,tsi'litoha,ka'litoho'i,ulitolv'i,hi'lita,ulitahsti
+841,871,he/she is taking it out of a container (refers to a long object),kaliha,tsila'a,kalihsko'i,ulvhv'i,hila,ulhti
 844,874,he/she is spanking him/her,kali'vnhiha,tsili'vnhiha,kal'vnhiho'i,uli'vnhilv'i,hili'vnhka,uli'vnhsti
-858,888,he/she is arriving,ka'luhka,tsi'luhka,ka'luhko'i,uluhtsv'i,hi'luhki,uluhisti
-862,892,he/she is chopping it,kaluyhska,tsiluyhska,kaluyhsko'i,uluyhv'i,hiluyha,uluyhsti
-864,894,he/she is beating him/her up,kalvnhiha,tsilvnhiha,kalvnhiho'i,ulvnhilv'i,hilvnhka,ulvnhsti
-889,919,he/she is giving him/her some liquid,kanenheha,tsineneha,kanenheho'i,unenhelv'i,hine'vsi,unenhehti
-914,944,he/she is burying him/her,ka'nisiha,tsinisiha,ka'nisisko'i,unisanhv'i,hinisa,unisohti
-915,945,he/she is leaving it (refers to flexible object),ka'niha'a,tsi'niya'a,ka'niyasko'i,uniyv'i,hiniya,uniyasti
-916,946,he/she is catching him/her,ka'niyiha,tsiniyiha,kaniyisko'i,uniyvhv'i,hiniya,uniyhti
-920,950,he/she is flying,kanohili,tsino'ili,kanohiliso'i,,hinohilisesti,
-922,952,he/she is causing it to sound,kanoyhvlhistiha,tsinoyvlistiha,kanoyhvlhistisko'i,unoyhvlhisthanv'i,hinoyhvlhista,unoyhvlhistohti
-965,995,it’s dripping,kaskwo'iha,,kaskwo'iho'i,uwaskwolv'i,,uwaskwo'isti
-976,1006,he/she is hanging it up,kathvska,ka'tvska,kathvsko'i,uthanv'i,hathvka,uthti
-977,1007,he/she is joking,kawelhiha,tsiwelhiha,kawelhisko'i,uwelhvnhv'i,hiwelhvna,uwelhvhti
-978,1008,he/she is resting him/her,kawesolvstiha,tsiyawesolvstiha,kawesolvstisko'i,uyawesolvsthanv'i,hiyawesolvsta,uyawesolvstohti
-986,1016,he/she is sewing it,kayewhska,tsiyewiska,kayewhsko'i,uwayewhsv'i,hiyewa,uwayewhsti
+858,888,he/she is arriving,ka'luhka,tsi'luhka,ka'luhko'i,uluhtsv'i,hi'luhki,uluhihsti
+889,919,he/she is giving him/her some liquid,kanenheha,tsineneha,kanenheho'i,unenhelv'i,hine'vhsi,unenhehti
+914,944,he/she is burying him/her,ka'nihsiha,tsinihsiha,ka'nihsihsko'i,unihsanhv'i,hinihsa,unihsohti
+915,945,he/she is leaving it (refers to flexible object),ka'niha'a,tsi'niya'a,ka'niyahsko'i,uniyv'i,hiniya,uniyahsti
+916,946,he/she is catching him/her,ka'niyiha,tsiniyiha,kaniyihsko'i,uniyvhv'i,hiniya,uniyhti
+920,950,he/she is flying,kanohili,tsino'ili,kanohilihso'i,,hinohilihsehsti,
+922,952,he/she is causing it to sound,kanoyhvlhihstiha,tsinoyvlihstiha,kanoyhvlhihstihsko'i,unoyhvlhihsthanv'i,hinoyhvlhihsta,unoyhvlhihstohti
+965,995,it’s dripping,kahskwo'iha,,kahskwo'iho'i,uwahskwolv'i,,uwahskwo'ihsti
+968,998,he/she is whistling,kahsvnhka,tsihsvnhka,kahsvnhko'i,uwahsvnhtsv'i,hihsvnhki,uwahsvnhsti
+976,1006,he/she is hanging it up,kathvhska,ka'tvhska,kathvhsko'i,uthanv'i,hathvka,uthti
+977,1007,he/she is joking,kawelhiha,tsiwelhiha,kawelhihsko'i,uwelhvnhv'i,hiwelhvna,uwelhvhti
+978,1008,he/she is resting him/her,kawehsolvhstiha,tsiyawehsolvhstiha,kawehsolvhstihsko'i,uyawehsolvhsthanv'i,hiyawehsolvhsta,uyawehsolvhstohti
 992,1022,he/she is feeding him/her,kelhoha,tsiyeloha,kelhoho'i,uwelhalv'i,hiyeloka,uwelhsti
-1001,1031,he/she is setting a post into the ground (refers to a post or other long object),kethvska,ke'tvska,kethvsko'i,uwethinv'i,hethvka,uwethti
-1003,1033,he/she has a nosebleed,kika tekhayvskwo'iha,kika tekayvskwo'iha,kika tekhayvskwo'iho'i,kika tuyhvskwolv'i,kika thiyhvskwotsa,kika tsuyhvskwo'isti
-1033,1064,he/she is smoking it,kokhska,kokiska,kokhsko'i,uwokhsv'i,hoki,uwokhsti
-1070,1101,he/she is hitting him/her,kvnhiha,tsiyvniha,kvnhiho'i,uwanhilv'i,hiyvnika,uwanhsti
-1082,1113,it’s becoming done (refers to by cooking),kvnhska,,kvnhsko'i,uwanhsv'i,hvnhi,uwanhisti
+1001,1031,he/she is setting a post into the ground (refers to a post or other long object),kethvhska,ke'tvhska,kethvhsko'i,uwethinv'i,hethvka,uwethti
+1003,1033,he/she has a nosebleed,kika tekhayvhskwo'iha,kika tekayvhskwo'iha,kika tekhayvhskwo'iho'i,kika tuyhvhskwolv'i,kika thiyhvhskwotsa,kika tsuyhvhskwo'ihsti
+1033,1064,he/she is smoking it,kokhska,kokihska,kokhsko'i,uwokhsv'i,hoki,uwokhsti
 1119,1163,he/she is returning,ika'luhka,itsi'luhka,ika'luhko'i,v'uluhtsv'i,tsihi'luhki,
-1227,1278,he/she is rooting it out,khanastetliha,tsinastetliha,khanastetlisko'i,unhastetlvhv'i,hinhastetla,unhastelhti
-1253,1304,it’s misting,khanuyolati'a,,khanuyolatisko'i,unhuyola'tv'i,,unhuyolatisti
-1261,1312,he/she is parting with him/her (refers to in death),khteka,tsiyvteka,khteko'i,uwhtetsv'i,hiyvteki,uwhte'isti
-1262,1313,he/she is using it,khtiha,kvtiha,khtisko'i,uwhthanv'i,hvhta,uwhtohti
-1263,1314,he/she is putting out a fire,khtlati'a,kvtlati'a,khtlatisko'i,uwhtlatv'i,hvhtlata,uwhtlatisti
-1264,1315,he/she is sharpening it,khtliha,kvtliha,khtlisko'i,uwhtlvhv'i,hvhtla,uwhtlvhti
-1265,1316,it is going out (refers to fire‚ light),khtloska,,khtlosko'i,uwhtlosv'i,hvhtlohi,uwhtlohisti
-1266,1317,he/she is putting it into a fire (refers to a flexible object),khtv'vska,kvtv'vska,khtv'vsko'i,uwhtvnv'i,hvhtv'vka,uwhtvti
-1267,1319,he/she is mingling with a group,khelatitoha,ke'latitoha,khelatitoho'i,uwhelatitolv'i,helatita,uwhelatitasti
-1270,1322,he/she is linking it,khilhvska,kv'ilhvska,khilhvsko'i,uwhilhanv'i,hvhilhvka,uwhilhti
-1277,1329,he/she is shaking it (refers to a flexible object),khtsakv'vska,tsiyvtsakv'vska,khtsakv'vsko'i,uwhtsakvnv'i,hiyvtsakvyha,uwhtsakvti
-1285,1337,it is hanging (refers to a long object),khtho'a,,khtho'o'i,,hatho'esti,
-1286,1338,he/she is hanging it up (refers to a long object),khthosati'a,kathosati'a,khthosatisko'i,uwhthosatv'i,hathosata,uwhthosatisti
-1301,1356,there are (a number of three or more must be specified),nani'a,notsi'a,nani'o'i,,nitsi'esti,
-1306,1363,he/she is saying it,nikawe'a,nitsiwe'a,nikawesko'i,nuwesv'i,nhiwi,iyuwesti
-1308,1365,he/she is taking it off,nikvnhte'a,nikvnhte'a,nikvnhtesko'i,nuwanhtesv'i,nhvnhtaki,iyuwanhtesti
-1309,1366,he/she is putting it on,nikvnhtiha,nikvnhtiha,nikvnhtisko'i,nuwanhthanv'i,nhvnhta,iyuwanhtohti
-1323,1380,he/she has something on (refers to objects),nuwanhti,nakwvnhti,nuwanhto'i,nuwanhtv'i,nitsvnhtesti,
-1481,1547,he/she is getting well,utiwhska,akwatiwhska,utiwhsko'i,utiwhsv'i,tsatiwhi,utiwhisti
-1484,1550,he/she has time,utlanvta'teha,akwatlanvta'teha,utlanvta'teho'i,utlanvta'telv'i,tsatlanvtatisi,utlanvta'tehti
-1493,1559,he/she is sick,utlvka,akhtlvka,utlvko'i,utlvkv'i,tstlvki,utlv'isti
-1531,1597,he/she is yawning,uhalhokeha,akhalhokeha,uhalhokesko'i,uhalhokehv'i,tsahalhokvla,uhalhokehti
-1563,1629,he/she is looking for it,uyhoha,akiyhoha,uyhoho'i,uyhalv'i,tsayhka,uyhsti
-1570,1636,he/she has a cold,uyhvtla uniyiha,uyhvtla aki'niyiha,uyhvtla uniyisko'i,uyhvtla uniyvhv'i,uyhvtla witsa'niya,uyhvtla uniyhti
+1227,1278,he/she is rooting it out,khanahstetliha,tsinahstetliha,khanahstetlihsko'i,unhahstetlvhv'i,hinhahstetla,unhahstelhti
+1253,1304,it’s misting,khanuyolati'a,,khanuyolatihsko'i,unhuyola'tv'i,,unhuyolatihsti
+1261,1312,he/she is parting with him/her (refers to in death),khteka,tsiyvteka,khteko'i,uwhtetsv'i,hiyvteki,uwhte'ihsti
+1262,1313,he/she is using it,khtiha,kvtiha,khtihsko'i,uwhthanv'i,hvhta,uwhtohti
+1263,1314,he/she is putting out a fire,khtlati'a,kvtlati'a,khtlatihsko'i,uwhtlatv'i,hvhtlata,uwhtlatihsti
+1264,1315,he/she is sharpening it,khtliha,kvtliha,khtlihsko'i,uwhtlvhv'i,hvhtla,uwhtlvhti
+1265,1316,it is going out (refers to fire‚ light),khtlohska,,khtlohsko'i,uwhtlohsv'i,hvhtlohi,uwhtlohihsti
+1266,1317,he/she is putting it into a fire (refers to a flexible object),khtv'vhska,kvtv'vhska,khtv'vhsko'i,uwhtvnv'i,hvhtv'vka,uwhtvti
+1267,1319,he/she is mingling with a group,khelatitoha,ke'latitoha,khelatitoho'i,uwhelatitolv'i,helatita,uwhelatitahsti
+1270,1322,he/she is linking it,khilhvhska,kv'ilhvhska,khilhvhsko'i,uwhilhanv'i,hvhilhvka,uwhilhti
+1277,1329,he/she is shaking it (refers to a flexible object),khtsakv'vhska,tsiyvtsakv'vhska,khtsakv'vhsko'i,uwhtsakvnv'i,hiyvtsakvyha,uwhtsakvti
+1285,1337,it is hanging (refers to a long object),khtho'a,,khtho'o'i,,hatho'ehsti,
+1286,1338,he/she is hanging it up (refers to a long object),khthohsati'a,kathohsati'a,khthohsatihsko'i,uwhthohsatv'i,hathohsata,uwhthohsatihsti
+1301,1356,there are (a number of three or more must be specified),nani'a,notsi'a,nani'o'i,,nitsi'ehsti,
+1306,1363,he/she is saying it,nikawe'a,nitsiwe'a,nikawehsko'i,nuwehsv'i,nhiwi,iyuwehsti
+1308,1365,he/she is taking it off,nikvnhte'a,nikvnhte'a,nikvnhtehsko'i,nuwanhtehsv'i,nhvnhtaki,iyuwanhtehsti
+1309,1366,he/she is putting it on,nikvnhtiha,nikvnhtiha,nikvnhtihsko'i,nuwanhthanv'i,nhvnhta,iyuwanhtohti
+1323,1380,he/she has something on (refers to objects),nuwanhti,nakwvnhti,nuwanhto'i,nuwanhtv'i,nitsvnhtehsti,
+1484,1550,he/she has time,utlanvta'teha,akwatlanvta'teha,utlanvta'teho'i,utlanvta'telv'i,tsatlanvtatihsi,utlanvta'tehti
+1493,1559,he/she is sick,utlvka,akhtlvka,utlvko'i,utlvkv'i,tstlvki,utlv'ihsti
+1531,1597,he/she is yawning,uhalhokeha,akhalhokeha,uhalhokehsko'i,uhalhokehv'i,tsahalhokvla,uhalhokehti
+1570,1636,he/she has a cold,uyhvtla uniyiha,uyhvtla aki'niyiha,uyhvtla uniyihsko'i,uyhvtla uniyvhv'i,uyhvtla witsa'niya,uyhvtla uniyhti
 1571,1637,he/she is choking on it,uyhvhtsinvthka,akhiyvhtsinvthka,uyhvhtsinvthko'i,uyhvhtsinvtsv'i,tshayvhtsinvthki,uyhvhtsinvtsti
-1649,1715,it is making a sound,unoyhvhka,akinoyhvhka,unoyhvhko'i,unoyhvlhsv'i,tsanoyhvla,unoyhvlhisti
-1664,1730,he/she is receiving punishment,ustvti'a,akhstvti'a,ustvtisko'i,ustvtv'i,tstvta,ustvtisti
-1671,1737,he/she is coughing,usiwhaska,akhsiwhaska,usiwhasko'i,usiwhahv'i,tsiwhahi,usiwhahisti
-1681,1747,he/she is going to bed,usvhiha,akhsvhiha,usvhiho'i,usvlhv'i,tsvha,usvsti
-1683,1749,he/she is thirsty,uthateki'a,akhthateki'a,uthatekisko'i,uthatekanv'i,tsthatekvka,uthatekoti
-1684,1750,he/she is becoming enraged,uthalhawoska,akhthalhawoska,uthalhawosko'i,uthalhawosv'i,tsthalhawohi,uthalhawohisti
-1698,1764,he/she is forgetting it,uwakhewhska,akwvkhewhska,uwakhewhsko'i,uwakhewhsv'i,witsvkhewa,uwakhewhisti
-1711,1777,he/she is yelling,uwelhuhka,akwelhuhka,uwelhuhko'i,uwelhunhv'i,helhuhvka,uwelhuhvsti
-1719,1785,he/she has it,uwekhaha,akikhaha,uwekhaho'i,uwekhahv'i,tsekhahesti,
-1721,1787,he/she is worried,uwelihi'a,akwelihi'a,uwelihisko'i,uwelihiskv'i,tselihiskesti,uwelihisti
+1649,1715,it is making a sound,unoyhvhka,akinoyhvhka,unoyhvhko'i,unoyhvlhsv'i,tsanoyhvla,unoyhvlhihsti
+1664,1730,he/she is receiving punishment,uhstvti'a,akhstvti'a,uhstvtihsko'i,uhstvtv'i,tstvta,uhstvtihsti
+1671,1737,he/she is coughing,uhsiwhahska,akhsiwhahska,uhsiwhahsko'i,uhsiwhahv'i,tsiwhahi,uhsiwhahihsti
+1681,1747,he/she is going to bed,uhsvhiha,akhsvhiha,uhsvhiho'i,uhsvlhv'i,tsvha,uhsvhsti
+1683,1749,he/she is thirsty,uthateki'a,akhthateki'a,uthatekihsko'i,uthatekanv'i,tsthatekvka,uthatekoti
+1684,1750,he/she is becoming enraged,uthalhawohska,akhthalhawohska,uthalhawohsko'i,uthalhawohsv'i,tsthalhawohi,uthalhawohihsti
+1698,1764,he/she is forgetting it,uwakhewhska,akwvkhewhska,uwakhewhsko'i,uwakhewhsv'i,witsvkhewa,uwakhewhihsti
+1711,1777,he/she is yelling,uwelhuhka,akwelhuhka,uwelhuhko'i,uwelhunhv'i,helhuhvka,uwelhuhvhsti
+1719,1785,he/she has it,uwekhaha,akikhaha,uwekhaho'i,uwekhahv'i,tsekhahehsti,
+1721,1787,he/she is worried,uwelihi'a,akwelihi'a,uwelihihsko'i,uwelihihskv'i,tselihihskehsti,uwelihihsti
 1739,1805,he/she is laughing,uyetska,akiyetska,uyetsko'i,uyetsv'i,tsayetsa,uyetsti
-1740,1806,he/she is itching,uyote'a,akiyote'a,uyotesko'i,uyoteskv'i,tsayotaka,uyotesti
-1745,1811,he/she is hungry,uyosiha,akiyosiha,uyosisko'i,uyosiskv'i,tsayosisa,uyosisohti
-1761,1830,he/she is sending it,wahvska,witsi'vska,wahvsko'i,wunhv'i,whihvka,wuhti
+1740,1806,he/she is itching,uyote'a,akiyote'a,uyotehsko'i,uyotehskv'i,tsayotaka,uyotehsti
+1745,1811,he/she is hungry,uyohsiha,akiyohsiha,uyohsihsko'i,uyohsihskv'i,tsayohsihsa,uyohsihsohti
+1761,1830,he/she is sending it,wahvhska,witsi'vhska,wahvhsko'i,wunhv'i,whihvka,wuhti

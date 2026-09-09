@@ -14,7 +14,6 @@ if "YAML_DIR" not in os.environ:
         except ImportError:
             pass
 
-from parse_chr_dict.create_aspect_class_csv import respell_consonants
 from parse_chr_dict.derive import derive_hypotheses_for_forms
 from parse_chr_dict.reconstruct import validate_hypothesis
 from parse_chr_dict.types import PRIMARY_VERB_ENTRY_TYPES
@@ -81,7 +80,7 @@ def main():
             for entry_type in PRIMARY_VERB_ENTRY_TYPES:
                 # Gather forms specific to this entry type
                 entry_forms = [
-                    (respell_consonants(row[form.corpus_key]), form)
+                    (row[form.corpus_key], form)
                     for form in entry_type.forms
                     if row.get(form.corpus_key)
                     and " " not in row[form.corpus_key]

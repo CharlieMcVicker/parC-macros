@@ -1,7 +1,6 @@
 import csv
 import pytest
 
-from parse_chr_dict.create_aspect_class_csv import respell_consonants
 from parse_chr_dict.derive import (
     derive_hypotheses_for_forms,
 )
@@ -291,10 +290,10 @@ def test_lexical_verb_dataclass_fields():
 
 def test_derive_hypotheses_for_forms_direct():
     forms = [
-        (respell_consonants("atateka"), PRES_3RD),
-        (respell_consonants("katateka"), PRES_1SG),
-        (respell_consonants("atateko'i"), HABITUAL_3RD),
-        (respell_consonants("utatinvsv'i"), COMPLETIVE_3RD),
+        ("atateka", PRES_3RD),
+        ("katateka", PRES_1SG),
+        ("atateko'i", HABITUAL_3RD),
+        ("utatinvhsv'i", COMPLETIVE_3RD),
     ]
     hyps = derive_hypotheses_for_forms(forms)
     assert isinstance(hyps, set)
@@ -311,7 +310,7 @@ def test_validate_hypothesis_and_row_reconstruction():
         "present": "atateka",
         "present_1sg": "katateka",
         "imperfective": "atateko'i",
-        "perfective": "utatinvsv'i",
+        "perfective": "utatinvhsv'i",
         "imperative": "hatatuka",
         "infinitive": "utatinvti",
     }
@@ -396,7 +395,7 @@ def test_hypothesis_pruning_efficiency():
         ("atateka", PRES_3RD),
         ("katateka", PRES_1SG),
         ("atateko'i", HABITUAL_3RD),
-        ("utatinvsv'i", COMPLETIVE_3RD),
+        ("utatinvhsv'i", COMPLETIVE_3RD),
     ]
     hyps = derive_hypotheses_for_forms(forms)
     assert len(hyps) > 0
@@ -411,12 +410,12 @@ def test_hypothesis_pruning_efficiency():
 
 def test_entry_1759_derivation_and_validation():
     row = {
-        "present": "uthvtasti",
-        "present_1sg": "tsiyathvtasti",
-        "imperfective": "uthvtasto'i",
-        "perfective": "uthvtastv'i",
-        "imperative": "hiyathvtastesti",
-        "infinitive": "uthvtastohti",
+        "present": "uthvtahsti",
+        "present_1sg": "tsiyathvtahsti",
+        "imperfective": "uthvtahsto'i",
+        "perfective": "uthvtahstv'i",
+        "imperative": "hiyathvtahstehsti",
+        "infinitive": "uthvtahstohti",
     }
     entry_type = STATIVE_FUT_PROG
     forms = [(row[form.corpus_key], form) for form in entry_type.forms]
@@ -439,8 +438,8 @@ def test_entry_1759_derivation_and_validation():
 def test_h_alternation_verb_derivation():
     # Test with a pair of forms where 3rd person has H-grade and 1st person triggers H-alternation
     forms = [
-        (respell_consonants("atateka"), PRES_3RD),
-        (respell_consonants("katateka"), PRES_1SG),
+        ("atateka", PRES_3RD),
+        ("katateka", PRES_1SG),
     ]
     hyps = derive_hypotheses_for_forms(forms)
     assert len(hyps) > 0
@@ -463,7 +462,7 @@ def test_h_alternation_trigger_external_validation():
         "present": "atateka",
         "present_1sg": "katateka",
         "imperfective": "atateko'i",
-        "perfective": "utatinvsv'i",
+        "perfective": "utatinvhsv'i",
         "imperative": "hatatuka",
         "infinitive": "utatinvti",
     }
@@ -541,8 +540,8 @@ def test_strict_h_alternation_trigger_rejection():
     """Verify that when a trigger form shows H-mutation, unmutated [H_alt=none] fallbacks for that root are pruned."""
     # atanhoyeha (3sg) + katanoyeha (1sg trigger with H_DROP mutation)
     forms_mutating = [
-        (respell_consonants("atanhoyeha"), PRES_3RD),
-        (respell_consonants("katanoyeha"), PRES_1SG),
+        ("atanhoyeha", PRES_3RD),
+        ("katanoyeha", PRES_1SG),
     ]
     hyps_mut = derive_hypotheses_for_forms(forms_mutating)
     assert len(hyps_mut) > 0
@@ -551,8 +550,8 @@ def test_strict_h_alternation_trigger_rejection():
 
     # atateka (3sg) + katateka (1sg trigger without H-mutation)
     forms_non_mutating = [
-        (respell_consonants("atateka"), PRES_3RD),
-        (respell_consonants("katateka"), PRES_1SG),
+        ("atateka", PRES_3RD),
+        ("katateka", PRES_1SG),
     ]
     hyps_non_mut = derive_hypotheses_for_forms(forms_non_mutating)
     assert len(hyps_non_mut) > 0
@@ -563,8 +562,8 @@ def test_strict_h_alternation_trigger_rejection():
 def test_h_vowel_row_39_43_thinking_derivation():
     """Verify that row 39,43 ('he/she is thinking') matches and derives hypotheses containing [H_alt=vowel_v]."""
     forms = [
-        (respell_consonants("atanhtheha"), PRES_3RD),
-        (respell_consonants("katanvtheha"), PRES_1SG),
+        ("atanhtheha", PRES_3RD),
+        ("katanvtheha", PRES_1SG),
     ]
     hyps = derive_hypotheses_for_forms(forms)
     assert len(hyps) > 0

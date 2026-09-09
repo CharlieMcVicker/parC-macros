@@ -99,12 +99,12 @@ def test_h_drop_entry_537():
 
 
 def test_h_glot_entry_65():
-    """Entry 65: [Pro][H_alt=glot]atehohist[Aspect][Tense] -> 1sg tsiyate'ohistiha
+    """Entry 65: [Pro][H_alt=glot]atehohihst[Aspect][Tense] -> 1sg tsiyate'ohihstiha
     1st h becomes ', 2nd h in histiha remains.
     """
-    tag_str = "[PrefixClass=a_stem][Pro=1sg>3sg][H_alt=glot]atehohist[AspectClass=cause][Aspect=present][Tense=present_a]"
+    tag_str = "[PrefixClass=a_stem][Pro=1sg>3sg][H_alt=glot]atehohihst[AspectClass=cause][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
-    assert "tsiyate'ohistiha" in forms
+    assert "tsiyate'ohihstiha" in forms
 
 
 def test_h_glot_entry_321():
@@ -144,12 +144,12 @@ def test_h_lat_entry_173():
 
 
 def test_h_lat_entry_563():
-    """Entry 563: [DIST=de][Pro][H_alt=lat]alhilost[Aspect][Tense] -> 1sg tetsiyatlilostiha
+    """Entry 563: [DIST=de][Pro][H_alt=lat]alhilohst[Aspect][Tense] -> 1sg tetsiyatlilohstiha
     1st lh becomes tl.
     """
-    tag_str = "[DIST=de][PrefixClass=a_stem][Pro=1sg>3sg][H_alt=lat]alhilost[AspectClass=cause][Aspect=present][Tense=present_a]"
+    tag_str = "[DIST=de][PrefixClass=a_stem][Pro=1sg>3sg][H_alt=lat]alhilohst[AspectClass=cause][Aspect=present][Tense=present_a]"
     forms = _inflect(tag_str)
-    assert "tetsiyatlilostiha" in forms
+    assert "tetsiyatlilohstiha" in forms
 
 
 def test_h_vowel_entry_45():

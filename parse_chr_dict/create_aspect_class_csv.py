@@ -19,13 +19,6 @@ STATIVE_DATA_COLS = {
 }
 
 
-@functools.lru_cache(maxsize=1024)
-def respell_consonants(s: str) -> str:
-    s = re.sub("([aeiouv])hs", "\\1s", s)
-    if s.startswith("hs"):
-        s = s[1:]
-    return s
-
 
 def write_metadata(dest: IO[str], *metadata: str):
     dest.writelines([line + "\n" for line in metadata])
@@ -78,7 +71,7 @@ def parse_classes_csv(
     """
     Parses chr-data/classes.csv directly.
     Emits unified hyphenated aspect class names (f"{class}-{subclass}" or class).
-    Processes semicolon-separated variants, strips '*' and '@', respells consonants.
+    Processes semicolon-separated variants and strips '*' and '@'.
     Tracks final-dropping triggers for mark_final (*) and mark_final_two (@).
     When separate_stative is True (default), returns (eventful_rows, stative_rows, ...),
     where stative_rows only contains 'present' and 'incompletive' aspect columns.
@@ -155,11 +148,7 @@ def parse_classes_csv(
                         mark_final_two_triggers.append(trigger)
                         drop_final_two_rows.append((drop_paradigm, col_name))
 
-                    if class_name == "oh-ol" and clean_var == "hst":
-                        respelled = "hst"
-                    else:
-                        respelled = respell_consonants(clean_var)
-                    processed_variants.append(respelled)
+                    processed_variants.append(clean_var)
 
                 row_data[col_name] = ";".join(processed_variants)
 

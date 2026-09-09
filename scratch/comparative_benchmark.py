@@ -272,7 +272,6 @@ def benchmark_100_row_parse_runtime(
     import parC.constants as const
     from parC.grammar.acceptor_compilation import word_fsa
     from parC.grammar.paradigm_compilation import clear_all_caches, get_open_parse_graph
-    from parse_chr_dict.create_aspect_class_csv import respell_consonants
     from parse_chr_dict.__main__ import ENTRY_TYPE_FORMS
 
     with open(baseline_metrics_path, mode="r", encoding="utf-8") as f:
@@ -308,7 +307,7 @@ def benchmark_100_row_parse_runtime(
     total_forms = 0
 
     for idx, row in target_rows:
-        pres_form = respell_consonants(row["present"])
+        pres_form = row["present"]
         pres_fsa = word_fsa(pres_form)
         t0 = time.perf_counter()
         _ = pynini.compose(pres_fsa, ip_parse_graph).optimize()
@@ -316,7 +315,7 @@ def benchmark_100_row_parse_runtime(
         ip_primary_times.append(dt_pres)
 
         forms = [
-            respell_consonants(row[p.corpus_key])
+            row[p.corpus_key]
             for p in ENTRY_TYPE_FORMS["Eventful"]
             if row.get(p.corpus_key) and " " not in row[p.corpus_key]
         ]
@@ -345,7 +344,7 @@ def benchmark_100_row_parse_runtime(
     base_row_times = []
 
     for idx, row in target_rows:
-        pres_form = respell_consonants(row["present"])
+        pres_form = row["present"]
         pres_fsa = word_fsa(pres_form)
         t0 = time.perf_counter()
         _ = pynini.compose(pres_fsa, base_parse_graph).optimize()
@@ -353,7 +352,7 @@ def benchmark_100_row_parse_runtime(
         base_primary_times.append(dt_pres)
 
         forms = [
-            respell_consonants(row[p.corpus_key])
+            row[p.corpus_key]
             for p in ENTRY_TYPE_FORMS["Eventful"]
             if row.get(p.corpus_key) and " " not in row[p.corpus_key]
         ]

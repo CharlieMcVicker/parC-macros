@@ -13,14 +13,15 @@ patterns:
   pattern: <NotLarC>|<V>
   ref: <NotLar>
 - name: Onset
-  pattern: "s?(<C>|((<NotLarC>|(tl)|(kw)|(ts))h?))"
+  pattern: "(hs)?(<C>|(hs)|((<NotLarC>|(tl)|(kw)|(ts))h?))"
   ref: <Onset>
 - name: Coda
-  pattern: "s?((<NotLarC>|(ts)|(kw))?h?)|'"
+  pattern: "((hs)?((<NotLarC>|(ts)|(kw))?h?))|'"
   ref: <Coda>
 - name: Root
   ref: <Root>
-  pattern: <V>?<Coda>?(<Onset><V><Coda>)*<Onset>?
+  # pattern: <V>?<Coda>?(<Onset><V><Coda>)*<Onset>?
+  pattern: <Phone>*
 - name: SonH
   pattern: nh|lh|yh|wh|mh
   ref: <SonH>

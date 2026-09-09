@@ -293,7 +293,7 @@ def test_lexical_verb_inflect_and_validate_form():
     assert verb.validate_form(PRES_3RD, "atateka") is True
     assert verb.validate_form(PRES_1SG, "katateka") is True
     assert verb.validate_form(HABITUAL_3RD, "atateko'i") is True
-    assert verb.validate_form(COMPLETIVE_3RD, "utatinvsv'i") is True
+    assert verb.validate_form(COMPLETIVE_3RD, "utatinvhsv'i") is True
     assert verb.validate_form(IMPERATIVE_2ND, "hatatuka") is True
     assert verb.validate_form(INFINITIVE_3RD, "utatinvti") is True
 

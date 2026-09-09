@@ -27,7 +27,7 @@ rules:
   string_map:
   - - '[DIST=di]'
     - t
-  right_context: h
+  right_context: h<V>
 - name: insert_dist_di_v
   string_map:
   - - '[DIST=di]'

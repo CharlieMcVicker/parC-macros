@@ -84,13 +84,13 @@ def test_compile_open_inflect_graph_ac3():
     inflect_no_infer = get_open_inflect_graph("verb", infer_lexical_features=False)
     assert inflect_no_infer is not None
     assert inflect_no_infer.num_states() > 0
-    assert inflect_no_infer.num_states() == 1895
+    assert inflect_no_infer.num_states() == 2249
 
     # Compile with infer_lexical_features=True
     inflect_infer = get_open_inflect_graph("verb", infer_lexical_features=True)
     assert inflect_infer is not None
     assert inflect_infer.num_states() > 0
-    assert inflect_infer.num_states() == 1895
+    assert inflect_infer.num_states() == 2249
 
 
 def test_compile_open_parse_graph_ac4():
@@ -101,7 +101,7 @@ def test_compile_open_parse_graph_ac4():
     )
     assert parse_no_infer is not None
     assert parse_no_infer.num_states() > 0
-    assert parse_no_infer.num_states() == 1895
+    assert parse_no_infer.num_states() == 2249
 
     # Compile with infer_lexical_features=True, non_deterministic_cleanup=True
     parse_infer = get_open_parse_graph(
@@ -109,7 +109,7 @@ def test_compile_open_parse_graph_ac4():
     )
     assert parse_infer is not None
     assert parse_infer.num_states() > 0
-    assert parse_infer.num_states() == 1895
+    assert parse_infer.num_states() == 2249
 
 
 def test_inplace_inflection_and_parse_roundtrip():
@@ -145,7 +145,7 @@ def test_inplace_inflection_and_parse_roundtrip():
 def test_inplace_distributive_allomorph_realization():
     """AC 5: Verify phonological realization across indicative (te-), imperative (th-), and infinitive (tsu-) forms."""
     # 1. Imperative distributive with [DIST=di] before h yields 'th-'
-    imperative_parses = parse("thatanhesaka")
+    imperative_parses = parse("thatanhehsaka")
     di_imperatives = [p for p in imperative_parses if "[DIST=di]" in p]
     assert len(di_imperatives) > 0
     cfg_imp = read_parse(di_imperatives[0])
@@ -153,7 +153,7 @@ def test_inplace_distributive_allomorph_realization():
     assert cfg_imp.to_labels_dict()["distributive"] == "+"
 
     # 2. Infinitive distributive with [DIST=di] before V yields 'tsu-'
-    infinitive_parses = parse("tsutanhesesti")
+    infinitive_parses = parse("tsutanhehsehsti")
     di_infinitives = [p for p in infinitive_parses if "[DIST=di]" in p]
     assert len(di_infinitives) > 0
     cfg_inf = read_parse(di_infinitives[0])
@@ -161,7 +161,7 @@ def test_inplace_distributive_allomorph_realization():
     assert cfg_inf.to_labels_dict()["distributive"] == "+"
 
     # 3. Indicative distributive with [DIST=de] yields 'te-'
-    indicative_parses = parse("tetanheseka")
+    indicative_parses = parse("tetanhehseka")
     de_indicatives = [p for p in indicative_parses if "[DIST=de]" in p]
     assert len(de_indicatives) > 0
     cfg_ind = read_parse(de_indicatives[0])
@@ -195,12 +195,12 @@ def test_aspect_variants_and_elimination_of_overgeneration():
     # Default (variant 1): no [Variant=N] tag -> st
     inf1_str = "[PrefixClass=a_stem][Pro=3sg.B][H_metathesis=none][H_alt=none][AspectClass=become][Aspect=infinitive][Tense=infinitive]"
     out1_fst = pynini.compose(word_fsa(inf1_str), inflect_fst)
-    assert fsm_strings(pynini.project(out1_fst, "output").optimize()) == ["[BOW]usti[EOW]"]
+    assert fsm_strings(pynini.project(out1_fst, "output").optimize()) == ["[BOW]uhsti[EOW]"]
 
     # Variant 2: [Variant=2] -> 'ist
     inf2_str = "[PrefixClass=a_stem][Pro=3sg.B][H_metathesis=none][H_alt=none][AspectClass=become][Variant=2][Aspect=infinitive][Tense=infinitive]"
     out2_fst = pynini.compose(word_fsa(inf2_str), inflect_fst)
-    assert fsm_strings(pynini.project(out2_fst, "output").optimize()) == ["[BOW]u'isti[EOW]"]
+    assert fsm_strings(pynini.project(out2_fst, "output").optimize()) == ["[BOW]u'ihsti[EOW]"]
 
     # Variant 3: [Variant=3] -> yhst
     inf3_str = "[PrefixClass=a_stem][Pro=3sg.B][H_metathesis=none][H_alt=none][AspectClass=become][Variant=3][Aspect=infinitive][Tense=infinitive]"
@@ -210,7 +210,7 @@ def test_aspect_variants_and_elimination_of_overgeneration():
     # Variant 4: [Variant=4] -> ist
     inf4_str = "[PrefixClass=a_stem][Pro=3sg.B][H_metathesis=none][H_alt=none][AspectClass=become][Variant=4][Aspect=infinitive][Tense=infinitive]"
     out4_fst = pynini.compose(word_fsa(inf4_str), inflect_fst)
-    assert fsm_strings(pynini.project(out4_fst, "output").optimize()) == ["[BOW]uisti[EOW]"]
+    assert fsm_strings(pynini.project(out4_fst, "output").optimize()) == ["[BOW]uihsti[EOW]"]
 
 
 

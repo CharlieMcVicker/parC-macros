@@ -228,7 +228,6 @@ def benchmark_corpus_parsing(
     Measures dictionary parsing runtime across the first target_valid_rows valid verb rows
     in chr-corpus/corpus.csv using the parse_chr_dict derivation and validation pipeline.
     """
-    from parse_chr_dict.create_aspect_class_csv import respell_consonants
     from parse_chr_dict.derive import derive_hypotheses_for_forms
     from parse_chr_dict.types import PRIMARY_VERB_ENTRY_TYPES as PRIMARY_ENTRY_TYPES
     from parse_chr_dict.reconstruct import validate_hypothesis
@@ -273,7 +272,7 @@ def benchmark_corpus_parsing(
 
         for entry_type in PRIMARY_ENTRY_TYPES:
             entry_forms = [
-                (respell_consonants(row[parsing.corpus_key]), parsing)
+                (row[parsing.corpus_key], parsing)
                 for parsing in ENTRY_TYPE_FORMS[entry_type.name]
                 if row.get(parsing.corpus_key) and " " not in row[parsing.corpus_key]
             ]

@@ -10,9 +10,9 @@ rules:
   - - '[AspectClass=a][Aspect=immediate]'
     - a
   - - '[AspectClass=a][Aspect=incompletive]'
-    - ask
+    - ahsk
   - - '[AspectClass=a][Aspect=infinitive]'
-    - ast
+    - ahst
   - - '[AspectClass=a][Aspect=present]'
     - a'
   - - '[AspectClass=apl-active-''][Aspect=completive]'
@@ -20,7 +20,7 @@ rules:
   - - '[AspectClass=apl-active-''][Aspect=immediate]'
     - vla
   - - '[AspectClass=apl-active-''][Aspect=incompletive]'
-    - esk
+    - ehsk
   - - '[AspectClass=apl-active-''][Aspect=infinitive]'
     - eht
   - - '[AspectClass=apl-active-''][Aspect=present]'
@@ -30,7 +30,7 @@ rules:
   - - '[AspectClass=apl-active-a][Aspect=immediate]'
     - a
   - - '[AspectClass=apl-active-a][Aspect=incompletive]'
-    - esk
+    - ehsk
   - - '[AspectClass=apl-active-a][Aspect=infinitive]'
     - ht
   - - '[AspectClass=apl-active-a][Aspect=present]'
@@ -40,7 +40,7 @@ rules:
   - - '[AspectClass=apl-active-h][Aspect=immediate]'
     - hvla
   - - '[AspectClass=apl-active-h][Aspect=incompletive]'
-    - hesk
+    - hehsk
   - - '[AspectClass=apl-active-h][Aspect=infinitive]'
     - heht
   - - '[AspectClass=apl-active-h][Aspect=present]'
@@ -50,7 +50,7 @@ rules:
   - - '[AspectClass=apl-active][Aspect=immediate]'
     - vla
   - - '[AspectClass=apl-active][Aspect=incompletive]'
-    - esk
+    - ehsk
   - - '[AspectClass=apl-active][Aspect=infinitive]'
     - eht
   - - '[AspectClass=apl-active][Aspect=present]'
@@ -58,7 +58,7 @@ rules:
   - - '[AspectClass=apl][Aspect=completive]'
     - el
   - - '[AspectClass=apl][Aspect=immediate]'
-    - si
+    - hsi
   - - '[AspectClass=apl][Aspect=incompletive]'
     - eh
   - - '[AspectClass=apl][Aspect=infinitive]'
@@ -66,9 +66,9 @@ rules:
   - - '[AspectClass=apl][Aspect=present]'
     - eh
   - - '[AspectClass=apl][Variant=2][Aspect=immediate]'
-    - si
+    - hsi
   - - '[AspectClass=apl][Variant=3][Aspect=immediate]'
-    - isi
+    - ihsi
   - - '[AspectClass=apl][Variant=4][Aspect=immediate]'
     - vla
   - - '[AspectClass=be-at][Aspect=completive]'
@@ -78,7 +78,7 @@ rules:
   - - '[AspectClass=be-at][Aspect=incompletive]'
     - oh
   - - '[AspectClass=be-at][Aspect=infinitive]'
-    - ast
+    - ahst
   - - '[AspectClass=be-at][Aspect=present]'
     - oh
   - - '[AspectClass=become][Aspect=completive]'
@@ -88,21 +88,21 @@ rules:
   - - '[AspectClass=become][Aspect=incompletive]'
     - k
   - - '[AspectClass=become][Aspect=infinitive]'
-    - st
+    - hst
   - - '[AspectClass=become][Aspect=present]'
     - k
   - - '[AspectClass=become][Variant=2][Aspect=infinitive]'
-    - '''ist'
+    - '''ihst'
   - - '[AspectClass=become][Variant=3][Aspect=infinitive]'
     - yhst
   - - '[AspectClass=become][Variant=4][Aspect=infinitive]'
-    - ist
+    - ihst
   - - '[AspectClass=cause][Aspect=completive]'
     - han
   - - '[AspectClass=cause][Aspect=immediate]'
     - a
   - - '[AspectClass=cause][Aspect=incompletive]'
-    - isk
+    - ihsk
   - - '[AspectClass=cause][Aspect=infinitive]'
     - oht
   - - '[AspectClass=cause][Aspect=present]'
@@ -118,7 +118,7 @@ rules:
   - - '[AspectClass=e-a][Aspect=immediate]'
     - a
   - - '[AspectClass=e-a][Aspect=incompletive]'
-    - esk
+    - ehsk
   - - '[AspectClass=e-a][Aspect=infinitive]'
     - et
   - - '[AspectClass=e-a][Aspect=present]'
@@ -128,9 +128,9 @@ rules:
   - - '[AspectClass=e-aka][Aspect=immediate]'
     - aka
   - - '[AspectClass=e-aka][Aspect=incompletive]'
-    - esk
+    - ehsk
   - - '[AspectClass=e-aka][Aspect=infinitive]'
-    - est
+    - ehst
   - - '[AspectClass=e-aka][Aspect=present]'
     - e'
   - - '[AspectClass=episodic][Aspect=completive]'
@@ -138,17 +138,17 @@ rules:
   - - '[AspectClass=episodic][Aspect=immediate]'
     - vhvka
   - - '[AspectClass=episodic][Aspect=incompletive]'
-    - vhvsk
+    - vhvhsk
   - - '[AspectClass=episodic][Aspect=infinitive]'
     - ht
   - - '[AspectClass=episodic][Aspect=present]'
-    - vhvsk
+    - vhvhsk
   - - '[AspectClass=episodic][Variant=2][Aspect=immediate]'
     - vna
   - - '[AspectClass=episodic][Variant=2][Aspect=infinitive]'
-    - vhvst
+    - vhvhst
   - - '[AspectClass=go-in][Aspect=completive]'
-    - invs
+    - invhs
   - - '[AspectClass=go-in][Aspect=immediate]'
     - uka
   - - '[AspectClass=go-in][Aspect=incompletive]'
@@ -158,15 +158,15 @@ rules:
   - - '[AspectClass=go-in][Aspect=present]'
     - ek
   - - '[AspectClass=go-in][Variant=2][Aspect=completive]'
-    - es
+    - ehs
   - - '[AspectClass=go][Aspect=completive]'
-    - vs
+    - vhs
   - - '[AspectClass=go][Aspect=immediate]'
     - uka
   - - '[AspectClass=go][Aspect=incompletive]'
     - ek
   - - '[AspectClass=go][Aspect=infinitive]'
-    - vst
+    - vhst
   - - '[AspectClass=go][Aspect=present]'
     - ek
   - - '[AspectClass=go][Variant=2][Aspect=present]'
@@ -178,7 +178,7 @@ rules:
   - - '[AspectClass=hih-hil][Aspect=incompletive]'
     - hih
   - - '[AspectClass=hih-hil][Aspect=infinitive]'
-    - st
+    - hst
   - - '[AspectClass=hih-hil][Aspect=present]'
     - hih
   - - '[AspectClass=hih-hil][Variant=2][Aspect=immediate]'
@@ -190,7 +190,7 @@ rules:
   - - '[AspectClass=hih-hilh][Aspect=incompletive]'
     - hih
   - - '[AspectClass=hih-hilh][Aspect=infinitive]'
-    - hist
+    - hihst
   - - '[AspectClass=hih-hilh][Aspect=present]'
     - hih
   - - '[AspectClass=hih-lh][Aspect=completive]'
@@ -200,7 +200,7 @@ rules:
   - - '[AspectClass=hih-lh][Aspect=incompletive]'
     - hih
   - - '[AspectClass=hih-lh][Aspect=infinitive]'
-    - st
+    - hst
   - - '[AspectClass=hih-lh][Aspect=present]'
     - hih
   - - '[AspectClass=hih-lh][Variant=2][Aspect=immediate]'
@@ -210,47 +210,47 @@ rules:
   - - '[AspectClass=husk][Aspect=immediate]'
     - huka
   - - '[AspectClass=husk][Aspect=incompletive]'
-    - husk
+    - huhsk
   - - '[AspectClass=husk][Aspect=infinitive]'
-    - hust
+    - huhst
   - - '[AspectClass=husk][Aspect=present]'
-    - husk
+    - huhsk
   - - '[AspectClass=hvsk-han][Aspect=completive]'
     - han
   - - '[AspectClass=hvsk-han][Aspect=immediate]'
     - hvka
   - - '[AspectClass=hvsk-han][Aspect=incompletive]'
-    - hvsk
+    - hvhsk
   - - '[AspectClass=hvsk-han][Aspect=infinitive]'
     - ht
   - - '[AspectClass=hvsk-han][Aspect=present]'
-    - hvsk
+    - hvhsk
   - - '[AspectClass=hvsk-han][Variant=2][Aspect=infinitive]'
-    - hvst
+    - hvhst
   - - '[AspectClass=hvsk-n][Aspect=completive]'
     - n
   - - '[AspectClass=hvsk-n][Aspect=immediate]'
     - hvka
   - - '[AspectClass=hvsk-n][Aspect=incompletive]'
-    - hvsk
+    - hvhsk
   - - '[AspectClass=hvsk-n][Aspect=infinitive]'
     - oht
   - - '[AspectClass=hvsk-n][Aspect=present]'
-    - hvsk
+    - hvhsk
   - - '[AspectClass=hvsk-nh][Aspect=completive]'
     - nh
   - - '[AspectClass=hvsk-nh][Aspect=immediate]'
     - hvka
   - - '[AspectClass=hvsk-nh][Aspect=incompletive]'
-    - hvsk
+    - hvhsk
   - - '[AspectClass=hvsk-nh][Aspect=infinitive]'
     - ht
   - - '[AspectClass=hvsk-nh][Aspect=present]'
-    - hvsk
+    - hvhsk
   - - '[AspectClass=hvsk-nh][Variant=2][Aspect=infinitive]'
     - ht
   - - '[AspectClass=hvsk-nh][Variant=3][Aspect=infinitive]'
-    - hvst
+    - hvhst
   - - '[AspectClass=hvsk-nh][Variant=4][Aspect=infinitive]'
     - oht
   - - '[AspectClass=i-a-i][Aspect=completive]'
@@ -258,41 +258,41 @@ rules:
   - - '[AspectClass=i-a-i][Aspect=immediate]'
     - a
   - - '[AspectClass=i-a-i][Aspect=incompletive]'
-    - isk
+    - ihsk
   - - '[AspectClass=i-a-i][Aspect=infinitive]'
-    - ist
+    - ihst
   - - '[AspectClass=i-a-i][Aspect=present]'
     - i'
   - - '[AspectClass=i-a-i][Variant=2][Aspect=completive]'
-    - is
+    - ihs
   - - '[AspectClass=i-a-ihsk][Aspect=completive]'
-    - is
+    - ihs
   - - '[AspectClass=i-a-ihsk][Aspect=immediate]'
     - a
   - - '[AspectClass=i-a-ihsk][Aspect=incompletive]'
-    - isk
+    - ihsk
   - - '[AspectClass=i-a-ihsk][Aspect=infinitive]'
-    - ist
+    - ihst
   - - '[AspectClass=i-a-ihsk][Aspect=present]'
-    - isk
+    - ihsk
   - - '[AspectClass=i-vka][Aspect=completive]'
     - an
   - - '[AspectClass=i-vka][Aspect=immediate]'
     - vka
   - - '[AspectClass=i-vka][Aspect=incompletive]'
-    - isk
+    - ihsk
   - - '[AspectClass=i-vka][Aspect=infinitive]'
     - ot
   - - '[AspectClass=i-vka][Aspect=present]'
     - i'
   - - '[AspectClass=ih-ihi][Aspect=completive]'
-    - is
+    - ihs
   - - '[AspectClass=ih-ihi][Aspect=immediate]'
     - ihi
   - - '[AspectClass=ih-ihi][Aspect=incompletive]'
-    - isk
+    - ihsk
   - - '[AspectClass=ih-ihi][Aspect=infinitive]'
-    - ihist
+    - ihihst
   - - '[AspectClass=ih-ihi][Aspect=present]'
     - ih
   - - '[AspectClass=ih-il][Aspect=completive]'
@@ -302,7 +302,7 @@ rules:
   - - '[AspectClass=ih-il][Aspect=incompletive]'
     - ih
   - - '[AspectClass=ih-il][Aspect=infinitive]'
-    - ist
+    - ihst
   - - '[AspectClass=ih-il][Aspect=present]'
     - ih
   - - '[AspectClass=ih-vh][Aspect=completive]'
@@ -310,7 +310,7 @@ rules:
   - - '[AspectClass=ih-vh][Aspect=immediate]'
     - a
   - - '[AspectClass=ih-vh][Aspect=incompletive]'
-    - isk
+    - ihsk
   - - '[AspectClass=ih-vh][Aspect=infinitive]'
     - ht
   - - '[AspectClass=ih-vh][Aspect=present]'
@@ -326,7 +326,7 @@ rules:
   - - '[AspectClass=ko-kots][Aspect=incompletive]'
     - kok
   - - '[AspectClass=ko-kots][Aspect=infinitive]'
-    - kost
+    - kohst
   - - '[AspectClass=ko-kots][Aspect=present]'
     - kok
   - - '[AspectClass=o][Aspect=completive]'
@@ -334,9 +334,9 @@ rules:
   - - '[AspectClass=o][Aspect=immediate]'
     - otsa
   - - '[AspectClass=o][Aspect=incompletive]'
-    - osk
+    - ohsk
   - - '[AspectClass=o][Aspect=infinitive]'
-    - ost
+    - ohst
   - - '[AspectClass=o][Aspect=present]'
     - o'
   - - '[AspectClass=oh-al][Aspect=completive]'
@@ -346,7 +346,7 @@ rules:
   - - '[AspectClass=oh-al][Aspect=incompletive]'
     - hoh
   - - '[AspectClass=oh-al][Aspect=infinitive]'
-    - st
+    - hst
   - - '[AspectClass=oh-al][Aspect=present]'
     - hoh
   - - '[AspectClass=oh-al][Variant=2][Aspect=immediate]'
@@ -364,45 +364,45 @@ rules:
   - - '[AspectClass=oh-ol][Variant=2][Aspect=infinitive]'
     - hst
   - - '[AspectClass=oh-ol][Variant=3][Aspect=infinitive]'
-    - ast
+    - ahst
   - - '[AspectClass=rev-''i][Aspect=completive]'
-    - '''is'
+    - '''ihs'
   - - '[AspectClass=rev-''i][Aspect=immediate]'
     - '''i'
   - - '[AspectClass=rev-''i][Aspect=incompletive]'
-    - '''isk'
+    - '''ihsk'
   - - '[AspectClass=rev-''i][Aspect=infinitive]'
-    - '''ist'
+    - '''ihst'
   - - '[AspectClass=rev-''i][Aspect=present]'
     - '''i'''
   - - '[AspectClass=rev-e][Aspect=completive]'
-    - es
+    - ehs
   - - '[AspectClass=rev-e][Aspect=immediate]'
     - aki
   - - '[AspectClass=rev-e][Aspect=incompletive]'
-    - esk
+    - ehsk
   - - '[AspectClass=rev-e][Aspect=infinitive]'
-    - est
+    - ehst
   - - '[AspectClass=rev-e][Aspect=present]'
     - e'
   - - '[AspectClass=rev-gi][Aspect=completive]'
-    - kis
+    - kihs
   - - '[AspectClass=rev-gi][Aspect=immediate]'
     - ki
   - - '[AspectClass=rev-gi][Aspect=incompletive]'
-    - kisk
+    - kihsk
   - - '[AspectClass=rev-gi][Aspect=infinitive]'
-    - kist
+    - kihst
   - - '[AspectClass=rev-gi][Aspect=present]'
     - ki'
   - - '[AspectClass=rev-i][Aspect=completive]'
-    - is
+    - ihs
   - - '[AspectClass=rev-i][Aspect=immediate]'
     - i
   - - '[AspectClass=rev-i][Aspect=incompletive]'
-    - isk
+    - ihsk
   - - '[AspectClass=rev-i][Aspect=infinitive]'
-    - ist
+    - ihst
   - - '[AspectClass=rev-i][Aspect=present]'
     - i'
   - - '[AspectClass=sk-h-yh][Aspect=completive]'
@@ -410,67 +410,67 @@ rules:
   - - '[AspectClass=sk-h-yh][Aspect=immediate]'
     - yha
   - - '[AspectClass=sk-h-yh][Aspect=incompletive]'
-    - sk
+    - hsk
   - - '[AspectClass=sk-h-yh][Aspect=infinitive]'
-    - st
+    - hst
   - - '[AspectClass=sk-h-yh][Aspect=present]'
-    - sk
+    - hsk
   - - '[AspectClass=sk-h][Aspect=completive]'
     - h
   - - '[AspectClass=sk-h][Aspect=immediate]'
     - ha
   - - '[AspectClass=sk-h][Aspect=incompletive]'
-    - sk
+    - hsk
   - - '[AspectClass=sk-h][Aspect=infinitive]'
-    - st
+    - hst
   - - '[AspectClass=sk-h][Aspect=present]'
-    - sk
+    - hsk
   - - '[AspectClass=sk-h][Variant=2][Aspect=immediate]'
     - ''
   - - '[AspectClass=sk-s-a][Aspect=completive]'
-    - s
+    - hs
   - - '[AspectClass=sk-s-a][Aspect=immediate]'
     - a
   - - '[AspectClass=sk-s-a][Aspect=incompletive]'
-    - sk
+    - hsk
   - - '[AspectClass=sk-s-a][Aspect=infinitive]'
-    - hist
+    - hihst
   - - '[AspectClass=sk-s-a][Aspect=present]'
-    - sk
+    - hsk
   - - '[AspectClass=sk-s-a][Variant=2][Aspect=infinitive]'
-    - st
+    - hst
   - - '[AspectClass=sk-s-hi-hihst][Aspect=completive]'
-    - s
+    - hs
   - - '[AspectClass=sk-s-hi-hihst][Aspect=immediate]'
     - hi
   - - '[AspectClass=sk-s-hi-hihst][Aspect=incompletive]'
-    - sk
+    - hsk
   - - '[AspectClass=sk-s-hi-hihst][Aspect=infinitive]'
-    - hist
+    - hihst
   - - '[AspectClass=sk-s-hi-hihst][Aspect=present]'
-    - sk
+    - hsk
   - - '[AspectClass=sk-s-hst][Aspect=completive]'
-    - s
+    - hs
   - - '[AspectClass=sk-s-hst][Aspect=immediate]'
     - ''
   - - '[AspectClass=sk-s-hst][Aspect=incompletive]'
-    - sk
+    - hsk
   - - '[AspectClass=sk-s-hst][Aspect=infinitive]'
-    - st
+    - hst
   - - '[AspectClass=sk-s-hst][Aspect=present]'
-    - sk
+    - hsk
   - - '[AspectClass=sk-s-hst][Variant=2][Aspect=immediate]'
     - hi
   - - '[AspectClass=sk-s-la][Aspect=completive]'
-    - s
+    - hs
   - - '[AspectClass=sk-s-la][Aspect=immediate]'
     - la
   - - '[AspectClass=sk-s-la][Aspect=incompletive]'
-    - sk
+    - hsk
   - - '[AspectClass=sk-s-la][Aspect=infinitive]'
-    - st
+    - hst
   - - '[AspectClass=sk-s-la][Aspect=present]'
-    - sk
+    - hsk
   - - '[AspectClass=stative-a''][Aspect=incompletive]'
     - a'
   - - '[AspectClass=stative-a''][Aspect=present]'
@@ -488,7 +488,7 @@ rules:
   - - '[AspectClass=stative-k][Aspect=present]'
     - k
   - - '[AspectClass=stative-s][Aspect=incompletive]'
-    - s
+    - hs
   - - '[AspectClass=stative-s][Aspect=present]'
     - h
   - - '[AspectClass=stative][Aspect=incompletive]'
@@ -500,29 +500,29 @@ rules:
   - - '[AspectClass=terminative-no-o][Aspect=immediate]'
     - nha
   - - '[AspectClass=terminative-no-o][Aspect=incompletive]'
-    - hvsk
+    - hvhsk
   - - '[AspectClass=terminative-no-o][Aspect=infinitive]'
-    - hvst
+    - hvhst
   - - '[AspectClass=terminative-no-o][Aspect=present]'
-    - hvsk
+    - hvhsk
   - - '[AspectClass=terminative][Aspect=completive]'
     - onh
   - - '[AspectClass=terminative][Aspect=immediate]'
     - onha
   - - '[AspectClass=terminative][Aspect=incompletive]'
-    - ohvsk
+    - ohvhsk
   - - '[AspectClass=terminative][Aspect=infinitive]'
-    - ohvst
+    - ohvhst
   - - '[AspectClass=terminative][Aspect=present]'
-    - ohvsk
+    - ohvhsk
   - - '[AspectClass=v-vhs][Aspect=completive]'
-    - vs
+    - vhs
   - - '[AspectClass=v-vhs][Aspect=immediate]'
     - vna
   - - '[AspectClass=v-vhs][Aspect=incompletive]'
-    - vsk
+    - vhsk
   - - '[AspectClass=v-vhs][Aspect=infinitive]'
-    - vst
+    - vhst
   - - '[AspectClass=v-vhs][Aspect=present]'
     - v'
   - - '[AspectClass=vnh-ih-a][Aspect=completive]'
@@ -530,7 +530,7 @@ rules:
   - - '[AspectClass=vnh-ih-a][Aspect=immediate]'
     - a
   - - '[AspectClass=vnh-ih-a][Aspect=incompletive]'
-    - isk
+    - ihsk
   - - '[AspectClass=vnh-ih-a][Aspect=infinitive]'
     - ht
   - - '[AspectClass=vnh-ih-a][Aspect=present]'
@@ -540,27 +540,27 @@ rules:
   - - '[AspectClass=vnh-vsk][Aspect=immediate]'
     - vna
   - - '[AspectClass=vnh-vsk][Aspect=incompletive]'
-    - vsk
+    - vhsk
   - - '[AspectClass=vnh-vsk][Aspect=infinitive]'
     - ht
   - - '[AspectClass=vnh-vsk][Aspect=present]'
-    - vsk
+    - vhsk
   - - '[AspectClass=vnh-vsk][Variant=2][Aspect=infinitive]'
     - vht
   - - '[AspectClass=vnh-vsk][Variant=3][Aspect=infinitive]'
     - vnht
   - - '[AspectClass=vnh-vsk][Variant=4][Aspect=infinitive]'
-    - vst
+    - vhst
   - - '[AspectClass=vsk-long][Aspect=completive]'
     - vn
   - - '[AspectClass=vsk-long][Aspect=immediate]'
     - vka
   - - '[AspectClass=vsk-long][Aspect=incompletive]'
-    - v'vsk
+    - v'vhsk
   - - '[AspectClass=vsk-long][Aspect=infinitive]'
     - vt
   - - '[AspectClass=vsk-long][Aspect=present]'
-    - v'vsk
+    - v'vhsk
   - - '[AspectClass=vsk-long][Variant=2][Aspect=immediate]'
     - v'vka
   - - '[AspectClass=vsk-post-v][Aspect=completive]'
@@ -568,20 +568,20 @@ rules:
   - - '[AspectClass=vsk-post-v][Aspect=immediate]'
     - '''vka'
   - - '[AspectClass=vsk-post-v][Aspect=incompletive]'
-    - '''vsk'
+    - '''vhsk'
   - - '[AspectClass=vsk-post-v][Aspect=infinitive]'
     - t
   - - '[AspectClass=vsk-post-v][Aspect=present]'
-    - '''vsk'
+    - '''vhsk'
   - - '[AspectClass=vsk][Aspect=completive]'
     - vn
   - - '[AspectClass=vsk][Aspect=immediate]'
     - vka
   - - '[AspectClass=vsk][Aspect=incompletive]'
-    - vsk
+    - vhsk
   - - '[AspectClass=vsk][Aspect=infinitive]'
     - vt
   - - '[AspectClass=vsk][Aspect=present]'
-    - vsk
+    - vhsk
   - - '[AspectClass=vsk][Variant=2][Aspect=immediate]'
     - v'vka

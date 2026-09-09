@@ -6,7 +6,6 @@ from parse_chr_dict.create_aspect_class_csv import (
     parse_classes_csv,
     generate_aspect_config,
     generate_aspect_effects_csv,
-    respell_consonants,
 )
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
@@ -102,18 +101,18 @@ def test_verb_aspect_csv_content():
     assert len(stative_rows) == 6
 
     # Spot checks on multi-variant classes
-    assert class_dict["become"]["infinitive"] == "st;'ist;yhst;ist"
-    assert class_dict["sk-s-a"]["infinitive"] == "hist;st"
+    assert class_dict["become"]["infinitive"] == "hst;'ihst;yhst;ihst"
+    assert class_dict["sk-s-a"]["infinitive"] == "hihst;hst"
     assert class_dict["sk-s-hst"]["immediate"] == ";hi"
     assert class_dict["sk-h"]["immediate"] == "ha;"
-    assert class_dict["hvsk-nh"]["infinitive"] == "ht;ht;hvst;oht"
-    assert class_dict["apl"]["immediate"] == "si;si;isi;vla"
+    assert class_dict["hvsk-nh"]["infinitive"] == "ht;ht;hvhst;oht"
+    assert class_dict["apl"]["immediate"] == "hsi;hsi;ihsi;vla"
     assert class_dict["go"]["present"] == "ek;"
-    assert class_dict["go-in"]["completive"] == "invs;es"
+    assert class_dict["go-in"]["completive"] == "invhs;ehs"
     assert class_dict["cause"]["present"] == "ih;"
     assert class_dict["cause"]["completive"] == "han;anh;an"
-    assert class_dict["vnh-vsk"]["infinitive"] == "ht;vht;vnht;vst"
-    assert class_dict["oh-ol"]["infinitive"] in ("ot;st;ast", "ot;hst;ast")
+    assert class_dict["vnh-vsk"]["infinitive"] == "ht;vht;vnht;vhst"
+    assert class_dict["oh-ol"]["infinitive"] == "ot;hst;ahst"
 
 
 def test_drop_final_csvs(tmp_path):
