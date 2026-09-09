@@ -422,8 +422,8 @@ def test_entry_1759_derivation_and_validation():
 
     hyps = derive_hypotheses_for_forms(forms)
     assert len(hyps) >= 1
-    hyp = next(h for h in hyps if h.h_root in ("athvtast", "[Pro]athvtast[Aspect][Tense]") and h.animate_objects is True)
-    assert hyp.h_root in ("athvtast", "[Pro]athvtast[Aspect][Tense]")
+    hyp = next(h for h in hyps if h.h_root in ("athvtahst", "[Pro]athvtahst[Aspect][Tense]") and h.animate_objects is True)
+    assert hyp.h_root in ("athvtahst", "[Pro]athvtahst[Aspect][Tense]")
     assert hyp.prefix_class == "a_stem"
     assert hyp.aspect_class == "stative"
     assert hyp.tense_present_class == "i_present"

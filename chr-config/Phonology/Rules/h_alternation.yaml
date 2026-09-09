@@ -145,6 +145,20 @@ rules:
   input_pattern: '[TEMP_GLOT]'
   output_pattern: ''
   right_context: <NotLar>*[TEMP_GLOT_H]
+- name: realize_h_vowel_hs
+  string_map:
+  - - '[TEMP_VOWEL_A_H]s'
+    - ahs
+  - - '[TEMP_VOWEL_E_H]s'
+    - ehs
+  - - '[TEMP_VOWEL_I_H]s'
+    - ihs
+  - - '[TEMP_VOWEL_O_H]s'
+    - ohs
+  - - '[TEMP_VOWEL_U_H]s'
+    - uhs
+  - - '[TEMP_VOWEL_V_H]s'
+    - vhs
 - name: realize_h_vowel
   string_map:
   - - '[TEMP_VOWEL_A_H]'
@@ -174,15 +188,6 @@ rules:
   input_pattern: '[H_alt=none]'
   output_pattern: ''
   left_context: '<Pro>|<H_metathesis>'
-
-- name: reaspirate_s
-  input_pattern: s
-  output_pattern: hs
-  left_context: <NotLar>
-- name: reaspirate_s_fix
-  input_pattern: ths
-  output_pattern: ts
-
 - name: h_alternation
   rule_sequence:
   - $mark_h_vowel_a
@@ -214,10 +219,9 @@ rules:
   - $tag_h_glot_medial
   - $tag_h_glot_init
   - $delete_trigger_glot
+  - $realize_h_vowel_hs # special case for hs -> Vhs instead of h -> V
   - $realize_h_vowel
   - $realize_h_lat
   - $realize_h_glot
   - $delete_target_h
   - $delete_h_none
-  - $reaspirate_s
-  - $reaspirate_s_fix

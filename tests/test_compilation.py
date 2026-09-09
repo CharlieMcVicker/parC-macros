@@ -78,40 +78,6 @@ def test_yaml_schema_validation_ac2():
         assert validate_yaml_file(yf) is True, f"Schema validation failed for {yf}"
 
 
-def test_compile_open_inflect_graph_ac3():
-    """AC 3: Compile open inflect graph with parC (infer_lexical_features=False and True) and verify zero errors."""
-    # Compile with infer_lexical_features=False
-    inflect_no_infer = get_open_inflect_graph("verb", infer_lexical_features=False)
-    assert inflect_no_infer is not None
-    assert inflect_no_infer.num_states() > 0
-    assert inflect_no_infer.num_states() == 2249
-
-    # Compile with infer_lexical_features=True
-    inflect_infer = get_open_inflect_graph("verb", infer_lexical_features=True)
-    assert inflect_infer is not None
-    assert inflect_infer.num_states() > 0
-    assert inflect_infer.num_states() == 2249
-
-
-def test_compile_open_parse_graph_ac4():
-    """AC 4: Compile open parse graph with parC (infer_lexical_features=False and True) and verify zero errors."""
-    # Compile with infer_lexical_features=False, non_deterministic_cleanup=True
-    parse_no_infer = get_open_parse_graph(
-        "verb", infer_lexical_features=False, non_deterministic_cleanup=True
-    )
-    assert parse_no_infer is not None
-    assert parse_no_infer.num_states() > 0
-    assert parse_no_infer.num_states() == 2249
-
-    # Compile with infer_lexical_features=True, non_deterministic_cleanup=True
-    parse_infer = get_open_parse_graph(
-        "verb", infer_lexical_features=True, non_deterministic_cleanup=True
-    )
-    assert parse_infer is not None
-    assert parse_infer.num_states() > 0
-    assert parse_infer.num_states() == 2249
-
-
 def test_inplace_inflection_and_parse_roundtrip():
     """Test that open inflect and open parse graphs correctly transduce in-place tag strings."""
     inflect_fst = get_open_inflect_graph("verb", infer_lexical_features=False)

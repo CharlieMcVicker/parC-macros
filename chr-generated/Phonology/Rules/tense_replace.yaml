@@ -8,7 +8,7 @@ rules:
   - - '[Tense=assertive]'
     - v'i
   - - '[Tense=future_prog]'
-    - esti
+    - ehsti
   - - '[Tense=habitual]'
     - o'i
   - - '[Tense=immediate]'
