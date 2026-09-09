@@ -173,7 +173,7 @@ rules:
 - name: delete_h_none
   input_pattern: '[H_alt=none]'
   output_pattern: ''
-  left_context: <Pro>
+  left_context: '<Pro>|<H_metathesis>'
 - name: h_alternation
   rule_sequence:
   - $mark_h_vowel_a

@@ -400,6 +400,10 @@ def generate_paradigm_config(
                 stage_to_rule["insert_wi"] = "$insert_WI"
                 stage_to_rule["insert_WI"] = "$insert_WI"
 
+            for stg in (stage_order or []):
+                if stg not in stage_to_rule and stg in available_rules:
+                    stage_to_rule[stg] = f"${stg}"
+
         global_markers = []
         if stage_order:
             for stg in stage_order:

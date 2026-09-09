@@ -169,6 +169,7 @@ def read_parse(s: str) -> ParseData:
     tense_present_class = ""
     tense = ""
     prepronominal_prefixes: list[str] = []
+    h_metathesis_tag = ""
     h_alt_tag = ""
 
     for tok in tokens:
@@ -191,6 +192,8 @@ def read_parse(s: str) -> ParseData:
                 tense = v
             elif k == "DIST":
                 prepronominal_prefixes.append(tok)
+            elif k in ("H_metathesis", "H_METATHESIS"):
+                h_metathesis_tag = tok
             elif k in ("H_alt", "H_ALT"):
                 h_alt_tag = tok
         else:
@@ -203,6 +206,7 @@ def read_parse(s: str) -> ParseData:
         root="".join(root_parts),
         prefix_class=prefix_class,
         pronominal=pronominal,
+        h_metathesis_tag=h_metathesis_tag,
         h_alt_tag=h_alt_tag,
         aspect_class=aspect_class,
         variant=variant,

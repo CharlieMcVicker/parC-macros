@@ -33,8 +33,11 @@ patterns:
 - name: H_alt
   ref: <H_alt>
   pattern: <H_alt>
+- name: NotLarC
+  pattern: '{tkmnslyw}'
+  ref: <NotLarC>
 - name: NotLar
-  pattern: '{tkmnslyw}|<V>'
+  pattern: <NotLarC>|<V>
   ref: <NotLar>
 - name: SonH
   pattern: nh|lh|yh|wh|mh
@@ -42,3 +45,6 @@ patterns:
 - name: HTarget
   pattern: h<V>|<SonH>
   ref: <HTarget>
+- name: HMetaPro
+  pattern: '[Pro=1sg.B]|[Pro=2sg.B]|[Pro=3sg.A]'
+  ref: <HMetaPro>

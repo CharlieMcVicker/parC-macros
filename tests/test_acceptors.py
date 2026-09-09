@@ -121,9 +121,9 @@ def test_compile_morphotactic_acceptor_ac2():
     morph_fsa = compile_morphotactic_acceptor(syms, alphabet)
     assert morph_fsa is not None
 
-    # State footprint verification: compact (~15-130 states across all modular CSVs)
+    # State footprint verification: compact (~15-400 states across all modular CSVs)
     state_count = morph_fsa.num_states()
-    assert 12 <= state_count <= 130, f"Expected state count between 12 and 130, got {state_count}"
+    assert 12 <= state_count <= 400, f"Expected state count between 12 and 400, got {state_count}"
 
     # Helper to test un-wrapped strings against morph_fsa
     def morph_accepts(tokens: list[str]) -> bool:
@@ -207,6 +207,18 @@ def test_compile_morphotactic_acceptor_ac2():
     assert not morph_accepts(tokens_stative_imm)
     tokens_stative_inf = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", "a", "t", "a", "t", "[AspectClass=stative-k]", "[Aspect=infinitive]", "[Tense=infinitive]"]
     assert not morph_accepts(tokens_stative_inf)
+
+    # 10. H_metathesis morphotactics: <HMetaPro> (3sg.A, 1sg.B, 2sg.B) licenses <H_metathesis>
+    tokens_meta_3sg_active = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", "[H_metathesis=active]", "[H_alt=none]", "a", "t", "a", "t", "[AspectClass=a]"]
+    assert morph_accepts(tokens_meta_3sg_active)
+    tokens_meta_3sg_none = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", "[H_metathesis=none]", "[H_alt=none]", "a", "t", "a", "t", "[AspectClass=a]"]
+    assert morph_accepts(tokens_meta_3sg_none)
+
+    # Elsewhere (*): 3sg.B licenses only [H_metathesis=none]
+    tokens_meta_3sgB_none = ["[PrefixClass=a_stem]", "[Pro=3sg.B]", "[H_metathesis=none]", "[H_alt=none]", "a", "t", "a", "t", "[AspectClass=a]"]
+    assert morph_accepts(tokens_meta_3sgB_none)
+    tokens_meta_3sgB_active = ["[PrefixClass=a_stem]", "[Pro=3sg.B]", "[H_metathesis=active]", "[H_alt=none]", "a", "t", "a", "t", "[AspectClass=a]"]
+    assert not morph_accepts(tokens_meta_3sgB_active)
 
 
 # =========================================================================

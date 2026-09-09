@@ -50,6 +50,8 @@ def setup_env():
 
 
 def _inflect(tag_str: str) -> list[str]:
+    if "[H_metathesis=" not in tag_str and "[H_alt=" in tag_str:
+        tag_str = tag_str.replace("[H_alt=", "[H_metathesis=none][H_alt=")
     inflect_fst = get_open_inflect_graph("verb", infer_lexical_features=False)
     out = pynini.project(pynini.compose(word_fsa(tag_str), inflect_fst), "output").optimize()
     forms = fsm_strings(out)

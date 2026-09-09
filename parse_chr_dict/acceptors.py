@@ -8,6 +8,7 @@ anchored prefix stem-shape constraints, and cascade domain acceptors.
 from __future__ import annotations
 
 import csv
+import functools
 import hashlib
 import json
 import os
@@ -17,7 +18,12 @@ from typing import Iterable, Set
 
 import pynini
 from parC.constants import get_yaml_dir
-from parC.grammar.acceptor_compilation import fsa, get_symbol_table
+from parC.grammar.acceptor_compilation import (
+    fsa,
+    fsm_strings,
+    get_symbol_table,
+    word_fsa,
+)
 from parC.grammar.blueprints.alphabet import AlphabetBlueprint
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
@@ -340,13 +346,22 @@ def compile_prefix_stem_shape_acceptor(
         raise ValueError("No [Pro=...] tags found in symbol table.")
     pro_fsa = pynini.union(*[pynini.accep(p, token_type=syms) for p in pro_tags]).optimize()
 
-    # Optional H_ALT tags in syms
-    h_alt_tags = [s for s in all_syms if s.startswith("[H_") and s.endswith("]")]
+    # H_metathesis tags in syms
+    h_meta_tags = [s for s in all_syms if (s.startswith("[H_metathesis=") or s.startswith("[H_METATHESIS=")) and s.endswith("]")]
     empty_fsa = pynini.accep("", token_type=syms)
+    if h_meta_tags:
+        h_meta_opt = pynini.union(empty_fsa, *[pynini.accep(h, token_type=syms) for h in h_meta_tags]).optimize()
+    else:
+        h_meta_opt = empty_fsa
+
+    # Optional H_ALT tags in syms
+    h_alt_tags = [s for s in all_syms if (s.startswith("[H_alt=") or s.startswith("[H_ALT=")) and s.endswith("]")]
     if h_alt_tags:
         h_alt_opt = pynini.union(empty_fsa, *[pynini.accep(h, token_type=syms) for h in h_alt_tags]).optimize()
     else:
         h_alt_opt = empty_fsa
+
+    pro_meta_alt_opt = pynini.concat(pro_fsa, pynini.concat(h_meta_opt, h_alt_opt)).optimize()
 
     all_phones = sorted(list(alphabet.inventory.phones))
 
@@ -378,7 +393,7 @@ def compile_prefix_stem_shape_acceptor(
         disallowed_phones = [p for p in all_phones if p not in allowed_phones]
         if disallowed_phones:
             dis_fsa = pynini.union(*[pynini.accep(p, token_type=syms) for p in disallowed_phones]).optimize()
-            inner_bad = pynini.concat(c_fsa, pynini.concat(pro_fsa, pynini.concat(h_alt_opt, dis_fsa)))
+            inner_bad = pynini.concat(c_fsa, pynini.concat(pro_meta_alt_opt, dis_fsa))
             inner_bad_seqs.append(inner_bad)
 
     all_pclasses_fsa = pynini.union(*prefix_class_fsas).optimize()
@@ -390,13 +405,20 @@ def compile_prefix_stem_shape_acceptor(
         bad_no_pro_inner = pynini.concat(all_pclasses_fsa, non_pro_fsa)
         inner_bad_seqs.append(bad_no_pro_inner)
 
-    # Disallow [PrefixClass=c] Pro (H_ALT)? followed by non-phone (e.g. adjacent morpheme tag)
-    non_phone_syms = [s for s in all_syms if s not in all_phones and not s.startswith("[H_")]
+    # Disallow [PrefixClass=c] Pro (H_metathesis)? (H_ALT)? followed by non-phone (e.g. adjacent morpheme tag)
+    non_phone_syms = [
+        s for s in all_syms
+        if s not in all_phones
+        and not s.startswith("[H_alt=")
+        and not s.startswith("[H_ALT=")
+        and not s.startswith("[H_metathesis=")
+        and not s.startswith("[H_METATHESIS=")
+    ]
     if non_phone_syms:
         non_phone_fsa = pynini.union(*[pynini.accep(s, token_type=syms) for s in non_phone_syms]).optimize()
         bad_no_phone_inner = pynini.concat(
             all_pclasses_fsa,
-            pynini.concat(pro_fsa, pynini.concat(h_alt_opt, non_phone_fsa)),
+            pynini.concat(pro_meta_alt_opt, non_phone_fsa),
         )
         inner_bad_seqs.append(bad_no_phone_inner)
 
@@ -566,4 +588,28 @@ def get_cascade_domain_acceptor(
 
     _CASCADE_DOMAIN_CACHE[cache_key] = fst
     return fst.copy()
+
+
+def compile_h_meta_trigger_fst() -> pynini.Fst:
+    """Compiles the <HMetaPro> FST representing pronominals that trigger H-metathesis."""
+    return fsa("<HMetaPro>")
+
+
+@functools.lru_cache(maxsize=8)
+def get_h_metathesis_trigger_pronominals() -> Set[str]:
+    """Returns the set of pronominal tag values that trigger H-metathesis by inspecting <HMetaPro>."""
+    raw_strs = fsm_strings(compile_h_meta_trigger_fst())
+    return {s[5:-1] if s.startswith("[Pro=") and s.endswith("]") else s for s in raw_strs}
+
+
+def is_h_metathesis_trigger(pronominal: str) -> bool:
+    """Returns True if the pronominal triggers H-metathesis according to compiled <HMetaPro>."""
+    pro_clean = pronominal[5:-1] if pronominal.startswith("[Pro=") and pronominal.endswith("]") else pronominal
+    return pro_clean in get_h_metathesis_trigger_pronominals()
+
+
+def clear_acceptor_caches():
+    """Clears internal acceptor caches."""
+    _CASCADE_DOMAIN_CACHE.clear()
+    get_h_metathesis_trigger_pronominals.cache_clear()
 

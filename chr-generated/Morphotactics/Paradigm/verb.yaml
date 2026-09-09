@@ -7,8 +7,10 @@ stage_order:
 - aspect_suffix
 - tense
 - h_alternation
+- tag_h_metathesis
 - drop_stem_initial_vowel
 - pronominal
+- h_metathesis
 - insert_dist
 - insert_wi
 global_markers:
@@ -25,21 +27,28 @@ global_markers:
   stage: h_alternation
   value: $h_alternation
 - kind: rule
+  stage: tag_h_metathesis
+  value: $tag_h_metathesis
+- kind: rule
   stage: drop_stem_initial_vowel
   value: $drop_stem_initial_vowel
 - kind: rule
   stage: pronominal
   value: $pro_replace
 - kind: rule
+  stage: h_metathesis
+  value: $h_metathesis
+- kind: rule
   stage: insert_dist
   value: $insert_DIST
 - kind: rule
   stage: insert_wi
   value: $insert_WI
-open_root_template: <PrepronominalPrefixes><PrefixClass><Pro><H_alt><Root><AspectClass><Variant><Aspect><Tense>
+open_root_template: <PrepronominalPrefixes><PrefixClass><Pro><H_metathesis><H_alt><Root><AspectClass><Variant><Aspect><Tense>
 template:
 - <PrepronominalPrefixes>
 - slot:pronominal
+- <H_metathesis>
 - <H_alt>
 - <Root>
 - slot:aspect

@@ -40,13 +40,14 @@ def test_inplace_patterns_and_inventory():
     patterns = get_patterns()
 
     assert len(inv.phones) == 16
-    assert len(inv.tags) == 135
+    assert len(inv.tags) == 138
 
     # Check required patterns
     assert "<PrepronominalPrefixes>" in patterns
     assert "<Root>" in patterns
     assert "<PrefixClass>" in patterns
     assert "<Pro>" in patterns
+    assert "<HMetaPro>" in patterns
     assert "<AspectClass>" in patterns
     assert "<Variant>" in patterns
     assert "<Aspect>" in patterns

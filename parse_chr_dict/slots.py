@@ -36,6 +36,7 @@ FALLBACK_MANIFEST: dict[str, Any] = {
         "<PrepronominalPrefixes>",
         "<PrefixClass>",
         "<Pro>",
+        "<H_metathesis>",
         "<H_alt>",
         "<Root>",
         "<AspectClass>",
@@ -60,6 +61,8 @@ FALLBACK_MANIFEST: dict[str, Any] = {
 DEFAULT_SLOT_TAG_MAP: dict[str, str] = {
     "PrefixClass": "prefix_class",
     "Pro": "pronominal",
+    "H_metathesis": "h_metathesis_tag",
+    "H_METATHESIS": "h_metathesis_tag",
     "H_alt": "h_alt_tag",
     "H_ALT": "h_alt_tag",
     "AspectClass": "aspect_class",
@@ -70,6 +73,8 @@ DEFAULT_SLOT_TAG_MAP: dict[str, str] = {
 
 SPECIAL_TAG_MAP: dict[str, str] = {
     "Pro": "pronominal",
+    "H_metathesis": "h_metathesis_tag",
+    "H_METATHESIS": "h_metathesis_tag",
     "H_alt": "h_alt_tag",
     "H_ALT": "h_alt_tag",
 }

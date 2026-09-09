@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 import functools
 from typing import List, Optional, Set, Tuple
 
+from parse_chr_dict.acceptors import is_h_metathesis_trigger
 from parse_chr_dict.create_aspect_class_csv import respell_consonants
 from parse_chr_dict.h_alternation import (
     is_h_alternation_trigger,
@@ -20,6 +21,7 @@ class ParseData:
     root: str
     prefix_class: str = ""
     pronominal: str = ""
+    h_metathesis_tag: str = ""
     h_alt_tag: str = ""
     aspect_class: str = ""
     variant: int = 1
@@ -47,6 +49,10 @@ class ParseData:
         return "[WI]" in self.prepronominal_prefixes
 
     @property
+    def has_h_metathesis(self) -> bool:
+        return self.h_metathesis_tag == "[H_metathesis=active]"
+
+    @property
     def rules(self) -> str:
         return "+"
 
@@ -66,6 +72,8 @@ class ParseData:
             d["translocutive"] = "+"
         if self.has_distributive:
             d["distributive"] = "+"
+        if self.h_metathesis_tag:
+            d["h_metathesis_tag"] = self.h_metathesis_tag
         if self.h_alt_tag:
             d["h_alt_tag"] = self.h_alt_tag
         return {k: v for k, v in d.items() if v}
@@ -79,6 +87,10 @@ class ParseData:
             parts.append(f"[PrefixClass={self.prefix_class}]")
         if self.pronominal:
             parts.append(f"[Pro={self.pronominal}]")
+        if self.h_metathesis_tag:
+            parts.append(self.h_metathesis_tag)
+        elif not any(self.root.startswith(t) for t in ("[H_", "[TEMP")):
+            parts.append("[H_metathesis=none]")
         if self.h_alt_tag:
             parts.append(self.h_alt_tag)
         elif not any(self.root.startswith(t) for t in ("[H_", "[TEMP")):
@@ -455,6 +467,7 @@ class VerbMetadata:
     animate_objects: bool = False
     aspect_variants: AspectVariants = field(default_factory=AspectVariants)
     is_i_present: bool = False
+    is_h_metathesis: bool = False
 
     def __init__(
         self,
@@ -464,22 +477,26 @@ class VerbMetadata:
         animate_objects: bool = False,
         aspect_variants: Optional[AspectVariants] = None,
         is_i_present: bool = False,
+        is_h_metathesis: bool = False,
         *,
         set_a: Optional[bool] = None,
         plural: Optional[bool] = None,
         tense_present_class: Optional[str] = None,
+        h_metathesis: Optional[bool] = None,
     ):
         actual_set_a = set_a if set_a is not None else (is_set_a if is_set_a is not None else True)
         actual_plural = plural if plural is not None else (is_plural if is_plural is not None else False)
         actual_variants = aspect_variants if aspect_variants is not None else AspectVariants()
         if tense_present_class is not None:
             is_i_present = (tense_present_class == "i_present")
+        actual_h_meta = h_metathesis if h_metathesis is not None else is_h_metathesis
         object.__setattr__(self, "entry_type", entry_type)
         object.__setattr__(self, "is_set_a", actual_set_a)
         object.__setattr__(self, "is_plural", actual_plural)
         object.__setattr__(self, "animate_objects", animate_objects)
         object.__setattr__(self, "aspect_variants", actual_variants)
         object.__setattr__(self, "is_i_present", is_i_present)
+        object.__setattr__(self, "is_h_metathesis", actual_h_meta)
 
     @property
     def set_a(self) -> bool:
@@ -490,20 +507,31 @@ class VerbMetadata:
         return self.is_plural
 
     @property
+    def h_metathesis(self) -> bool:
+        return self.is_h_metathesis
+
+    @property
     def tense_present_class(self) -> str:
         return "i_present" if self.is_i_present else "a_present"
 
     @classmethod
-    def all_combinations(cls, entry_type: str | VerbEntryType = "Eventful"):
+    def all_combinations(
+        cls,
+        entry_type: str | VerbEntryType = "Eventful",
+        is_h_metathesis: Optional[bool] = False,
+    ):
+        meta_options = [is_h_metathesis] if is_h_metathesis is not None else [False, True]
         for plural in [True, False]:
             for set_a in [True, False]:
                 for animate_objects in [False] if plural else [True, False]:
-                    yield cls(
-                        entry_type=entry_type,
-                        is_set_a=set_a,
-                        is_plural=plural,
-                        animate_objects=animate_objects,
-                    )
+                    for h_meta in meta_options:
+                        yield cls(
+                            entry_type=entry_type,
+                            is_set_a=set_a,
+                            is_plural=plural,
+                            animate_objects=animate_objects,
+                            is_h_metathesis=h_meta,
+                        )
 
     def with_variant(self, aspect: str, variant: int) -> VerbMetadata:
         return VerbMetadata(
@@ -513,6 +541,7 @@ class VerbMetadata:
             animate_objects=self.animate_objects,
             aspect_variants=self.aspect_variants.with_variant(aspect, variant),
             is_i_present=self.is_i_present,
+            is_h_metathesis=self.is_h_metathesis,
         )
 
     def to_dict(self) -> dict[str, str | bool | int]:
@@ -524,6 +553,8 @@ class VerbMetadata:
             "animate_objects": self.animate_objects,
             "is_i_present": self.is_i_present,
             "tense_present_class": self.tense_present_class,
+            "is_h_metathesis": self.is_h_metathesis,
+            "h_metathesis": self.is_h_metathesis,
             **self.aspect_variants.to_dict(),
         }
 
@@ -584,8 +615,11 @@ class LexicalVerb:
         translocutive: bool = False,
         aspect_variants: Optional[AspectVariants] = None,
         entry_type: str = "Eventful",
+        is_h_metathesis: bool = False,
+        h_metathesis: Optional[bool] = None,
     ):
         is_i_pres = (tense_present_class == "i_present")
+        actual_h_meta = h_metathesis if h_metathesis is not None else is_h_metathesis
         if template is None:
             var_int = int(present_variant) if str(present_variant).isdigit() else 1
             template = VerbTemplate(
@@ -607,16 +641,17 @@ class LexicalVerb:
                 animate_objects=animate_objects,
                 aspect_variants=aspect_variants,
                 is_i_present=is_i_pres,
+                is_h_metathesis=actual_h_meta,
             )
-        elif tense_present_class:
-            # If explicit tense_present_class was passed with existing metadata, update metadata
+        elif tense_present_class or h_metathesis is not None or is_h_metathesis:
             metadata = VerbMetadata(
                 entry_type=metadata.entry_type,
                 is_set_a=metadata.is_set_a,
                 is_plural=metadata.is_plural,
                 animate_objects=metadata.animate_objects,
                 aspect_variants=metadata.aspect_variants,
-                is_i_present=is_i_pres,
+                is_i_present=is_i_pres if tense_present_class else metadata.is_i_present,
+                is_h_metathesis=actual_h_meta if (h_metathesis is not None or is_h_metathesis) else metadata.is_h_metathesis,
             )
         object.__setattr__(self, "template", template)
         object.__setattr__(self, "metadata", metadata)
@@ -635,6 +670,14 @@ class LexicalVerb:
     @property
     def aspect_class(self) -> str:
         return self.template.aspect_class
+
+    @property
+    def is_h_metathesis(self) -> bool:
+        return self.metadata.is_h_metathesis
+
+    @property
+    def h_metathesis(self) -> bool:
+        return self.metadata.is_h_metathesis
 
     @property
     def tense_present_class(self) -> str:
@@ -670,6 +713,8 @@ class LexicalVerb:
             "set_a": self.set_a,
             "plural": self.plural,
             "animate_objects": self.animate_objects,
+            "is_h_metathesis": self.is_h_metathesis,
+            "h_metathesis": self.h_metathesis,
             "present_variant": self.present_variant,
             **self.metadata.aspect_variants.to_dict(),
         }
@@ -718,10 +763,16 @@ class LexicalVerb:
         results: set[str] = set()
         for pro in pros:
             h_alt = self.h_alt_tag or "[H_alt=none]" if is_h_alternation_trigger(pro) else "[H_alt=none]"
+            h_meta = (
+                "[H_metathesis=active]"
+                if (self.metadata.is_h_metathesis and is_h_metathesis_trigger(pro))
+                else "[H_metathesis=none]"
+            )
             for p_cand in prefixes:
                 feat_dict = {
                     "prefix_class": p_cand,
                     "pronominal": pro,
+                    "h_metathesis_tag": h_meta,
                     "h_alt_tag": h_alt,
                     "aspect_class": self.aspect_class,
                     "variant": str(var),

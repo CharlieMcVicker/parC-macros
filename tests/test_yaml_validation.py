@@ -73,6 +73,7 @@ def test_chr_config_yamls():
     assert verb_data["paradigm"]["template"] == [
         "<PrepronominalPrefixes>",
         "slot:pronominal",
+        "<H_metathesis>",
         "<H_alt>",
         "<Root>",
         "slot:aspect",
@@ -80,7 +81,7 @@ def test_chr_config_yamls():
     ]
     assert (
         derive_open_root_template(verb_data)
-        == "<PrepronominalPrefixes><PrefixClass><Pro><H_alt><Root><AspectClass><Variant><Aspect><Tense>"
+        == "<PrepronominalPrefixes><PrefixClass><Pro><H_metathesis><H_alt><Root><AspectClass><Variant><Aspect><Tense>"
     )
 
     # Validate all Phonology YAML files with schema validator

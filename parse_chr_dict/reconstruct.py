@@ -36,6 +36,7 @@ _INFLECT_CACHE: dict[tuple[str, frozenset[tuple[str, str]], str, bool, bool], li
 def build_tag_str(root: str, feature_values: dict[str, str]) -> str:
     pref = feature_values.get("prefix_class", "")
     pro = feature_values.get("pronominal", "")
+    h_meta = feature_values.get("h_metathesis_tag") or feature_values.get("h_metathesis", "")
     h_alt = feature_values.get("h_alt_tag", "")
     asp_cls = feature_values.get("aspect_class", "")
     var = feature_values.get("variant", 1)
@@ -63,6 +64,13 @@ def build_tag_str(root: str, feature_values: dict[str, str]) -> str:
         parts.append(f"[PrefixClass={pref}]")
     if pro:
         parts.append(f"[Pro={pro}]")
+    if h_meta:
+        if h_meta in ("active", "none"):
+            parts.append(f"[H_metathesis={h_meta}]")
+        else:
+            parts.append(h_meta)
+    elif not any(root.startswith(t) for t in ("[H_", "[TEMP")):
+        parts.append("[H_metathesis=none]")
     if h_alt:
         parts.append(h_alt)
     elif not any(root.startswith(t) for t in ("[H_", "[TEMP")):
@@ -150,7 +158,9 @@ def reconstruct_row(
 ) -> list[VerbMetadata]:
     passing_metas: list[VerbMetadata] = []
     entry_type_name = getattr(entry_type, "name", str(entry_type))
-    for meta in VerbMetadata.all_combinations(entry_type=entry_type_name):
+    h_meta_val = row.get("h_metathesis") or row.get("is_h_metathesis")
+    h_meta_opt = (h_meta_val in (True, "True", "true")) if h_meta_val is not None else None
+    for meta in VerbMetadata.all_combinations(entry_type=entry_type_name, is_h_metathesis=h_meta_opt):
         hypothesis = LexicalVerb(
             h_root=row.get("h_root", ""),
             h_alt_tag=row.get("h_alt_tag", ""),
@@ -160,6 +170,7 @@ def reconstruct_row(
             set_a=meta.is_set_a,
             plural=meta.is_plural,
             animate_objects=meta.animate_objects,
+            is_h_metathesis=meta.is_h_metathesis,
         )
         if validate_hypothesis(hypothesis, row, entry_type):
             passing_metas.append(meta)

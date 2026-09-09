@@ -1,0 +1,14 @@
+kind: Rules
+rules:
+- name: insert_meta_h
+  input_pattern: ''
+  output_pattern: h
+  right_context: '<V><NotLarC>*[TEMP_META_H_DEL]<V>'
+- name: delete_meta_h_tag
+  input_pattern: '[TEMP_META_H_DEL]'
+  output_pattern: ''
+
+- name: h_metathesis
+  rule_sequence:
+  - $insert_meta_h
+  - $delete_meta_h_tag

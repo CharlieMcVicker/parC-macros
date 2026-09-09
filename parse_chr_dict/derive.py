@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import Dict, List, Optional, Set, Tuple
 import warnings
 
+from parse_chr_dict.acceptors import is_h_metathesis_trigger
 from parse_chr_dict.parse import (
     parse_surface,
     parse_string_to_parse_data,
@@ -177,27 +178,36 @@ def _derive_category(
         else:
             animate_options = [False]
 
+        # H-metathesis candidate values
+        if is_h_metathesis_trigger(pro_tag):
+            h_meta_options = [p_data.h_metathesis_tag == "[H_metathesis=active]"]
+        else:
+            h_meta_options = [False, True]
+
         h_alt_val = p_data.h_alt_tag or "[H_alt=none]"
         aspect_variants = AspectVariants(present=pres_var)
 
         for sa in set_a_options:
             for pl in plural_options:
                 for anim in animate_options:
-                    meta = VerbMetadata(
-                        entry_type="Stative" if is_stative else "Eventful",
-                        is_set_a=sa,
-                        is_plural=pl,
-                        animate_objects=anim,
-                        aspect_variants=aspect_variants,
-                        is_i_present=is_i_pres,
-                    )
-                    candidate_hypotheses.add(
-                        LexicalVerb(
-                            template=tmpl,
-                            metadata=meta,
-                            h_alt_tag=h_alt_val,
+                    for h_meta in h_meta_options:
+                        meta = VerbMetadata(
+                            entry_type="Stative" if is_stative else "Eventful",
+                            is_set_a=sa,
+                            is_plural=pl,
+                            animate_objects=anim,
+                            aspect_variants=aspect_variants,
+                            is_i_present=is_i_pres,
+                            is_h_metathesis=h_meta,
                         )
-                    )
+                        candidate_hypotheses.add(
+                            LexicalVerb(
+                                template=tmpl,
+                                metadata=meta,
+                                h_alt_tag=h_alt_val,
+                                is_h_metathesis=h_meta,
+                            )
+                        )
 
     if not candidate_hypotheses or len(ordered_forms) == 1:
         return candidate_hypotheses
@@ -334,6 +344,16 @@ def _derive_category(
                 else:
                     new_h_alt_tag = hyp.h_alt_tag or "[H_alt=none]"
 
+                if is_h_metathesis_trigger(pro_tag):
+                    expected_meta = (
+                        "[H_metathesis=active]"
+                        if hyp.metadata.is_h_metathesis
+                        else "[H_metathesis=none]"
+                    )
+                    actual_meta = p_data.h_metathesis_tag or "[H_metathesis=none]"
+                    if actual_meta != expected_meta:
+                        continue
+
                 # Fold non-shared form variant into metadata.aspect_variants
                 aspect_name = p_data.aspect or form.corpus_key
                 new_aspect_variants = hyp.metadata.aspect_variants.with_variant(
@@ -346,6 +366,7 @@ def _derive_category(
                     animate_objects=hyp.metadata.animate_objects,
                     aspect_variants=new_aspect_variants,
                     is_i_present=hyp.metadata.is_i_present,
+                    is_h_metathesis=hyp.metadata.is_h_metathesis,
                 )
 
                 # Determine canonical prefix class
@@ -370,6 +391,7 @@ def _derive_category(
                         template=new_template,
                         metadata=new_metadata,
                         h_alt_tag=new_h_alt_tag,
+                        is_h_metathesis=hyp.metadata.is_h_metathesis,
                     )
                 )
 

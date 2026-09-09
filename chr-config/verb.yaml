@@ -3,8 +3,10 @@ stages:
   - aspect_suffix
   - tense
   - h_alternation
+  - tag_h_metathesis
   - drop_stem_initial_vowel
   - pronominal
+  - h_metathesis
   - insert_dist
   - insert_wi
 
@@ -57,6 +59,7 @@ paradigm:
   template:
     - "<PrepronominalPrefixes>"
     - slot:pronominal
+    - "<H_metathesis>"
     - "<H_alt>"
     - "<Root>"
     - slot:aspect

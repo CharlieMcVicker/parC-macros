@@ -460,7 +460,7 @@ def generate_patterns(
     retained_map: dict[str, dict[str, Any]] = {}
     for pat in pats_yaml.get("patterns", []):
         ref = pat.get("ref")
-        if ref in ("<C>", "<NotLar>", "<SonH>", "<HTarget>", "<H_alt>", "<H_ALT>"):
+        if ref:
             retained_map[ref] = pat
 
     c_pat = retained_map.get("<C>", {
@@ -469,23 +469,15 @@ def generate_patterns(
         "ref": "<C>",
     })
 
-    not_lar_pat = retained_map.get("<NotLar>", {
-        "name": "NotLar",
-        "pattern": "{tkmnslyw}|<V>",
-        "ref": "<NotLar>",
-    })
-
-    son_h_pat = retained_map.get("<SonH>", {
-        "name": "SonH",
-        "pattern": "nh|lh|yh|wh|mh",
-        "ref": "<SonH>",
-    })
-
-    h_target_pat = retained_map.get("<HTarget>", {
-        "name": "HTarget",
-        "pattern": "h<V>|<SonH>",
-        "ref": "<HTarget>",
-    })
+    generated_refs = {
+        "<C>", "<PrepronominalPrefixes>", "<Root>", "<PrefixClass>", "<Pro>",
+        "<AspectClass>", "<Variant>", "<Aspect>", "<TenseClass>", "<Tense>",
+        "<Morpheme>", "<H_alt>", "<H_ALT>"
+    }
+    custom_patterns = [
+        pat for pat in pats_yaml.get("patterns", [])
+        if pat.get("ref") not in generated_refs
+    ]
 
     prefix_class_pat = "|".join(f"[PrefixClass={c}]" for c in data["prefix_classes"])
     pro_pat = "|".join(f"[Pro={p}]" for p in data["pronominals"])
@@ -571,9 +563,7 @@ def generate_patterns(
             "ref": "<H_alt>",
             "pattern": "<H_alt>",
         },
-        not_lar_pat,
-        son_h_pat,
-        h_target_pat,
+        *custom_patterns,
     ])
 
     pats_yaml["kind"] = "Patterns"

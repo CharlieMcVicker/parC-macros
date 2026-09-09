@@ -100,6 +100,7 @@ def _categorize_arc(in_char: str, out_char: str, current_stage: str) -> str:
     elif (
         out_char.startswith("[PrefixClass=")
         or out_char.startswith("[Pro=")
+        or out_char.startswith("[H_metathesis=")
         or out_char.startswith("[H_alt=")
         or out_char in ("[WI]", "[DIST]", "[DIST=de]", "[DIST=di]")
         or out_char.startswith("[DIST=")

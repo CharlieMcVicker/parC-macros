@@ -1,0 +1,5 @@
+# kind: morphotactic_licensing
+# trigger_slot: Pro
+trigger,target_slot,licensed
+<HMetaPro>,H_metathesis,<H_metathesis>
+*,H_metathesis,[H_metathesis=none]

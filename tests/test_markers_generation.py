@@ -116,8 +116,10 @@ def test_inplace_paradigm_generation_ac2():
             "aspect_suffix",
             "tense",
             "h_alternation",
+            "tag_h_metathesis",
             "drop_stem_initial_vowel",
             "pronominal",
+            "h_metathesis",
             "insert_dist",
             "insert_wi",
         ]
@@ -136,8 +138,10 @@ def test_inplace_paradigm_generation_ac2():
         assert gm_map["final_dropping"] == "$drop_root_final"
         assert gm_map["aspect_suffix"] == "$aspect_replace"
         assert gm_map["h_alternation"] == "$h_alternation"
+        assert gm_map["tag_h_metathesis"] == "$tag_h_metathesis"
         assert gm_map["drop_stem_initial_vowel"] == "$drop_stem_initial_vowel"
         assert gm_map["pronominal"] == "$pro_replace"
+        assert gm_map["h_metathesis"] == "$h_metathesis"
         assert gm_map["tense"] == "$tense_replace"
 
 
@@ -277,6 +281,7 @@ def test_slots_json_manifest_generation():
             "<PrepronominalPrefixes>",
             "<PrefixClass>",
             "<Pro>",
+            "<H_metathesis>",
             "<H_alt>",
             "<Root>",
             "<AspectClass>",

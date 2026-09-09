@@ -55,6 +55,7 @@ data:
   - '[TEMP_VOWEL_O_H]'
   - '[TEMP_VOWEL_U_H]'
   - '[TEMP_VOWEL_V_H]'
+  - '[TEMP_META_H_DEL]'
 - name: PPP
   ref: <PPP>
   tags:
@@ -75,6 +76,11 @@ data:
   - '[H_alt=vowel_o]'
   - '[H_alt=vowel_u]'
   - '[H_alt=vowel_v]'
+- name: H_metathesis
+  ref: <H_metathesis>
+  tags:
+  - '[H_metathesis=none]'
+  - '[H_metathesis=active]'
 - name: PrefixClass
   ref: <PrefixClass>
   tags:

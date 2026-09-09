@@ -1,0 +1,20 @@
+kind: Rules
+rules:
+- name: tag_meta_h
+  input_pattern: h
+  output_pattern: '[TEMP_META_H_DEL]'
+  left_context: '[H_metathesis=active](<C>*<V><C>|<NotLarC>+)'
+  right_context: <V>
+- name: delete_h_meta_none
+  input_pattern: '[H_metathesis=none]'
+  output_pattern: ''
+- name: delete_h_meta_active
+  input_pattern: '[H_metathesis=active]'
+  output_pattern: ''
+  right_context: '(<C>*<V><C>|<NotLarC>+)[TEMP_META_H_DEL]'
+
+- name: tag_h_metathesis
+  rule_sequence:
+  - $tag_meta_h
+  - $delete_h_meta_none
+  - $delete_h_meta_active
