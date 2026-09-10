@@ -1,0 +1,68 @@
+kind: Rules
+rules:
+- name: expand_amb
+  input_pattern: '[NFS=AMB]'
+  output_pattern: 'it'
+  right_context: '[AspectClass=be-at]'
+
+- name: expand_at_long_c
+  input_pattern: '[NFS=AT_LONG]'
+  output_pattern: 't'
+  left_context: 'e|i|o|u|v'
+  right_context: '[AspectClass=i-a-i]'
+- name: expand_at_long_v
+  input_pattern: '[NFS=AT_LONG]'
+  output_pattern: 'at'
+  right_context: '[AspectClass=i-a-i]'
+- name: expand_at_long
+  rule_sequence:
+  - $expand_at_long_c
+  - $expand_at_long_v
+
+- name: expand_iter_c
+  input_pattern: '[NFS=ITER]'
+  output_pattern: 'hs'
+  left_context: 'a|e|o|u|v'
+  right_context: '[AspectClass=cause]'
+- name: expand_iter_v
+  input_pattern: '[NFS=ITER]'
+  output_pattern: 'ihs'
+  right_context: '[AspectClass=cause]'
+- name: expand_iter
+  rule_sequence:
+  - $expand_iter_c
+  - $expand_iter_v
+
+- name: expand_rep
+  input_pattern: '[NFS=REP]'
+  output_pattern: 'il'
+  right_context: '[AspectClass=o]'
+
+- name: expand_become_a
+  input_pattern: '[NFS=BECOME-A]'
+  output_pattern: 'a'
+  right_context: '[AspectClass=become]'
+
+- name: expand_become_i
+  input_pattern: '[NFS=BECOME-I]'
+  output_pattern: 'i'
+  right_context: '[AspectClass=become]'
+
+- name: expand_become_o
+  input_pattern: '[NFS=BECOME-O]'
+  output_pattern: 'o'
+  right_context: '[AspectClass=become]'
+
+- name: expand_become
+  rule_sequence:
+  - $expand_become_a
+  - $expand_become_i
+  - $expand_become_o
+
+- name: expand_nfs
+  rule_sequence:
+  - $expand_amb
+  - $expand_at_long
+  - $expand_iter
+  - $expand_rep
+  - $expand_become

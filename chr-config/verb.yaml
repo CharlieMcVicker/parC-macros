@@ -1,4 +1,5 @@
 stages:
+  - expand_nfs
   - final_dropping
   - aspect_suffix
   - tense

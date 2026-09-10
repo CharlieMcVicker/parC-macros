@@ -19,6 +19,7 @@ import pynini
 from parC.constants import set_yaml_dir
 from parC.grammar.paradigm_compilation import get_symbol_table, word_fsa
 from parse_chr_dict.parse import get_just_root, get_parse_graph, parse
+from parse_chr_dict.slots import get_slot_manifest
 
 if "YAML_DIR" in os.environ:
     try:
@@ -89,31 +90,84 @@ def get_arc_alignment(fst: pynini.Fst, surface_str: str) -> list[tuple[str, str]
     return alignment
 
 
+def _build_tag_category_map(manifest: dict | None = None) -> tuple[dict[str, str], tuple[str, ...], tuple[str, ...]]:
+    """
+    Builds data-driven mapping from tag names / prefixes to category/stage names based on slot manifest.
+    Returns:
+      (tag_prefix_to_category, prefix_tags, suffix_tag_prefixes)
+    """
+    if manifest is None:
+        manifest = get_slot_manifest()
+
+    tag_prefix_to_cat: dict[str, str] = {}
+    suffix_tag_prefixes: list[str] = []
+    prefix_tags: list[str] = ["[WI]", "[DIST]", "[DIST=de]", "[DIST=di]"]
+
+    for slot in manifest.get("slots", []):
+        role = slot.get("role", "")
+        tags = slot.get("tags", [])
+        for tag in tags:
+            tag_prefix = f"[{tag}="
+            if role == "suffix":
+                tag_prefix_to_cat[tag_prefix] = tag
+                suffix_tag_prefixes.append(tag_prefix)
+            else:
+                tag_prefix_to_cat[tag_prefix] = "Prefix"
+                prefix_tags.append(tag_prefix)
+
+    # Template non-slot prefix items (e.g. <H_metathesis>, <H_alt>)
+    template = manifest.get("template", [])
+    root_idx = template.index("<Root>") if "<Root>" in template else -1
+
+    for i, token in enumerate(template):
+        if token.startswith("<") and token.endswith(">"):
+            tag_name = token[1:-1]
+            if tag_name in ("PrepronominalPrefixes", "Root"):
+                continue
+            tag_prefix = f"[{tag_name}="
+            if root_idx != -1 and i < root_idx:
+                tag_prefix_to_cat[tag_prefix] = "Prefix"
+                prefix_tags.append(tag_prefix)
+            elif root_idx != -1 and i > root_idx:
+                if tag_prefix not in tag_prefix_to_cat:
+                    tag_prefix_to_cat[tag_prefix] = tag_name
+                    suffix_tag_prefixes.append(tag_prefix)
+
+    return tag_prefix_to_cat, tuple(prefix_tags), tuple(suffix_tag_prefixes)
+
+
+_TAG_PREFIX_MAP, _PREFIX_TAGS, _SUFFIX_TAG_PREFIXES = _build_tag_category_map()
+
+
+def _is_tag(s: str) -> bool:
+    return s.startswith("[") and s.endswith("]")
+
+
 def _categorize_arc(in_char: str, out_char: str, current_stage: str) -> str:
-    """Classifies an alignment arc into a morphological slot/stage."""
-    if out_char.startswith("[AspectClass="):
-        return "AspectClass"
-    elif out_char.startswith("[Aspect="):
-        return "Aspect"
-    elif out_char.startswith("[Tense="):
-        return "Tense"
-    elif (
-        out_char.startswith("[PrefixClass=")
-        or out_char.startswith("[Pro=")
-        or out_char.startswith("[H_metathesis=")
-        or out_char.startswith("[H_alt=")
-        or out_char in ("[WI]", "[DIST]", "[DIST=de]", "[DIST=di]")
-        or out_char.startswith("[DIST=")
-    ):
-        return "Prefix"
-    elif current_stage in ("Prefix", "Initial"):
+    """Classifies an alignment arc into a morphological slot/stage dynamically."""
+    if _is_tag(out_char):
+        if out_char.startswith("[NFS="):
+            return "NFS"
+        for prefix, cat in _TAG_PREFIX_MAP.items():
+            if out_char.startswith(prefix):
+                return cat
+        if out_char in _PREFIX_TAGS or any(out_char.startswith(p) for p in _PREFIX_TAGS):
+            return "Prefix"
+        # Root internal tags
+        if current_stage == "Root" or current_stage in ("Prefix", "Initial"):
+            return "Root"
+
+    if current_stage in ("Prefix", "Initial"):
         # Non-bracketed output symbol marks transition to root
-        if not (out_char.startswith("[") and out_char.endswith("]")):
+        if not _is_tag(out_char):
             return "Root"
         return "Prefix"
     elif current_stage == "Root":
-        if not (out_char.startswith("[") and out_char.endswith("]")):
+        if not _is_tag(out_char):
             return "Root"
+        return current_stage
+    elif current_stage == "NFS":
+        # NFS expansion can emit surface chars or epsilon; transition to suffix when suffix tag seen
         return current_stage
     else:
         # Suffix stages: retain current stage for untagged / epsilon suffix chars
@@ -143,7 +197,7 @@ def segment_alignment(alignment: list[tuple[str, str]]) -> list[dict[str, str | 
 
         if in_char != "ε":
             segments[-1][1].append(in_char)
-        if out_char != "ε" and (out_char.startswith("[") and out_char.endswith("]")):
+        if out_char != "ε" and _is_tag(out_char):
             segments[-1][2].append(out_char)
         elif out_char != "ε" and new_stage == "Root":
             segments[-1][2].append(out_char)

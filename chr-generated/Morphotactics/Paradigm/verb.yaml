@@ -3,6 +3,7 @@
 kind: Paradigm
 part_of_speech: $verb
 stage_order:
+- expand_nfs
 - final_dropping
 - aspect_suffix
 - tense
@@ -14,6 +15,9 @@ stage_order:
 - insert_dist
 - insert_wi
 global_markers:
+- kind: rule
+  stage: expand_nfs
+  value: $expand_nfs
 - kind: rule
   stage: final_dropping
   value: $drop_root_final

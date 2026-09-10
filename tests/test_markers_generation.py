@@ -112,6 +112,7 @@ def test_inplace_paradigm_generation_ac2():
         assert "global_markers" in paradigm_data
 
         expected_stages = [
+            "expand_nfs",
             "final_dropping",
             "aspect_suffix",
             "tense",
@@ -135,6 +136,7 @@ def test_inplace_paradigm_generation_ac2():
 
         # Specific stage rule associations
         gm_map = {m["stage"]: m["value"] for m in gm}
+        assert gm_map["expand_nfs"] == "$expand_nfs"
         assert gm_map["final_dropping"] == "$drop_root_final"
         assert gm_map["aspect_suffix"] == "$aspect_replace"
         assert gm_map["h_alternation"] == "$h_alternation"

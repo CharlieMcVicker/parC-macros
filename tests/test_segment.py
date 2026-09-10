@@ -77,6 +77,40 @@ def test_get_arc_alignment_invalid_surface(parse_graph):
     assert alignment is None
 
 
+def test_segment_alignment_with_nfs(parse_graph):
+    alignment = get_arc_alignment(parse_graph, "awhahthvhitoha")
+    assert alignment is not None
+    segments = segment_alignment(alignment)
+
+    stages = [s["stage"] for s in segments]
+    assert stages == ["Prefix", "Root", "NFS", "AspectClass", "Aspect", "Tense"]
+
+    root_seg = next(s for s in segments if s["stage"] == "Root")
+    assert root_seg["surface"] == "whahthvh"
+
+    nfs_seg = next(s for s in segments if s["stage"] == "NFS")
+    assert nfs_seg["surface"] == "it"
+    assert "[NFS=AMB]" in nfs_seg["info"]
+
+    hyphenated = format_segmentation(segments)
+    assert hyphenated == "a-whahthvh-it-o-h-a"
+    assert "".join(s["surface"] for s in segments) == "awhahthvhitoha"
+
+
+def test_segment_alignment_with_nfs_at_long(parse_graph):
+    alignment = get_arc_alignment(parse_graph, "atahwatvhitoha")
+    assert alignment is not None
+    segments = segment_alignment(alignment)
+
+    stages = [s["stage"] for s in segments]
+    assert stages == ["Prefix", "Root", "NFS", "AspectClass", "Aspect", "Tense"]
+
+    hyphenated = format_segmentation(segments)
+    assert hyphenated == "a-tahwatvh-it-o-h-a"
+    assert "".join(s["surface"] for s in segments) == "atahwatvhitoha"
+
+
+
 def test_cli_argument_execution(monkeypatch, capsys):
     monkeypatch.setattr(sys, "argv", ["segment", "katateka"])
     segment_main()
@@ -96,3 +130,4 @@ def test_cli_interactive_execution(monkeypatch, capsys):
     assert "SEGMENT:" in captured.out
     assert ("Segmentation: k-atat-e-k-a" in captured.out or "Segmentation: ka-tat-e-k-a" in captured.out)
     assert "Parses (total:" in captured.out
+

@@ -18,9 +18,13 @@ patterns:
 - name: Coda
   pattern: "((hs)?((<NotLarC>|(ts)|(kw))?h?))|'"
   ref: <Coda>
+- name: VerbRoot
+  pattern: <V>?<Coda>?(<Onset><V><Coda>)*<Onset>?
+  ref: <VerbRoot>
 - name: Root
   ref: <Root>
-  pattern: <V>?<Coda>?(<Onset><V><Coda>)*<Onset>?
+  # pattern: <VerbRoot>(<DerivationalSuffixes><AspectClass><Variant>?<Aspect=completive>)*<DerivationalSuffixes>?
+  pattern: <VerbRoot><NFS>?
 - name: SonH
   pattern: nh|lh|yh|wh|mh
   ref: <SonH>
