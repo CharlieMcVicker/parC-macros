@@ -114,18 +114,12 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 70,74,he/she is going around a curve,ateyoha,kateyoha,ateyoho'i,uteyolv'i,hateyaka,uteyhsti,Eventful,atey,[H_alt=none],oh-ol,a_stem,a_present,True,False,False,1,1,1,1,2
 72,76,he/she is laying it down (refers to a long object),ati'a,tsiti'a,atihsko'i,utv'i,hita,utihsti,Eventful,t,[H_alt=none],i-a-i,cons_stem,a_present,True,False,False,1,1,1,1,1
 72,76,he/she is laying it down (refers to a long object),ati'a,tsiti'a,atihsko'i,utv'i,hita,utihsti,Eventful,t,[H_alt=none],i-a-i,cons_stem,a_present,True,False,True,1,1,1,1,1
-73,77,he/she is rising (from a prone position),atitiha,katiti'a,atitihsko'i,utitvhv'i,hatita,utithti,Eventful,[VoiceInfix=ad]it,[H_alt=glot],ih-vh,a_stem,a_present,True,False,False,1,1,1,1,1
 73,77,he/she is rising (from a prone position),atitiha,katiti'a,atitihsko'i,utitvhv'i,hatita,utithti,Eventful,[VoiceInfix=adi]t,[H_alt=glot],ih-vh,a_stem,a_present,True,False,False,1,1,1,1,1
 73,77,he/she is rising (from a prone position),atitiha,katiti'a,atitihsko'i,utitvhv'i,hatita,utithti,Eventful,[VoiceInfix=adi]vt,[H_alt=glot],ih-vh,a_stem,a_present,True,False,False,1,1,1,1,1
 73,77,he/she is rising (from a prone position),atitiha,katiti'a,atitihsko'i,utitvhv'i,hatita,utithti,Eventful,atit,[H_alt=glot],ih-vh,a_stem,a_present,True,False,False,1,1,1,1,1
-74,78,he/she is scattering it,atikaleya'a,katikaleya'a,atikaleyahsko'i,utikaleyv'i,hatikaleya,utikaleyahsti,Eventful,[VoiceInfix=ad]ikaley,[H_alt=none],a,a_stem,a_present,True,False,False,1,1,1,1,1
 74,78,he/she is scattering it,atikaleya'a,katikaleya'a,atikaleyahsko'i,utikaleyv'i,hatikaleya,utikaleyahsti,Eventful,[VoiceInfix=adi]kaley,[H_alt=none],a,a_stem,a_present,True,False,False,1,1,1,1,1
 74,78,he/she is scattering it,atikaleya'a,katikaleya'a,atikaleyahsko'i,utikaleyv'i,hatikaleya,utikaleyahsti,Eventful,[VoiceInfix=adi]vkaley,[H_alt=none],a,a_stem,a_present,True,False,False,1,1,1,1,1
 74,78,he/she is scattering it,atikaleya'a,katikaleya'a,atikaleyahsko'i,utikaleyv'i,hatikaleya,utikaleyahsti,Eventful,atikaley,[H_alt=none],a,a_stem,a_present,True,False,False,1,1,1,1,1
-75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,Eventful,[VoiceInfix=ad]ikaley[NFS=BECOME-O],[H_alt=none],become,a_stem,a_present,True,False,False,1,1,1,1,3
-75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,Eventful,[VoiceInfix=ad]ikaley[NFS=BECOME-O],[H_alt=none],become,a_stem,a_present,True,False,True,1,1,1,1,3
-75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,Eventful,[VoiceInfix=ad]ikaleyo,[H_alt=none],become,a_stem,a_present,True,False,False,1,1,1,1,3
-75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,Eventful,[VoiceInfix=ad]ikaleyo,[H_alt=none],become,a_stem,a_present,True,False,True,1,1,1,1,3
 75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,Eventful,[VoiceInfix=adi]kaley[NFS=BECOME-O],[H_alt=none],become,a_stem,a_present,True,False,False,1,1,1,1,3
 75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,Eventful,[VoiceInfix=adi]kaley[NFS=BECOME-O],[H_alt=none],become,a_stem,a_present,True,False,True,1,1,1,1,3
 75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,Eventful,[VoiceInfix=adi]kaleyo,[H_alt=none],become,a_stem,a_present,True,False,False,1,1,1,1,3
@@ -142,23 +136,18 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,Eventful,tikaley[NFS=BECOME-O],[H_alt=none],become,cons_stem,a_present,True,False,True,1,1,1,1,3
 75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,Eventful,tikaleyo,[H_alt=none],become,cons_stem,a_present,True,False,False,1,1,1,1,3
 75,79,it’s scattering,atikaleyoka,,atikaleyoko'i,utikaleyotsv'i,,utikaleyoyhsti,Eventful,tikaleyo,[H_alt=none],become,cons_stem,a_present,True,False,True,1,1,1,1,3
-76,80,he/she is spinning,atikwalvteyoha,katikwalvteyoha,atikwalvteyoho'i,utikwalvteyolv'i,hatikwalvteyaka,utikwalvteyhsti,Eventful,[VoiceInfix=ad]ikwalvtey,[H_alt=none],oh-ol,a_stem,a_present,True,False,False,1,1,1,1,2
 76,80,he/she is spinning,atikwalvteyoha,katikwalvteyoha,atikwalvteyoho'i,utikwalvteyolv'i,hatikwalvteyaka,utikwalvteyhsti,Eventful,[VoiceInfix=adi]kwalvtey,[H_alt=none],oh-ol,a_stem,a_present,True,False,False,1,1,1,1,2
 76,80,he/she is spinning,atikwalvteyoha,katikwalvteyoha,atikwalvteyoho'i,utikwalvteyolv'i,hatikwalvteyaka,utikwalvteyhsti,Eventful,[VoiceInfix=adi]vkwalvtey,[H_alt=none],oh-ol,a_stem,a_present,True,False,False,1,1,1,1,2
 76,80,he/she is spinning,atikwalvteyoha,katikwalvteyoha,atikwalvteyoho'i,utikwalvteyolv'i,hatikwalvteyaka,utikwalvteyhsti,Eventful,atikwalvtey,[H_alt=none],oh-ol,a_stem,a_present,True,False,False,1,1,1,1,2
-77,81,he/she is saying it,atiha,kati'a,atihsko'i,utvnhv'i,hata,uthti,Eventful,[VoiceInfix=ad],[H_alt=glot],vnh-ih-a,a_stem,a_present,True,False,False,1,1,1,1,1
 77,81,he/she is saying it,atiha,kati'a,atihsko'i,utvnhv'i,hata,uthti,Eventful,at,[H_alt=glot],vnh-ih-a,a_stem,a_present,True,False,False,1,1,1,1,1
-78,82,he/she is running over him/her,atinvtiha,tsiyatinvtiha,atinvtihsko'i,utinvthanv'i,hiyatinvta,utinvtohti,Eventful,[VoiceInfix=ad]invt,[H_alt=none],cause,a_stem,a_present,True,False,True,1,1,1,1,1
 78,82,he/she is running over him/her,atinvtiha,tsiyatinvtiha,atinvtihsko'i,utinvthanv'i,hiyatinvta,utinvtohti,Eventful,[VoiceInfix=adi]nvt,[H_alt=none],cause,a_stem,a_present,True,False,True,1,1,1,1,1
 78,82,he/she is running over him/her,atinvtiha,tsiyatinvtiha,atinvtihsko'i,utinvthanv'i,hiyatinvta,utinvtohti,Eventful,[VoiceInfix=adi]vnvt,[H_alt=none],cause,a_stem,a_present,True,False,True,1,1,1,1,1
 78,82,he/she is running over him/her,atinvtiha,tsiyatinvtiha,atinvtihsko'i,utinvthanv'i,hiyatinvta,utinvtohti,Eventful,atinvt,[H_alt=none],cause,a_stem,a_present,True,False,True,1,1,1,1,1
-79,83,he/she is hiding,atihskalhvhska,katihskalhvhska,atihskalhvhsko'i,utihskalhanv'i,hatihskalhvka,utihskalhti,Eventful,[VoiceInfix=ad]ihskal,[H_alt=none],hvsk-han,a_stem,a_present,True,False,False,1,1,1,1,1
 79,83,he/she is hiding,atihskalhvhska,katihskalhvhska,atihskalhvhsko'i,utihskalhanv'i,hatihskalhvka,utihskalhti,Eventful,[VoiceInfix=adi]hskal,[H_alt=none],hvsk-han,a_stem,a_present,True,False,False,1,1,1,1,1
 79,83,he/she is hiding,atihskalhvhska,katihskalhvhska,atihskalhvhsko'i,utihskalhanv'i,hatihskalhvka,utihskalhti,Eventful,[VoiceInfix=adi]vhskal,[H_alt=none],hvsk-han,a_stem,a_present,True,False,False,1,1,1,1,1
 79,83,he/she is hiding,atihskalhvhska,katihskalhvhska,atihskalhvhsko'i,utihskalhanv'i,hatihskalhvka,utihskalhti,Eventful,atihskal,[H_alt=none],hvsk-han,a_stem,a_present,True,False,False,1,1,1,1,1
 80,84,he/she is leaving it behind (refers to a long object),atihsiya'a,tsitihsiya'a,atihsiyahsko'i,utihsiyv'i,hitihsiya,utihsiyahsti,Eventful,tihsiy,[H_alt=none],a,cons_stem,a_present,True,False,False,1,1,1,1,1
 80,84,he/she is leaving it behind (refers to a long object),atihsiya'a,tsitihsiya'a,atihsiyahsko'i,utihsiyv'i,hitihsiya,utihsiyahsti,Eventful,tihsiy,[H_alt=none],a,cons_stem,a_present,True,False,True,1,1,1,1,1
-82,86,he/she is drinking it,atithahska,katithahska,atithahsko'i,utithahv'i,hatitha,utithahsti,Eventful,[VoiceInfix=ad]itha,[H_alt=none],sk-h,a_stem,a_present,True,False,False,1,1,1,2,1
 82,86,he/she is drinking it,atithahska,katithahska,atithahsko'i,utithahv'i,hatitha,utithahsti,Eventful,[VoiceInfix=adi]tha,[H_alt=none],sk-h,a_stem,a_present,True,False,False,1,1,1,2,1
 82,86,he/she is drinking it,atithahska,katithahska,atithahsko'i,utithahv'i,hatitha,utithahsti,Eventful,[VoiceInfix=adi]vtha,[H_alt=none],sk-h,a_stem,a_present,True,False,False,1,1,1,2,1
 82,86,he/she is drinking it,atithahska,katithahska,atithahsko'i,utithahv'i,hatitha,utithahsti,Eventful,atitha,[H_alt=none],sk-h,a_stem,a_present,True,False,False,1,1,1,2,1
@@ -335,23 +324,16 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 232,238,he/she is capturing him/her,ayhvkhiti'a,tsiyvkhiti'a,ayhvkhitihsko'i,uyhvkhitv'i,hiyvkhita,uyhvkhitihsti,Eventful,yhvkhit,[H_alt=drop],i-a-i,cons_stem,a_present,True,False,True,1,1,1,1,1
 233,239,he/she is hitting him/her on the nose,ayhvhsteluhvhska,tsiyvhsteluhvhska,ayhvhsteluhvhsko'i,uyhvhstelunhv'i,hiyvhsteluhvka,uyhvhsteluhti,Eventful,yhvhstelu,[H_alt=drop],hvsk-nh,cons_stem,a_present,True,False,True,1,1,1,1,1
 234,240,he/she is choking him/her,ayhvhskiyiha,tsiyvhskiyiha,ayhvhskiyihsko'i,uyhvhskiyvhv'i,hiyvhskiya,uyhvhskiyhti,Eventful,yhvhskiy,[H_alt=drop],ih-vh,cons_stem,a_present,True,False,True,1,1,1,1,1
-238,244,it’s hatching,atsa'i'a,katsa'i'a,atsa'ihsko'i,utsa'ihsv'i,hatsa'i,utsa'ihsti,Eventful,[VoiceInfix=ad]sa,[H_alt=none],rev-'i,a_stem,a_present,True,False,False,1,1,1,1,1
-238,244,it’s hatching,atsa'i'a,katsa'i'a,atsa'ihsko'i,utsa'ihsv'i,hatsa'i,utsa'ihsti,Eventful,[VoiceInfix=ad]sa',[H_alt=none],rev-i,a_stem,a_present,True,False,False,1,1,1,1,1
 238,244,it’s hatching,atsa'i'a,katsa'i'a,atsa'ihsko'i,utsa'ihsv'i,hatsa'i,utsa'ihsti,Eventful,atsa,[H_alt=none],rev-'i,a_stem,a_present,True,False,False,1,1,1,1,1
 238,244,it’s hatching,atsa'i'a,katsa'i'a,atsa'ihsko'i,utsa'ihsv'i,hatsa'i,utsa'ihsti,Eventful,atsa',[H_alt=none],rev-i,a_stem,a_present,True,False,False,1,1,1,1,1
-239,245,he/she is dressing up,atsanvhska,katsanvhska,atsanvhsko'i,utsanvnhv'i,hatsanvna,utsanvhti,Eventful,[VoiceInfix=ad]san,[H_alt=none],vnh-vsk,a_stem,a_present,True,False,False,1,1,1,1,2
 239,245,he/she is dressing up,atsanvhska,katsanvhska,atsanvhsko'i,utsanvnhv'i,hatsanvna,utsanvhti,Eventful,atsan,[H_alt=none],vnh-vsk,a_stem,a_present,True,False,False,1,1,1,1,2
-242,248,he/she is acting like him/her,atselvhska,katselvhska,atselvhsko'i,utselvnhv'i,hatselvna,utselhti,Eventful,[VoiceInfix=ad]sel,[H_alt=none],vnh-vsk,a_stem,a_present,True,False,False,1,1,1,1,1
 242,248,he/she is acting like him/her,atselvhska,katselvhska,atselvhsko'i,utselvnhv'i,hatselvna,utselhti,Eventful,atsel,[H_alt=none],vnh-vsk,a_stem,a_present,True,False,False,1,1,1,1,1
-250,256,it’s blooming,atsilvhska,,atsilvhsko'i,utsilvnhv'i,,utsilhti,Eventful,[VoiceInfix=ad]sil,[H_alt=none],vnh-vsk,a_stem,a_present,True,False,False,1,1,1,1,1
-250,256,it’s blooming,atsilvhska,,atsilvhsko'i,utsilvnhv'i,,utsilhti,Eventful,[VoiceInfix=ad]sil,[H_alt=none],vnh-vsk,a_stem,a_present,True,False,True,1,1,1,1,1
 250,256,it’s blooming,atsilvhska,,atsilvhsko'i,utsilvnhv'i,,utsilhti,Eventful,atsil,[H_alt=none],vnh-vsk,a_stem,a_present,True,False,False,1,1,1,1,1
 250,256,it’s blooming,atsilvhska,,atsilvhsko'i,utsilvnhv'i,,utsilhti,Eventful,atsil,[H_alt=none],vnh-vsk,a_stem,a_present,True,False,True,1,1,1,1,1
 250,256,it’s blooming,atsilvhska,,atsilvhsko'i,utsilvnhv'i,,utsilhti,Eventful,tsil,[H_alt=none],vnh-vsk,cons_stem,a_present,True,False,False,1,1,1,1,1
 250,256,it’s blooming,atsilvhska,,atsilvhsko'i,utsilvnhv'i,,utsilhti,Eventful,tsil,[H_alt=none],vnh-vsk,cons_stem,a_present,True,False,True,1,1,1,1,1
 253,259,he/she is lighting a fire,atsihslhvhska,tsitsihslhvhska,atsihslhvhsko'i,utsihslhanv'i,hitsihslhvka,utsihslhvhsti,Eventful,tsihsl,[H_alt=none],hvsk-han,cons_stem,a_present,True,False,False,1,1,1,1,2
 253,259,he/she is lighting a fire,atsihslhvhska,tsitsihslhvhska,atsihslhvhsko'i,utsihslhanv'i,hitsihslhvka,utsihslhvhsti,Eventful,tsihsl,[H_alt=none],hvsk-han,cons_stem,a_present,True,False,True,1,1,1,1,2
-254,260,he/she is blowing,atsothahska,katsothahska,atsothahsko'i,utsothahv'i,hatsotha,utsothahsti,Eventful,[VoiceInfix=ad]sotha,[H_alt=none],sk-h,a_stem,a_present,True,False,False,1,1,1,2,1
 254,260,he/she is blowing,atsothahska,katsothahska,atsothahsko'i,utsothahv'i,hatsotha,utsothahsti,Eventful,atsotha,[H_alt=none],sk-h,a_stem,a_present,True,False,False,1,1,1,2,1
 255,261,he/she is turning on a light,atsvhsthvhska,tsitsvhsthvhska,atsvhsthvhsko'i,utsvhsthanv'i,hitsvhsthvka,utsvhsthvhsti,Eventful,tsvhst,[H_alt=none],hvsk-han,cons_stem,a_present,True,False,False,1,1,1,1,2
 255,261,he/she is turning on a light,atsvhsthvhska,tsitsvhsthvhska,atsvhsthvhsko'i,utsvhsthanv'i,hitsvhsthvka,utsvhsthvhsti,Eventful,tsvhst,[H_alt=none],hvsk-han,cons_stem,a_present,True,False,True,1,1,1,1,2
@@ -594,16 +576,10 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 464,471,he/she is mooring a boat,athalati'a,tsithalati'a,athalatihsko'i,uthalatv'i,hithalata,uthalatihsti,Eventful,thal[NFS=AT_LONG],[H_alt=none],i-a-i,cons_stem,a_present,True,False,True,1,1,1,1,1
 464,471,he/she is mooring a boat,athalati'a,tsithalati'a,athalatihsko'i,uthalatv'i,hithalata,uthalatihsti,Eventful,thalat,[H_alt=none],i-a-i,cons_stem,a_present,True,False,False,1,1,1,1,1
 464,471,he/she is mooring a boat,athalati'a,tsithalati'a,athalatihsko'i,uthalatv'i,hithalata,uthalatihsti,Eventful,thalat,[H_alt=none],i-a-i,cons_stem,a_present,True,False,True,1,1,1,1,1
-467,474,it’s steaming,athanoleka,,athanoleko'i,uthanolvhsv'i,,uthanolvhsti,Eventful,[VoiceInfix=ad]hanol,[H_alt=none],go,a_stem,a_present,True,False,False,1,1,1,1,1
-467,474,it’s steaming,athanoleka,,athanoleko'i,uthanolvhsv'i,,uthanolvhsti,Eventful,[VoiceInfix=ad]hanol,[H_alt=none],go,a_stem,a_present,True,False,True,1,1,1,1,1
 467,474,it’s steaming,athanoleka,,athanoleko'i,uthanolvhsv'i,,uthanolvhsti,Eventful,athanol,[H_alt=none],go,a_stem,a_present,True,False,False,1,1,1,1,1
 467,474,it’s steaming,athanoleka,,athanoleko'i,uthanolvhsv'i,,uthanolvhsti,Eventful,athanol,[H_alt=none],go,a_stem,a_present,True,False,True,1,1,1,1,1
 467,474,it’s steaming,athanoleka,,athanoleko'i,uthanolvhsv'i,,uthanolvhsti,Eventful,thanol,[H_alt=none],go,cons_stem,a_present,True,False,False,1,1,1,1,1
 467,474,it’s steaming,athanoleka,,athanoleko'i,uthanolvhsv'i,,uthanolvhsti,Eventful,thanol,[H_alt=none],go,cons_stem,a_present,True,False,True,1,1,1,1,1
-469,476,it’s exploding,athahski'a,,athahskihsko'i,uthahskihsv'i,hathahski,uthahskihsti,Eventful,[VoiceInfix=ad]hahs,[H_alt=none],rev-gi,a_stem,a_present,True,False,False,1,1,1,1,1
-469,476,it’s exploding,athahski'a,,athahskihsko'i,uthahskihsv'i,hathahski,uthahskihsti,Eventful,[VoiceInfix=ad]hahs,[H_alt=none],rev-gi,a_stem,a_present,True,False,True,1,1,1,1,1
-469,476,it’s exploding,athahski'a,,athahskihsko'i,uthahskihsv'i,hathahski,uthahskihsti,Eventful,[VoiceInfix=ad]hahsk,[H_alt=none],rev-i,a_stem,a_present,True,False,False,1,1,1,1,1
-469,476,it’s exploding,athahski'a,,athahskihsko'i,uthahskihsv'i,hathahski,uthahskihsti,Eventful,[VoiceInfix=ad]hahsk,[H_alt=none],rev-i,a_stem,a_present,True,False,True,1,1,1,1,1
 469,476,it’s exploding,athahski'a,,athahskihsko'i,uthahskihsv'i,hathahski,uthahskihsti,Eventful,athahs,[H_alt=none],rev-gi,a_stem,a_present,True,False,False,1,1,1,1,1
 469,476,it’s exploding,athahski'a,,athahskihsko'i,uthahskihsv'i,hathahski,uthahskihsti,Eventful,athahs,[H_alt=none],rev-gi,a_stem,a_present,True,False,True,1,1,1,1,1
 469,476,it’s exploding,athahski'a,,athahskihsko'i,uthahskihsv'i,hathahski,uthahskihsti,Eventful,athahsk,[H_alt=none],rev-i,a_stem,a_present,True,False,False,1,1,1,1,1
@@ -613,20 +589,10 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 474,481,he/she is asking for it,athayohiha,tsithayohiha,athayohiho'i,uthayolhv'i,hithayoha,uthayohsti,Eventful,thayo,[H_alt=none],hih-lh,cons_stem,a_present,True,False,True,1,1,1,2,1
 477,484,he/she is shaking him/her,athelvhvhska,tsithelvhvhska,athelvhvhsko'i,uthelvnhv'i,hithelvna,uthelhti,Eventful,thel,[H_alt=none],episodic,cons_stem,a_present,True,False,False,1,1,1,2,1
 477,484,he/she is shaking him/her,athelvhvhska,tsithelvhvhska,athelvhvhsko'i,uthelvnhv'i,hithelvna,uthelhti,Eventful,thel,[H_alt=none],episodic,cons_stem,a_present,True,False,True,1,1,1,2,1
-479,486,he/she is leading him/her,athinhi,tsiyathinhi,athinheko'i,uthinhvhsv'i,hiyathinhuka,uthinhvhsti,Eventful,[VoiceInfix=ad]hinh,[H_alt=none],go,a_stem,i_present,True,False,True,2,1,1,1,1
 479,486,he/she is leading him/her,athinhi,tsiyathinhi,athinheko'i,uthinhvhsv'i,hiyathinhuka,uthinhvhsti,Eventful,athinh,[H_alt=none],go,a_stem,i_present,True,False,True,2,1,1,1,1
-483,490,he/she is racing,athohkiya'a,kathohkiya'a,athohkiyahsko'i,uthohkiyv'i,hathohkiya,uthohkiyahsti,Eventful,[VoiceInfix=ad]hohkiy,[H_alt=none],a,a_stem,a_present,True,False,False,1,1,1,1,1
 483,490,he/she is racing,athohkiya'a,kathohkiya'a,athohkiyahsko'i,uthohkiyv'i,hathohkiya,uthohkiyahsti,Eventful,athohkiy,[H_alt=none],a,a_stem,a_present,True,False,False,1,1,1,1,1
-486,493,he/she is loaning it to him/her,atholhstiha,tsiyatholhstiha,atholhstihsko'i,utholhsthanv'i,hiyatholhsta,utholhstohti,Eventful,[VoiceInfix=ad]holhst,[H_alt=none],cause,a_stem,a_present,True,False,True,1,1,1,1,1
 486,493,he/she is loaning it to him/her,atholhstiha,tsiyatholhstiha,atholhstihsko'i,utholhsthanv'i,hiyatholhsta,utholhstohti,Eventful,atholhst,[H_alt=none],cause,a_stem,a_present,True,False,True,1,1,1,1,1
-487,494,he/she is borrowing him/her,atholhska,tsiyatholhska,atholhsko'i,utholhsv'i,hiyathola,utholhihsti,Eventful,[VoiceInfix=ad]hol,[H_alt=none],sk-s-a,a_stem,a_present,True,False,True,1,1,1,1,1
 487,494,he/she is borrowing him/her,atholhska,tsiyatholhska,atholhsko'i,utholhsv'i,hiyathola,utholhihsti,Eventful,athol,[H_alt=none],sk-s-a,a_stem,a_present,True,False,True,1,1,1,1,1
-488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,Eventful,[VoiceInfix=ad]hoyaw,[H_alt=none],sk-s-a,a_stem,a_present,True,False,False,1,1,1,1,2
-488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,Eventful,[VoiceInfix=ad]hoyaw,[H_alt=none],sk-s-a,a_stem,a_present,True,False,True,1,1,1,1,2
-488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,Eventful,[VoiceInfix=ad]hoyaw,[H_alt=none],sk-s-hst,a_stem,a_present,True,False,False,1,1,1,1,1
-488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,Eventful,[VoiceInfix=ad]hoyaw,[H_alt=none],sk-s-hst,a_stem,a_present,True,False,True,1,1,1,1,1
-488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,Eventful,[VoiceInfix=ad]hoyaw,[H_alt=none],sk-s-la,a_stem,a_present,True,False,False,1,1,1,1,1
-488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,Eventful,[VoiceInfix=ad]hoyaw,[H_alt=none],sk-s-la,a_stem,a_present,True,False,True,1,1,1,1,1
 488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,Eventful,athoyaw,[H_alt=none],sk-s-a,a_stem,a_present,True,False,False,1,1,1,1,2
 488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,Eventful,athoyaw,[H_alt=none],sk-s-a,a_stem,a_present,True,False,True,1,1,1,1,2
 488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,Eventful,athoyaw,[H_alt=none],sk-s-hst,a_stem,a_present,True,False,False,1,1,1,1,1
@@ -641,13 +607,9 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 488,495,it’s flashing (refers to reflected light),athoyawhska,,athoyawhsko'i,uthoyawhsv'i,,uthoyawhsti,Eventful,thoyaw,[H_alt=none],sk-s-la,cons_stem,a_present,True,False,True,1,1,1,1,1
 493,500,he/she is promising,athu'ihstiha,tsithu'ihstiha,athu'ihstihsko'i,uthu'ihsthanv'i,hithu'ihsta,uthu'ihstohti,Eventful,thu'ihst,[H_alt=none],cause,cons_stem,a_present,True,False,False,1,1,1,1,1
 493,500,he/she is promising,athu'ihstiha,tsithu'ihstiha,athu'ihstihsko'i,uthu'ihsthanv'i,hithu'ihsta,uthu'ihstohti,Eventful,thu'ihst,[H_alt=none],cause,cons_stem,a_present,True,False,True,1,1,1,1,1
-494,501,he/she is listening to him/her,athvtahstiha,tsiyathvtahstiha,athvtahstihsko'i,uthvtahsthanv'i,hiyathvtahsta,uthvtahstohti,Eventful,[VoiceInfix=ad]hvtahst,[H_alt=none],cause,a_stem,a_present,True,False,True,1,1,1,1,1
 494,501,he/she is listening to him/her,athvtahstiha,tsiyathvtahstiha,athvtahstihsko'i,uthvtahsthanv'i,hiyathvtahsta,uthvtahstohti,Eventful,athvtahst,[H_alt=none],cause,a_stem,a_present,True,False,True,1,1,1,1,1
-495,502,he/she is asking him/her a question,athvtvhvhska,tsiyathvtvhvhska,athvtvhvhsko'i,uthvtvnhv'i,hiyathvtvhvka,uthvthti,Eventful,[VoiceInfix=ad]hvt,[H_alt=none],episodic,a_stem,a_present,True,False,True,1,1,1,1,1
-495,502,he/she is asking him/her a question,athvtvhvhska,tsiyathvtvhvhska,athvtvhvhsko'i,uthvtvnhv'i,hiyathvtvhvka,uthvthti,Eventful,[VoiceInfix=ad]hvtv,[H_alt=none],hvsk-nh,a_stem,a_present,True,False,True,1,1,1,1,2
 495,502,he/she is asking him/her a question,athvtvhvhska,tsiyathvtvhvhska,athvtvhvhsko'i,uthvtvnhv'i,hiyathvtvhvka,uthvthti,Eventful,athvt,[H_alt=none],episodic,a_stem,a_present,True,False,True,1,1,1,1,1
 495,502,he/she is asking him/her a question,athvtvhvhska,tsiyathvtvhvhska,athvtvhvhsko'i,uthvtvnhv'i,hiyathvtvhvka,uthvthti,Eventful,athvtv,[H_alt=none],hvsk-nh,a_stem,a_present,True,False,True,1,1,1,1,2
-496,503,he/she hears him/her,athvki'a,tsiyathvki'a,athvkihsko'i,uthvkanv'i,hiyathvkvka,uthvkoti,Eventful,[VoiceInfix=ad]hvk,[H_alt=none],i-vka,a_stem,a_present,True,False,True,1,1,1,1,1
 496,503,he/she hears him/her,athvki'a,tsiyathvki'a,athvkihsko'i,uthvkanv'i,hiyathvkvka,uthvkoti,Eventful,athvk,[H_alt=none],i-vka,a_stem,a_present,True,False,True,1,1,1,1,1
 502,509,he/she is inside,aya'a,tsiya'a,aya'o'i,,,,StativeFutProg,y,[H_alt=none],stative-a',cons_stem,a_present,True,False,False,1,1,1,1,1
 502,509,he/she is inside,aya'a,tsiya'a,aya'o'i,,,,StativeFutProg,y,[H_alt=none],stative-a',cons_stem,a_present,True,False,True,1,1,1,1,1
@@ -1117,10 +1079,6 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 956,986,he/she is rolling him/her,kahsakwalehiha,tsiyahsakwalehiha,kahsakwalehiho'i,uwahsakwalelhv'i,hiyahsakwaleka,uwahsakwalehsti,Eventful,hsakwale,[H_alt=none],hih-lh,long_stem,a_present,True,False,True,1,1,1,1,1
 960,990,he/she is attaching the object behind it (refers to a flexible object),kahsanenatvhska,tsihsanenatvhska,kahsanenatvhsko'i,uwahsanenatvnv'i,hihsanenatvka,uwahsanenatvti,Eventful,hsanenat,[H_alt=none],vsk,long_stem,a_present,True,False,False,1,1,1,1,1
 969,999,he/she is piling it up,kahsvthvhska,tsihsvthvhska,kahsvthvhsko'i,uwahsvthanv'i,hihsvthvka,uwahsvthti,Eventful,hsvt,[H_alt=none],hvsk-han,long_stem,a_present,True,False,False,1,1,1,1,1
-970,1000,it’s hanging,katha,,katho'i,,hathehsti,,StativeFutProg,[VoiceInfix=ad],[H_alt=none],stative-h,a_stem,a_present,True,False,False,1,1,1,1,1
-970,1000,it’s hanging,katha,,katho'i,,hathehsti,,StativeFutProg,[VoiceInfix=ad],[H_alt=none],stative-h,a_stem,a_present,True,False,True,1,1,1,1,1
-970,1000,it’s hanging,katha,,katho'i,,hathehsti,,StativeFutProg,[VoiceInfix=ad]h,[H_alt=none],stative,a_stem,a_present,True,False,False,1,1,1,1,1
-970,1000,it’s hanging,katha,,katho'i,,hathehsti,,StativeFutProg,[VoiceInfix=ad]h,[H_alt=none],stative,a_stem,a_present,True,False,True,1,1,1,1,1
 970,1000,it’s hanging,katha,,katho'i,,hathehsti,,StativeFutProg,at,[H_alt=none],stative-h,a_stem,a_present,True,False,False,1,1,1,1,1
 970,1000,it’s hanging,katha,,katho'i,,hathehsti,,StativeFutProg,at,[H_alt=none],stative-h,a_stem,a_present,True,False,True,1,1,1,1,1
 970,1000,it’s hanging,katha,,katho'i,,hathehsti,,StativeFutProg,ath,[H_alt=none],stative,a_stem,a_present,True,False,False,1,1,1,1,1
@@ -1254,14 +1212,9 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 1470,1536,it’s in view,utayvlatha,akwatayvlatha,utayvlatho'i,utayvlathv'i,tsatayvlathehsti,utayvlathti,StativeFutProg,[VoiceInfix=ada]yvlath,[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
 1470,1536,it’s in view,utayvlatha,akwatayvlatha,utayvlatho'i,utayvlathv'i,tsatayvlathehsti,utayvlathti,StativeFutProg,atayvlat,[H_alt=none],stative-h,a_stem,a_present,False,False,False,1,1,1,1,1
 1470,1536,it’s in view,utayvlatha,akwatayvlatha,utayvlatho'i,utayvlathv'i,tsatayvlathehsti,utayvlathti,StativeFutProg,atayvlath,[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
-1471,1537,he/she is throwing it,uteka,akwateka,uteko'i,utinvhsv'i,tsatuka,utinvti,Eventful,[VoiceInfix=ad],[H_alt=none],go-in,a_stem,a_present,False,False,False,1,1,1,1,1
 1471,1537,he/she is throwing it,uteka,akwateka,uteko'i,utinvhsv'i,tsatuka,utinvti,Eventful,at,[H_alt=none],go-in,a_stem,a_present,False,False,False,1,1,1,1,1
 1476,1542,he/she is having a birthday,utethiyiha,akwatethiyiha,utethiyihsko'i,utethiyvhv'i,tsatethiya,utethiyhti,Eventful,[VoiceInfix=ad]ethiy,[H_alt=none],ih-vh,a_stem,a_present,False,False,False,1,1,1,1,1
 1476,1542,he/she is having a birthday,utethiyiha,akwatethiyiha,utethiyihsko'i,utethiyvhv'i,tsatethiya,utethiyhti,Eventful,atethiy,[H_alt=none],ih-vh,a_stem,a_present,False,False,False,1,1,1,1,1
-1478,1544,it’s hot,utilhehka,,utilhehko'i,utilhehkv'i,tsatilhehkehsti,,StativeFutProg,[VoiceInfix=ad]ilheh,[H_alt=none],stative-k,a_stem,a_present,False,False,False,1,1,1,1,1
-1478,1544,it’s hot,utilhehka,,utilhehko'i,utilhehkv'i,tsatilhehkehsti,,StativeFutProg,[VoiceInfix=ad]ilheh,[H_alt=none],stative-k,a_stem,a_present,False,False,True,1,1,1,1,1
-1478,1544,it’s hot,utilhehka,,utilhehko'i,utilhehkv'i,tsatilhehkehsti,,StativeFutProg,[VoiceInfix=ad]ilhehk,[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
-1478,1544,it’s hot,utilhehka,,utilhehko'i,utilhehkv'i,tsatilhehkehsti,,StativeFutProg,[VoiceInfix=ad]ilhehk,[H_alt=none],stative,a_stem,a_present,False,False,True,1,1,1,1,1
 1478,1544,it’s hot,utilhehka,,utilhehko'i,utilhehkv'i,tsatilhehkehsti,,StativeFutProg,[VoiceInfix=adi]lheh,[H_alt=none],stative-k,a_stem,a_present,False,False,False,1,1,1,1,1
 1478,1544,it’s hot,utilhehka,,utilhehko'i,utilhehkv'i,tsatilhehkehsti,,StativeFutProg,[VoiceInfix=adi]lheh,[H_alt=none],stative-k,a_stem,a_present,False,False,True,1,1,1,1,1
 1478,1544,it’s hot,utilhehka,,utilhehko'i,utilhehkv'i,tsatilhehkehsti,,StativeFutProg,[VoiceInfix=adi]lhehk,[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
@@ -1278,23 +1231,18 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 1478,1544,it’s hot,utilhehka,,utilhehko'i,utilhehkv'i,tsatilhehkehsti,,StativeFutProg,tilheh,[H_alt=none],stative-k,cons_stem,a_present,False,False,True,1,1,1,1,1
 1478,1544,it’s hot,utilhehka,,utilhehko'i,utilhehkv'i,tsatilhehkehsti,,StativeFutProg,tilhehk,[H_alt=none],stative,cons_stem,a_present,False,False,False,1,1,1,1,1
 1478,1544,it’s hot,utilhehka,,utilhehko'i,utilhehkv'i,tsatilhehkehsti,,StativeFutProg,tilhehk,[H_alt=none],stative,cons_stem,a_present,False,False,True,1,1,1,1,1
-1479,1545,he/she has a fever,utilhehvhska,akwatilhehvhska,utilhehvhsko'i,utilhehvhskv'i,tsatilhehvhi,utilhehvhsti,StativeNoImp,[VoiceInfix=ad]ilhehvhs,[H_alt=none],stative-k,a_stem,a_present,False,False,False,1,1,1,1,1
-1479,1545,he/she has a fever,utilhehvhska,akwatilhehvhska,utilhehvhsko'i,utilhehvhskv'i,tsatilhehvhi,utilhehvhsti,StativeNoImp,[VoiceInfix=ad]ilhehvhsk,[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
 1479,1545,he/she has a fever,utilhehvhska,akwatilhehvhska,utilhehvhsko'i,utilhehvhskv'i,tsatilhehvhi,utilhehvhsti,StativeNoImp,[VoiceInfix=adi]lhehvhs,[H_alt=none],stative-k,a_stem,a_present,False,False,False,1,1,1,1,1
 1479,1545,he/she has a fever,utilhehvhska,akwatilhehvhska,utilhehvhsko'i,utilhehvhskv'i,tsatilhehvhi,utilhehvhsti,StativeNoImp,[VoiceInfix=adi]lhehvhsk,[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
 1479,1545,he/she has a fever,utilhehvhska,akwatilhehvhska,utilhehvhsko'i,utilhehvhskv'i,tsatilhehvhi,utilhehvhsti,StativeNoImp,[VoiceInfix=adi]vlhehvhs,[H_alt=none],stative-k,a_stem,a_present,False,False,False,1,1,1,1,1
 1479,1545,he/she has a fever,utilhehvhska,akwatilhehvhska,utilhehvhsko'i,utilhehvhskv'i,tsatilhehvhi,utilhehvhsti,StativeNoImp,[VoiceInfix=adi]vlhehvhsk,[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
 1479,1545,he/she has a fever,utilhehvhska,akwatilhehvhska,utilhehvhsko'i,utilhehvhskv'i,tsatilhehvhi,utilhehvhsti,StativeNoImp,atilhehvhs,[H_alt=none],stative-k,a_stem,a_present,False,False,False,1,1,1,1,1
 1479,1545,he/she has a fever,utilhehvhska,akwatilhehvhska,utilhehvhsko'i,utilhehvhskv'i,tsatilhehvhi,utilhehvhsti,StativeNoImp,atilhehvhsk,[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
-1480,1546,he/she is in hiding,utihskalha,akwatihskalha,utihskalho'i,utihskalhv'i,tsatihskalhehsti,utihskalhti,StativeFutProg,[VoiceInfix=ad]ihskal,[H_alt=none],stative-h,a_stem,a_present,False,False,False,1,1,1,1,1
-1480,1546,he/she is in hiding,utihskalha,akwatihskalha,utihskalho'i,utihskalhv'i,tsatihskalhehsti,utihskalhti,StativeFutProg,[VoiceInfix=ad]ihskalh,[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
 1480,1546,he/she is in hiding,utihskalha,akwatihskalha,utihskalho'i,utihskalhv'i,tsatihskalhehsti,utihskalhti,StativeFutProg,[VoiceInfix=adi]hskal,[H_alt=none],stative-h,a_stem,a_present,False,False,False,1,1,1,1,1
 1480,1546,he/she is in hiding,utihskalha,akwatihskalha,utihskalho'i,utihskalhv'i,tsatihskalhehsti,utihskalhti,StativeFutProg,[VoiceInfix=adi]hskalh,[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
 1480,1546,he/she is in hiding,utihskalha,akwatihskalha,utihskalho'i,utihskalhv'i,tsatihskalhehsti,utihskalhti,StativeFutProg,[VoiceInfix=adi]vhskal,[H_alt=none],stative-h,a_stem,a_present,False,False,False,1,1,1,1,1
 1480,1546,he/she is in hiding,utihskalha,akwatihskalha,utihskalho'i,utihskalhv'i,tsatihskalhehsti,utihskalhti,StativeFutProg,[VoiceInfix=adi]vhskalh,[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
 1480,1546,he/she is in hiding,utihskalha,akwatihskalha,utihskalho'i,utihskalhv'i,tsatihskalhehsti,utihskalhti,StativeFutProg,atihskal,[H_alt=none],stative-h,a_stem,a_present,False,False,False,1,1,1,1,1
 1480,1546,he/she is in hiding,utihskalha,akwatihskalha,utihskalho'i,utihskalhv'i,tsatihskalhehsti,utihskalhti,StativeFutProg,atihskalh,[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
-1481,1547,he/she is getting well,utiwhska,akwatiwhska,utiwhsko'i,utiwhsv'i,tsatiwhi,utiwhihsti,Eventful,[VoiceInfix=ad]iw,[H_alt=none],sk-s-hi-hihst,a_stem,a_present,False,False,False,1,1,1,1,1
 1481,1547,he/she is getting well,utiwhska,akwatiwhska,utiwhsko'i,utiwhsv'i,tsatiwhi,utiwhihsti,Eventful,[VoiceInfix=adi]vw,[H_alt=none],sk-s-hi-hihst,a_stem,a_present,False,False,False,1,1,1,1,1
 1481,1547,he/she is getting well,utiwhska,akwatiwhska,utiwhsko'i,utiwhsv'i,tsatiwhi,utiwhihsti,Eventful,[VoiceInfix=adi]w,[H_alt=none],sk-s-hi-hihst,a_stem,a_present,False,False,False,1,1,1,1,1
 1481,1547,he/she is getting well,utiwhska,akwatiwhska,utiwhsko'i,utiwhsv'i,tsatiwhi,utiwhihsti,Eventful,atiw,[H_alt=none],sk-s-hi-hihst,a_stem,a_present,False,False,False,1,1,1,1,1
@@ -1368,14 +1316,9 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 1569,1635,it is cold (refers to weather),uyhvtla,,uyhvtlo'i,uyhvtlv'i,,,StativeFutProg,yhvtl,[H_alt=none],stative,r_stem,a_present,False,False,True,1,1,1,1,1
 1572,1638,he/she is getting drunk,uyhvhste'a,akhiyvhste'a,uyhvhstehsko'i,uyhvhsta'v'i,tshayvhstaka,uyhvhstehsti,Eventful,yhvhst,[H_alt=none],e-aka,cons_stem,a_present,False,False,False,1,1,1,1,1
 1572,1638,he/she is getting drunk,uyhvhste'a,akhiyvhste'a,uyhvhstehsko'i,uyhvhsta'v'i,tshayvhstaka,uyhvhstehsti,Eventful,yhvhst,[H_alt=none],e-aka,r_stem,a_present,False,False,False,1,1,1,1,1
-1576,1642,he/she is inside it,utsa'a,akwatsa'a,utsa'o'i,utsa'v'i,tsatsa'ehsti,,StativeFutProg,[VoiceInfix=ad]s,[H_alt=none],stative-a',a_stem,a_present,False,False,False,1,1,1,1,1
-1576,1642,he/she is inside it,utsa'a,akwatsa'a,utsa'o'i,utsa'v'i,tsatsa'ehsti,,StativeFutProg,[VoiceInfix=ad]sa',[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
 1576,1642,he/she is inside it,utsa'a,akwatsa'a,utsa'o'i,utsa'v'i,tsatsa'ehsti,,StativeFutProg,ats,[H_alt=none],stative-a',a_stem,a_present,False,False,False,1,1,1,1,1
 1576,1642,he/she is inside it,utsa'a,akwatsa'a,utsa'o'i,utsa'v'i,tsatsa'ehsti,,StativeFutProg,atsa',[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
-1580,1646,he/she is grinning,utsetsti,akwatsetsti,utsetsto'i,utsetstv'i,hatsetsta,utsetstohti,StativeNoImp,[VoiceInfix=ad]setst,[H_alt=none],stative,a_stem,i_present,False,False,False,1,1,1,1,1
 1580,1646,he/she is grinning,utsetsti,akwatsetsti,utsetsto'i,utsetstv'i,hatsetsta,utsetstohti,StativeNoImp,atsetst,[H_alt=none],stative,a_stem,i_present,False,False,False,1,1,1,1,1
-1585,1651,it’s rattling,utsonatha,akwatsonatha,utsonatho'i,utsonathv'i,hatsonathvka,utsonathti,StativeNoImp,[VoiceInfix=ad]sonat,[H_alt=none],stative-h,a_stem,a_present,False,False,False,1,1,1,1,1
-1585,1651,it’s rattling,utsonatha,akwatsonatha,utsonatho'i,utsonathv'i,hatsonathvka,utsonathti,StativeNoImp,[VoiceInfix=ad]sonath,[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
 1585,1651,it’s rattling,utsonatha,akwatsonatha,utsonatho'i,utsonathv'i,hatsonathvka,utsonathti,StativeNoImp,atsonat,[H_alt=none],stative-h,a_stem,a_present,False,False,False,1,1,1,1,1
 1585,1651,it’s rattling,utsonatha,akwatsonatha,utsonatho'i,utsonathv'i,hatsonathvka,utsonathti,StativeNoImp,atsonath,[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
 1592,1658,it’s sticking out,ukhsatha,akwakhsatha,ukhsatho'i,ukhsathv'i,tsakhsathehsti,ukhsathti,StativeFutProg,akhsat,[H_alt=none],stative-h,a_stem,a_present,False,False,False,1,1,1,1,1
@@ -1439,8 +1382,6 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 1646,1712,he/she knows it,unhtha,akwanhtha,unhtho'i,unhthv'i,tsanhthehsti,,StativeFutProg,anht,[H_alt=none],stative-h,a_stem,a_present,False,False,False,1,1,1,1,1
 1646,1712,he/she knows it,unhtha,akwanhtha,unhtho'i,unhthv'i,tsanhthehsti,,StativeFutProg,anhth,[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
 1677,1743,he/she is wearing pants,uhsula,akwahsula,uhsulo'i,uhsulv'i,tsahsulehsti,,StativeFutProg,ahsul,[H_alt=none],stative,a_stem,a_present,False,False,False,1,1,1,1,1
-1693,1759,he/she is listening to him/her,uthvtahsti,tsiyathvtahsti,uthvtahsto'i,uthvtahstv'i,hiyathvtahstehsti,uthvtahstohti,StativeFutProg,[VoiceInfix=ad]hvtahst,[H_alt=none],stative,a_stem,i_present,False,False,True,1,1,1,1,1
-1693,1759,he/she is listening to him/her,uthvtahsti,tsiyathvtahsti,uthvtahsto'i,uthvtahstv'i,hiyathvtahstehsti,uthvtahstohti,StativeFutProg,[VoiceInfix=ad]hvtahst,[H_alt=none],stative,a_stem,i_present,False,False,True,1,1,1,1,1
 1693,1759,he/she is listening to him/her,uthvtahsti,tsiyathvtahsti,uthvtahsto'i,uthvtahstv'i,hiyathvtahstehsti,uthvtahstohti,StativeFutProg,athvtahst,[H_alt=none],stative,a_stem,i_present,False,False,True,1,1,1,1,1
 1693,1759,he/she is listening to him/her,uthvtahsti,tsiyathvtahsti,uthvtahsto'i,uthvtahstv'i,hiyathvtahstehsti,uthvtahstohti,StativeFutProg,athvtahst,[H_alt=none],stative,a_stem,i_present,False,False,True,1,1,1,1,1
 1699,1765,he/she is belching,uwakhuleka,akikhuleka,uwakhuleko'i,uwakhuletsv'i,tsakhuleki,uwakhule'ihsti,Eventful,khule,[H_alt=none],become,long_stem,a_present,False,False,False,1,1,1,1,2

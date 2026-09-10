@@ -10,6 +10,7 @@ rules:
 - name: expand_voice_ad
   input_pattern: '[VoiceInfix=ad]'
   output_pattern: 'at'
+  right_context: 'l|a|e|o|u|v'
 - name: expand_voice_ada
   input_pattern: '[VoiceInfix=ada]'
   output_pattern: 'ata'
