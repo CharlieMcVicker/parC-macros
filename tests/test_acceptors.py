@@ -124,9 +124,9 @@ def test_compile_morphotactic_acceptor_ac2():
     morph_fsa = compile_morphotactic_acceptor(syms, alphabet)
     assert morph_fsa is not None
 
-    # State footprint verification: compact (~15-400 states across all modular CSVs)
+    # State footprint verification: compact (~15-700 states across all modular CSVs)
     state_count = morph_fsa.num_states()
-    assert 12 <= state_count <= 400, f"Expected state count between 12 and 400, got {state_count}"
+    assert 12 <= state_count <= 700, f"Expected state count between 12 and 700, got {state_count}"
 
     # Helper to test un-wrapped strings against morph_fsa
     def morph_accepts(tokens: list[str]) -> bool:

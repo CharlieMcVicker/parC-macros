@@ -166,7 +166,7 @@ def compile_morphotactic_acceptor(
         syms = alphabet.get_symbol_table() if hasattr(alphabet, "get_symbol_table") else get_default_symbol_table()
 
     rule_files = resolve_morphotactic_rule_files(rules_csv)
-    _, sigma_star, all_syms = get_template_sigma(syms)
+    sigma, sigma_star, all_syms = get_template_sigma(syms)
 
     def get_slot_fsa(slot_name: str) -> pynini.Fst:
         ref = slot_name if (slot_name.startswith("<") and slot_name.endswith(">")) else f"<{slot_name}>"
@@ -184,11 +184,12 @@ def compile_morphotactic_acceptor(
             parts = [v.strip() for v in pattern_str.split("|") if v.strip()]
             return pynini.union(*[pynini.accep(p, token_type=syms) for p in parts]).optimize()
 
-    rules: list[tuple[pynini.Fst, pynini.Fst]] = []
+    combined_acceptor = sigma_star
     for r_path in rule_files:
         if not r_path.exists():
             continue
         trigger_slot = None
+        unless_pattern = None
         explicit_triggers_fsa: pynini.Fst | None = None
         file_rules: list[tuple[pynini.Fst, pynini.Fst]] = []
         elsewhere_rules: list[tuple[str, str]] = []
@@ -206,6 +207,8 @@ def compile_morphotactic_acceptor(
                         k, v = comment_text.split(":", 1)
                         if k.strip().lower() == "trigger_slot":
                             trigger_slot = v.strip()
+                        elif k.strip().lower() == "unless":
+                            unless_pattern = v.strip()
                     continue
                 if header is None:
                     header = [c.strip() for c in row]
@@ -251,22 +254,26 @@ def compile_morphotactic_acceptor(
                 if unlicensed_fsa.num_states() > 0 and elsewhere_trigger_fsa.num_states() > 0:
                     file_rules.append((elsewhere_trigger_fsa, unlicensed_fsa))
 
-        rules.extend(file_rules)
+        if unless_pattern:
+            unless_fsa = compile_pattern_fsa(unless_pattern)
+            sigma_no_unless = pynini.difference(sigma, unless_fsa).optimize()
+            sigma_star_file = sigma_no_unless.star.optimize()
+        else:
+            sigma_star_file = sigma_star
 
-    combined_acceptor = sigma_star
-    for trigger_fsa, unlicensed_fsa in rules:
-        bad_forward = pynini.concat(
-            sigma_star,
-            pynini.concat(trigger_fsa, pynini.concat(sigma_star, pynini.concat(unlicensed_fsa, sigma_star))),
-        )
-        bad_reverse = pynini.concat(
-            sigma_star,
-            pynini.concat(unlicensed_fsa, pynini.concat(sigma_star, pynini.concat(trigger_fsa, sigma_star))),
-        )
-        bad = pynini.union(bad_forward, bad_reverse).optimize()
+        for trigger_fsa, unlicensed_fsa in file_rules:
+            bad_forward = pynini.concat(
+                sigma_star_file,
+                pynini.concat(trigger_fsa, pynini.concat(sigma_star_file, pynini.concat(unlicensed_fsa, sigma_star_file))),
+            )
+            bad_reverse = pynini.concat(
+                sigma_star_file,
+                pynini.concat(unlicensed_fsa, pynini.concat(sigma_star_file, pynini.concat(trigger_fsa, sigma_star_file))),
+            )
+            bad = pynini.union(bad_forward, bad_reverse).optimize()
 
-        rule_dfa = pynini.difference(sigma_star, bad).optimize()
-        combined_acceptor = pynini.intersect(combined_acceptor, rule_dfa).optimize()
+            rule_dfa = pynini.difference(sigma_star, bad).optimize()
+            combined_acceptor = pynini.intersect(combined_acceptor, rule_dfa).optimize()
 
     return combined_acceptor
 
@@ -421,6 +428,11 @@ def compile_h_meta_trigger_fst() -> pynini.Fst:
     return fsa("<HMetaPro>")
 
 
+def compile_h_meta_voice_trigger_fst() -> pynini.Fst:
+    """Compiles the <HMetaVoice> FST representing voice infixes that trigger H-metathesis."""
+    return fsa("<HMetaVoice>")
+
+
 @functools.lru_cache(maxsize=8)
 def get_h_metathesis_trigger_pronominals() -> Set[str]:
     """Returns the set of pronominal tag values that trigger H-metathesis by inspecting <HMetaPro>."""
@@ -428,8 +440,22 @@ def get_h_metathesis_trigger_pronominals() -> Set[str]:
     return {s[5:-1] if s.startswith("[Pro=") and s.endswith("]") else s for s in raw_strs}
 
 
-def is_h_metathesis_trigger(pronominal: str) -> bool:
-    """Returns True if the pronominal triggers H-metathesis according to compiled <HMetaPro>."""
+@functools.lru_cache(maxsize=8)
+def get_h_metathesis_trigger_voice_infixes() -> Set[str]:
+    """Returns the set of voice infix tag values that trigger H-metathesis by inspecting <HMetaVoice>."""
+    try:
+        raw_strs = fsm_strings(compile_h_meta_voice_trigger_fst())
+        return {s[12:-1] if s.startswith("[VoiceInfix=") and s.endswith("]") else s for s in raw_strs}
+    except Exception:
+        return {"ali"}
+
+
+def is_h_metathesis_trigger(pronominal: str, voice_or_root: str = "") -> bool:
+    """Returns True if the pronominal or voice infix triggers H-metathesis."""
+    if voice_or_root:
+        for v in get_h_metathesis_trigger_voice_infixes():
+            if f"[VoiceInfix={v}]" in voice_or_root or voice_or_root == v or voice_or_root.startswith(f"[VoiceInfix={v}]"):
+                return True
     pro_clean = pronominal[5:-1] if pronominal.startswith("[Pro=") and pronominal.endswith("]") else pronominal
     return pro_clean in get_h_metathesis_trigger_pronominals()
 
@@ -438,4 +464,5 @@ def clear_acceptor_caches():
     """Clears internal acceptor caches."""
     _CASCADE_DOMAIN_CACHE.clear()
     get_h_metathesis_trigger_pronominals.cache_clear()
+    get_h_metathesis_trigger_voice_infixes.cache_clear()
 

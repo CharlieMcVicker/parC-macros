@@ -1,0 +1,35 @@
+kind: Rules
+rules:
+- name: expand_voice_al
+  input_pattern: '[VoiceInfix=ali]'
+  output_pattern: 'al'
+  right_context: 'h<C>'
+- name: expand_voice_ali
+  input_pattern: '[VoiceInfix=ali]'
+  output_pattern: 'ali'
+- name: expand_voice_ad
+  input_pattern: '[VoiceInfix=ad]'
+  output_pattern: 'at'
+- name: expand_voice_ada
+  input_pattern: '[VoiceInfix=ada]'
+  output_pattern: 'ata'
+- name: expand_voice_adad
+  input_pattern: '[VoiceInfix=adad]'
+  output_pattern: 'atat'
+- name: expand_voice_adi_v
+  input_pattern: '[VoiceInfix=adi]v'
+  output_pattern: 'ati'
+- name: expand_voice_adi
+  input_pattern: '[VoiceInfix=adi]'
+  output_pattern: 'ati'
+  right_context: <C>
+
+- name: expand_voice
+  rule_sequence:
+  - $expand_voice_al
+  - $expand_voice_ali
+  - $expand_voice_ad
+  - $expand_voice_ada
+  - $expand_voice_adad
+  - $expand_voice_adi_v
+  - $expand_voice_adi

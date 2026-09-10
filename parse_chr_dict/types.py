@@ -763,9 +763,10 @@ class LexicalVerb:
         results: set[str] = set()
         for pro in pros:
             h_alt = self.h_alt_tag or "[H_alt=none]" if is_h_alternation_trigger(pro) else "[H_alt=none]"
+            h_meta_triggered = is_h_metathesis_trigger(pro, self.template.root) and (h_alt == "[H_alt=none]")
             h_meta = (
                 "[H_metathesis=active]"
-                if (self.metadata.is_h_metathesis and is_h_metathesis_trigger(pro))
+                if (self.metadata.is_h_metathesis and h_meta_triggered)
                 else "[H_metathesis=none]"
             )
             for p_cand in prefixes:

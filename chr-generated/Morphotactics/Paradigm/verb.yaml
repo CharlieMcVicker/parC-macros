@@ -7,6 +7,7 @@ stage_order:
 - final_dropping
 - aspect_suffix
 - tense
+- expand_voice
 - h_alternation
 - tag_h_metathesis
 - mark_stem_initial_vowel
@@ -28,6 +29,9 @@ global_markers:
 - kind: rule
   stage: tense
   value: $tense_replace
+- kind: rule
+  stage: expand_voice
+  value: $expand_voice
 - kind: rule
   stage: h_alternation
   value: $h_alternation

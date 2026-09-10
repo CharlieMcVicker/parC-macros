@@ -130,6 +130,7 @@ def test_inplace_paradigm_generation_ac2():
             "final_dropping",
             "aspect_suffix",
             "tense",
+            "expand_voice",
             "h_alternation",
             "tag_h_metathesis",
             "mark_stem_initial_vowel",
@@ -155,6 +156,7 @@ def test_inplace_paradigm_generation_ac2():
         assert gm_map["final_dropping"] == "$drop_root_final"
         assert gm_map["aspect_suffix"] == "$aspect_replace"
         assert gm_map["h_alternation"] == "$h_alternation"
+        assert gm_map["expand_voice"] == "$expand_voice"
         assert gm_map["tag_h_metathesis"] == "$tag_h_metathesis"
         assert gm_map["drop_stem_initial_vowel"] == "$drop_stem_initial_vowel"
         assert gm_map["pronominal"] == "$pro_replace"

@@ -24,7 +24,7 @@ patterns:
 - name: Root
   ref: <Root>
   # pattern: <VerbRoot>(<DerivationalSuffixes><AspectClass><Variant>?<Aspect=completive>)*<DerivationalSuffixes>?
-  pattern: <VerbRoot><NFS>?
+  pattern: <VoiceInfix>?<VerbRoot><NFS>?
 - name: SonH
   pattern: nh|lh|yh|wh|mh
   ref: <SonH>
@@ -34,3 +34,6 @@ patterns:
 - name: HMetaPro
   pattern: '[Pro=1sg.B]|[Pro=2sg.B]|[Pro=3sg.A]'
   ref: <HMetaPro>
+- name: HMetaVoice
+  pattern: '[VoiceInfix=ali]'
+  ref: <HMetaVoice>

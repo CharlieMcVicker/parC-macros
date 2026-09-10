@@ -3,6 +3,7 @@ stages:
   - final_dropping
   - aspect_suffix
   - tense
+  - expand_voice
   - h_alternation
   - tag_h_metathesis
   - mark_stem_initial_vowel

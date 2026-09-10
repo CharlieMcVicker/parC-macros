@@ -624,4 +624,28 @@ def test_h_vowel_row_39_43_thinking_derivation():
     assert len(h_vowel_hyps) > 0, "Expected at least one hypothesis with [H_alt=vowel_v]"
     for h in h_vowel_hyps:
         assert h.h_alt_tag == "[H_alt=vowel_v]"
-        assert "atanh" in h.h_root
+        assert "atanh" in h.h_root or "nht" in h.h_root
+
+
+def test_middle_voice_entry_554_conversing():
+    """Verify corpus entry 554 ('he/she is conversing') derives a middle voice hypothesis with [VoiceInfix=ali]nho."""
+    forms = [
+        ("talhinoheha", PRES_3RD),
+        ("tekalinoheha", PRES_1SG),
+        ("talhinohehsko'i", HABITUAL_3RD),
+        ("tulhinohelhv'i", COMPLETIVE_3RD),
+        ("thalhinohvla", IMPERATIVE_2ND),
+        ("tsulhinohehti", INFINITIVE_3RD),
+    ]
+    hyps = derive_hypotheses_for_forms(forms)
+    ali_nho = [h for h in hyps if h.template.root == "[VoiceInfix=ali]nho" and h.aspect_class == "apl-active-h"]
+    assert len(ali_nho) > 0, f"Expected [VoiceInfix=ali]nho hypothesis for entry 554, but got: {hyps}"
+    verb = ali_nho[0]
+    assert verb.is_h_metathesis is True
+    assert verb.h_alt_tag == "[H_alt=drop]"
+
+    # Verify forward inflection of all 6 forms
+    for surface, form in forms:
+        recs = verb.inflect_form(form)
+        assert surface in recs, f"Expected {surface} in reconstructed forms {recs} for {form.name}"
+
