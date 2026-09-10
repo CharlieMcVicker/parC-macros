@@ -1,11 +1,14 @@
 stages:
+  - expand_nfs
   - final_dropping
   - aspect_suffix
   - tense
+  - expand_voice
   - h_alternation
   - tag_h_metathesis
-  - drop_stem_initial_vowel
+  - mark_stem_initial_vowel
   - pronominal
+  - drop_stem_initial_vowel
   - h_metathesis
   - insert_dist
   - insert_wi

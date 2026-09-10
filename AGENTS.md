@@ -113,6 +113,7 @@ parC-macros/
 │   ├── reconstruct.py    # Forward inflection & candidate hypothesis validation
 │   ├── acceptors.py      # Form-specific morphotactic query lattices
 │   ├── h_alternation.py  # H-alternation phonological rule handler
+│   ├── parse_options.py  # Structured parse variation and option extraction CLI/API
 │   └── segment.py        # CLI interactive morpheme segmenter
 └── tests/                # Pytest suite (primarily test_derive_pipeline.py)
 ```

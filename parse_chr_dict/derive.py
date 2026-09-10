@@ -178,13 +178,12 @@ def _derive_category(
         else:
             animate_options = [False]
 
+        h_alt_val = p_data.h_alt_tag or "[H_alt=none]"
         # H-metathesis candidate values
-        if is_h_metathesis_trigger(pro_tag):
+        if is_h_metathesis_trigger(pro_tag, p_data.root) and h_alt_val == "[H_alt=none]":
             h_meta_options = [p_data.h_metathesis_tag == "[H_metathesis=active]"]
         else:
             h_meta_options = [False, True]
-
-        h_alt_val = p_data.h_alt_tag or "[H_alt=none]"
         aspect_variants = AspectVariants(present=pres_var)
 
         for sa in set_a_options:
@@ -344,10 +343,10 @@ def _derive_category(
                 else:
                     new_h_alt_tag = hyp.h_alt_tag or "[H_alt=none]"
 
-                if is_h_metathesis_trigger(pro_tag):
+                if is_h_metathesis_trigger(pro_tag, hyp.template.root):
                     expected_meta = (
                         "[H_metathesis=active]"
-                        if hyp.metadata.is_h_metathesis
+                        if (hyp.metadata.is_h_metathesis and (p_data.h_alt_tag in ("", "[H_alt=none]")))
                         else "[H_metathesis=none]"
                     )
                     actual_meta = p_data.h_metathesis_tag or "[H_metathesis=none]"
@@ -394,22 +393,6 @@ def _derive_category(
                         is_h_metathesis=hyp.metadata.is_h_metathesis,
                     )
                 )
-
-        # If any hypotheses underwent actual H-mutation on a trigger form, reject unmutated fallbacks for the same root
-        mutated_h_roots = {
-            h.h_root
-            for h in surviving
-            if h.h_alt_tag and h.h_alt_tag != "[H_alt=none]"
-        }
-        if mutated_h_roots:
-            surviving = {
-                h
-                for h in surviving
-                if not (
-                    h.h_root in mutated_h_roots
-                    and (not h.h_alt_tag or h.h_alt_tag == "[H_alt=none]")
-                )
-            }
 
         candidate_hypotheses = surviving
 

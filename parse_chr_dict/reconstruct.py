@@ -84,7 +84,13 @@ def inflect_tag_str(tag_str: str) -> list[str]:
     inflect_fst = get_inflect_graph()
     out_fst = pynini.compose(word_fsa(tag_str), inflect_fst)
     out_proj = pynini.project(out_fst, "output").optimize()
-    return fsm_strings(out_proj, strip_all_tags=True)
+    raw_strings = fsm_strings(out_proj)
+    valid_surfs: list[str] = []
+    for s in raw_strings:
+        clean = re.sub(r"\[(BOW|EOW)\]", "", s)
+        if "[" not in clean:
+            valid_surfs.append(clean)
+    return valid_surfs
 
 
 def memoized_inflect(

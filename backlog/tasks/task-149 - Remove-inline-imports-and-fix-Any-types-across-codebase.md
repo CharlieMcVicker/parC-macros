@@ -1,14 +1,14 @@
 ---
 id: TASK-149
 title: Remove inline imports and fix Any types across codebase
-status: In Progress
+status: Done
 assignee:
   - '@self'
 created_date: '2026-09-08 15:59'
-updated_date: '2026-09-08 16:00'
+updated_date: '2026-09-10 16:42'
 labels: []
 dependencies: []
-ordinal: 159000
+ordinal: 176000
 ---
 
 ## Description

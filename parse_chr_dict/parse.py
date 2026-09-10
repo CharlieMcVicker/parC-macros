@@ -311,6 +311,26 @@ def get_specialized_parse_graph(form: VerbForm | str, is_stative: bool = False) 
     return specialized_graph
 
 
+def tokenize_root(r: str) -> list[str]:
+    """Tokenizes a root string into individual characters and bracketed tags (e.g. [NFS=AMB])."""
+    tokens: list[str] = []
+    i = 0
+    n = len(r)
+    while i < n:
+        if r[i] == "[":
+            end = r.find("]", i)
+            if end != -1:
+                tokens.append(r[i : end + 1])
+                i = end + 1
+            else:
+                tokens.append(r[i])
+                i += 1
+        else:
+            tokens.append(r[i])
+            i += 1
+    return tokens
+
+
 def build_root_filter_fsa(allowed_roots: Iterable[str]) -> pynini.Fst | None:
     """
     Constructs an optimized FSA filter that restricts the output of a parse graph to
@@ -349,9 +369,9 @@ def build_root_filter_fsa(allowed_roots: Iterable[str]) -> pynini.Fst | None:
 
     root_fsas = []
     for r in key:
-        clean_r = get_just_root(r) if "[" in r else r
-        if clean_r and all(syms.member(c) for c in clean_r):
-            chars = [pynini.accep(c, token_type=syms) for c in clean_r]
+        toks = tokenize_root(r)
+        if toks and all(syms.member(c) for c in toks):
+            chars = [pynini.accep(c, token_type=syms) for c in toks]
             root_fsas.append(functools.reduce(pynini.concat, chars))
 
     if not root_fsas:

@@ -3,17 +3,23 @@
 kind: Paradigm
 part_of_speech: $verb
 stage_order:
+- expand_nfs
 - final_dropping
 - aspect_suffix
 - tense
+- expand_voice
 - h_alternation
 - tag_h_metathesis
-- drop_stem_initial_vowel
+- mark_stem_initial_vowel
 - pronominal
+- drop_stem_initial_vowel
 - h_metathesis
 - insert_dist
 - insert_wi
 global_markers:
+- kind: rule
+  stage: expand_nfs
+  value: $expand_nfs
 - kind: rule
   stage: final_dropping
   value: $drop_root_final
@@ -24,17 +30,23 @@ global_markers:
   stage: tense
   value: $tense_replace
 - kind: rule
+  stage: expand_voice
+  value: $expand_voice
+- kind: rule
   stage: h_alternation
   value: $h_alternation
 - kind: rule
   stage: tag_h_metathesis
   value: $tag_h_metathesis
 - kind: rule
-  stage: drop_stem_initial_vowel
-  value: $drop_stem_initial_vowel
+  stage: mark_stem_initial_vowel
+  value: $mark_stem_initial_vowel
 - kind: rule
   stage: pronominal
   value: $pro_replace
+- kind: rule
+  stage: drop_stem_initial_vowel
+  value: $drop_stem_initial_vowel
 - kind: rule
   stage: h_metathesis
   value: $h_metathesis

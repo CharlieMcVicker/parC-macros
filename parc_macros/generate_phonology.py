@@ -275,24 +275,36 @@ def extract_phonology_data(
                 else:
                     mark_final_two_triggers.append(f"[AspectClass={cls_expr}][Aspect={feat}]")
 
-    # Stem-initial vowel drop triggers
-    drop_a_src = phonology_effects.get("drop_stem_initial_a")
-    drop_first_a_csv = (
-        config_dir / drop_a_src if drop_a_src else config_dir / "verb-pronominal-drop-first-a.csv"
-    )
-    if drop_first_a_csv.exists():
-        drop_first_a_triggers = _parse_rule_triggers(drop_first_a_csv)
-    else:
-        drop_first_a_triggers = [("a_stem", "3sg.A"), ("a_stem", "3sg.B")]
+    paradigm_config = verb_config.get("paradigm", {}) if verb_config else {}
+    open_root_template = paradigm_config.get("open_root_template", "")
+    if not open_root_template and verb_config:
+        open_root_template = derive_open_root_template(verb_config)
+    template_tokens = re.findall(r"<[^>]+>", open_root_template) if open_root_template else []
 
-    drop_v_src = phonology_effects.get("drop_stem_initial_v")
-    drop_first_v_csv = (
-        config_dir / drop_v_src if drop_v_src else config_dir / "verb-pronominal-drop-first-v.csv"
-    )
-    if drop_first_v_csv.exists():
-        drop_first_v_triggers = _parse_rule_triggers(drop_first_v_csv)
-    else:
-        drop_first_v_triggers = [("v_stem", "3sg.B")]
+    # Stem-initial vowel drop triggers
+    stem_initial_vowel_drops: dict[str, list[tuple[str, str]]] = {}
+
+    if phonology_effects:
+        for key, val in phonology_effects.items():
+            if key in ("drop_stem_initial_vowels", "drop_stem_initial") and isinstance(val, dict):
+                for phone, src_file in val.items():
+                    src_path = config_dir / src_file
+                    if src_path.exists():
+                        stem_initial_vowel_drops[phone] = _parse_rule_triggers(src_path)
+            elif key.startswith("drop_stem_initial_") and key not in ("drop_stem_initial_vowels", "drop_stem_initial_vowel"):
+                phone = key[len("drop_stem_initial_"):]
+                if isinstance(val, str):
+                    src_path = config_dir / val
+                    if src_path.exists():
+                        stem_initial_vowel_drops[phone] = _parse_rule_triggers(src_path)
+
+    if not stem_initial_vowel_drops and config_dir.exists():
+        for csv_file in sorted(config_dir.glob("*.csv")):
+            m = re.match(r"^(?:.*[-_])?drop[-_](?:first|stem[-_]initial)[-_]([a-zA-Z0-9_]+)\.csv$", csv_file.name)
+            if m:
+                phone = m.group(1)
+                if phone not in stem_initial_vowel_drops:
+                    stem_initial_vowel_drops[phone] = _parse_rule_triggers(csv_file)
 
     return {
         "tag_groups": tag_groups,
@@ -306,8 +318,8 @@ def extract_phonology_data(
         "variants": variants,
         "mark_final_triggers": mark_final_triggers,
         "mark_final_two_triggers": mark_final_two_triggers,
-        "drop_first_a_triggers": drop_first_a_triggers,
-        "drop_first_v_triggers": drop_first_v_triggers,
+        "stem_initial_vowel_drops": stem_initial_vowel_drops,
+        "template_tokens": template_tokens,
     }
 
 
@@ -564,6 +576,12 @@ def generate_phonology_rules(
                 "right_context": drop_final_two_rc,
             },
             {
+                "name": "delete_temp_marker",
+                "description": "delete the temporary marker [TEMP]",
+                "input_pattern": "[TEMP]",
+                "output_pattern": "",
+            },
+            {
                 "name": "drop_final",
                 "description": "drop final phone",
                 "rule_sequence": [
@@ -592,64 +610,70 @@ def generate_phonology_rules(
     with open(output_rules_dir / "drop_root_final.yaml", "w", encoding="utf-8") as f:
         yaml.dump(drop_root_final_yaml, f, sort_keys=False, default_flow_style=False)
 
-    # 2. drop_stem_initial_vowel.yaml
-    drop_a_branches = [
-        f"[PrefixClass={cls}][Pro={pro}]<H_alt>?"
-        for cls, pro in data.get("drop_first_a_triggers", [])
-    ]
-    drop_a_lc = "|".join(drop_a_branches) if drop_a_branches else "[PrefixClass=a_stem][Pro=3sg.A]<H_alt>?|[PrefixClass=a_stem][Pro=3sg.B]<H_alt>?"
+    # 2. mark_stem_initial_vowel.yaml and drop_stem_initial_vowel.yaml
+    slot_tag_groups = data.get("slot_tag_groups", [])
+    tag_groups = data.get("tag_groups", {})
 
-    drop_v_branches = [
-        f"[PrefixClass={cls}][Pro={pro}]<H_alt>?"
-        for cls, pro in data.get("drop_first_v_triggers", [])
-    ]
-    drop_v_lc = "|".join(drop_v_branches) if drop_v_branches else "[PrefixClass=v_stem][Pro=3sg.B]<H_alt>?"
+    prefix_class_tag = "PrefixClass"
+    prefix_feat_tag = "Pro"
+    if "PrefixClass" in tag_groups:
+        prefix_class_tag = "PrefixClass"
+    elif len(slot_tag_groups) >= 2:
+        prefix_class_tag = slot_tag_groups[0]
+
+    if "Pro" in tag_groups:
+        prefix_feat_tag = "Pro"
+    elif len(slot_tag_groups) >= 2:
+        prefix_feat_tag = slot_tag_groups[1]
+
+    # Check if <H_alt> exists in base inventory/patterns/template
+    optional_h_alt = "<H_alt>?" if ("H_alt" in tag_groups or "<H_alt>" in data.get("template_tokens", [])) else ""
+
+    stem_initial_vowel_drops = data.get("stem_initial_vowel_drops", {})
+
+    mark_sub_rules = []
+    mark_seq_names = []
+    drop_string_maps = []
+
+    for vowel, triggers in stem_initial_vowel_drops.items():
+        if not triggers:
+            continue
+        branches = [
+            f"[{prefix_class_tag}={cls}][{prefix_feat_tag}={feat}]{optional_h_alt}"
+            for cls, feat in triggers
+        ]
+        lc = "|".join(branches)
+        rule_name = f"mark_stem_initial_{vowel}"
+        mark_sub_rules.append({
+            "name": rule_name,
+            "description": f"mark the first {vowel} with [TEMP] at start of stem",
+            "string_map": [[vowel, f"{vowel}[TEMP]"]],
+            "left_context": lc,
+        })
+        mark_seq_names.append(f"${rule_name}")
+        drop_string_maps.append([f"{vowel}[TEMP]", ""])
+
+    mark_stem_initial_vowel_yaml = {
+        "kind": "Rules",
+        "rules": mark_sub_rules + [
+            {
+                "name": "mark_stem_initial_vowel",
+                "description": "mark stem initial vowel with [TEMP] based on pronominal triggers",
+                "rule_sequence": mark_seq_names,
+            }
+        ],
+    }
+    with open(output_rules_dir / "mark_stem_initial_vowel.yaml", "w", encoding="utf-8") as f:
+        yaml.dump(mark_stem_initial_vowel_yaml, f, sort_keys=False, default_flow_style=False)
 
     drop_stem_initial_vowel_yaml = {
         "kind": "Rules",
         "rules": [
             {
-                "name": "mark_stem_initial_a",
-                "description": "mark the first a with [TEMP] at start of stem",
-                "string_map": [["a", "[TEMP]"]],
-                "left_context": drop_a_lc,
-            },
-            {
-                "name": "mark_stem_initial_v",
-                "description": "mark the first v with [TEMP] at start of stem",
-                "string_map": [["v", "[TEMP]"]],
-                "left_context": drop_v_lc,
-            },
-            {
-                "name": "delete_temp_marker",
-                "description": "delete the temporary marker [TEMP]",
-                "input_pattern": "[TEMP]",
-                "output_pattern": "",
-            },
-            {
-                "name": "drop_stem_initial_a",
-                "description": "drop only the first a at start of stem",
-                "rule_sequence": [
-                    "$mark_stem_initial_a",
-                    "$delete_temp_marker",
-                ],
-            },
-            {
-                "name": "drop_stem_initial_v",
-                "description": "drop only the first v at start of stem",
-                "rule_sequence": [
-                    "$mark_stem_initial_v",
-                    "$delete_temp_marker",
-                ],
-            },
-            {
                 "name": "drop_stem_initial_vowel",
-                "description": "drop stem initial vowel (a or v) based on pronominal triggers",
-                "rule_sequence": [
-                    "$drop_stem_initial_a",
-                    "$drop_stem_initial_v",
-                ],
-            },
+                "description": "drop stem initial vowel marked with [TEMP]",
+                "string_map": drop_string_maps,
+            }
         ],
     }
     with open(output_rules_dir / "drop_stem_initial_vowel.yaml", "w", encoding="utf-8") as f:
@@ -659,5 +683,5 @@ def generate_phonology_rules(
     src_rules = config_dir / "Phonology" / "Rules"
     if src_rules.exists():
         for rf in src_rules.glob("*.yaml"):
-            if rf.name not in ("drop_root_final.yaml", "drop_stem_initial_vowel.yaml"):
+            if rf.name not in ("drop_root_final.yaml", "drop_stem_initial_vowel.yaml", "mark_stem_initial_vowel.yaml"):
                 shutil.copy2(rf, output_rules_dir / rf.name)

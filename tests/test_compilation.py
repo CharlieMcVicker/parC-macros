@@ -140,15 +140,15 @@ def test_aspect_variants_and_elimination_of_overgeneration():
     inflect_fst = get_open_inflect_graph("verb", infer_lexical_features=False)
 
     # 1. Present tense for class 'become' - ONLY ONE path exists (no duplicate inf2, inf3, inf4 variants!)
-    # [PrefixClass=a_stem][Pro=3sg.A][H_metathesis=none][H_alt=none][AspectClass=become][Aspect=present][Tense=present_a]
-    pres_str = "[PrefixClass=a_stem][Pro=3sg.A][H_metathesis=none][H_alt=none][AspectClass=become][Aspect=present][Tense=present_a]"
+    # [PrefixClass=a_stem][Pro=3sg.A][H_metathesis=none][H_alt=none]a[AspectClass=become][Aspect=present][Tense=present_a]
+    pres_str = "[PrefixClass=a_stem][Pro=3sg.A][H_metathesis=none][H_alt=none]a[AspectClass=become][Aspect=present][Tense=present_a]"
     out_fst = pynini.compose(word_fsa(pres_str), inflect_fst)
     out_forms = fsm_strings(pynini.project(out_fst, "output").optimize())
     assert len(out_forms) == 1
     assert out_forms == ["[BOW]aka[EOW]"]
 
     # Verify that trying to pass [Variant=2] on present tense yields no valid surface forms (tags remain unconsumed)
-    invalid_pres_str = "[PrefixClass=a_stem][Pro=3sg.A][H_metathesis=none][H_alt=none][AspectClass=become][Variant=2][Aspect=present][Tense=present_a]"
+    invalid_pres_str = "[PrefixClass=a_stem][Pro=3sg.A][H_metathesis=none][H_alt=none]a[AspectClass=become][Variant=2][Aspect=present][Tense=present_a]"
     invalid_fst = pynini.compose(word_fsa(invalid_pres_str), inflect_fst)
     invalid_forms = [
         f
@@ -159,22 +159,22 @@ def test_aspect_variants_and_elimination_of_overgeneration():
 
     # 2. Infinitive forms for class 'become'
     # Default (variant 1): no [Variant=N] tag -> st
-    inf1_str = "[PrefixClass=a_stem][Pro=3sg.B][H_metathesis=none][H_alt=none][AspectClass=become][Aspect=infinitive][Tense=infinitive]"
+    inf1_str = "[PrefixClass=a_stem][Pro=3sg.B][H_metathesis=none][H_alt=none]a[AspectClass=become][Aspect=infinitive][Tense=infinitive]"
     out1_fst = pynini.compose(word_fsa(inf1_str), inflect_fst)
     assert fsm_strings(pynini.project(out1_fst, "output").optimize()) == ["[BOW]uhsti[EOW]"]
 
     # Variant 2: [Variant=2] -> 'ist
-    inf2_str = "[PrefixClass=a_stem][Pro=3sg.B][H_metathesis=none][H_alt=none][AspectClass=become][Variant=2][Aspect=infinitive][Tense=infinitive]"
+    inf2_str = "[PrefixClass=a_stem][Pro=3sg.B][H_metathesis=none][H_alt=none]a[AspectClass=become][Variant=2][Aspect=infinitive][Tense=infinitive]"
     out2_fst = pynini.compose(word_fsa(inf2_str), inflect_fst)
     assert fsm_strings(pynini.project(out2_fst, "output").optimize()) == ["[BOW]u'ihsti[EOW]"]
 
     # Variant 3: [Variant=3] -> yhst
-    inf3_str = "[PrefixClass=a_stem][Pro=3sg.B][H_metathesis=none][H_alt=none][AspectClass=become][Variant=3][Aspect=infinitive][Tense=infinitive]"
+    inf3_str = "[PrefixClass=a_stem][Pro=3sg.B][H_metathesis=none][H_alt=none]a[AspectClass=become][Variant=3][Aspect=infinitive][Tense=infinitive]"
     out3_fst = pynini.compose(word_fsa(inf3_str), inflect_fst)
     assert fsm_strings(pynini.project(out3_fst, "output").optimize()) == ["[BOW]uyhsti[EOW]"]
 
     # Variant 4: [Variant=4] -> ist
-    inf4_str = "[PrefixClass=a_stem][Pro=3sg.B][H_metathesis=none][H_alt=none][AspectClass=become][Variant=4][Aspect=infinitive][Tense=infinitive]"
+    inf4_str = "[PrefixClass=a_stem][Pro=3sg.B][H_metathesis=none][H_alt=none]a[AspectClass=become][Variant=4][Aspect=infinitive][Tense=infinitive]"
     out4_fst = pynini.compose(word_fsa(inf4_str), inflect_fst)
     assert fsm_strings(pynini.project(out4_fst, "output").optimize()) == ["[BOW]uihsti[EOW]"]
 

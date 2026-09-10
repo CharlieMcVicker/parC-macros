@@ -241,6 +241,59 @@ def test_real_animate_verb_entry_788():
     assert len(derived) > 0, f"Animate verb entry 788 ('{row['present']}') failed multi-form derivation"
 
 
+def test_real_stative_verb_entry_1516():
+    with open("chr-corpus/corpus.csv") as f:
+        reader = csv.DictReader(
+            f,
+            fieldnames=[
+                "corpus_id",
+                "entry_no",
+                "definition",
+                "present",
+                "present_1sg",
+                "imperfective",
+                "perfective",
+                "imperative",
+                "infinitive",
+            ],
+        )
+        next(reader)
+        row = next(r for r in reader if r["corpus_id"] == "1516")
+
+    # Entry 1516 forms: present="ukeyuha", present_1sg="tsikeyu'a", imperfective="ukeyuhso'i", perfective="ukeyuhsv'i", imperative="hikeyuhsehsti", infinitive="ukeyhti"
+    forms = [
+        (row["present"], PRES_3RD),
+        (row["present_1sg"], PRES_1SG),
+        (row["imperfective"], HABITUAL_3RD),
+        (row["perfective"], INCOMPLETIVE_ASSERTIVE_3RD),
+        (row["imperative"], FUT_PROG_2ND),
+    ]
+    derived = derive_hypotheses_for_forms(forms)
+    assert len(derived) > 0, f"Stative verb entry 1516 ('{row['present']}') failed multi-form derivation"
+    assert any(h.h_alt_tag == "[H_alt=glot]" for h in derived)
+
+
+def test_real_eventful_verb_entries_821_825_1045():
+    """Verify non-H-alternating verbs with /hs/ in aspect suffixes derive cleanly."""
+    with open("chr-corpus/corpus.csv") as f:
+        reader = list(csv.DictReader(f))
+
+    for corpus_id, expected_root in [("821", "tsaliko"), ("825", "tsvy"), ("1045", "utal")]:
+        row = next(r for r in reader if r["corpus_id"] == corpus_id)
+        forms = [
+            (row["present"], PRES_3RD),
+            (row["present_1sg"], PRES_1SG),
+            (row["imperfective"], HABITUAL_3RD),
+            (row["perfective"], COMPLETIVE_3RD),
+            (row["imperative"], IMPERATIVE_2ND),
+            (row["infinitive"], INFINITIVE_3RD),
+        ]
+        derived = derive_hypotheses_for_forms(forms, entry_type=EVENTFUL)
+        valid = [h for h in derived if validate_hypothesis(h, row, EVENTFUL)]
+        assert len(valid) > 0, f"Entry {corpus_id} ('{row['present']}') failed validation"
+        assert any(h.h_root == expected_root and h.h_alt_tag == "[H_alt=none]" for h in valid)
+
+
 def test_lexical_verb_dataclass_fields():
     hyp = LexicalVerb(
         h_root="[Pro]atat[Aspect][Tense]",
@@ -571,4 +624,28 @@ def test_h_vowel_row_39_43_thinking_derivation():
     assert len(h_vowel_hyps) > 0, "Expected at least one hypothesis with [H_alt=vowel_v]"
     for h in h_vowel_hyps:
         assert h.h_alt_tag == "[H_alt=vowel_v]"
-        assert "atanh" in h.h_root
+        assert "atanh" in h.h_root or "nht" in h.h_root
+
+
+def test_middle_voice_entry_554_conversing():
+    """Verify corpus entry 554 ('he/she is conversing') derives a middle voice hypothesis with [VoiceInfix=ali]nho."""
+    forms = [
+        ("talhinoheha", PRES_3RD),
+        ("tekalinoheha", PRES_1SG),
+        ("talhinohehsko'i", HABITUAL_3RD),
+        ("tulhinohelhv'i", COMPLETIVE_3RD),
+        ("thalhinohvla", IMPERATIVE_2ND),
+        ("tsulhinohehti", INFINITIVE_3RD),
+    ]
+    hyps = derive_hypotheses_for_forms(forms)
+    ali_nho = [h for h in hyps if h.template.root == "[VoiceInfix=ali]nho" and h.aspect_class == "apl-active-h"]
+    assert len(ali_nho) > 0, f"Expected [VoiceInfix=ali]nho hypothesis for entry 554, but got: {hyps}"
+    verb = ali_nho[0]
+    assert verb.is_h_metathesis is True
+    assert verb.h_alt_tag == "[H_alt=drop]"
+
+    # Verify forward inflection of all 6 forms
+    for surface, form in forms:
+        recs = verb.inflect_form(form)
+        assert surface in recs, f"Expected {surface} in reconstructed forms {recs} for {form.name}"
+

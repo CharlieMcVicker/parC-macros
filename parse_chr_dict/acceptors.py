@@ -29,7 +29,6 @@ REPO_ROOT = Path(__file__).parent.parent.resolve()
 DEFAULT_CONFIG_DIR = REPO_ROOT / "chr-config"
 DEFAULT_FEATURE_ACCEPTORS_DIR = DEFAULT_CONFIG_DIR / "feature_acceptors"
 DEFAULT_MORPHOTACTICS_CSV = DEFAULT_FEATURE_ACCEPTORS_DIR / "morphotactics.csv"
-DEFAULT_PREFIX_CLASS_CSV = DEFAULT_FEATURE_ACCEPTORS_DIR / "prefix_class.csv"
 
 
 def get_default_symbol_table() -> pynini.SymbolTable:
@@ -167,7 +166,7 @@ def compile_morphotactic_acceptor(
         syms = alphabet.get_symbol_table() if hasattr(alphabet, "get_symbol_table") else get_default_symbol_table()
 
     rule_files = resolve_morphotactic_rule_files(rules_csv)
-    _, sigma_star, all_syms = get_template_sigma(syms)
+    sigma, sigma_star, all_syms = get_template_sigma(syms)
 
     def get_slot_fsa(slot_name: str) -> pynini.Fst:
         ref = slot_name if (slot_name.startswith("<") and slot_name.endswith(">")) else f"<{slot_name}>"
@@ -185,11 +184,12 @@ def compile_morphotactic_acceptor(
             parts = [v.strip() for v in pattern_str.split("|") if v.strip()]
             return pynini.union(*[pynini.accep(p, token_type=syms) for p in parts]).optimize()
 
-    rules: list[tuple[pynini.Fst, pynini.Fst]] = []
+    combined_acceptor = sigma_star
     for r_path in rule_files:
         if not r_path.exists():
             continue
         trigger_slot = None
+        unless_pattern = None
         explicit_triggers_fsa: pynini.Fst | None = None
         file_rules: list[tuple[pynini.Fst, pynini.Fst]] = []
         elsewhere_rules: list[tuple[str, str]] = []
@@ -207,6 +207,8 @@ def compile_morphotactic_acceptor(
                         k, v = comment_text.split(":", 1)
                         if k.strip().lower() == "trigger_slot":
                             trigger_slot = v.strip()
+                        elif k.strip().lower() == "unless":
+                            unless_pattern = v.strip()
                     continue
                 if header is None:
                     header = [c.strip() for c in row]
@@ -252,179 +254,45 @@ def compile_morphotactic_acceptor(
                 if unlicensed_fsa.num_states() > 0 and elsewhere_trigger_fsa.num_states() > 0:
                     file_rules.append((elsewhere_trigger_fsa, unlicensed_fsa))
 
-        rules.extend(file_rules)
+        if unless_pattern:
+            unless_fsa = compile_pattern_fsa(unless_pattern)
+            sigma_no_unless = pynini.difference(sigma, unless_fsa).optimize()
+            sigma_star_file = sigma_no_unless.star.optimize()
+        else:
+            sigma_star_file = sigma_star
 
-    combined_acceptor = sigma_star
-    for trigger_fsa, unlicensed_fsa in rules:
-        bad_forward = pynini.concat(
-            sigma_star,
-            pynini.concat(trigger_fsa, pynini.concat(sigma_star, pynini.concat(unlicensed_fsa, sigma_star))),
-        )
-        bad_reverse = pynini.concat(
-            sigma_star,
-            pynini.concat(unlicensed_fsa, pynini.concat(sigma_star, pynini.concat(trigger_fsa, sigma_star))),
-        )
-        bad = pynini.union(bad_forward, bad_reverse).optimize()
+        for trigger_fsa, unlicensed_fsa in file_rules:
+            bad_forward = pynini.concat(
+                sigma_star_file,
+                pynini.concat(trigger_fsa, pynini.concat(sigma_star_file, pynini.concat(unlicensed_fsa, sigma_star_file))),
+            )
+            bad_reverse = pynini.concat(
+                sigma_star_file,
+                pynini.concat(unlicensed_fsa, pynini.concat(sigma_star_file, pynini.concat(trigger_fsa, sigma_star_file))),
+            )
+            bad = pynini.union(bad_forward, bad_reverse).optimize()
 
-        rule_dfa = pynini.difference(sigma_star, bad).optimize()
-        combined_acceptor = pynini.intersect(combined_acceptor, rule_dfa).optimize()
+            rule_dfa = pynini.difference(sigma_star, bad).optimize()
+            combined_acceptor = pynini.intersect(combined_acceptor, rule_dfa).optimize()
 
     return combined_acceptor
-
-
-def compile_prefix_stem_shape_acceptor(
-    syms: pynini.SymbolTable | None = None,
-    alphabet=None,
-    rules_csv: str | Path | None = None,
-) -> pynini.Fst:
-    """
-    Enforces anchored sequence in the template:
-    <PrefixClass> <Pro> <H_ALT>? <InitialPhoneme>
-
-    For every prefix class c in rules, [PrefixClass=c] must be followed by <Pro>,
-    optional <H_ALT>, and a root whose initial phoneme satisfies PhonemeConstraint_c.
-
-    Rules are read from rules_csv (defaults to chr-config/feature_acceptors/prefix_class.csv).
-    """
-    if alphabet is None:
-        alphabet = get_default_alphabet()
-    if syms is None:
-        syms = alphabet.get_symbol_table() if hasattr(alphabet, "get_symbol_table") else get_default_symbol_table()
-
-    if rules_csv is None:
-        rules_csv = DEFAULT_PREFIX_CLASS_CSV
-    rules_path = Path(rules_csv)
-    if not rules_path.is_absolute():
-        rules_path = REPO_ROOT / rules_path
-
-    _, sigma_star, all_syms = get_template_sigma(syms)
-
-    # Pro tags in syms
-    pro_tags = [s for s in all_syms if s.startswith("[Pro=") and s.endswith("]")]
-    if not pro_tags:
-        raise ValueError("No [Pro=...] tags found in symbol table.")
-    pro_fsa = pynini.union(*[pynini.accep(p, token_type=syms) for p in pro_tags]).optimize()
-
-    # H_metathesis tags in syms
-    h_meta_tags = [s for s in all_syms if (s.startswith("[H_metathesis=") or s.startswith("[H_METATHESIS=")) and s.endswith("]")]
-    empty_fsa = pynini.accep("", token_type=syms)
-    if h_meta_tags:
-        h_meta_opt = pynini.union(empty_fsa, *[pynini.accep(h, token_type=syms) for h in h_meta_tags]).optimize()
-    else:
-        h_meta_opt = empty_fsa
-
-    # Optional H_ALT tags in syms
-    h_alt_tags = [s for s in all_syms if (s.startswith("[H_alt=") or s.startswith("[H_ALT=")) and s.endswith("]")]
-    if h_alt_tags:
-        h_alt_opt = pynini.union(empty_fsa, *[pynini.accep(h, token_type=syms) for h in h_alt_tags]).optimize()
-    else:
-        h_alt_opt = empty_fsa
-
-    pro_meta_alt_opt = pynini.concat(pro_fsa, pynini.concat(h_meta_opt, h_alt_opt)).optimize()
-
-    all_phones = sorted(list(alphabet.inventory.phones))
-
-    # Read prefix class rules
-    class_rules: list[tuple[str, str]] = []
-    with open(rules_path, "r", encoding="utf-8") as f:
-        reader = csv.reader(f)
-        header = None
-        for row in reader:
-            if not row or not row[0] or row[0].startswith("#"):
-                continue
-            if header is None:
-                header = [c.strip() for c in row]
-                continue
-            pclass = row[0].strip()
-            pattern = row[1].strip() if len(row) > 1 else ""
-            if pclass and pattern:
-                class_rules.append((pclass, pattern))
-
-    inner_bad_seqs: list[pynini.Fst] = []
-    prefix_class_fsas: list[pynini.Fst] = []
-
-    for pclass, pattern in class_rules:
-        tag_str = f"[PrefixClass={pclass}]"
-        c_fsa = pynini.accep(tag_str, token_type=syms)
-        prefix_class_fsas.append(c_fsa)
-
-        pat_fsa = fsa(pattern)
-        allowed_strs = set(fsm_strings(pat_fsa))
-        single_allowed = {s for s in allowed_strs if len(s) == 1}
-        multi_allowed = {s for s in allowed_strs if len(s) > 1}
-        multi_starts = {s[0] for s in multi_allowed}
-        dis_singles = [p for p in all_phones if p not in single_allowed and p not in multi_starts]
-
-        dis_parts = []
-        if dis_singles:
-            dis_parts.append(pynini.union(*[pynini.accep(p, token_type=syms) for p in dis_singles]))
-
-        for prefix in multi_starts:
-            allowed_next = {s[1] for s in multi_allowed if s.startswith(prefix) and len(s) == 2}
-            if prefix not in single_allowed:
-                dis_next = [p for p in all_phones if p not in allowed_next]
-                p_fsa = pynini.accep(prefix, token_type=syms)
-                if dis_next:
-                    dn_fsa = pynini.union(*[pynini.accep(p, token_type=syms) for p in dis_next])
-                    dis_parts.append(pynini.concat(p_fsa, dn_fsa))
-
-        if dis_parts:
-            dis_fsa = pynini.union(*dis_parts).optimize()
-            inner_bad = pynini.concat(c_fsa, pynini.concat(pro_meta_alt_opt, dis_fsa))
-            inner_bad_seqs.append(inner_bad)
-
-    all_pclasses_fsa = pynini.union(*prefix_class_fsas).optimize()
-
-    # Disallow [PrefixClass=c] followed by non-Pro
-    non_pro_syms = [s for s in all_syms if not s.startswith("[Pro=")]
-    if non_pro_syms:
-        non_pro_fsa = pynini.union(*[pynini.accep(s, token_type=syms) for s in non_pro_syms]).optimize()
-        bad_no_pro_inner = pynini.concat(all_pclasses_fsa, non_pro_fsa)
-        inner_bad_seqs.append(bad_no_pro_inner)
-
-    # Disallow [PrefixClass=c] Pro (H_metathesis)? (H_ALT)? followed by non-phone (e.g. adjacent morpheme tag)
-    non_phone_syms = [
-        s for s in all_syms
-        if s not in all_phones
-        and not s.startswith("[H_alt=")
-        and not s.startswith("[H_ALT=")
-        and not s.startswith("[H_metathesis=")
-        and not s.startswith("[H_METATHESIS=")
-    ]
-    if non_phone_syms:
-        non_phone_fsa = pynini.union(*[pynini.accep(s, token_type=syms) for s in non_phone_syms]).optimize()
-        bad_no_phone_inner = pynini.concat(
-            all_pclasses_fsa,
-            pynini.concat(pro_meta_alt_opt, non_phone_fsa),
-        )
-        inner_bad_seqs.append(bad_no_phone_inner)
-
-    combined_inner_bad = pynini.union(*inner_bad_seqs).optimize()
-    total_bad = pynini.concat(sigma_star, pynini.concat(combined_inner_bad, sigma_star)).optimize()
-    stem_shape_dfa = pynini.difference(sigma_star, total_bad).optimize()
-    return stem_shape_dfa
 
 
 def compile_cascade_domain_acceptor(
     syms: pynini.SymbolTable | None = None,
     alphabet=None,
     morph_rules_csv: str | Path | None = None,
-    prefix_rules_csv: str | Path | None = None,
 ) -> pynini.Fst:
     """
-    Compiles the full cascade domain acceptor by intersecting the morphotactic licensing
-    and anchored prefix stem-shape acceptors, wrapped with [BOW] on the left and [EOW]
-    (with optional trailing [rules=+]) on the right.
+    Compiles the cascade domain acceptor by wrapping the morphotactic licensing
+    acceptor with [BOW] on the left and [EOW] (with optional trailing [rules=+]) on the right.
     """
     if alphabet is None:
         alphabet = get_default_alphabet()
     if syms is None:
         syms = alphabet.get_symbol_table() if hasattr(alphabet, "get_symbol_table") else get_default_symbol_table()
 
-    morph_acceptor = compile_morphotactic_acceptor(syms, alphabet, rules_csv=morph_rules_csv)
-    stem_acceptor = compile_prefix_stem_shape_acceptor(syms, alphabet, rules_csv=prefix_rules_csv)
-
-    inner_acceptor = pynini.intersect(morph_acceptor, stem_acceptor).optimize()
+    inner_acceptor = compile_morphotactic_acceptor(syms, alphabet, rules_csv=morph_rules_csv)
 
     bow_fsa = pynini.accep("[BOW]", token_type=syms)
     eow_fsa = pynini.accep("[EOW]", token_type=syms)
@@ -447,17 +315,14 @@ _CASCADE_DOMAIN_CACHE: dict[str, pynini.Fst] = {}
 def compute_domain_acceptor_cache_key(
     syms: pynini.SymbolTable,
     morph_rules_path: str | Path | Iterable[str | Path] | None,
-    prefix_rules_path: Path,
 ) -> str:
-    """Computes a SHA-256 cache key over morphotactics rules, prefix class rules, and symbol table."""
+    """Computes a SHA-256 cache key over morphotactics rules and symbol table."""
     h = hashlib.sha256()
     rule_files = resolve_morphotactic_rule_files(morph_rules_path)
     for rf in rule_files:
         if rf.exists():
             h.update(rf.name.encode("utf-8"))
             h.update(rf.read_bytes())
-    if prefix_rules_path.exists():
-        h.update(prefix_rules_path.read_bytes())
     h.update(str(syms.num_symbols()).encode("utf-8"))
     for i in range(min(100, syms.num_symbols())):
         h.update(syms.find(i).encode("utf-8"))
@@ -468,7 +333,6 @@ def get_cascade_domain_acceptor(
     syms: pynini.SymbolTable | None = None,
     alphabet=None,
     morph_rules_csv: str | Path | Iterable[str | Path] | None = None,
-    prefix_rules_csv: str | Path | None = None,
     cache_dir: Path | str | None = None,
     force_recompile: bool = False,
 ) -> pynini.Fst:
@@ -488,13 +352,7 @@ def get_cascade_domain_acceptor(
 
     morph_rules_path = morph_rules_csv if morph_rules_csv is not None else DEFAULT_FEATURE_ACCEPTORS_DIR
 
-    if prefix_rules_csv is None:
-        prefix_rules_csv = DEFAULT_PREFIX_CLASS_CSV
-    prefix_rules_path = Path(prefix_rules_csv)
-    if not prefix_rules_path.is_absolute():
-        prefix_rules_path = REPO_ROOT / prefix_rules_path
-
-    cache_key = compute_domain_acceptor_cache_key(syms, morph_rules_path, prefix_rules_path)
+    cache_key = compute_domain_acceptor_cache_key(syms, morph_rules_path)
 
     # Check in-memory cache
     if not force_recompile and cache_key in _CASCADE_DOMAIN_CACHE:
@@ -537,13 +395,11 @@ def get_cascade_domain_acceptor(
         syms=syms,
         alphabet=alphabet,
         morph_rules_csv=morph_rules_path,
-        prefix_rules_csv=prefix_rules_path,
     )
 
     meta_content = json.dumps({
         "cache_key": cache_key,
         "morph_rules": str(morph_rules_path),
-        "prefix_rules": str(prefix_rules_path),
     })
 
     # Save to primary cache
@@ -572,6 +428,11 @@ def compile_h_meta_trigger_fst() -> pynini.Fst:
     return fsa("<HMetaPro>")
 
 
+def compile_h_meta_voice_trigger_fst() -> pynini.Fst:
+    """Compiles the <HMetaVoice> FST representing voice infixes that trigger H-metathesis."""
+    return fsa("<HMetaVoice>")
+
+
 @functools.lru_cache(maxsize=8)
 def get_h_metathesis_trigger_pronominals() -> Set[str]:
     """Returns the set of pronominal tag values that trigger H-metathesis by inspecting <HMetaPro>."""
@@ -579,8 +440,22 @@ def get_h_metathesis_trigger_pronominals() -> Set[str]:
     return {s[5:-1] if s.startswith("[Pro=") and s.endswith("]") else s for s in raw_strs}
 
 
-def is_h_metathesis_trigger(pronominal: str) -> bool:
-    """Returns True if the pronominal triggers H-metathesis according to compiled <HMetaPro>."""
+@functools.lru_cache(maxsize=8)
+def get_h_metathesis_trigger_voice_infixes() -> Set[str]:
+    """Returns the set of voice infix tag values that trigger H-metathesis by inspecting <HMetaVoice>."""
+    try:
+        raw_strs = fsm_strings(compile_h_meta_voice_trigger_fst())
+        return {s[12:-1] if s.startswith("[VoiceInfix=") and s.endswith("]") else s for s in raw_strs}
+    except Exception:
+        return {"ali"}
+
+
+def is_h_metathesis_trigger(pronominal: str, voice_or_root: str = "") -> bool:
+    """Returns True if the pronominal or voice infix triggers H-metathesis."""
+    if voice_or_root:
+        for v in get_h_metathesis_trigger_voice_infixes():
+            if f"[VoiceInfix={v}]" in voice_or_root or voice_or_root == v or voice_or_root.startswith(f"[VoiceInfix={v}]"):
+                return True
     pro_clean = pronominal[5:-1] if pronominal.startswith("[Pro=") and pronominal.endswith("]") else pronominal
     return pro_clean in get_h_metathesis_trigger_pronominals()
 
@@ -589,4 +464,5 @@ def clear_acceptor_caches():
     """Clears internal acceptor caches."""
     _CASCADE_DOMAIN_CACHE.clear()
     get_h_metathesis_trigger_pronominals.cache_clear()
+    get_h_metathesis_trigger_voice_infixes.cache_clear()
 

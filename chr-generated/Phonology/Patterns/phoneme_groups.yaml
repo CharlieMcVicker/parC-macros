@@ -18,9 +18,12 @@ patterns:
 - name: Coda
   pattern: ((hs)?((<NotLarC>|(ts)|(kw))?h?))|'
   ref: <Coda>
+- name: VerbRoot
+  pattern: <V>?<Coda>?(<Onset><V><Coda>)*<Onset>?
+  ref: <VerbRoot>
 - name: Root
   ref: <Root>
-  pattern: <V>?<Coda>?(<Onset><V><Coda>)*<Onset>?
+  pattern: <VoiceInfix>?<VerbRoot><NFS>?
 - name: PrefixClass
   ref: <PrefixClass>
   pattern: '[PrefixClass=a_stem]|[PrefixClass=v_stem]|[PrefixClass=e_stem]|[PrefixClass=k_a_stem]|[PrefixClass=vowel_stem]|[PrefixClass=cons_stem]|[PrefixClass=r_stem]|[PrefixClass=long_stem]'
@@ -41,7 +44,7 @@ patterns:
   pattern: '[Tense=present_a]|[Tense=present_i]|[Tense=immediate]|[Tense=habitual]|[Tense=future_prog]|[Tense=assertive]|[Tense=reported]|[Tense=infinitive]'
 - name: Morpheme
   ref: <Morpheme>
-  pattern: <PrefixClass>|<Pro>|<AspectClass>|<Aspect>|<Tense>|<PPP>|[WI]|[DIST]|[DIST=de]|[DIST=di]|<H_alt>|[H_alt=none]|[H_alt=drop]|[H_alt=glot]|[H_alt=lat]|[H_alt=vowel_a]|[H_alt=vowel_e]|[H_alt=vowel_i]|[H_alt=vowel_o]|[H_alt=vowel_u]|[H_alt=vowel_v]|<H_metathesis>|[H_metathesis=none]|[H_metathesis=active]|[Variant=2]|[Variant=3]|[Variant=4]
+  pattern: <PrefixClass>|<Pro>|<AspectClass>|<Aspect>|<Tense>|<PPP>|[WI]|[DIST]|[DIST=de]|[DIST=di]|<H_alt>|[H_alt=none]|[H_alt=drop]|[H_alt=glot]|[H_alt=lat]|[H_alt=vowel_a]|[H_alt=vowel_e]|[H_alt=vowel_i]|[H_alt=vowel_o]|[H_alt=vowel_u]|[H_alt=vowel_v]|<H_metathesis>|[H_metathesis=none]|[H_metathesis=active]|<VoiceInfix>|[VoiceInfix=ali]|[VoiceInfix=ad]|[VoiceInfix=ada]|[VoiceInfix=adad]|[VoiceInfix=adi]|<NFS>|[NFS=AMB]|[NFS=AT_LONG]|[NFS=ITER]|[NFS=REP]|[NFS=BECOME-A]|[NFS=BECOME-I]|[NFS=BECOME-O]|[Variant=2]|[Variant=3]|[Variant=4]
 - name: SonH
   pattern: nh|lh|yh|wh|mh
   ref: <SonH>
@@ -51,3 +54,6 @@ patterns:
 - name: HMetaPro
   pattern: '[Pro=1sg.B]|[Pro=2sg.B]|[Pro=3sg.A]'
   ref: <HMetaPro>
+- name: HMetaVoice
+  pattern: '[VoiceInfix=ali]'
+  ref: <HMetaVoice>

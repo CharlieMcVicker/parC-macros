@@ -59,6 +59,41 @@ def get_class_tag_title(class_feature: str, metadata: dict | None = None) -> str
     return "".join(part.capitalize() for part in class_feature.split("_"))
 
 
+def _load_class_acceptors(config_dir: Path, class_feature_name: str) -> dict[str, str]:
+    """Loads class -> right_context pattern mappings from feature_acceptors directory if available."""
+    snake_name = re.sub(r"(?<!^)(?=[A-Z])", "_", class_feature_name).lower()
+    candidate_paths = [
+        config_dir / "feature_acceptors" / f"{snake_name}.csv",
+        config_dir / "feature_acceptors" / f"{class_feature_name.lower()}.csv",
+        config_dir / f"{snake_name}.csv",
+    ]
+    for p in candidate_paths:
+        if p.exists():
+            acceptors = {}
+            try:
+                with open(p, "r", encoding="utf-8") as afh:
+                    lines = [line for line in afh if line.strip() and not line.strip().startswith("#")]
+                if not lines:
+                    continue
+                reader = csv.reader(lines)
+                rows = list(reader)
+                if not rows or len(rows) < 2:
+                    continue
+                # Skip header row (first non-comment line)
+                for arow in rows[1:]:
+                    if not arow or not arow[0].strip():
+                        continue
+                    cname = arow[0].strip()
+                    cpat = arow[1].strip() if len(arow) > 1 else ""
+                    if cname and cpat:
+                        acceptors[cname] = cpat
+                if acceptors:
+                    return acceptors
+            except Exception:
+                pass
+    return {}
+
+
 def _generate_rules(csv_files: list[str], rules_out_dir: str) -> None:
     tag_mappings: dict[str, dict] = {}
 
@@ -99,10 +134,17 @@ def _generate_rules(csv_files: list[str], rules_out_dir: str) -> None:
                 "morpheme_tag": morpheme_tag,
                 "rule_name": rule_name,
                 "mappings": {},
+                "class_mappings": {},
+                "class_feature": class_feature,
+                "class_tag_title": None,
+                "class_acceptors": {},
             }
 
+        csv_dir = Path(csv_path).parent
         if class_feature:
             class_tag_title = get_class_tag_title(class_feature, metadata)
+            tag_mappings[tag_slug]["class_tag_title"] = class_tag_title
+            tag_mappings[tag_slug]["class_acceptors"] = _load_class_acceptors(csv_dir, class_feature)
             id_col = reader.fieldnames[0]
             feature_cols = reader.fieldnames[1:]
 
@@ -110,6 +152,9 @@ def _generate_rules(csv_files: list[str], rules_out_dir: str) -> None:
                 class_name = row.get(id_col, "").strip()
                 if not class_name:
                     continue
+                if class_name not in tag_mappings[tag_slug]["class_mappings"]:
+                    tag_mappings[tag_slug]["class_mappings"][class_name] = {}
+
                 for col in feature_cols:
                     feat_name = col.strip()
                     val = row.get(col, "").strip()
@@ -122,10 +167,12 @@ def _generate_rules(csv_files: list[str], rules_out_dir: str) -> None:
                             else:
                                 pattern = f"[{class_tag_title}={class_name}][Variant={idx}][{feature_tag_title}={feat_name}]"
                             tag_mappings[tag_slug]["mappings"][pattern] = clean_v
+                            tag_mappings[tag_slug]["class_mappings"][class_name][pattern] = clean_v
                     else:
                         clean_v = val.strip()
                         pattern = f"[{class_tag_title}={class_name}][{feature_tag_title}={feat_name}]"
                         tag_mappings[tag_slug]["mappings"][pattern] = clean_v
+                        tag_mappings[tag_slug]["class_mappings"][class_name][pattern] = clean_v
         else:
             feature_cols = reader.fieldnames
             for row in reader:
@@ -141,20 +188,49 @@ def _generate_rules(csv_files: list[str], rules_out_dir: str) -> None:
         rules_filename = f"{tag_slug}_replace.yaml"
         out_path = os.path.join(rules_out_dir, rules_filename)
 
-        string_map = [
-            [inp, val] for inp, val in sorted(info["mappings"].items(), key=lambda x: x[0])
-        ]
+        class_acceptors = info.get("class_acceptors", {})
+        class_mappings = info.get("class_mappings", {})
 
-        doc = {
-            "kind": "Rules",
-            "rules": [
-                {
-                    "name": rule_name,
-                    "description": f"Morpheme replacement rule for {info['morpheme_tag']}",
+        if class_acceptors and class_mappings:
+            sub_rules = []
+            for class_name in sorted(class_mappings.keys()):
+                c_maps = class_mappings[class_name]
+                sub_rule_name = f"{rule_name}_{sanitize_rule_name(class_name)}"
+                string_map = [
+                    [inp, val] for inp, val in sorted(c_maps.items(), key=lambda x: x[0])
+                ]
+                sub_rule_doc = {
+                    "name": sub_rule_name,
+                    "description": f"Morpheme replacement for {info['morpheme_tag']} conditioned on [{info['class_tag_title']}={class_name}]",
                     "string_map": string_map,
                 }
-            ],
-        }
+                if class_name in class_acceptors:
+                    sub_rule_doc["right_context"] = class_acceptors[class_name]
+                sub_rules.append(sub_rule_doc)
+
+            top_rule = {
+                "name": rule_name,
+                "description": f"Morpheme replacement rule for {info['morpheme_tag']}",
+                "rule_sequence": [f"${sr['name']}" for sr in sub_rules],
+            }
+            doc = {
+                "kind": "Rules",
+                "rules": sub_rules + [top_rule],
+            }
+        else:
+            string_map = [
+                [inp, val] for inp, val in sorted(info["mappings"].items(), key=lambda x: x[0])
+            ]
+            doc = {
+                "kind": "Rules",
+                "rules": [
+                    {
+                        "name": rule_name,
+                        "description": f"Morpheme replacement rule for {info['morpheme_tag']}",
+                        "string_map": string_map,
+                    }
+                ],
+            }
 
         with open(out_path, "w", encoding="utf-8") as fh:
             fh.write("# This is a Rules config file\n")
@@ -187,6 +263,9 @@ def _generate_rules_from_slots(
 
         feature_tag_title = structure[-1]["TagGroup"]
         mappings: dict[str, str] = {}
+        class_mappings: dict[str, dict[str, str]] = {}
+        class_acceptors: dict[str, str] = {}
+        class_tag_title: str | None = None
 
         for src in sources:
             src_path = config_dir / src
@@ -220,6 +299,8 @@ def _generate_rules_from_slots(
                 # 2 TagGroups (e.g. PrefixClass, Pro): [PrefixClass={row}][Pro={col}] -> surface
                 class_tag = structure[0]["TagGroup"]
                 feat_tag = structure[1]["TagGroup"]
+                class_tag_title = class_tag
+                class_acceptors = _load_class_acceptors(config_dir, class_tag)
                 id_col = reader.fieldnames[0]
                 feature_cols = reader.fieldnames[1:]
 
@@ -227,11 +308,14 @@ def _generate_rules_from_slots(
                     class_name = row.get(id_col, "").strip()
                     if not class_name:
                         continue
+                    if class_name not in class_mappings:
+                        class_mappings[class_name] = {}
                     for col in feature_cols:
                         feat_name = col.strip()
                         val = row.get(col, "").strip()
                         pattern = f"[{class_tag}={class_name}][{feat_tag}={feat_name}]"
                         mappings[pattern] = val
+                        class_mappings[class_name][pattern] = val
 
             elif len(structure) == 3:
                 # 3 TagGroups (e.g. AspectClass, Variant, Aspect):
@@ -267,20 +351,46 @@ def _generate_rules_from_slots(
         rules_filename = f"{rule_name}.yaml"
         out_path = os.path.join(rules_out_dir, rules_filename)
 
-        string_map = [
-            [inp, val] for inp, val in sorted(mappings.items(), key=lambda x: x[0])
-        ]
-
-        doc = {
-            "kind": "Rules",
-            "rules": [
-                {
-                    "name": rule_name,
-                    "description": f"Morpheme replacement rule for [{feature_tag_title}]",
+        if class_acceptors and class_mappings:
+            sub_rules = []
+            for class_name in sorted(class_mappings.keys()):
+                c_maps = class_mappings[class_name]
+                sub_rule_name = f"{rule_name}_{sanitize_rule_name(class_name)}"
+                string_map = [
+                    [inp, val] for inp, val in sorted(c_maps.items(), key=lambda x: x[0])
+                ]
+                sub_rule_doc = {
+                    "name": sub_rule_name,
+                    "description": f"Morpheme replacement for [{feature_tag_title}] conditioned on [{class_tag_title}={class_name}]",
                     "string_map": string_map,
                 }
-            ],
-        }
+                if class_name in class_acceptors:
+                    sub_rule_doc["right_context"] = class_acceptors[class_name]
+                sub_rules.append(sub_rule_doc)
+
+            top_rule = {
+                "name": rule_name,
+                "description": f"Morpheme replacement rule for [{feature_tag_title}]",
+                "rule_sequence": [f"${sr['name']}" for sr in sub_rules],
+            }
+            doc = {
+                "kind": "Rules",
+                "rules": sub_rules + [top_rule],
+            }
+        else:
+            string_map = [
+                [inp, val] for inp, val in sorted(mappings.items(), key=lambda x: x[0])
+            ]
+            doc = {
+                "kind": "Rules",
+                "rules": [
+                    {
+                        "name": rule_name,
+                        "description": f"Morpheme replacement rule for [{feature_tag_title}]",
+                        "string_map": string_map,
+                    }
+                ],
+            }
 
         with open(out_path, "w", encoding="utf-8") as fh:
             fh.write("# This is a Rules config file\n")

@@ -81,3 +81,21 @@ data:
   tags:
   - '[H_metathesis=none]'
   - '[H_metathesis=active]'
+- name: VoiceInfix
+  ref: <VoiceInfix>
+  tags:
+  - '[VoiceInfix=ali]'
+  - '[VoiceInfix=ad]'
+  - '[VoiceInfix=ada]'
+  - '[VoiceInfix=adad]'
+  - '[VoiceInfix=adi]'
+- name: Non-Final Suffixes
+  ref: <NFS>
+  tags:
+  - '[NFS=AMB]'
+  - '[NFS=AT_LONG]'
+  - '[NFS=ITER]'
+  - '[NFS=REP]'
+  - '[NFS=BECOME-A]'
+  - '[NFS=BECOME-I]'
+  - '[NFS=BECOME-O]'
