@@ -147,6 +147,41 @@ def test_cli_verbose_and_json(monkeypatch, capsys):
     assert "Suffix Bundles:" in captured_verbose.out
 
 
+def test_cli_batch_json(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", ["parse_options", "--json", "katateka", "awhahthvhitoha"])
+    parse_options_main()
+    captured = capsys.readouterr()
+    parsed_json = json.loads(captured.out)
+    assert "results" in parsed_json
+    assert len(parsed_json["results"]) == 2
+    assert parsed_json["results"][0]["surface"] == "katateka"
+    assert parsed_json["results"][0]["total_parses"] == 852
+    assert parsed_json["results"][1]["surface"] == "awhahthvhitoha"
+    assert parsed_json["results"][1]["total_parses"] > 0
+
+
+def test_cli_batch_multiple_words_text(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", ["parse_options", "katateka", "awhahthvhitoha"])
+    parse_options_main()
+    captured = capsys.readouterr()
+    assert "WORD: katateka" in captured.out
+    assert "WORD: awhahthvhitoha" in captured.out
+
+
+def test_cli_positional_delimiter(monkeypatch, capsys):
+    # Test -- delimiter allowing surface tokens starting with hyphens
+    monkeypatch.setattr(sys, "argv", ["parse_options", "--json", "--", "-v", "katateka"])
+    parse_options_main()
+    captured = capsys.readouterr()
+    parsed_json = json.loads(captured.out)
+    assert "results" in parsed_json
+    assert len(parsed_json["results"]) == 2
+    assert parsed_json["results"][0]["surface"] == "-v"
+    assert parsed_json["results"][0]["total_parses"] == 0
+    assert parsed_json["results"][1]["surface"] == "katateka"
+    assert parsed_json["results"][1]["total_parses"] == 852
+
+
 def test_cli_interactive_execution(monkeypatch, capsys):
     monkeypatch.setattr(sys, "argv", ["parse_options"])
     monkeypatch.setattr("sys.stdin", io.StringIO("katateka\n\n"))
@@ -255,4 +290,57 @@ def test_root_parse_options_dynamic_slot_options(parse_graph):
     assert "aspect" in atateka.slot_options
     assert "tense" in atateka.slot_options
     assert "1sg.A" in atateka.slot_options["pronominal"]
+
+
+def test_root_parse_options_create_factory():
+    pb = PrefixBundle(
+        prefix_class="1",
+        pronominal="1sg.A",
+        slot_values=(("VoicePrefix", "mid"),),
+    )
+    sb = SuffixBundle(
+        aspect_class="regular",
+        aspect="present",
+        slot_values=(("NFSClass", "noun"),),
+    )
+    rpo = RootParseOptions.create(
+        root="test_root",
+        prefix_bundles=(pb,),
+        suffix_bundles=(sb,),
+        total_parses=1,
+        pronominal_options=("1sg.A",),
+        aspect_options=("present",),
+    )
+    assert rpo.root == "test_root"
+    assert rpo.total_parses == 1
+    assert rpo.slot_options["pronominal"] == ("1sg.A",)
+    assert rpo.slot_options["aspect"] == ("present",)
+
+
+def test_bundle_get_and_slots_properties():
+    pb = PrefixBundle(
+        prefix_class="1",
+        pronominal="1sg.A",
+        slot_values=(("VoicePrefix", "mid"),),
+    )
+    assert pb.get("prefix_class") == "1"
+    assert pb.get("VoicePrefix") == "mid"
+    assert pb.get("voice_prefix") == "mid"
+    assert pb.get("nonexistent", "fallback") == "fallback"
+    assert pb.slots["VoicePrefix"] == "mid"
+
+    sb = SuffixBundle(
+        aspect_class="regular",
+        variant=2,
+        aspect="present",
+        tense="present_a",
+        slot_values=(("NFSSuffix", "amb"),),
+    )
+    assert sb.get("aspect_class") == "regular"
+    assert sb.get("variant") == 2
+    assert sb.get("NFSSuffix") == "amb"
+    assert sb.get("nfs_suffix") == "amb"
+    assert sb.get("missing", 42) == 42
+    assert sb.slots["NFSSuffix"] == "amb"
+
 

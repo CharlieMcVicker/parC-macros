@@ -488,4 +488,121 @@ def test_dynamic_alphabet_and_patterns_language_agnostic():
         assert morpheme_pat["pattern"] == "<Person>|<Number>|<Mood>|<CustTag>|[TAG_A]|[TAG_B]"
 
 
+def test_language_agnostic_phonology_effects_and_vowel_dropping():
+    """
+    TASK-171: Verify that phonology rule generation is language-agnostic and data-driven:
+    - Custom vowels/phones specified in phonology_effects dynamically generate corresponding mark/drop rules.
+    - Missing or empty triggers produce valid empty rule configs without hardcoding Cherokee triggers.
+    """
+    import parc_macros.generate_phonology as gp
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        cfg_path = Path(tmp_dir) / "config"
+        out_rules_path = Path(tmp_dir) / "Rules"
+        cfg_path.mkdir(parents=True, exist_ok=True)
+        out_rules_path.mkdir(parents=True, exist_ok=True)
+
+        # 1. Custom phone 'u' drop trigger CSV
+        u_csv = cfg_path / "lang-prefix-drop-u.csv"
+        with open(u_csv, "w", encoding="utf-8") as f:
+            f.write("# comment line\n")
+            f.write("Class,1sg,2sg,3sg\n")
+            f.write("u_stem,Y,N,Y\n")
+
+        custom_verb_config = {
+            "slots": [
+                {
+                    "name": "agreement",
+                    "role": "prefix",
+                    "structure": [
+                        {"TagGroup": "AgrClass", "optional": False},
+                        {"TagGroup": "Person", "optional": False},
+                    ],
+                }
+            ],
+            "phonology_effects": {
+                "drop_stem_initial_u": "lang-prefix-drop-u.csv",
+            },
+        }
+
+        extracted = gp.extract_phonology_data(cfg_path, verb_config=custom_verb_config)
+        assert "stem_initial_vowel_drops" in extracted
+        assert "u" in extracted["stem_initial_vowel_drops"]
+        assert extracted["stem_initial_vowel_drops"]["u"] == [("u_stem", "1sg"), ("u_stem", "3sg")]
+        assert "a" not in extracted["stem_initial_vowel_drops"]
+        assert "v" not in extracted["stem_initial_vowel_drops"]
+
+        # Generate phonology rules
+        gp.generate_phonology_rules(cfg_path, out_rules_path, extracted)
+
+        mark_file = out_rules_path / "mark_stem_initial_vowel.yaml"
+        drop_file = out_rules_path / "drop_stem_initial_vowel.yaml"
+
+        assert mark_file.exists()
+        assert drop_file.exists()
+        assert validate_yaml_file(mark_file) is True
+        assert validate_yaml_file(drop_file) is True
+
+        with open(mark_file, "r", encoding="utf-8") as f:
+            mark_data = yaml.safe_load(f)
+        with open(drop_file, "r", encoding="utf-8") as f:
+            drop_data = yaml.safe_load(f)
+
+        assert mark_data["rules"][0]["name"] == "mark_stem_initial_u"
+        assert mark_data["rules"][0]["string_map"] == [["u", "u[TEMP]"]]
+        assert mark_data["rules"][0]["left_context"] == "[AgrClass=u_stem][Person=1sg]|[AgrClass=u_stem][Person=3sg]"
+        assert mark_data["rules"][1]["rule_sequence"] == ["$mark_stem_initial_u"]
+
+        assert drop_data["rules"][0]["string_map"] == [["u[TEMP]", ""]]
+
+        # 2. Test with empty phonology_effects -> no hardcoded triggers
+        empty_verb_config = {"slots": [], "phonology_effects": {}}
+        extracted_empty = gp.extract_phonology_data(cfg_path, verb_config=empty_verb_config)
+        assert extracted_empty["stem_initial_vowel_drops"] == {}
+
+        out_empty_rules = Path(tmp_dir) / "RulesEmpty"
+        out_empty_rules.mkdir(parents=True, exist_ok=True)
+        gp.generate_phonology_rules(cfg_path, out_empty_rules, extracted_empty)
+
+        mark_empty_file = out_empty_rules / "mark_stem_initial_vowel.yaml"
+        drop_empty_file = out_empty_rules / "drop_stem_initial_vowel.yaml"
+        assert validate_yaml_file(mark_empty_file) is True
+        assert validate_yaml_file(drop_empty_file) is True
+
+        with open(mark_empty_file, "r", encoding="utf-8") as f:
+            mark_empty_data = yaml.safe_load(f)
+        with open(drop_empty_file, "r", encoding="utf-8") as f:
+            drop_empty_data = yaml.safe_load(f)
+
+        assert mark_empty_data["rules"][0]["rule_sequence"] == []
+        assert drop_empty_data["rules"][0]["string_map"] == []
+
+
+def test_generic_class_acceptor_loading():
+    """
+    TASK-171: Verify _load_class_acceptors loads arbitrary class-to-pattern CSVs
+    generically without relying on hardcoded Cherokee column names.
+    """
+    from parc_macros.generate_morpheme_replace_rules import _load_class_acceptors
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_path = Path(tmp_dir)
+        fa_dir = tmp_path / "feature_acceptors"
+        fa_dir.mkdir(parents=True, exist_ok=True)
+
+        csv_file = fa_dir / "declension_class.csv"
+        with open(csv_file, "w", encoding="utf-8") as f:
+            f.write("# comment line\n")
+            f.write("arbitrary_header_1,arbitrary_header_2\n")
+            f.write("first_declension,[a-z]+\n")
+            f.write("second_declension,[A-Z]+\n")
+
+        acceptors = _load_class_acceptors(tmp_path, "declension_class")
+        assert acceptors == {
+            "first_declension": "[a-z]+",
+            "second_declension": "[A-Z]+",
+        }
+
+
+
 

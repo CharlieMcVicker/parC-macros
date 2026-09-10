@@ -19,7 +19,7 @@ import pynini
 from parC.constants import set_yaml_dir
 from parC.grammar.paradigm_compilation import get_symbol_table, word_fsa
 from parse_chr_dict.parse import get_just_root, get_parse_graph, parse
-from parse_chr_dict.slots import get_slot_manifest
+from parse_chr_dict.slots import get_prepronominal_tags, get_slot_manifest
 
 if "YAML_DIR" in os.environ:
     try:
@@ -101,7 +101,13 @@ def _build_tag_category_map(manifest: dict | None = None) -> tuple[dict[str, str
 
     tag_prefix_to_cat: dict[str, str] = {}
     suffix_tag_prefixes: list[str] = []
-    prefix_tags: list[str] = ["[WI]", "[DIST]", "[DIST=de]", "[DIST=di]"]
+    prefix_tags: list[str] = get_prepronominal_tags(manifest=manifest)
+
+    for p_tag in prefix_tags:
+        tag_prefix_to_cat[p_tag] = "Prefix"
+        if "=" in p_tag:
+            inner_k = p_tag.split("=")[0] + "="
+            tag_prefix_to_cat[inner_k] = "Prefix"
 
     for slot in manifest.get("slots", []):
         role = slot.get("role", "")

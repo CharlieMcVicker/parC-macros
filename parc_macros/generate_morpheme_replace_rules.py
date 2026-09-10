@@ -72,15 +72,21 @@ def _load_class_acceptors(config_dir: Path, class_feature_name: str) -> dict[str
             acceptors = {}
             try:
                 with open(p, "r", encoding="utf-8") as afh:
-                    for arow in csv.reader(afh):
-                        if not arow or not arow[0].strip() or arow[0].strip().startswith("#"):
-                            continue
-                        cname = arow[0].strip()
-                        if cname in ("prefix_class", snake_name, class_feature_name.lower(), "class", "paradigm"):
-                            continue
-                        cpat = arow[1].strip() if len(arow) > 1 else ""
-                        if cname and cpat:
-                            acceptors[cname] = cpat
+                    lines = [line for line in afh if line.strip() and not line.strip().startswith("#")]
+                if not lines:
+                    continue
+                reader = csv.reader(lines)
+                rows = list(reader)
+                if not rows or len(rows) < 2:
+                    continue
+                # Skip header row (first non-comment line)
+                for arow in rows[1:]:
+                    if not arow or not arow[0].strip():
+                        continue
+                    cname = arow[0].strip()
+                    cpat = arow[1].strip() if len(arow) > 1 else ""
+                    if cname and cpat:
+                        acceptors[cname] = cpat
                 if acceptors:
                     return acceptors
             except Exception:

@@ -10,6 +10,8 @@ import os
 import re
 from pathlib import Path
 from typing import Any
+import yaml
+
 
 FALLBACK_MANIFEST: dict[str, Any] = {
     "slots": [
@@ -171,3 +173,54 @@ def get_slot_name_to_tag_map(manifest: dict[str, Any] | None = None) -> dict[str
         if v not in res or k != "H_ALT":
             res[v] = k
     return res
+
+
+def get_inventory_tags(
+    yaml_dir: str | Path | None = None,
+) -> dict[str, list[str]]:
+    """
+    Loads tag groups defined in Phonology/Inventory/alphabet.yaml if available.
+    Returns mapping from ref name (e.g. '<PPP>') to list of tag strings.
+    """
+    if yaml_dir is None:
+        yaml_dir_env = os.environ.get("YAML_DIR")
+        if yaml_dir_env:
+            inv_path = Path(yaml_dir_env) / "Phonology" / "Inventory" / "alphabet.yaml"
+        else:
+            repo_root = Path(__file__).parent.parent.resolve()
+            inv_path = repo_root / "chr-generated" / "Phonology" / "Inventory" / "alphabet.yaml"
+            if not inv_path.exists():
+                inv_path = repo_root / "chr-config" / "Phonology" / "Inventory" / "alphabet.yaml"
+    else:
+        inv_path = Path(yaml_dir) / "Phonology" / "Inventory" / "alphabet.yaml"
+
+    res: dict[str, list[str]] = {}
+    if inv_path.exists() and inv_path.is_file():
+        try:
+            with open(inv_path, "r", encoding="utf-8") as f:
+                data = yaml.safe_load(f) or {}
+            for item in data.get("data", []):
+                ref = item.get("ref")
+                tags = item.get("tags", [])
+                if ref and tags:
+                    res[ref] = list(tags)
+                    res[ref.strip("<>")] = list(tags)
+        except Exception:
+            pass
+
+    return res
+
+
+def get_prepronominal_tags(
+    manifest: dict[str, Any] | None = None,
+    yaml_dir: str | Path | None = None,
+) -> list[str]:
+    """
+    Extracts prepronominal prefix tags dynamically from alphabet inventory or template.
+    """
+    inv = get_inventory_tags(yaml_dir=yaml_dir)
+    for key in ("<PrepronominalPrefixes>", "PrepronominalPrefixes", "<PPP>", "PPP"):
+        if key in inv:
+            return list(inv[key])
+    return []
+

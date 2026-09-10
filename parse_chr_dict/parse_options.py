@@ -32,6 +32,8 @@ from parse_chr_dict.acceptors import get_default_symbol_table
 from parse_chr_dict.parse import get_parse_graph
 
 from parse_chr_dict.slots import (
+    _pascal_to_snake,
+    get_prepronominal_tags,
     get_root_boundary_tag_prefixes,
     get_slot_manifest,
     get_slot_name_to_tag_map,
@@ -106,6 +108,29 @@ class PrefixBundle:
     h_alt_tag: str = ""
     slot_values: tuple[tuple[str, str], ...] = ()
 
+    @property
+    def slots(self) -> dict[str, Any]:
+        """Dictionary of all slot values in this bundle including standard and dynamic slots."""
+        d: dict[str, Any] = {
+            "prepronominal_prefixes": self.prepronominal_prefixes,
+            "prefix_class": self.prefix_class,
+            "pronominal": self.pronominal,
+            "h_metathesis_tag": self.h_metathesis_tag,
+            "h_alt_tag": self.h_alt_tag,
+        }
+        for k, v in self.slot_values:
+            d[k] = v
+        return d
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """Retrieves a slot value by tag name or field name."""
+        if hasattr(self, key):
+            return getattr(self, key)
+        for k, v in self.slot_values:
+            if k == key or _pascal_to_snake(k) == key:
+                return v
+        return default
+
     def to_tag_string(self) -> str:
         """Returns the linear tag string representation of this prefix bundle."""
         parts = list(self.prepronominal_prefixes)
@@ -138,6 +163,28 @@ class SuffixBundle:
     aspect: str = ""
     tense: str = ""
     slot_values: tuple[tuple[str, str], ...] = ()
+
+    @property
+    def slots(self) -> dict[str, Any]:
+        """Dictionary of all slot values in this bundle including standard and dynamic slots."""
+        d: dict[str, Any] = {
+            "aspect_class": self.aspect_class,
+            "variant": self.variant,
+            "aspect": self.aspect,
+            "tense": self.tense,
+        }
+        for k, v in self.slot_values:
+            d[k] = v
+        return d
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """Retrieves a slot value by tag name or field name."""
+        if hasattr(self, key):
+            return getattr(self, key)
+        for k, v in self.slot_values:
+            if k == key or _pascal_to_snake(k) == key:
+                return v
+        return default
 
     def to_tag_string(self) -> str:
         """Returns the linear tag string representation of this suffix bundle."""
@@ -183,23 +230,55 @@ class RootParseOptions:
     aspect_options: tuple[str, ...]
     tense_options: tuple[str, ...]
     total_parses: int
-    slot_options: dict[str, tuple[Any, ...]] = None  # type: ignore[assignment]
+    slot_options: dict[str, tuple[Any, ...]]
 
-    def __post_init__(self) -> None:
-        if self.slot_options is None:
-            # Populate standard default slot_options if not provided
-            default_map = {
-                "prepronominal": self.prepronominal_options,
-                "prefix_class": self.prefix_class_options,
-                "pronominal": self.pronominal_options,
-                "h_metathesis": self.h_metathesis_options,
-                "h_alt": self.h_alt_options,
-                "aspect_class": self.aspect_class_options,
-                "variant": self.variant_options,
-                "aspect": self.aspect_options,
-                "tense": self.tense_options,
+    @classmethod
+    def create(
+        cls,
+        root: str,
+        prefix_bundles: tuple[PrefixBundle, ...],
+        suffix_bundles: tuple[SuffixBundle, ...],
+        total_parses: int,
+        prepronominal_options: tuple[tuple[str, ...], ...] = (),
+        prefix_class_options: tuple[str, ...] = (),
+        pronominal_options: tuple[str, ...] = (),
+        h_metathesis_options: tuple[str, ...] = (),
+        h_alt_options: tuple[str, ...] = (),
+        aspect_class_options: tuple[str, ...] = (),
+        variant_options: tuple[int, ...] = (),
+        aspect_options: tuple[str, ...] = (),
+        tense_options: tuple[str, ...] = (),
+        slot_options: dict[str, tuple[Any, ...]] | None = None,
+    ) -> "RootParseOptions":
+        """Factory method to construct RootParseOptions with clean slot_options initialization."""
+        if slot_options is None:
+            slot_options = {
+                "prepronominal": prepronominal_options,
+                "prefix_class": prefix_class_options,
+                "pronominal": pronominal_options,
+                "h_metathesis": h_metathesis_options,
+                "h_alt": h_alt_options,
+                "aspect_class": aspect_class_options,
+                "variant": variant_options,
+                "aspect": aspect_options,
+                "tense": tense_options,
             }
-            object.__setattr__(self, "slot_options", default_map)
+        return cls(
+            root=root,
+            prefix_bundles=prefix_bundles,
+            suffix_bundles=suffix_bundles,
+            prepronominal_options=prepronominal_options,
+            prefix_class_options=prefix_class_options,
+            pronominal_options=pronominal_options,
+            h_metathesis_options=h_metathesis_options,
+            h_alt_options=h_alt_options,
+            aspect_class_options=aspect_class_options,
+            variant_options=variant_options,
+            aspect_options=aspect_options,
+            tense_options=tense_options,
+            total_parses=total_parses,
+            slot_options=slot_options,
+        )
 
     @property
     def is_fully_factorable(self) -> bool:
@@ -234,6 +313,11 @@ class RootParseOptions:
             lines.append(f"{ind}  H_metathesis  : {h_meta_str}")
         if any(h != "[none]" and h != "[H_alt=none]" for h in self.h_alt_options):
             lines.append(f"{ind}  H_alt         : {h_alt_str}")
+
+        known_prefix_slots = {"prepronominal", "prefix_class", "pronominal", "h_metathesis", "h_alt"}
+        for k, v in self.slot_options.items():
+            if k not in known_prefix_slots and k not in {"aspect_class", "variant", "aspect", "tense"} and v:
+                lines.append(f"{ind}  {k:<14}: {', '.join(str(x) for x in v)}")
 
         lines.append(f"{ind}Suffix variations ({len(self.suffix_bundles)} bundle{'s' if len(self.suffix_bundles) != 1 else ''}):")
         lines.append(f"{ind}  AspectClass   : {ac_str}")
@@ -408,6 +492,8 @@ def parse_token_sequence(
                 tense = tag_val
             elif tag_key:
                 other_suffix_slots[tag_key] = tag_val
+            elif is_tag:
+                other_suffix_slots[tok] = ""
         elif in_prefix:
             if tag_key == "PrefixClass":
                 prefix_class = tag_val
@@ -417,20 +503,21 @@ def parse_token_sequence(
                 h_metathesis_tag = tok
             elif tag_key in ("H_alt", "H_ALT"):
                 h_alt_tag = tok
-            elif tok in ("[WI]", "[DIST]") or tok.startswith("[DIST="):
-                prepronominal.append(tok)
             elif tag_key and (tag_key in prefix_slots or tag_key == left_boundary):
                 other_prefix_slots[tag_key] = tag_val
             elif tok.startswith("[TEMP"):
                 h_alt_tag = tok
-            elif is_tag:
-                # Initial root tag (e.g. [VoiceInfix=...])
-                in_prefix = False
-                root_chars.append(tok)
-            else:
+            elif not is_tag:
                 # First non-tag character begins the root
                 in_prefix = False
                 root_chars.append(tok)
+            elif h_alt_tag or (left_boundary and tag_key == left_boundary):
+                # We reached/passed the left root boundary; non-prefix tag is an initial root tag (e.g. VoiceInfix)
+                in_prefix = False
+                root_chars.append(tok)
+            else:
+                # Tag before PrefixClass/Pro/H_alt (e.g. [WI], [DIST], [DIST=de], or dynamic prepronominal prefix)
+                prepronominal.append(tok)
         else:
             root_chars.append(tok)
 
@@ -631,8 +718,24 @@ def main() -> None:
     fst = get_parse_graph()
 
     if args.words:
-        for word in args.words:
-            process_word(word.strip(), fst=fst, verbose=args.verbose, as_json=args.json)
+        clean_words = [w.strip() for w in args.words if w.strip()]
+        if not clean_words:
+            return
+
+        if args.json:
+            if len(clean_words) == 1:
+                options = extract_parse_options(clean_words[0], fst=fst)
+                print(json.dumps(options.to_dict(), indent=2))
+            else:
+                results = [
+                    extract_parse_options(w, fst=fst).to_dict()
+                    for w in clean_words
+                ]
+                print(json.dumps({"results": results}, indent=2))
+            return
+
+        for word in clean_words:
+            process_word(word, fst=fst, verbose=args.verbose, as_json=False)
         return
 
     # Interactive REPL mode

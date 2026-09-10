@@ -13,7 +13,7 @@ rules:
     - v[TEMP]
   left_context: '[PrefixClass=v_stem][Pro=3sg.B]<H_alt>?'
 - name: mark_stem_initial_vowel
-  description: mark stem initial vowel (a or v) with [TEMP] based on pronominal triggers
+  description: mark stem initial vowel with [TEMP] based on pronominal triggers
   rule_sequence:
   - $mark_stem_initial_a
   - $mark_stem_initial_v

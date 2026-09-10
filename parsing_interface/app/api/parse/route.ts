@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { spawn } from "child_process";
+import fs from "fs";
 import path from "path";
 import { ParseApiResponse, RootParseOption, WordParseResult } from "@/types/parser";
+
+import { getRepoRoot } from "@/lib/repo";
 
 function stripPunctuation(word: string): string {
   return word.replace(/^[\p{P}\p{S}\s]+|[\p{P}\p{S}\s]+$/gu, "").trim();
@@ -14,17 +17,23 @@ interface WordParseOptionsJson {
   roots: RootParseOption[];
 }
 
-function parseWordOptionsCli(word: string): Promise<WordParseOptionsJson | null> {
+interface BatchParseResponseJson {
+  results?: WordParseOptionsJson[];
+}
+
+const TIMEOUT_MS = 30000;
+
+function parseBatchWordsCli(words: string[]): Promise<Map<string, WordParseOptionsJson>> {
   return new Promise((resolve, reject) => {
-    if (!word) {
-      resolve(null);
+    if (words.length === 0) {
+      resolve(new Map());
       return;
     }
 
-    const repoRoot = path.resolve(process.cwd(), "..");
+    const repoRoot = getRepoRoot();
     const pythonBin = process.env.PYTHON_BIN || "python";
 
-    const args = ["-m", "parse_chr_dict.parse_options", "--json", word];
+    const args = ["-m", "parse_chr_dict.parse_options", "--json", "--", ...words];
     const proc = spawn(pythonBin, args, {
       cwd: repoRoot,
       env: {
@@ -36,6 +45,20 @@ function parseWordOptionsCli(word: string): Promise<WordParseOptionsJson | null>
 
     let stdout = "";
     let stderr = "";
+    let timedOut = false;
+
+    const timer = setTimeout(() => {
+      timedOut = true;
+      proc.kill("SIGTERM");
+      setTimeout(() => {
+        try {
+          proc.kill("SIGKILL");
+        } catch {
+          // ignore
+        }
+      }, 1000);
+      reject(new Error(`parse_options subprocess timed out after ${TIMEOUT_MS}ms`));
+    }, TIMEOUT_MS);
 
     proc.stdout.on("data", (chunk) => {
       stdout += chunk.toString();
@@ -46,30 +69,40 @@ function parseWordOptionsCli(word: string): Promise<WordParseOptionsJson | null>
     });
 
     proc.on("error", (err) => {
+      if (timedOut) return;
+      clearTimeout(timer);
       reject(err);
     });
 
     proc.on("close", (code) => {
+      if (timedOut) return;
+      clearTimeout(timer);
+
+      const resultMap = new Map<string, WordParseOptionsJson>();
+
       if (code !== 0) {
-        console.error(`parse_options failed for word "${word}":`, stderr);
-        // Try parsing stdout anyway in case partial JSON was written
-        try {
-          const parsed = JSON.parse(stdout) as WordParseOptionsJson;
-          resolve(parsed);
-          return;
-        } catch {
-          resolve(null);
-          return;
-        }
+        console.error(`parse_options batch execution failed (exit code ${code}):`, stderr);
       }
 
       try {
-        const parsed = JSON.parse(stdout || "{}") as WordParseOptionsJson;
-        resolve(parsed);
+        if (stdout.trim()) {
+          const parsed = JSON.parse(stdout) as BatchParseResponseJson | WordParseOptionsJson;
+          if (parsed && "results" in parsed && Array.isArray(parsed.results)) {
+            for (const item of parsed.results) {
+              if (item && item.surface) {
+                resultMap.set(item.surface, item);
+              }
+            }
+          } else if (parsed && "surface" in parsed && (parsed as WordParseOptionsJson).surface) {
+            const singleItem = parsed as WordParseOptionsJson;
+            resultMap.set(singleItem.surface, singleItem);
+          }
+        }
       } catch (err) {
-        console.error(`Failed to parse CLI JSON for "${word}":`, err, stdout);
-        resolve(null);
+        console.error("Failed to parse CLI batch JSON output:", err, stdout);
       }
+
+      resolve(resultMap);
     });
   });
 }
@@ -92,17 +125,10 @@ export async function POST(req: NextRequest) {
       clean: stripPunctuation(t),
     }));
 
-    // Parse unique non-empty words concurrently
+    // Parse unique non-empty words in a single batch CLI subprocess
     const uniqueCleanWords = Array.from(new Set(wordMap.map((w) => w.clean).filter((w) => w.length > 0)));
 
-    const parsedEntries = await Promise.all(
-      uniqueCleanWords.map(async (word) => {
-        const data = await parseWordOptionsCli(word);
-        return [word, data] as const;
-      })
-    );
-
-    const cliResultsMap = new Map<string, WordParseOptionsJson | null>(parsedEntries);
+    const cliResultsMap = await parseBatchWordsCli(uniqueCleanWords);
 
     const results: WordParseResult[] = wordMap.map((w) => {
       if (!w.clean) {

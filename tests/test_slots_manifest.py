@@ -133,3 +133,15 @@ def test_build_root_filter_fsa_accepts_valid_and_filters_invalid():
 
     results_invalid = parse_surface("atateka", allowed_roots=["woniha"])
     assert len(results_invalid) == 0
+
+
+def test_get_inventory_and_prepronominal_tags():
+    from parse_chr_dict.slots import get_inventory_tags, get_prepronominal_tags
+
+    inv = get_inventory_tags()
+    assert isinstance(inv, dict)
+    ppp_tags = get_prepronominal_tags()
+    assert isinstance(ppp_tags, list)
+    assert len(ppp_tags) > 0
+    assert "[WI]" in ppp_tags
+

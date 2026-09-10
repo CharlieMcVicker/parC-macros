@@ -1,40 +1,144 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
-import { ParseApiResponse, RootParseOption, WordParseResult } from "@/types/parser";
+import React, { useState, useEffect, useMemo } from "react";
+import {
+  ColumnDef,
+  FALLBACK_MANIFEST,
+  ParseApiResponse,
+  PrefixBundle,
+  RootParseOption,
+  SlotManifest,
+  SuffixBundle,
+  WordParseResult,
+} from "@/types/parser";
 
-// Exact linear template slot order:
-// <PrepronominalPrefixes><PrefixClass><Pro><H_alt_Meta><Root><AspectClass><Variant><Aspect><Tense>
-type SlotKey =
-  | "prepronominal"
-  | "prefix_class"
-  | "pronominal"
-  | "h_alt_meta"
-  | "root"
-  | "aspect_class"
-  | "variant"
-  | "aspect"
-  | "tense";
-
-interface ColumnDef {
-  key: SlotKey;
-  label: string;
-  category: "prefix" | "root" | "suffix";
+function tagToSnake(name: string): string {
+  return name
+    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
+    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1_$2")
+    .toLowerCase();
 }
 
-const SLOT_COLUMNS: ColumnDef[] = [
-  { key: "prepronominal", label: "Prepronominal", category: "prefix" },
-  { key: "prefix_class", label: "Prefix Class", category: "prefix" },
-  { key: "pronominal", label: "Pronominal", category: "prefix" },
-  { key: "h_alt_meta", label: "H-Alt / Meta", category: "prefix" },
-  { key: "root", label: "Root", category: "root" },
-  { key: "aspect_class", label: "Aspect Class", category: "suffix" },
-  { key: "variant", label: "Variant", category: "suffix" },
-  { key: "aspect", label: "Aspect", category: "suffix" },
-  { key: "tense", label: "Tense", category: "suffix" },
-];
+function tagToLabel(name: string): string {
+  const clean = name.replace(/[<>]/g, "");
+  if (clean === "PrepronominalPrefixes" || clean === "prepronominal") return "Prepronominal";
+  if (clean === "PrefixClass" || clean === "prefix_class") return "Prefix Class";
+  if (clean === "Pro" || clean === "pronominal") return "Pronominal";
+  if (clean === "H_metathesis" || clean === "h_metathesis") return "H-Metathesis";
+  if (clean === "H_alt" || clean === "h_alt") return "H-Alt";
+  if (clean === "Root" || clean === "root") return "Root";
+  if (clean === "AspectClass" || clean === "aspect_class") return "Aspect Class";
+  if (clean === "Variant" || clean === "variant") return "Variant";
+  if (clean === "Aspect" || clean === "aspect") return "Aspect";
+  if (clean === "Tense" || clean === "tense") return "Tense";
+
+  const words = clean
+    .replace(/_/g, " ")
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2");
+  return words
+    .split(/\s+/)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+    .join(" ");
+}
+
+function tagToKey(name: string): string {
+  const clean = name.replace(/[<>]/g, "");
+  if (clean === "PrepronominalPrefixes" || clean === "PPP") return "prepronominal";
+  if (clean === "Pro") return "pronominal";
+  if (clean === "Root") return "root";
+  if (clean === "H_metathesis") return "h_metathesis";
+  if (clean === "H_alt") return "h_alt";
+  if (clean === "AspectClass") return "aspect_class";
+  if (clean === "PrefixClass") return "prefix_class";
+  if (clean === "Variant") return "variant";
+  if (clean === "Aspect") return "aspect";
+  if (clean === "Tense") return "tense";
+  return tagToSnake(clean);
+}
+
+function buildColumnDefs(manifest: SlotManifest): ColumnDef[] {
+  const template = manifest.template || [];
+  const rootIndex = template.findIndex((t) => t.replace(/[<>]/g, "").toLowerCase() === "root");
+
+  const slotRoleMap = new Map<string, "prefix" | "suffix">();
+  for (const s of manifest.slots || []) {
+    const role = s.role === "prefix" || s.role === "suffix" ? s.role : "suffix";
+    slotRoleMap.set(s.name, role);
+    for (const t of s.tags || []) {
+      slotRoleMap.set(t, role);
+    }
+  }
+
+  return template.map((rawTag, idx) => {
+    const cleanTag = rawTag.replace(/[<>]/g, "");
+    const key = tagToKey(cleanTag);
+    const label = tagToLabel(cleanTag);
+
+    let category: "prefix" | "root" | "suffix" = "suffix";
+    if (cleanTag.toLowerCase() === "root") {
+      category = "root";
+    } else if (rootIndex !== -1) {
+      category = idx < rootIndex ? "prefix" : "suffix";
+    } else if (slotRoleMap.has(cleanTag)) {
+      category = slotRoleMap.get(cleanTag)!;
+    }
+
+    return {
+      key,
+      label,
+      category,
+      tag: cleanTag,
+    };
+  });
+}
+
+function getPrefixBundleValue(bundle: PrefixBundle, key: string, tag?: string): string {
+  if (key === "prepronominal") {
+    return bundle.prepronominal_prefixes && bundle.prepronominal_prefixes.length > 0
+      ? bundle.prepronominal_prefixes.join(",")
+      : "(none)";
+  }
+  if (key === "prefix_class") {
+    return bundle.prefix_class || "";
+  }
+  if (key === "pronominal") {
+    return bundle.pronominal || "";
+  }
+  if (key === "h_metathesis") {
+    return bundle.h_metathesis_tag || bundle.slot_values?.["H_metathesis"] || bundle.slot_values?.["H_METATHESIS"] || "";
+  }
+  if (key === "h_alt") {
+    return bundle.h_alt_tag || bundle.slot_values?.["H_alt"] || bundle.slot_values?.["H_ALT"] || "";
+  }
+  if (bundle.slot_values) {
+    if (bundle.slot_values[key] !== undefined) return bundle.slot_values[key];
+    if (tag && bundle.slot_values[tag] !== undefined) return bundle.slot_values[tag];
+  }
+  return "";
+}
+
+function getSuffixBundleValue(bundle: SuffixBundle, key: string, tag?: string): string {
+  if (key === "aspect_class") {
+    return bundle.aspect_class || "";
+  }
+  if (key === "variant") {
+    return String(bundle.variant);
+  }
+  if (key === "aspect") {
+    return bundle.aspect || "";
+  }
+  if (key === "tense") {
+    return bundle.tense || "";
+  }
+  if (bundle.slot_values) {
+    if (bundle.slot_values[key] !== undefined) return bundle.slot_values[key];
+    if (tag && bundle.slot_values[tag] !== undefined) return bundle.slot_values[tag];
+  }
+  return "";
+}
 
 export default function Home() {
+  const [manifest, setManifest] = useState<SlotManifest>(FALLBACK_MANIFEST);
   const [inputText, setInputText] = useState<string>("katateka");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -43,6 +147,30 @@ export default function Home() {
 
   // Selected morpheme slot values for the active word
   const [selectedSlots, setSelectedSlots] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    async function loadManifest() {
+      try {
+        const res = await fetch("/api/manifest");
+        if (res.ok) {
+          const data = (await res.json()) as SlotManifest;
+          if (data && Array.isArray(data.template) && data.template.length > 0) {
+            setManifest(data);
+          }
+        }
+      } catch (err: unknown) {
+        console.error("Failed to fetch /api/manifest:", err);
+      }
+    }
+    loadManifest();
+  }, []);
+
+  const columns: ColumnDef[] = useMemo(() => {
+    return buildColumnDefs(manifest);
+  }, [manifest]);
+
+  const prefixColumns = useMemo(() => columns.filter((c) => c.category === "prefix"), [columns]);
+  const suffixColumns = useMemo(() => columns.filter((c) => c.category === "suffix"), [columns]);
 
   const handleParse = async () => {
     if (!inputText.trim()) return;
@@ -101,176 +229,109 @@ export default function Home() {
 
       // Check if root has at least one valid prefix bundle matching prefix selections
       const hasMatchingPrefix = r.prefix_bundles.some((bundle) => {
-        if (selectedSlots["prefix_class"] && bundle.prefix_class !== selectedSlots["prefix_class"]) return false;
-        if (selectedSlots["pronominal"] && bundle.pronominal !== selectedSlots["pronominal"]) return false;
-        if (selectedSlots["prepronominal"]) {
-          const p = bundle.prepronominal_prefixes.join(",") || "(none)";
-          if (p !== selectedSlots["prepronominal"]) return false;
-        }
-        if (selectedSlots["h_alt_meta"]) {
-          const combo = `${bundle.h_alt_tag} ${bundle.h_metathesis_tag}`;
-          if (combo !== selectedSlots["h_alt_meta"]) return false;
-        }
-        return true;
+        return prefixColumns.every((col) => {
+          const selectedVal = selectedSlots[col.key];
+          if (!selectedVal) return true;
+          const bundleVal = getPrefixBundleValue(bundle, col.key, col.tag);
+          return bundleVal === selectedVal;
+        });
       });
 
       if (!hasMatchingPrefix) return false;
 
       // Check if root has at least one valid suffix bundle matching suffix selections
       const hasMatchingSuffix = r.suffix_bundles.some((bundle) => {
-        if (selectedSlots["aspect_class"] && bundle.aspect_class !== selectedSlots["aspect_class"]) return false;
-        if (selectedSlots["variant"] && String(bundle.variant) !== selectedSlots["variant"]) return false;
-        if (selectedSlots["aspect"] && bundle.aspect !== selectedSlots["aspect"]) return false;
-        if (selectedSlots["tense"] && bundle.tense !== selectedSlots["tense"]) return false;
-        return true;
+        return suffixColumns.every((col) => {
+          const selectedVal = selectedSlots[col.key];
+          if (!selectedVal) return true;
+          const bundleVal = getSuffixBundleValue(bundle, col.key, col.tag);
+          return bundleVal === selectedVal;
+        });
       });
 
       return hasMatchingSuffix;
     });
-  }, [allCandidateRoots, selectedSlots]);
+  }, [allCandidateRoots, selectedSlots, prefixColumns, suffixColumns]);
 
   // Aggregate available choices for every slot across all currently valid roots and bundles
   const slotOptionsMap = useMemo(() => {
-    const prepros = new Set<string>();
-    const prefixClasses = new Set<string>();
-    const pronominals = new Set<string>();
-    const hAltMetas = new Set<string>();
-    const roots = new Set<string>();
-    const aspectClasses = new Set<string>();
-    const variants = new Set<string>();
-    const aspects = new Set<string>();
-    const tenses = new Set<string>();
+    const optionsMap: Record<string, string[]> = {};
 
-    for (const r of filteredCandidateRoots) {
-      roots.add(r.root);
+    for (const col of columns) {
+      const optionsSet = new Set<string>();
 
-      // Collect prefixes with cross-slot filtering
-      for (const bundle of r.prefix_bundles) {
-        const prepStr = bundle.prepronominal_prefixes.join(",") || "(none)";
-        const combo = `${bundle.h_alt_tag} ${bundle.h_metathesis_tag}`;
-
-        // For prepronominal options
-        if (
-          (!selectedSlots["prefix_class"] || bundle.prefix_class === selectedSlots["prefix_class"]) &&
-          (!selectedSlots["pronominal"] || bundle.pronominal === selectedSlots["pronominal"]) &&
-          (!selectedSlots["h_alt_meta"] || combo === selectedSlots["h_alt_meta"])
-        ) {
-          prepros.add(prepStr);
+      if (col.category === "root") {
+        for (const r of filteredCandidateRoots) {
+          if (r.root) optionsSet.add(r.root);
         }
+      } else if (col.category === "prefix") {
+        for (const r of filteredCandidateRoots) {
+          for (const bundle of r.prefix_bundles) {
+            const matchesOther = prefixColumns.every((otherCol) => {
+              if (otherCol.key === col.key) return true;
+              const selectedVal = selectedSlots[otherCol.key];
+              if (!selectedVal) return true;
+              const bundleVal = getPrefixBundleValue(bundle, otherCol.key, otherCol.tag);
+              return bundleVal === selectedVal;
+            });
 
-        // For prefix_class options
-        if (
-          (!selectedSlots["prepronominal"] || prepStr === selectedSlots["prepronominal"]) &&
-          (!selectedSlots["pronominal"] || bundle.pronominal === selectedSlots["pronominal"]) &&
-          (!selectedSlots["h_alt_meta"] || combo === selectedSlots["h_alt_meta"])
-        ) {
-          prefixClasses.add(bundle.prefix_class);
+            if (matchesOther) {
+              const val = getPrefixBundleValue(bundle, col.key, col.tag);
+              if (val) optionsSet.add(val);
+            }
+          }
         }
+      } else if (col.category === "suffix") {
+        for (const r of filteredCandidateRoots) {
+          for (const bundle of r.suffix_bundles) {
+            const matchesOther = suffixColumns.every((otherCol) => {
+              if (otherCol.key === col.key) return true;
+              const selectedVal = selectedSlots[otherCol.key];
+              if (!selectedVal) return true;
+              const bundleVal = getSuffixBundleValue(bundle, otherCol.key, otherCol.tag);
+              return bundleVal === selectedVal;
+            });
 
-        // For pronominal options
-        if (
-          (!selectedSlots["prepronominal"] || prepStr === selectedSlots["prepronominal"]) &&
-          (!selectedSlots["prefix_class"] || bundle.prefix_class === selectedSlots["prefix_class"]) &&
-          (!selectedSlots["h_alt_meta"] || combo === selectedSlots["h_alt_meta"])
-        ) {
-          pronominals.add(bundle.pronominal);
-        }
-
-        // For h_alt_meta options
-        if (
-          (!selectedSlots["prepronominal"] || prepStr === selectedSlots["prepronominal"]) &&
-          (!selectedSlots["prefix_class"] || bundle.prefix_class === selectedSlots["prefix_class"]) &&
-          (!selectedSlots["pronominal"] || bundle.pronominal === selectedSlots["pronominal"])
-        ) {
-          hAltMetas.add(combo);
+            if (matchesOther) {
+              const val = getSuffixBundleValue(bundle, col.key, col.tag);
+              if (val) optionsSet.add(val);
+            }
+          }
         }
       }
 
-      // Collect suffixes with cross-slot filtering
-      for (const bundle of r.suffix_bundles) {
-        const varStr = String(bundle.variant);
-
-        // For aspect_class options
-        if (
-          (!selectedSlots["variant"] || varStr === selectedSlots["variant"]) &&
-          (!selectedSlots["aspect"] || bundle.aspect === selectedSlots["aspect"]) &&
-          (!selectedSlots["tense"] || bundle.tense === selectedSlots["tense"])
-        ) {
-          aspectClasses.add(bundle.aspect_class);
-        }
-
-        // For variant options
-        if (
-          (!selectedSlots["aspect_class"] || bundle.aspect_class === selectedSlots["aspect_class"]) &&
-          (!selectedSlots["aspect"] || bundle.aspect === selectedSlots["aspect"]) &&
-          (!selectedSlots["tense"] || bundle.tense === selectedSlots["tense"])
-        ) {
-          variants.add(varStr);
-        }
-
-        // For aspect options
-        if (
-          (!selectedSlots["aspect_class"] || bundle.aspect_class === selectedSlots["aspect_class"]) &&
-          (!selectedSlots["variant"] || varStr === selectedSlots["variant"]) &&
-          (!selectedSlots["tense"] || bundle.tense === selectedSlots["tense"])
-        ) {
-          aspects.add(bundle.aspect);
-        }
-
-        // For tense options
-        if (
-          (!selectedSlots["aspect_class"] || bundle.aspect_class === selectedSlots["aspect_class"]) &&
-          (!selectedSlots["variant"] || varStr === selectedSlots["variant"]) &&
-          (!selectedSlots["aspect"] || bundle.aspect === selectedSlots["aspect"])
-        ) {
-          tenses.add(bundle.tense);
-        }
-      }
+      optionsMap[col.key] = Array.from(optionsSet);
     }
 
-    return {
-      prepronominal: Array.from(prepros),
-      prefix_class: Array.from(prefixClasses),
-      pronominal: Array.from(pronominals),
-      h_alt_meta: Array.from(hAltMetas),
-      root: Array.from(roots),
-      aspect_class: Array.from(aspectClasses),
-      variant: Array.from(variants),
-      aspect: Array.from(aspects),
-      tense: Array.from(tenses),
-    };
-  }, [filteredCandidateRoots, selectedSlots]);
+    return optionsMap;
+  }, [columns, prefixColumns, suffixColumns, filteredCandidateRoots, selectedSlots]);
 
   // Calculate total remaining combinations
   const totalRemainingCombinations = useMemo(() => {
     let count = 0;
     for (const r of filteredCandidateRoots) {
-      const validPrefixes = r.prefix_bundles.filter((b) => {
-        if (selectedSlots["prefix_class"] && b.prefix_class !== selectedSlots["prefix_class"]) return false;
-        if (selectedSlots["pronominal"] && b.pronominal !== selectedSlots["pronominal"]) return false;
-        if (selectedSlots["prepronominal"]) {
-          const p = b.prepronominal_prefixes.join(",") || "(none)";
-          if (p !== selectedSlots["prepronominal"]) return false;
-        }
-        if (selectedSlots["h_alt_meta"]) {
-          const combo = `${b.h_alt_tag} ${b.h_metathesis_tag}`;
-          if (combo !== selectedSlots["h_alt_meta"]) return false;
-        }
-        return true;
+      const validPrefixes = r.prefix_bundles.filter((bundle) => {
+        return prefixColumns.every((col) => {
+          const selectedVal = selectedSlots[col.key];
+          if (!selectedVal) return true;
+          const bundleVal = getPrefixBundleValue(bundle, col.key, col.tag);
+          return bundleVal === selectedVal;
+        });
       });
 
-      const validSuffixes = r.suffix_bundles.filter((b) => {
-        if (selectedSlots["aspect_class"] && b.aspect_class !== selectedSlots["aspect_class"]) return false;
-        if (selectedSlots["variant"] && String(b.variant) !== selectedSlots["variant"]) return false;
-        if (selectedSlots["aspect"] && b.aspect !== selectedSlots["aspect"]) return false;
-        if (selectedSlots["tense"] && b.tense !== selectedSlots["tense"]) return false;
-        return true;
+      const validSuffixes = r.suffix_bundles.filter((bundle) => {
+        return suffixColumns.every((col) => {
+          const selectedVal = selectedSlots[col.key];
+          if (!selectedVal) return true;
+          const bundleVal = getSuffixBundleValue(bundle, col.key, col.tag);
+          return bundleVal === selectedVal;
+        });
       });
 
       count += validPrefixes.length * validSuffixes.length;
     }
     return count;
-  }, [filteredCandidateRoots, selectedSlots]);
+  }, [filteredCandidateRoots, selectedSlots, prefixColumns, suffixColumns]);
 
   const handleSlotSelect = (slotName: string, value: string) => {
     setSelectedSlots((prev) => {
@@ -290,13 +351,13 @@ export default function Home() {
 
   // Filter columns: only show columns that have more than 1 option (or if currently selected)
   const visibleColumns = useMemo(() => {
-    return SLOT_COLUMNS.filter((col) => {
+    return columns.filter((col) => {
       const options = slotOptionsMap[col.key] || [];
       const hasSelection = Boolean(selectedSlots[col.key]);
       // Hide column if there is 1 or fewer options AND user hasn't explicitly set it
       return options.length > 1 || hasSelection;
     });
-  }, [slotOptionsMap, selectedSlots]);
+  }, [columns, slotOptionsMap, selectedSlots]);
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100 p-6 md:p-8 font-sans flex flex-col space-y-6">
@@ -430,7 +491,7 @@ export default function Home() {
               <span className="text-slate-500 uppercase text-[10px] font-bold tracking-wider mr-2 shrink-0">
                 Assembly:
               </span>
-              {SLOT_COLUMNS.map((col) => {
+              {columns.map((col) => {
                 const val = selectedSlots[col.key];
                 const available = slotOptionsMap[col.key] || [];
                 const displayVal = val || (available.length === 1 ? available[0] : "*");
