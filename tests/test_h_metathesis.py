@@ -38,12 +38,12 @@ CASES = [
     ("nho", "r_stem", "3sg.A", "none", "wikanhoki'a"),
     ("elho", "vowel_stem", "3sg.A", "active", "wikheloki'a"),
     # aki
-    ("nhalv", "cons_stem", "1sg.B", "active", "wakhinalvki'a"),
-    ("nhalv", "cons_stem", "1sg.B", "none", "wakinhalvki'a"),
+    ("nhalv", "r_stem", "1sg.B", "active", "wakhinalvki'a"),
+    ("nhalv", "r_stem", "1sg.B", "none", "wakinhalvki'a"),
 
     # tsa -> tsha
-    ("nhalv", "cons_stem", "2sg.B", "active", "witshanalvki'a"),
-    ("nhalv", "cons_stem", "2sg.B", "none", "witsanhalvki'a"),
+    ("nhalv", "r_stem", "2sg.B", "active", "witshanalvki'a"),
+    ("nhalv", "r_stem", "2sg.B", "none", "witsanhalvki'a"),
 ]
 
 

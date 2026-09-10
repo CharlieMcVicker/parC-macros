@@ -564,6 +564,12 @@ def generate_phonology_rules(
                 "right_context": drop_final_two_rc,
             },
             {
+                "name": "delete_temp_marker",
+                "description": "delete the temporary marker [TEMP]",
+                "input_pattern": "[TEMP]",
+                "output_pattern": "",
+            },
+            {
                 "name": "drop_final",
                 "description": "drop final phone",
                 "rule_sequence": [
@@ -592,7 +598,7 @@ def generate_phonology_rules(
     with open(output_rules_dir / "drop_root_final.yaml", "w", encoding="utf-8") as f:
         yaml.dump(drop_root_final_yaml, f, sort_keys=False, default_flow_style=False)
 
-    # 2. drop_stem_initial_vowel.yaml
+    # 2. mark_stem_initial_vowel.yaml and drop_stem_initial_vowel.yaml
     drop_a_branches = [
         f"[PrefixClass={cls}][Pro={pro}]<H_alt>?"
         for cls, pro in data.get("drop_first_a_triggers", [])
@@ -605,49 +611,43 @@ def generate_phonology_rules(
     ]
     drop_v_lc = "|".join(drop_v_branches) if drop_v_branches else "[PrefixClass=v_stem][Pro=3sg.B]<H_alt>?"
 
-    drop_stem_initial_vowel_yaml = {
+    mark_stem_initial_vowel_yaml = {
         "kind": "Rules",
         "rules": [
             {
                 "name": "mark_stem_initial_a",
                 "description": "mark the first a with [TEMP] at start of stem",
-                "string_map": [["a", "[TEMP]"]],
+                "string_map": [["a", "a[TEMP]"]],
                 "left_context": drop_a_lc,
             },
             {
                 "name": "mark_stem_initial_v",
                 "description": "mark the first v with [TEMP] at start of stem",
-                "string_map": [["v", "[TEMP]"]],
+                "string_map": [["v", "v[TEMP]"]],
                 "left_context": drop_v_lc,
             },
             {
-                "name": "delete_temp_marker",
-                "description": "delete the temporary marker [TEMP]",
-                "input_pattern": "[TEMP]",
-                "output_pattern": "",
-            },
-            {
-                "name": "drop_stem_initial_a",
-                "description": "drop only the first a at start of stem",
+                "name": "mark_stem_initial_vowel",
+                "description": "mark stem initial vowel (a or v) with [TEMP] based on pronominal triggers",
                 "rule_sequence": [
                     "$mark_stem_initial_a",
-                    "$delete_temp_marker",
-                ],
-            },
-            {
-                "name": "drop_stem_initial_v",
-                "description": "drop only the first v at start of stem",
-                "rule_sequence": [
                     "$mark_stem_initial_v",
-                    "$delete_temp_marker",
                 ],
             },
+        ],
+    }
+    with open(output_rules_dir / "mark_stem_initial_vowel.yaml", "w", encoding="utf-8") as f:
+        yaml.dump(mark_stem_initial_vowel_yaml, f, sort_keys=False, default_flow_style=False)
+
+    drop_stem_initial_vowel_yaml = {
+        "kind": "Rules",
+        "rules": [
             {
                 "name": "drop_stem_initial_vowel",
-                "description": "drop stem initial vowel (a or v) based on pronominal triggers",
-                "rule_sequence": [
-                    "$drop_stem_initial_a",
-                    "$drop_stem_initial_v",
+                "description": "drop stem initial vowel marked with [TEMP]",
+                "string_map": [
+                    ["a[TEMP]", ""],
+                    ["v[TEMP]", ""],
                 ],
             },
         ],
@@ -659,5 +659,5 @@ def generate_phonology_rules(
     src_rules = config_dir / "Phonology" / "Rules"
     if src_rules.exists():
         for rf in src_rules.glob("*.yaml"):
-            if rf.name not in ("drop_root_final.yaml", "drop_stem_initial_vowel.yaml"):
+            if rf.name not in ("drop_root_final.yaml", "drop_stem_initial_vowel.yaml", "mark_stem_initial_vowel.yaml"):
                 shutil.copy2(rf, output_rules_dir / rf.name)

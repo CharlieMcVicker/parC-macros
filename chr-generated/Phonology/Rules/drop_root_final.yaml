@@ -12,6 +12,10 @@ rules:
   - - <Phone><Phone>?
     - '[TEMP]'
   right_context: '[AspectClass=apl][Variant=2][Aspect=immediate]'
+- name: delete_temp_marker
+  description: delete the temporary marker [TEMP]
+  input_pattern: '[TEMP]'
+  output_pattern: ''
 - name: drop_final
   description: drop final phone
   rule_sequence:

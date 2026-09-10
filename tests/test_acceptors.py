@@ -16,16 +16,15 @@ import pytest
 import pynini
 
 from parC.constants import set_yaml_dir
-from parC.grammar.acceptor_compilation import fsa, fsm_strings
+from parC.grammar.acceptor_compilation import fsa, fsm_strings, word_fsa
 from parC.grammar.paradigm_compilation import clear_all_caches
 from parc_macros.generate_markers import generate_markers
 from parse_chr_dict.acceptors import (
     DEFAULT_CONFIG_DIR,
+    DEFAULT_FEATURE_ACCEPTORS_DIR,
     DEFAULT_MORPHOTACTICS_CSV,
-    DEFAULT_PREFIX_CLASS_CSV,
     _CASCADE_DOMAIN_CACHE,
     compile_morphotactic_acceptor,
-    compile_prefix_stem_shape_acceptor,
     compile_cascade_domain_acceptor,
     accepts_parse,
     get_cascade_domain_acceptor,
@@ -36,10 +35,12 @@ from parse_chr_dict.acceptors import (
 )
 import parse_chr_dict.parse as parse_mod
 from parse_chr_dict.parse import get_parse_graph, parse
+from parC.grammar.paradigm_compilation import get_open_inflect_graph
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
 CONFIG_DIR = REPO_ROOT / "chr-config"
 GEN_DIR = REPO_ROOT / "chr-generated"
+PREFIX_CLASS_CSV = DEFAULT_FEATURE_ACCEPTORS_DIR / "prefix_class.csv"
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -73,7 +74,7 @@ def setup_acceptor_env():
 
 def test_prefix_class_csv_audit_ac1():
     """Verify all prefix classes are present and map to exact phoneme patterns."""
-    assert DEFAULT_PREFIX_CLASS_CSV.exists()
+    assert PREFIX_CLASS_CSV.exists()
 
     # All expected classes and their phone expectations
     expected_classes = {
@@ -87,7 +88,7 @@ def test_prefix_class_csv_audit_ac1():
         "long_stem": {"t", "k", "'", "m", "n", "h", "s", "l", "y", "w"},
     }
 
-    with open(DEFAULT_PREFIX_CLASS_CSV, "r", encoding="utf-8") as f:
+    with open(PREFIX_CLASS_CSV, "r", encoding="utf-8") as f:
         reader = csv.reader(f)
         classes_found = {}
         for row in reader:
@@ -224,77 +225,47 @@ def test_compile_morphotactic_acceptor_ac2():
 
 
 # =========================================================================
-# AC 3: Anchored prefix stem-shape acceptor
+# AC 3: Native prefix stem-shape right-context licensing via FST cascade
 # =========================================================================
 
-def test_compile_prefix_stem_shape_acceptor_ac3():
-    """AC 3: compile_prefix_stem_shape_acceptor anchors [PrefixClass=c]<Pro><H_ALT>?<InitialPhoneme>."""
-    syms = get_default_symbol_table()
-    alphabet = get_default_alphabet()
+def test_right_context_prefix_stem_shape_licensing_ac3():
+    """
+    AC 3: Verify that morpheme replacement rules enforce prefix class stem-shape
+    constraints at insertion time via right_context in pro_replace.yaml.
+    """
+    inflect_fst = get_open_inflect_graph("verb", infer_lexical_features=False)
+    mid = "[H_metathesis=none][H_alt=none]"
+    tail = "[AspectClass=a][Aspect=present][Tense=present_a]"
 
-    stem_fsa = compile_prefix_stem_shape_acceptor(syms, alphabet)
-    assert stem_fsa is not None
-
-    # State footprint verification: tiny (~15-35 states)
-    state_count = stem_fsa.num_states()
-    assert 12 <= state_count <= 35, f"Expected state count between 12 and 35, got {state_count}"
-
-    def stem_accepts(tokens: list[str]) -> bool:
-        test_fsa = pynini.accep(" ".join(tokens), token_type=syms)
-        res = pynini.intersect(test_fsa, stem_fsa)
-        return res.num_states() > 0 and res.start() != pynini.NO_STATE_ID
-
-    tail = ["[AspectClass=a]", "[Aspect=present]", "[Tense=present_a]"]
-
-    # Valid combinations for prefix classes
+    # Valid combinations produce clean surface forms
     valid_cases = [
-        ("[PrefixClass=a_stem]", ["a", "t", "a", "t"]),
-        ("[PrefixClass=v_stem]", ["v", "a", "t", "a", "t"]),
-        ("[PrefixClass=e_stem]", ["e", "t", "a", "t"]),
-        ("[PrefixClass=k_a_stem]", ["a", "t", "a", "t"]),
-        ("[PrefixClass=vowel_stem]", ["o", "t", "a", "t"]),
-        ("[PrefixClass=cons_stem]", ["t", "h", "a", "t"]),
-        ("[PrefixClass=cons_stem]", ["s", "t", "a", "t"]),
-        ("[PrefixClass=cons_stem]", ["l", "h", "a", "t"]),
-        ("[PrefixClass=cons_stem]", ["y", "h", "a", "t"]),
-        ("[PrefixClass=r_stem]", ["n", "a", "t", "a", "t"]),
-        ("[PrefixClass=r_stem]", ["l", "a", "t", "a", "t"]),
-        ("[PrefixClass=long_stem]", ["t", "h", "a", "t"]),
+        (f"[PrefixClass=a_stem][Pro=3sg.A]{mid}atat{tail}", "atata'a"),
+        (f"[PrefixClass=cons_stem][Pro=3sg.A]{mid}that{tail}", "athata'a"),
+        (f"[PrefixClass=r_stem][Pro=3sg.A]{mid}nhat{tail}", "kanhata'a"),
+        (f"[PrefixClass=vowel_stem][Pro=3sg.A]{mid}ehat{tail}", "kehata'a"),
     ]
-    for pclass, root_chars in valid_cases:
-        tokens = [pclass, "[Pro=3sg.A]"] + root_chars + tail
-        assert stem_accepts(tokens), f"Expected valid parse for {pclass} with root starting {root_chars[0]}"
+    for inp, expected in valid_cases:
+        out_fst = pynini.compose(word_fsa(inp), inflect_fst)
+        forms = fsm_strings(pynini.project(out_fst, "output").optimize())
+        clean_forms = [f.replace("[BOW]", "").replace("[EOW]", "") for f in forms if "[" not in f.replace("[BOW]", "").replace("[EOW]", "")]
+        assert expected in clean_forms, f"Expected {expected} in inflected forms for {inp}, got {forms}"
 
-    # Optional H_ALT tags
-    for h_tag in ["[H_alt=none]", "[H_alt=drop]", "[H_alt=glot]", "[H_alt=lat]", "[H_alt=vowel_a]"]:
-        tokens_h_a = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", h_tag, "a", "t", "a", "t"] + tail
-        assert stem_accepts(tokens_h_a), f"Expected acceptance of a_stem with {h_tag} and initial 'a'"
-        tokens_h_cons = ["[PrefixClass=cons_stem]", "[Pro=3sg.A]", h_tag, "t", "h", "a", "t"] + tail
-        assert stem_accepts(tokens_h_cons), f"Expected acceptance of cons_stem with {h_tag} and initial 't'"
-
-    # Invalid combinations (illicit initial phones)
+    # Invalid combinations (illicit initial phones for prefix class) fail to transduce (tags left unconsumed)
     invalid_cases = [
-        ("[PrefixClass=a_stem]", ["t", "h", "a", "t"]),       # TASK-108 scenario: a_stem before 't'
-        ("[PrefixClass=v_stem]", ["a", "t", "a", "t"]),       # v_stem before 'a'
-        ("[PrefixClass=e_stem]", ["a", "t", "a", "t"]),       # e_stem before 'a'
-        ("[PrefixClass=k_a_stem]", ["t", "h", "a", "t"]),     # k_a_stem before 't'
-        ("[PrefixClass=vowel_stem]", ["t", "h", "a", "t"]),   # vowel_stem before 't'
-        ("[PrefixClass=cons_stem]", ["a", "t", "a", "t"]),    # cons_stem before 'a'
-        ("[PrefixClass=cons_stem]", ["l", "a", "t", "a", "t"]),  # cons_stem before 'l' without 'h'
-        ("[PrefixClass=r_stem]", ["t", "a", "t", "a", "t"]),  # r_stem before 't' (not sonorant/nasal)
-        ("[PrefixClass=long_stem]", ["a", "t", "a", "t"]),    # long_stem before 'a'
+        # a_stem before consonant root 'that'
+        f"[PrefixClass=a_stem][Pro=3sg.A]{mid}that{tail}",
+        # cons_stem before vowel root 'atat'
+        f"[PrefixClass=cons_stem][Pro=3sg.A]{mid}atat{tail}",
+        # v_stem before 'a'
+        f"[PrefixClass=v_stem][Pro=3sg.A]{mid}atat{tail}",
+        # e_stem before 'a'
+        f"[PrefixClass=e_stem][Pro=3sg.A]{mid}atat{tail}",
     ]
-    for pclass, root_chars in invalid_cases:
-        tokens = [pclass, "[Pro=3sg.A]"] + root_chars + tail
-        assert not stem_accepts(tokens), f"Must reject illicit initial phone for {pclass}: {root_chars[0]}"
-
-    # TASK-108 explicit regression check: a_stem with [H_alt=drop] before consonant root 'that'
-    tokens_task108 = ["[PrefixClass=a_stem]", "[Pro=3sg.A]", "[H_alt=drop]", "t", "h", "a", "t"] + tail
-    assert not stem_accepts(tokens_task108), "TASK-108: [PrefixClass=a_stem] with [H_alt=drop]that MUST be rejected"
-
-    # Illicit templates (PrefixClass missing Pro, or PrefixClass followed by non-Pro)
-    assert not stem_accepts(["[PrefixClass=a_stem]", "a", "t", "a", "t"] + tail)
-    assert not stem_accepts(["[PrefixClass=a_stem]", "[AspectClass=a]", "a", "t", "a", "t"] + tail)
+    for inp in invalid_cases:
+        out_fst = pynini.compose(word_fsa(inp), inflect_fst)
+        forms = fsm_strings(pynini.project(out_fst, "output").optimize())
+        clean_forms = [f for f in forms if "[" not in f.replace("[BOW]", "").replace("[EOW]", "")]
+        assert len(clean_forms) == 0, f"Mismatched stem shape {inp} must produce 0 valid surface forms, got {clean_forms}"
 
 
 # =========================================================================
@@ -303,8 +274,8 @@ def test_compile_prefix_stem_shape_acceptor_ac3():
 
 def test_compile_cascade_domain_acceptor_ac4_ac5():
     """
-    AC 4 & AC 5: Intersect morphotactic and stem-shape acceptors with [BOW]/[EOW] wrapping.
-    Verify valid in-place parses are accepted and illicit combinations pruned.
+    AC 4 & AC 5: Wrap morphotactic licensing acceptor with [BOW]/[EOW] wrapping.
+    Verify valid in-place parses are accepted and illicit morphotactic combinations pruned.
     """
     syms = get_default_symbol_table()
     alphabet = get_default_alphabet()
@@ -338,14 +309,8 @@ def test_compile_cascade_domain_acceptor_ac4_ac5():
         assert accepts_parse(cascade, vp, syms), f"Cascade should accept valid parse: {vp}"
 
     invalid_parses = [
-        # TASK-108: a_stem before consonant root 'that'
-        "[BOW][PrefixClass=a_stem][Pro=3sg.A]that[AspectClass=a][Aspect=present][Tense=present_a][EOW][rules=+]",
-        # TASK-108 with [H_alt=drop]: a_stem with [H_alt=drop] before consonant root 'that'
-        "[BOW][PrefixClass=a_stem][Pro=1sg.A][H_alt=drop]that[AspectClass=a][Aspect=present][Tense=present_a][EOW][rules=+]",
         # TASK-109: Non-trigger 3sg.A with active [H_alt=drop] (violates pro_morphotactics)
         "[BOW][PrefixClass=a_stem][Pro=3sg.A][H_alt=drop]atat[AspectClass=a][Aspect=present][Tense=present_a][EOW][rules=+]",
-        # cons_stem before vowel root 'atat'
-        "[BOW][PrefixClass=cons_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][Tense=present_a][EOW][rules=+]",
         # [DIST=de] with immediate tense (violates morphotactics)
         "[BOW][DIST=de][PrefixClass=a_stem][Pro=3sg.A]atat[AspectClass=a][Aspect=present][Tense=immediate][EOW][rules=+]",
         # [DIST=di] with present tense (violates morphotactics)

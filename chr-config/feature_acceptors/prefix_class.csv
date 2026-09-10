@@ -6,5 +6,5 @@ e_stem,e
 k_a_stem,a
 vowel_stem,e|o|u|v
 cons_stem,<Stops>|<Frc>|y|w|(lh)|(yh)
-r_stem,(<Son>|<N>)
+r_stem,'?(<Son>|<N>)
 long_stem,<C>

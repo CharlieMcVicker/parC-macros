@@ -9,8 +9,9 @@ stage_order:
 - tense
 - h_alternation
 - tag_h_metathesis
-- drop_stem_initial_vowel
+- mark_stem_initial_vowel
 - pronominal
+- drop_stem_initial_vowel
 - h_metathesis
 - insert_dist
 - insert_wi
@@ -34,11 +35,14 @@ global_markers:
   stage: tag_h_metathesis
   value: $tag_h_metathesis
 - kind: rule
-  stage: drop_stem_initial_vowel
-  value: $drop_stem_initial_vowel
+  stage: mark_stem_initial_vowel
+  value: $mark_stem_initial_vowel
 - kind: rule
   stage: pronominal
   value: $pro_replace
+- kind: rule
+  stage: drop_stem_initial_vowel
+  value: $drop_stem_initial_vowel
 - kind: rule
   stage: h_metathesis
   value: $h_metathesis

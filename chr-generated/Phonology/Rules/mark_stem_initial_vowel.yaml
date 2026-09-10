@@ -1,0 +1,19 @@
+kind: Rules
+rules:
+- name: mark_stem_initial_a
+  description: mark the first a with [TEMP] at start of stem
+  string_map:
+  - - a
+    - a[TEMP]
+  left_context: '[PrefixClass=a_stem][Pro=3sg.A]<H_alt>?|[PrefixClass=a_stem][Pro=3sg.B]<H_alt>?'
+- name: mark_stem_initial_v
+  description: mark the first v with [TEMP] at start of stem
+  string_map:
+  - - v
+    - v[TEMP]
+  left_context: '[PrefixClass=v_stem][Pro=3sg.B]<H_alt>?'
+- name: mark_stem_initial_vowel
+  description: mark stem initial vowel (a or v) with [TEMP] based on pronominal triggers
+  rule_sequence:
+  - $mark_stem_initial_a
+  - $mark_stem_initial_v

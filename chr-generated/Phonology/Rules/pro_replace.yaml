@@ -2,8 +2,8 @@
 # Generated automatically by generate_morpheme_replace_rules.py
 kind: Rules
 rules:
-- name: pro_replace
-  description: Morpheme replacement rule for [Pro]
+- name: pro_replace_a_stem
+  description: Morpheme replacement for [Pro] conditioned on [PrefixClass=a_stem]
   string_map:
   - - '[PrefixClass=a_stem][Pro=1sg.A]'
     - k
@@ -49,6 +49,10 @@ rules:
     - it
   - - '[PrefixClass=a_stem][Pro=Ipl.B]'
     - ik
+  right_context: a
+- name: pro_replace_cons_stem
+  description: Morpheme replacement for [Pro] conditioned on [PrefixClass=cons_stem]
+  string_map:
   - - '[PrefixClass=cons_stem][Pro=1sg.A]'
     - tsi
   - - '[PrefixClass=cons_stem][Pro=1sg.B]'
@@ -93,6 +97,10 @@ rules:
     - iti
   - - '[PrefixClass=cons_stem][Pro=Ipl.B]'
     - iki
+  right_context: <Stops>|<Frc>|y|w|(lh)|(yh)
+- name: pro_replace_e_stem
+  description: Morpheme replacement for [Pro] conditioned on [PrefixClass=e_stem]
+  string_map:
   - - '[PrefixClass=e_stem][Pro=1sg.A]'
     - k
   - - '[PrefixClass=e_stem][Pro=1sg.B]'
@@ -137,6 +145,10 @@ rules:
     - it
   - - '[PrefixClass=e_stem][Pro=Ipl.B]'
     - ik
+  right_context: e
+- name: pro_replace_k_a_stem
+  description: Morpheme replacement for [Pro] conditioned on [PrefixClass=k_a_stem]
+  string_map:
   - - '[PrefixClass=k_a_stem][Pro=1sg.A]'
     - k
   - - '[PrefixClass=k_a_stem][Pro=1sg.B]'
@@ -181,6 +193,10 @@ rules:
     - it
   - - '[PrefixClass=k_a_stem][Pro=Ipl.B]'
     - ik
+  right_context: a
+- name: pro_replace_long_stem
+  description: Morpheme replacement for [Pro] conditioned on [PrefixClass=long_stem]
+  string_map:
   - - '[PrefixClass=long_stem][Pro=1sg.A]'
     - tsi
   - - '[PrefixClass=long_stem][Pro=1sg.B]'
@@ -225,6 +241,10 @@ rules:
     - iti
   - - '[PrefixClass=long_stem][Pro=Ipl.B]'
     - iki
+  right_context: <C>
+- name: pro_replace_r_stem
+  description: Morpheme replacement for [Pro] conditioned on [PrefixClass=r_stem]
+  string_map:
   - - '[PrefixClass=r_stem][Pro=1sg.A]'
     - tsi
   - - '[PrefixClass=r_stem][Pro=1sg.B]'
@@ -269,6 +289,10 @@ rules:
     - iti
   - - '[PrefixClass=r_stem][Pro=Ipl.B]'
     - iki
+  right_context: '''?(<Son>|<N>)'
+- name: pro_replace_v_stem
+  description: Morpheme replacement for [Pro] conditioned on [PrefixClass=v_stem]
+  string_map:
   - - '[PrefixClass=v_stem][Pro=1sg.A]'
     - k
   - - '[PrefixClass=v_stem][Pro=1sg.B]'
@@ -313,6 +337,10 @@ rules:
     - it
   - - '[PrefixClass=v_stem][Pro=Ipl.B]'
     - ik
+  right_context: v
+- name: pro_replace_vowel_stem
+  description: Morpheme replacement for [Pro] conditioned on [PrefixClass=vowel_stem]
+  string_map:
   - - '[PrefixClass=vowel_stem][Pro=1sg.A]'
     - k
   - - '[PrefixClass=vowel_stem][Pro=1sg.B]'
@@ -357,3 +385,15 @@ rules:
     - it
   - - '[PrefixClass=vowel_stem][Pro=Ipl.B]'
     - ik
+  right_context: e|o|u|v
+- name: pro_replace
+  description: Morpheme replacement rule for [Pro]
+  rule_sequence:
+  - $pro_replace_a_stem
+  - $pro_replace_cons_stem
+  - $pro_replace_e_stem
+  - $pro_replace_k_a_stem
+  - $pro_replace_long_stem
+  - $pro_replace_r_stem
+  - $pro_replace_v_stem
+  - $pro_replace_vowel_stem

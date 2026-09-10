@@ -55,14 +55,28 @@ def test_inplace_2_tag_rules_generation_ac1():
         with open(pro_file, "r", encoding="utf-8") as f:
             pro_rules = yaml.safe_load(f)
         assert validate_yaml_content(pro_rules) is True
-        assert len(pro_rules["rules"]) == 1
-        rule = pro_rules["rules"][0]
-        assert rule["name"] == "pro_replace"
-        pro_map = dict(rule["string_map"])
-        # Check specific known mappings
-        assert pro_map["[PrefixClass=a_stem][Pro=1sg.A]"] == "k"
-        assert pro_map["[PrefixClass=cons_stem][Pro=1sg.A]"] == "tsi"
-        assert pro_map["[PrefixClass=e_stem][Pro=3sg.A]"] == ""
+        # pro_rules has subrules per class + 1 sequence rule
+        assert len(pro_rules["rules"]) > 1
+        top_rule = pro_rules["rules"][-1]
+        assert top_rule["name"] == "pro_replace"
+        assert "rule_sequence" in top_rule
+
+        # Check subrules have right_context and correct string mappings
+        sub_rules_by_name = {r["name"]: r for r in pro_rules["rules"][:-1]}
+        assert "pro_replace_a_stem" in sub_rules_by_name
+        a_stem_rule = sub_rules_by_name["pro_replace_a_stem"]
+        assert a_stem_rule["right_context"] == "a"
+        a_stem_map = dict(a_stem_rule["string_map"])
+        assert a_stem_map["[PrefixClass=a_stem][Pro=1sg.A]"] == "k"
+
+        cons_stem_rule = sub_rules_by_name["pro_replace_cons_stem"]
+        cons_stem_map = dict(cons_stem_rule["string_map"])
+        assert cons_stem_map["[PrefixClass=cons_stem][Pro=1sg.A]"] == "tsi"
+
+        e_stem_rule = sub_rules_by_name["pro_replace_e_stem"]
+        assert e_stem_rule["right_context"] == "e"
+        e_stem_map = dict(e_stem_rule["string_map"])
+        assert e_stem_map["[PrefixClass=e_stem][Pro=3sg.A]"] == ""
 
         # 2. Check aspect_replace.yaml
         aspect_file = rules_dir / "aspect_replace.yaml"
@@ -118,8 +132,9 @@ def test_inplace_paradigm_generation_ac2():
             "tense",
             "h_alternation",
             "tag_h_metathesis",
-            "drop_stem_initial_vowel",
+            "mark_stem_initial_vowel",
             "pronominal",
+            "drop_stem_initial_vowel",
             "h_metathesis",
             "insert_dist",
             "insert_wi",
