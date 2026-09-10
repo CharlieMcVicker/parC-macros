@@ -395,22 +395,6 @@ def _derive_category(
                     )
                 )
 
-        # If any hypotheses underwent actual H-mutation on a trigger form, reject unmutated fallbacks for the same root
-        mutated_h_roots = {
-            h.h_root
-            for h in surviving
-            if h.h_alt_tag and h.h_alt_tag != "[H_alt=none]"
-        }
-        if mutated_h_roots:
-            surviving = {
-                h
-                for h in surviving
-                if not (
-                    h.h_root in mutated_h_roots
-                    and (not h.h_alt_tag or h.h_alt_tag == "[H_alt=none]")
-                )
-            }
-
         candidate_hypotheses = surviving
 
     return candidate_hypotheses

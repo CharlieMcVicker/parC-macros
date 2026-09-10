@@ -750,6 +750,9 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 884,914,he/she is getting some liquid,kaneki'a,tsineki'a,kanekihsko'i,unekihsv'i,hineki,unekihsti,Eventful,ne,[H_alt=none],rev-gi,r_stem,a_present,True,False,True,1,1,1,1,1
 884,914,he/she is getting some liquid,kaneki'a,tsineki'a,kanekihsko'i,unekihsv'i,hineki,unekihsti,Eventful,nek,[H_alt=none],rev-i,r_stem,a_present,True,False,False,1,1,1,1,1
 884,914,he/she is getting some liquid,kaneki'a,tsineki'a,kanekihsko'i,unekihsv'i,hineki,unekihsti,Eventful,nek,[H_alt=none],rev-i,r_stem,a_present,True,False,True,1,1,1,1,1
+885,915,he/she is taking liquid from him/her,kaneki'eha,tsineki'eha,kaneki'eho'i,uneki'elv'i,hinekihsi,uneki'ehti,Eventful,neki',[H_alt=none],apl,r_stem,a_present,True,False,False,1,1,1,1,1
+885,915,he/she is taking liquid from him/her,kaneki'eha,tsineki'eha,kaneki'eho'i,uneki'elv'i,hinekihsi,uneki'ehti,Eventful,neki',[H_alt=none],apl,r_stem,a_present,True,False,True,1,1,1,1,1
+885,915,he/she is taking liquid from him/her,kaneki'eha,tsineki'eha,kaneki'eho'i,uneki'elv'i,hinekihsi,uneki'ehti,Eventful,neki',[H_alt=vowel_i],apl,r_stem,a_present,True,False,True,1,1,1,2,1
 886,916,he/she is bewitching him/her,kanekuti'a,tsinekuti'a,kanekutihsko'i,unekutv'i,hinekuta,unekutihsti,Eventful,neku[NFS=AT_LONG],[H_alt=none],i-a-i,r_stem,a_present,True,False,False,1,1,1,1,1
 886,916,he/she is bewitching him/her,kanekuti'a,tsinekuti'a,kanekutihsko'i,unekutv'i,hinekuta,unekutihsti,Eventful,neku[NFS=AT_LONG],[H_alt=none],i-a-i,r_stem,a_present,True,False,True,1,1,1,1,1
 886,916,he/she is bewitching him/her,kanekuti'a,tsinekuti'a,kanekutihsko'i,unekutv'i,hinekuta,unekutihsti,Eventful,nekut,[H_alt=none],i-a-i,r_stem,a_present,True,False,False,1,1,1,1,1
@@ -867,6 +870,9 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 949,979,he/she is tossing about,kanvtsitoha,tsinvtsitoha,kanvtsitoho'i,unvtsitolv'i,hinvtsita,unvtsitahsti,Eventful,nvts[NFS=AMB],[H_alt=none],be-at,r_stem,a_present,True,False,True,1,1,1,1,1
 949,979,he/she is tossing about,kanvtsitoha,tsinvtsitoha,kanvtsitoho'i,unvtsitolv'i,hinvtsita,unvtsitahsti,Eventful,nvtsit,[H_alt=none],be-at,r_stem,a_present,True,False,False,1,1,1,1,1
 949,979,he/she is tossing about,kanvtsitoha,tsinvtsitoha,kanvtsitoho'i,unvtsitolv'i,hinvtsita,unvtsitahsti,Eventful,nvtsit,[H_alt=none],be-at,r_stem,a_present,True,False,True,1,1,1,1,1
+950,980,he/she is giving him/her an object (refers to a flexible object),kanvneha,tsinvneha,kanvneho'i,unvnelv'i,hinvhsi,unvnehti,Eventful,nvn,[H_alt=none],apl,r_stem,a_present,True,False,False,1,1,1,1,1
+950,980,he/she is giving him/her an object (refers to a flexible object),kanvneha,tsinvneha,kanvneho'i,unvnelv'i,hinvhsi,unvnehti,Eventful,nvn,[H_alt=none],apl,r_stem,a_present,True,False,True,1,1,1,1,1
+950,980,he/she is giving him/her an object (refers to a flexible object),kanvneha,tsinvneha,kanvneho'i,unvnelv'i,hinvhsi,unvnehti,Eventful,nvn,[H_alt=vowel_v],apl,r_stem,a_present,True,False,True,1,1,1,2,1
 955,985,he/she is pushing him/her,kahsatohska,tsiyahsatohska,kahsatohsko'i,uwahsatoyhv'i,hiyahsatoyha,uwahsatohsti,Eventful,hsato,[H_alt=none],sk-h-yh,long_stem,a_present,True,False,True,1,1,1,1,1
 956,986,he/she is rolling him/her,kahsakwalehiha,tsiyahsakwalehiha,kahsakwalehiho'i,uwahsakwalelhv'i,hiyahsakwaleka,uwahsakwalehsti,Eventful,hsakwale,[H_alt=none],hih-lh,long_stem,a_present,True,False,True,1,1,1,1,1
 960,990,he/she is attaching the object behind it (refers to a flexible object),kahsanenatvhska,tsihsanenatvhska,kahsanenatvhsko'i,uwahsanenatvnv'i,hihsanenatvka,uwahsanenatvti,Eventful,hsanenat,[H_alt=none],vsk,long_stem,a_present,True,False,False,1,1,1,1,1
@@ -1019,8 +1025,8 @@ corpus_id,entry_no,definition,present,present_1sg,imperfective,perfective,impera
 1507,1573,he/she wants it,utuliha,akwatuliha,utulihsko'i,utulvhv'i,tsatula,utulhti,Eventful,atul,[H_alt=none],ih-vh,a_stem,a_present,False,False,False,1,1,1,1,1
 1508,1574,he/she is willing,utvnv'ihsti,akwatvnv'ihsti,utvnv'ihsto'i,utvnv'ihstv'i,tsatvnv'ihstehsti,,StativeFutProg,atvnv'ihst,[H_alt=none],stative,a_stem,i_present,False,False,False,1,1,1,1,1
 1514,1580,he/she is becoming warm,ukanawohska,akikanawohska,ukanawohsko'i,ukanawohsv'i,tsakanawohi,ukanawohihsti,Eventful,kanawo,[H_alt=none],sk-s-hi-hihst,cons_stem,a_present,False,False,False,1,1,1,1,1
-1516,1582,he/she is possessive of him/her,ukeyuha,tsikeyu'a,ukeyuhso'i,ukeyuhsv'i,hikeyuhsehsti,ukeyhti,StativeNoImp,keyu,[H_alt=glot],stative-s,cons_stem,a_present,False,False,True,1,1,1,1,1
-1516,1582,he/she is possessive of him/her,ukeyuha,tsikeyu'a,ukeyuhso'i,ukeyuhsv'i,hikeyuhsehsti,ukeyhti,StativeNoImp,keyu,[H_alt=glot],stative-s,cons_stem,a_present,False,False,True,1,1,1,1,1
+1516,1582,he/she is possessive of him/her,ukeyuha,tsikeyu'a,ukeyuhso'i,ukeyuhsv'i,hikeyuhsehsti,ukeyhti,StativeFutProg,keyu,[H_alt=glot],stative-s,cons_stem,a_present,False,False,True,1,1,1,1,1
+1516,1582,he/she is possessive of him/her,ukeyuha,tsikeyu'a,ukeyuhso'i,ukeyuhsv'i,hikeyuhsehsti,ukeyhti,StativeFutProg,keyu,[H_alt=glot],stative-s,cons_stem,a_present,False,False,True,1,1,1,1,1
 1523,1589,he/she is late,ukonhiyoka,akikonhiyoka,ukonhiyoko'i,ukonhiyotsv'i,tsakonhiyoki,ukonhiyohsti,Eventful,konhiy[NFS=BECOME-O],[H_alt=none],become,cons_stem,a_present,False,False,False,1,1,1,1,1
 1523,1589,he/she is late,ukonhiyoka,akikonhiyoka,ukonhiyoko'i,ukonhiyotsv'i,tsakonhiyoki,ukonhiyohsti,Eventful,konhiyo,[H_alt=none],become,cons_stem,a_present,False,False,False,1,1,1,1,1
 1524,1590,it’s decaying,ukohska,akikohska,ukohsko'i,ukohsv'i,tsakohi,ukohihsti,Eventful,ko,[H_alt=none],sk-s-hi-hihst,cons_stem,a_present,False,False,False,1,1,1,1,1

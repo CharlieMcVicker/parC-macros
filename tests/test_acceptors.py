@@ -84,7 +84,7 @@ def test_prefix_class_csv_audit_ac1():
         "k_a_stem": {"a"},
         "vowel_stem": {"e", "o", "u", "v"},
         "cons_stem": {"t", "k", "'", "h", "s", "lh", "y", "yh", "w"},
-        "r_stem": {"m", "n", "l", "y", "w"},
+        "r_stem": {"m", "n", "l", "y", "w", "'m", "'n", "'l", "'y", "'w"},
         "long_stem": {"t", "k", "'", "m", "n", "h", "s", "l", "y", "w"},
     }
 

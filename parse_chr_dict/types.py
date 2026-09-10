@@ -559,6 +559,7 @@ class VerbMetadata:
 
     def get_pronominal_candidates(self, person: str, allow_set_a: bool) -> list[str]:
         pronoun_set = "A" if self.is_set_a and allow_set_a else "B"
+
         if self.animate_objects and person in ("1st", "2nd"):
             tags = filter_pronominals(person=person, pronoun_set="transitive")
             candidates = list(tags) if tags else [f"{person[0]}sg>3sg"]
@@ -788,6 +789,20 @@ class LexicalVerb:
                     open_root=True,
                     infer_lexical_features=True,
                 )
+                # Sometimes, a form features a non-alternating sequence (eg. hs)
+                # that was not present in another form. To handle this, we allow
+                # a fallback to the non-alternating form if the h_alt_tag is not
+                # "[H_alt=none]"
+                if not surfs and h_alt != "[H_alt=none]":
+                    feat_dict_unmutated = dict(feat_dict)
+                    feat_dict_unmutated["h_alt_tag"] = "[H_alt=none]"
+                    surfs = memoized_inflect(
+                        self.h_root,
+                        feature_values=feat_dict_unmutated,
+                        name="verb",
+                        open_root=True,
+                        infer_lexical_features=True,
+                    )
                 results.update(surfs)
         return sorted(list(results))
 
