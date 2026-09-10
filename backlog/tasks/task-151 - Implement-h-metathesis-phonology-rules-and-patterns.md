@@ -1,14 +1,14 @@
 ---
 id: TASK-151
 title: Implement h-metathesis phonology rules and patterns
-status: In Progress
+status: Done
 assignee:
   - '@agent'
 created_date: '2026-09-08 19:02'
-updated_date: '2026-09-08 19:59'
+updated_date: '2026-09-10 16:42'
 labels: []
 dependencies: []
-ordinal: 161000
+ordinal: 176000
 ---
 
 ## Description
