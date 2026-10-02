@@ -67,16 +67,16 @@ def test_inplace_2_tag_rules_generation_ac1():
         a_stem_rule = sub_rules_by_name["pro_replace_a_stem"]
         assert a_stem_rule["right_context"] == "a"
         a_stem_map = dict(a_stem_rule["string_map"])
-        assert a_stem_map["[PrefixClass=a_stem][Pro=1sg.A]"] == "k"
+        assert a_stem_map["[PrefixClass=a_stem][Pro=1sg.A]"] == "[Pro=1sg.A]k-"
 
         cons_stem_rule = sub_rules_by_name["pro_replace_cons_stem"]
         cons_stem_map = dict(cons_stem_rule["string_map"])
-        assert cons_stem_map["[PrefixClass=cons_stem][Pro=1sg.A]"] == "tsi"
+        assert cons_stem_map["[PrefixClass=cons_stem][Pro=1sg.A]"] == "[Pro=1sg.A]tsi-"
 
         e_stem_rule = sub_rules_by_name["pro_replace_e_stem"]
         assert e_stem_rule["right_context"] == "e"
         e_stem_map = dict(e_stem_rule["string_map"])
-        assert e_stem_map["[PrefixClass=e_stem][Pro=3sg.A]"] == ""
+        assert e_stem_map["[PrefixClass=e_stem][Pro=3sg.A]"] == "[Pro=3sg.A]-"
 
         # 2. Check aspect_replace.yaml
         aspect_file = rules_dir / "aspect_replace.yaml"
@@ -85,9 +85,9 @@ def test_inplace_2_tag_rules_generation_ac1():
             aspect_rules = yaml.safe_load(f)
         assert validate_yaml_content(aspect_rules) is True
         aspect_map = dict(aspect_rules["rules"][0]["string_map"])
-        assert aspect_map["[AspectClass=become][Aspect=completive]"] == "ts"
-        assert aspect_map["[AspectClass=a][Aspect=present]"] == "a'"
-        assert aspect_map["[AspectClass=a][Aspect=completive]"] == ""
+        assert aspect_map["[AspectClass=become][Aspect=completive]"] == "-[Aspect=completive]ts"
+        assert aspect_map["[AspectClass=a][Aspect=present]"] == "-[Aspect=present]a'"
+        assert aspect_map["[AspectClass=a][Aspect=completive]"] == "-[Aspect=completive]"
 
         # 3. Check tense_replace.yaml
         tense_file = rules_dir / "tense_replace.yaml"
@@ -96,9 +96,9 @@ def test_inplace_2_tag_rules_generation_ac1():
             tense_rules = yaml.safe_load(f)
         assert validate_yaml_content(tense_rules) is True
         tense_map = dict(tense_rules["rules"][0]["string_map"])
-        assert tense_map["[Tense=present_a]"] == "a"
-        assert tense_map["[Tense=immediate]"] == ""
-        assert tense_map["[Tense=present_i]"] == "i"
+        assert tense_map["[Tense=present_a]"] == "-[Tense=present_a]a"
+        assert tense_map["[Tense=immediate]"] == "-[Tense=immediate]"
+        assert tense_map["[Tense=present_i]"] == "-[Tense=present_i]i"
 
 
 def test_inplace_paradigm_generation_ac2():
@@ -236,22 +236,22 @@ def test_inplace_aspect_variants_generation_task_111_2():
         aspect_map = dict(aspect_data["rules"][0]["string_map"])
 
         # 1. Non-varying cell: 'become' present is 'k'
-        assert aspect_map["[AspectClass=become][Aspect=present]"] == "k"
+        assert aspect_map["[AspectClass=become][Aspect=present]"] == "-[Aspect=present]k"
         assert "[AspectClass=become][Variant=2][Aspect=present]" not in aspect_map
 
         # 2. Varying cell with multiple variants: 'become' infinitive is 'st;'ist;yhst;ist'
-        assert aspect_map["[AspectClass=become][Aspect=infinitive]"] == "hst"
-        assert aspect_map["[AspectClass=become][Variant=2][Aspect=infinitive]"] == "'ihst"
-        assert aspect_map["[AspectClass=become][Variant=3][Aspect=infinitive]"] == "yhst"
-        assert aspect_map["[AspectClass=become][Variant=4][Aspect=infinitive]"] == "ihst"
+        assert aspect_map["[AspectClass=become][Aspect=infinitive]"] == "-[Aspect=infinitive]hst"
+        assert aspect_map["[AspectClass=become][Variant=2][Aspect=infinitive]"] == "-[Aspect=infinitive]'ihst"
+        assert aspect_map["[AspectClass=become][Variant=3][Aspect=infinitive]"] == "-[Aspect=infinitive]yhst"
+        assert aspect_map["[AspectClass=become][Variant=4][Aspect=infinitive]"] == "-[Aspect=infinitive]ihst"
 
         # 3. Row with leading empty variant: 'sk-s-hst' immediate is ';hi'
-        assert aspect_map["[AspectClass=sk-s-hst][Aspect=immediate]"] == ""
-        assert aspect_map["[AspectClass=sk-s-hst][Variant=2][Aspect=immediate]"] == "hi"
+        assert aspect_map["[AspectClass=sk-s-hst][Aspect=immediate]"] == "-[Aspect=immediate]"
+        assert aspect_map["[AspectClass=sk-s-hst][Variant=2][Aspect=immediate]"] == "-[Aspect=immediate]hi"
 
         # 4. Row with trailing empty variant: 'go' present is 'ek;'
-        assert aspect_map["[AspectClass=go][Aspect=present]"] == "ek"
-        assert aspect_map["[AspectClass=go][Variant=2][Aspect=present]"] == ""
+        assert aspect_map["[AspectClass=go][Aspect=present]"] == "-[Aspect=present]ek"
+        assert aspect_map["[AspectClass=go][Variant=2][Aspect=present]"] == "-[Aspect=present]"
 
         # 5. Verify non-varying classes (prefix_class, tense_present_class) emit clean 2-tag rules without [Variant=N]
         pro_file = rules_dir / "pro_replace.yaml"

@@ -59,6 +59,27 @@ def get_class_tag_title(class_feature: str, metadata: dict | None = None) -> str
     return "".join(part.capitalize() for part in class_feature.split("_"))
 
 
+def format_morpheme_replacement(
+    feature_tag_title: str,
+    feat_name: str,
+    surface_val: str,
+    role: str = "",
+) -> str:
+    """
+    Formats the replacement string by retaining the primary feature tag and adding
+    boundary hyphens based on the slot's role (prefix, suffix, etc.).
+    - prefix: [Tag=Val]surface-
+    - suffix: -[Tag=Val]surface
+    - other:  [Tag=Val]surface
+    """
+    tag = f"[{feature_tag_title}={feat_name}]"
+    if role == "prefix":
+        return f"{tag}{surface_val}-"
+    elif role == "suffix":
+        return f"-{tag}{surface_val}"
+    return f"{tag}{surface_val}"
+
+
 def _load_class_acceptors(config_dir: Path, class_feature_name: str) -> dict[str, str]:
     """Loads class -> right_context pattern mappings from feature_acceptors directory if available."""
     snake_name = re.sub(r"(?<!^)(?=[A-Z])", "_", class_feature_name).lower()
@@ -124,6 +145,7 @@ def _generate_rules(csv_files: list[str], rules_out_dir: str) -> None:
         feature_tag_title = morpheme_tag.replace("[", "").replace("]", "").strip()
         class_feature = metadata.get("class_feature")
         rule_name = metadata.get("rule", f"{tag_slug}_replace").lstrip("$")
+        slot_role = metadata.get("role", "")
 
         reader = csv.DictReader(io.StringIO("".join(data_lines)))
         if not reader.fieldnames:
@@ -162,17 +184,23 @@ def _generate_rules(csv_files: list[str], rules_out_dir: str) -> None:
                         variants = val.split(";")
                         for idx, v in enumerate(variants, start=1):
                             clean_v = v.strip()
+                            formatted_v = format_morpheme_replacement(
+                                feature_tag_title, feat_name, clean_v, slot_role
+                            )
                             if idx == 1:
                                 pattern = f"[{class_tag_title}={class_name}][{feature_tag_title}={feat_name}]"
                             else:
                                 pattern = f"[{class_tag_title}={class_name}][Variant={idx}][{feature_tag_title}={feat_name}]"
-                            tag_mappings[tag_slug]["mappings"][pattern] = clean_v
-                            tag_mappings[tag_slug]["class_mappings"][class_name][pattern] = clean_v
+                            tag_mappings[tag_slug]["mappings"][pattern] = formatted_v
+                            tag_mappings[tag_slug]["class_mappings"][class_name][pattern] = formatted_v
                     else:
                         clean_v = val.strip()
+                        formatted_v = format_morpheme_replacement(
+                            feature_tag_title, feat_name, clean_v, slot_role
+                        )
                         pattern = f"[{class_tag_title}={class_name}][{feature_tag_title}={feat_name}]"
-                        tag_mappings[tag_slug]["mappings"][pattern] = clean_v
-                        tag_mappings[tag_slug]["class_mappings"][class_name][pattern] = clean_v
+                        tag_mappings[tag_slug]["mappings"][pattern] = formatted_v
+                        tag_mappings[tag_slug]["class_mappings"][class_name][pattern] = formatted_v
         else:
             feature_cols = reader.fieldnames
             for row in reader:
@@ -180,8 +208,11 @@ def _generate_rules(csv_files: list[str], rules_out_dir: str) -> None:
                     feat_name = col.strip()
                     val = row.get(col, "").strip()
                     clean_v = val.strip()
+                    formatted_v = format_morpheme_replacement(
+                        feature_tag_title, feat_name, clean_v, slot_role
+                    )
                     pattern = f"[{feature_tag_title}={feat_name}]"
-                    tag_mappings[tag_slug]["mappings"][pattern] = clean_v
+                    tag_mappings[tag_slug]["mappings"][pattern] = formatted_v
 
     for tag_slug, info in tag_mappings.items():
         rule_name = info["rule_name"]
@@ -253,6 +284,7 @@ def _generate_rules_from_slots(
 ) -> None:
     for slot in slots:
         slot_name = slot.get("name", "")
+        role = slot.get("role", "")
         rule_raw = slot.get("rule", f"${slot_name}_replace")
         rule_name = rule_raw.lstrip("$")
         sources = slot.get("sources", [])
@@ -286,17 +318,20 @@ def _generate_rules_from_slots(
                 continue
 
             if len(structure) == 1:
-                # 1 TagGroup (e.g. Tense): [Tense={val}] -> surface
+                # 1 TagGroup (e.g. Tense): [Tense={val}] -> formatted
                 tag_group = structure[0]["TagGroup"]
                 for row in reader:
                     for col in reader.fieldnames:
                         feat_name = col.strip()
                         val = row.get(col, "").strip()
+                        formatted_v = format_morpheme_replacement(
+                            tag_group, feat_name, val, role
+                        )
                         pattern = f"[{tag_group}={feat_name}]"
-                        mappings[pattern] = val
+                        mappings[pattern] = formatted_v
 
             elif len(structure) == 2:
-                # 2 TagGroups (e.g. PrefixClass, Pro): [PrefixClass={row}][Pro={col}] -> surface
+                # 2 TagGroups (e.g. PrefixClass, Pro): [PrefixClass={row}][Pro={col}] -> formatted
                 class_tag = structure[0]["TagGroup"]
                 feat_tag = structure[1]["TagGroup"]
                 class_tag_title = class_tag
@@ -313,14 +348,17 @@ def _generate_rules_from_slots(
                     for col in feature_cols:
                         feat_name = col.strip()
                         val = row.get(col, "").strip()
+                        formatted_v = format_morpheme_replacement(
+                            feat_tag, feat_name, val, role
+                        )
                         pattern = f"[{class_tag}={class_name}][{feat_tag}={feat_name}]"
-                        mappings[pattern] = val
-                        class_mappings[class_name][pattern] = val
+                        mappings[pattern] = formatted_v
+                        class_mappings[class_name][pattern] = formatted_v
 
             elif len(structure) == 3:
                 # 3 TagGroups (e.g. AspectClass, Variant, Aspect):
-                # Variant 1 (optional omitted): [AspectClass={row}][Aspect={col}] -> surface
-                # Variant N (optional present): [AspectClass={row}][Variant={N}][Aspect={col}] -> surface
+                # Variant 1 (optional omitted): [AspectClass={row}][Aspect={col}] -> formatted
+                # Variant N (optional present): [AspectClass={row}][Variant={N}][Aspect={col}] -> formatted
                 class_tag = structure[0]["TagGroup"]
                 opt_tag = structure[1]["TagGroup"]
                 feat_tag = structure[2]["TagGroup"]
@@ -331,6 +369,8 @@ def _generate_rules_from_slots(
                     class_name = row.get(id_col, "").strip()
                     if not class_name:
                         continue
+                    if class_name not in class_mappings:
+                        class_mappings[class_name] = {}
                     for col in feature_cols:
                         feat_name = col.strip()
                         val = row.get(col, "").strip()
@@ -338,15 +378,23 @@ def _generate_rules_from_slots(
                             variants = val.split(";")
                             for idx, v in enumerate(variants, start=1):
                                 clean_v = v.strip()
+                                formatted_v = format_morpheme_replacement(
+                                    feat_tag, feat_name, clean_v, role
+                                )
                                 if idx == 1:
                                     pattern = f"[{class_tag}={class_name}][{feat_tag}={feat_name}]"
                                 else:
                                     pattern = f"[{class_tag}={class_name}][{opt_tag}={idx}][{feat_tag}={feat_name}]"
-                                mappings[pattern] = clean_v
+                                mappings[pattern] = formatted_v
+                                class_mappings[class_name][pattern] = formatted_v
                         else:
                             clean_v = val.strip()
+                            formatted_v = format_morpheme_replacement(
+                                feat_tag, feat_name, clean_v, role
+                            )
                             pattern = f"[{class_tag}={class_name}][{feat_tag}={feat_name}]"
-                            mappings[pattern] = clean_v
+                            mappings[pattern] = formatted_v
+                            class_mappings[class_name][pattern] = formatted_v
 
         rules_filename = f"{rule_name}.yaml"
         out_path = os.path.join(rules_out_dir, rules_filename)

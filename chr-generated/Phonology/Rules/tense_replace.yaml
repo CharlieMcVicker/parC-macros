@@ -6,18 +6,18 @@ rules:
   description: Morpheme replacement rule for [Tense]
   string_map:
   - - '[Tense=assertive]'
-    - v'i
+    - -[Tense=assertive]v'i
   - - '[Tense=future_prog]'
-    - ehsti
+    - -[Tense=future_prog]ehsti
   - - '[Tense=habitual]'
-    - o'i
+    - -[Tense=habitual]o'i
   - - '[Tense=immediate]'
-    - ''
+    - -[Tense=immediate]
   - - '[Tense=infinitive]'
-    - i
+    - -[Tense=infinitive]i
   - - '[Tense=present_a]'
-    - a
+    - -[Tense=present_a]a
   - - '[Tense=present_i]'
-    - i
+    - -[Tense=present_i]i
   - - '[Tense=reported]'
-    - e'i
+    - -[Tense=reported]e'i
