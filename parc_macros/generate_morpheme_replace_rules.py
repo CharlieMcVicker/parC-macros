@@ -1,3 +1,4 @@
+from __future__ import annotations
 import sys
 from pathlib import Path
 _root = str(Path(__file__).parent.parent.resolve())
@@ -64,14 +65,18 @@ def format_morpheme_replacement(
     feat_name: str,
     surface_val: str,
     role: str = "",
+    segmented: bool = False,
 ) -> str:
     """
-    Formats the replacement string by retaining the primary feature tag and adding
-    boundary hyphens based on the slot's role (prefix, suffix, etc.).
-    - prefix: [Tag=Val]surface-
-    - suffix: -[Tag=Val]surface
-    - other:  [Tag=Val]surface
+    Formats the replacement string.
+    If segmented: retains the primary feature tag and adds boundary hyphens based on role:
+      - prefix: [Tag=Val]surface-
+      - suffix: -[Tag=Val]surface
+      - other:  [Tag=Val]surface
+    If clean surface (not segmented): returns surface_val directly.
     """
+    if not segmented:
+        return surface_val
     tag = f"[{feature_tag_title}={feat_name}]"
     if role == "prefix":
         return f"{tag}{surface_val}-"
@@ -115,6 +120,82 @@ def _load_class_acceptors(config_dir: Path, class_feature_name: str) -> dict[str
     return {}
 
 
+def _write_replace_rule_file(
+    out_path: str,
+    rule_name: str,
+    feature_tag_title: str,
+    class_tag_title: str | None,
+    class_acceptors: dict[str, str],
+    class_mappings: dict[str, dict[str, str]],
+    mappings: dict[str, str],
+    is_segmented: bool = False,
+) -> None:
+    if class_acceptors and class_mappings:
+        sub_rules = []
+        for class_name in sorted(class_mappings.keys()):
+            c_maps = class_mappings[class_name]
+            sub_rule_name = f"{rule_name}_{sanitize_rule_name(class_name)}"
+            string_map = [
+                [inp, val] for inp, val in sorted(c_maps.items(), key=lambda x: x[0])
+            ]
+            desc = f"Morpheme replacement for [{feature_tag_title}] conditioned on [{class_tag_title}={class_name}]"
+            if is_segmented:
+                desc += " (segmented)"
+            sub_rule_doc = {
+                "name": sub_rule_name,
+                "description": desc,
+                "string_map": string_map,
+            }
+            if class_name in class_acceptors:
+                sub_rule_doc["right_context"] = class_acceptors[class_name]
+            sub_rules.append(sub_rule_doc)
+
+        desc_top = f"Morpheme replacement rule for [{feature_tag_title}]"
+        if is_segmented:
+            desc_top += " (segmented)"
+        top_rule = {
+            "name": rule_name,
+            "description": desc_top,
+            "rule_sequence": [f"${sr['name']}" for sr in sub_rules],
+        }
+        doc = {
+            "kind": "Rules",
+            "rules": sub_rules + [top_rule],
+        }
+    else:
+        desc_top = f"Morpheme replacement rule for [{feature_tag_title}]"
+        if is_segmented:
+            desc_top += " (segmented)"
+        string_map = [
+            [inp, val] for inp, val in sorted(mappings.items(), key=lambda x: x[0])
+        ]
+        doc = {
+            "kind": "Rules",
+            "rules": [
+                {
+                    "name": rule_name,
+                    "description": desc_top,
+                    "string_map": string_map,
+                }
+            ],
+        }
+
+    with open(out_path, "w", encoding="utf-8") as fh:
+        fh.write("# This is a Rules config file\n")
+        fh.write(
+            "# Generated automatically by generate_morpheme_replace_rules.py\n"
+        )
+        yaml.dump(
+            doc,
+            fh,
+            Dumper=_ReplaceRulesDumper,
+            default_flow_style=False,
+            allow_unicode=True,
+            sort_keys=False,
+        )
+    print(f"Generated morpheme replace rules: {out_path}")
+
+
 def _generate_rules(csv_files: list[str], rules_out_dir: str) -> None:
     tag_mappings: dict[str, dict] = {}
 
@@ -155,11 +236,14 @@ def _generate_rules(csv_files: list[str], rules_out_dir: str) -> None:
             tag_mappings[tag_slug] = {
                 "morpheme_tag": morpheme_tag,
                 "rule_name": rule_name,
-                "mappings": {},
-                "class_mappings": {},
+                "clean_mappings": {},
+                "clean_class_mappings": {},
+                "seg_mappings": {},
+                "seg_class_mappings": {},
                 "class_feature": class_feature,
                 "class_tag_title": None,
                 "class_acceptors": {},
+                "feature_tag_title": feature_tag_title,
             }
 
         csv_dir = Path(csv_path).parent
@@ -174,8 +258,9 @@ def _generate_rules(csv_files: list[str], rules_out_dir: str) -> None:
                 class_name = row.get(id_col, "").strip()
                 if not class_name:
                     continue
-                if class_name not in tag_mappings[tag_slug]["class_mappings"]:
-                    tag_mappings[tag_slug]["class_mappings"][class_name] = {}
+                if class_name not in tag_mappings[tag_slug]["clean_class_mappings"]:
+                    tag_mappings[tag_slug]["clean_class_mappings"][class_name] = {}
+                    tag_mappings[tag_slug]["seg_class_mappings"][class_name] = {}
 
                 for col in feature_cols:
                     feat_name = col.strip()
@@ -183,100 +268,73 @@ def _generate_rules(csv_files: list[str], rules_out_dir: str) -> None:
                     if ";" in val:
                         variants = val.split(";")
                         for idx, v in enumerate(variants, start=1):
-                            clean_v = v.strip()
-                            formatted_v = format_morpheme_replacement(
-                                feature_tag_title, feat_name, clean_v, slot_role
+                            clean_v_val = v.strip()
+                            clean_v = format_morpheme_replacement(
+                                feature_tag_title, feat_name, clean_v_val, slot_role, segmented=False
+                            )
+                            seg_v = format_morpheme_replacement(
+                                feature_tag_title, feat_name, clean_v_val, slot_role, segmented=True
                             )
                             if idx == 1:
                                 pattern = f"[{class_tag_title}={class_name}][{feature_tag_title}={feat_name}]"
                             else:
                                 pattern = f"[{class_tag_title}={class_name}][Variant={idx}][{feature_tag_title}={feat_name}]"
-                            tag_mappings[tag_slug]["mappings"][pattern] = formatted_v
-                            tag_mappings[tag_slug]["class_mappings"][class_name][pattern] = formatted_v
+                            tag_mappings[tag_slug]["clean_mappings"][pattern] = clean_v
+                            tag_mappings[tag_slug]["clean_class_mappings"][class_name][pattern] = clean_v
+                            tag_mappings[tag_slug]["seg_mappings"][pattern] = seg_v
+                            tag_mappings[tag_slug]["seg_class_mappings"][class_name][pattern] = seg_v
                     else:
-                        clean_v = val.strip()
-                        formatted_v = format_morpheme_replacement(
-                            feature_tag_title, feat_name, clean_v, slot_role
+                        clean_v_val = val.strip()
+                        clean_v = format_morpheme_replacement(
+                            feature_tag_title, feat_name, clean_v_val, slot_role, segmented=False
+                        )
+                        seg_v = format_morpheme_replacement(
+                            feature_tag_title, feat_name, clean_v_val, slot_role, segmented=True
                         )
                         pattern = f"[{class_tag_title}={class_name}][{feature_tag_title}={feat_name}]"
-                        tag_mappings[tag_slug]["mappings"][pattern] = formatted_v
-                        tag_mappings[tag_slug]["class_mappings"][class_name][pattern] = formatted_v
+                        tag_mappings[tag_slug]["clean_mappings"][pattern] = clean_v
+                        tag_mappings[tag_slug]["clean_class_mappings"][class_name][pattern] = clean_v
+                        tag_mappings[tag_slug]["seg_mappings"][pattern] = seg_v
+                        tag_mappings[tag_slug]["seg_class_mappings"][class_name][pattern] = seg_v
         else:
             feature_cols = reader.fieldnames
             for row in reader:
                 for col in feature_cols:
                     feat_name = col.strip()
                     val = row.get(col, "").strip()
-                    clean_v = val.strip()
-                    formatted_v = format_morpheme_replacement(
-                        feature_tag_title, feat_name, clean_v, slot_role
+                    clean_v_val = val.strip()
+                    clean_v = format_morpheme_replacement(
+                        feature_tag_title, feat_name, clean_v_val, slot_role, segmented=False
+                    )
+                    seg_v = format_morpheme_replacement(
+                        feature_tag_title, feat_name, clean_v_val, slot_role, segmented=True
                     )
                     pattern = f"[{feature_tag_title}={feat_name}]"
-                    tag_mappings[tag_slug]["mappings"][pattern] = formatted_v
+                    tag_mappings[tag_slug]["clean_mappings"][pattern] = clean_v
+                    tag_mappings[tag_slug]["seg_mappings"][pattern] = seg_v
 
     for tag_slug, info in tag_mappings.items():
         rule_name = info["rule_name"]
-        rules_filename = f"{tag_slug}_replace.yaml"
-        out_path = os.path.join(rules_out_dir, rules_filename)
-
-        class_acceptors = info.get("class_acceptors", {})
-        class_mappings = info.get("class_mappings", {})
-
-        if class_acceptors and class_mappings:
-            sub_rules = []
-            for class_name in sorted(class_mappings.keys()):
-                c_maps = class_mappings[class_name]
-                sub_rule_name = f"{rule_name}_{sanitize_rule_name(class_name)}"
-                string_map = [
-                    [inp, val] for inp, val in sorted(c_maps.items(), key=lambda x: x[0])
-                ]
-                sub_rule_doc = {
-                    "name": sub_rule_name,
-                    "description": f"Morpheme replacement for {info['morpheme_tag']} conditioned on [{info['class_tag_title']}={class_name}]",
-                    "string_map": string_map,
-                }
-                if class_name in class_acceptors:
-                    sub_rule_doc["right_context"] = class_acceptors[class_name]
-                sub_rules.append(sub_rule_doc)
-
-            top_rule = {
-                "name": rule_name,
-                "description": f"Morpheme replacement rule for {info['morpheme_tag']}",
-                "rule_sequence": [f"${sr['name']}" for sr in sub_rules],
-            }
-            doc = {
-                "kind": "Rules",
-                "rules": sub_rules + [top_rule],
-            }
-        else:
-            string_map = [
-                [inp, val] for inp, val in sorted(info["mappings"].items(), key=lambda x: x[0])
-            ]
-            doc = {
-                "kind": "Rules",
-                "rules": [
-                    {
-                        "name": rule_name,
-                        "description": f"Morpheme replacement rule for {info['morpheme_tag']}",
-                        "string_map": string_map,
-                    }
-                ],
-            }
-
-        with open(out_path, "w", encoding="utf-8") as fh:
-            fh.write("# This is a Rules config file\n")
-            fh.write(
-                "# Generated automatically by generate_morpheme_replace_rules.py\n"
-            )
-            yaml.dump(
-                doc,
-                fh,
-                Dumper=_ReplaceRulesDumper,
-                default_flow_style=False,
-                allow_unicode=True,
-                sort_keys=False,
-            )
-        print(f"Generated morpheme replace rules: {out_path}")
+        _write_replace_rule_file(
+            os.path.join(rules_out_dir, f"{tag_slug}_replace.yaml"),
+            rule_name,
+            info["feature_tag_title"],
+            info["class_tag_title"],
+            info["class_acceptors"],
+            info["clean_class_mappings"],
+            info["clean_mappings"],
+            is_segmented=False,
+        )
+        _write_replace_rule_file(
+            os.path.join(rules_out_dir, f"{tag_slug}_replace_segmented.yaml"),
+            f"{rule_name}_segmented",
+            info["feature_tag_title"],
+            info["class_tag_title"],
+            info["class_acceptors"],
+            info["seg_class_mappings"],
+            info["seg_mappings"],
+            is_segmented=True,
+        )
 
 
 def _generate_rules_from_slots(
@@ -294,8 +352,10 @@ def _generate_rules_from_slots(
             continue
 
         feature_tag_title = structure[-1]["TagGroup"]
-        mappings: dict[str, str] = {}
-        class_mappings: dict[str, dict[str, str]] = {}
+        clean_mappings: dict[str, str] = {}
+        clean_class_mappings: dict[str, dict[str, str]] = {}
+        seg_mappings: dict[str, str] = {}
+        seg_class_mappings: dict[str, dict[str, str]] = {}
         class_acceptors: dict[str, str] = {}
         class_tag_title: str | None = None
 
@@ -324,11 +384,15 @@ def _generate_rules_from_slots(
                     for col in reader.fieldnames:
                         feat_name = col.strip()
                         val = row.get(col, "").strip()
-                        formatted_v = format_morpheme_replacement(
-                            tag_group, feat_name, val, role
+                        clean_v = format_morpheme_replacement(
+                            tag_group, feat_name, val, role, segmented=False
+                        )
+                        seg_v = format_morpheme_replacement(
+                            tag_group, feat_name, val, role, segmented=True
                         )
                         pattern = f"[{tag_group}={feat_name}]"
-                        mappings[pattern] = formatted_v
+                        clean_mappings[pattern] = clean_v
+                        seg_mappings[pattern] = seg_v
 
             elif len(structure) == 2:
                 # 2 TagGroups (e.g. PrefixClass, Pro): [PrefixClass={row}][Pro={col}] -> formatted
@@ -343,17 +407,23 @@ def _generate_rules_from_slots(
                     class_name = row.get(id_col, "").strip()
                     if not class_name:
                         continue
-                    if class_name not in class_mappings:
-                        class_mappings[class_name] = {}
+                    if class_name not in clean_class_mappings:
+                        clean_class_mappings[class_name] = {}
+                        seg_class_mappings[class_name] = {}
                     for col in feature_cols:
                         feat_name = col.strip()
                         val = row.get(col, "").strip()
-                        formatted_v = format_morpheme_replacement(
-                            feat_tag, feat_name, val, role
+                        clean_v = format_morpheme_replacement(
+                            feat_tag, feat_name, val, role, segmented=False
+                        )
+                        seg_v = format_morpheme_replacement(
+                            feat_tag, feat_name, val, role, segmented=True
                         )
                         pattern = f"[{class_tag}={class_name}][{feat_tag}={feat_name}]"
-                        mappings[pattern] = formatted_v
-                        class_mappings[class_name][pattern] = formatted_v
+                        clean_mappings[pattern] = clean_v
+                        clean_class_mappings[class_name][pattern] = clean_v
+                        seg_mappings[pattern] = seg_v
+                        seg_class_mappings[class_name][pattern] = seg_v
 
             elif len(structure) == 3:
                 # 3 TagGroups (e.g. AspectClass, Variant, Aspect):
@@ -362,6 +432,8 @@ def _generate_rules_from_slots(
                 class_tag = structure[0]["TagGroup"]
                 opt_tag = structure[1]["TagGroup"]
                 feat_tag = structure[2]["TagGroup"]
+                class_tag_title = class_tag
+                class_acceptors = _load_class_acceptors(config_dir, class_tag)
                 id_col = reader.fieldnames[0]
                 feature_cols = reader.fieldnames[1:]
 
@@ -369,91 +441,67 @@ def _generate_rules_from_slots(
                     class_name = row.get(id_col, "").strip()
                     if not class_name:
                         continue
-                    if class_name not in class_mappings:
-                        class_mappings[class_name] = {}
+                    if class_name not in clean_class_mappings:
+                        clean_class_mappings[class_name] = {}
+                        seg_class_mappings[class_name] = {}
                     for col in feature_cols:
                         feat_name = col.strip()
                         val = row.get(col, "").strip()
                         if ";" in val:
                             variants = val.split(";")
                             for idx, v in enumerate(variants, start=1):
-                                clean_v = v.strip()
-                                formatted_v = format_morpheme_replacement(
-                                    feat_tag, feat_name, clean_v, role
+                                clean_v_val = v.strip()
+                                clean_v = format_morpheme_replacement(
+                                    feat_tag, feat_name, clean_v_val, role, segmented=False
+                                )
+                                seg_v = format_morpheme_replacement(
+                                    feat_tag, feat_name, clean_v_val, role, segmented=True
                                 )
                                 if idx == 1:
                                     pattern = f"[{class_tag}={class_name}][{feat_tag}={feat_name}]"
                                 else:
                                     pattern = f"[{class_tag}={class_name}][{opt_tag}={idx}][{feat_tag}={feat_name}]"
-                                mappings[pattern] = formatted_v
-                                class_mappings[class_name][pattern] = formatted_v
+                                clean_mappings[pattern] = clean_v
+                                clean_class_mappings[class_name][pattern] = clean_v
+                                seg_mappings[pattern] = seg_v
+                                seg_class_mappings[class_name][pattern] = seg_v
                         else:
-                            clean_v = val.strip()
-                            formatted_v = format_morpheme_replacement(
-                                feat_tag, feat_name, clean_v, role
+                            clean_v_val = val.strip()
+                            clean_v = format_morpheme_replacement(
+                                feat_tag, feat_name, clean_v_val, role, segmented=False
+                            )
+                            seg_v = format_morpheme_replacement(
+                                feat_tag, feat_name, clean_v_val, role, segmented=True
                             )
                             pattern = f"[{class_tag}={class_name}][{feat_tag}={feat_name}]"
-                            mappings[pattern] = formatted_v
-                            class_mappings[class_name][pattern] = formatted_v
+                            clean_mappings[pattern] = clean_v
+                            clean_class_mappings[class_name][pattern] = clean_v
+                            seg_mappings[pattern] = seg_v
+                            seg_class_mappings[class_name][pattern] = seg_v
 
-        rules_filename = f"{rule_name}.yaml"
-        out_path = os.path.join(rules_out_dir, rules_filename)
+        clean_out_path = os.path.join(rules_out_dir, f"{rule_name}.yaml")
+        _write_replace_rule_file(
+            clean_out_path,
+            rule_name,
+            feature_tag_title,
+            class_tag_title,
+            class_acceptors,
+            clean_class_mappings,
+            clean_mappings,
+            is_segmented=False,
+        )
 
-        if class_acceptors and class_mappings:
-            sub_rules = []
-            for class_name in sorted(class_mappings.keys()):
-                c_maps = class_mappings[class_name]
-                sub_rule_name = f"{rule_name}_{sanitize_rule_name(class_name)}"
-                string_map = [
-                    [inp, val] for inp, val in sorted(c_maps.items(), key=lambda x: x[0])
-                ]
-                sub_rule_doc = {
-                    "name": sub_rule_name,
-                    "description": f"Morpheme replacement for [{feature_tag_title}] conditioned on [{class_tag_title}={class_name}]",
-                    "string_map": string_map,
-                }
-                if class_name in class_acceptors:
-                    sub_rule_doc["right_context"] = class_acceptors[class_name]
-                sub_rules.append(sub_rule_doc)
-
-            top_rule = {
-                "name": rule_name,
-                "description": f"Morpheme replacement rule for [{feature_tag_title}]",
-                "rule_sequence": [f"${sr['name']}" for sr in sub_rules],
-            }
-            doc = {
-                "kind": "Rules",
-                "rules": sub_rules + [top_rule],
-            }
-        else:
-            string_map = [
-                [inp, val] for inp, val in sorted(mappings.items(), key=lambda x: x[0])
-            ]
-            doc = {
-                "kind": "Rules",
-                "rules": [
-                    {
-                        "name": rule_name,
-                        "description": f"Morpheme replacement rule for [{feature_tag_title}]",
-                        "string_map": string_map,
-                    }
-                ],
-            }
-
-        with open(out_path, "w", encoding="utf-8") as fh:
-            fh.write("# This is a Rules config file\n")
-            fh.write(
-                "# Generated automatically by generate_morpheme_replace_rules.py\n"
-            )
-            yaml.dump(
-                doc,
-                fh,
-                Dumper=_ReplaceRulesDumper,
-                default_flow_style=False,
-                allow_unicode=True,
-                sort_keys=False,
-            )
-        print(f"Generated morpheme replace rules: {out_path}")
+        seg_out_path = os.path.join(rules_out_dir, f"{rule_name}_segmented.yaml")
+        _write_replace_rule_file(
+            seg_out_path,
+            f"{rule_name}_segmented",
+            feature_tag_title,
+            class_tag_title,
+            class_acceptors,
+            seg_class_mappings,
+            seg_mappings,
+            is_segmented=True,
+        )
 
 
 def generate_morpheme_replace_rules(

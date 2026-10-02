@@ -39,7 +39,7 @@ def test_inplace_patterns_and_inventory():
     inv = get_inventory_items()
     patterns = get_patterns()
 
-    assert len(inv.phones) == 16
+    assert len(inv.phones) == 17
     # assert len(inv.tags) == 141
 
     # Check required patterns

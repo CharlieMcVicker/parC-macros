@@ -313,14 +313,17 @@ def generate_paradigm_config(
     output_dir,
     open_root_template,
     template=None,
+    is_segmented=False,
 ):
     """
     Generates a lean unified Paradigm config using global_markers without ContingentFeatureMarkers.
+    If is_segmented is True, emits {pos_name}_segmented.yaml using segmented stage rules and slots.
     """
     paradigm_config = verb_config.get("paradigm", {})
     paradigm_dir = os.path.join(output_dir, "Morphotactics", "Paradigm")
     os.makedirs(paradigm_dir, exist_ok=True)
-    paradigm_file = os.path.join(paradigm_dir, f"{pos_name}.yaml")
+    filename = f"{pos_name}_segmented.yaml" if is_segmented else f"{pos_name}.yaml"
+    paradigm_file = os.path.join(paradigm_dir, filename)
 
     # If global_markers is explicitly configured in verb.yaml, use it
     if "global_markers" in paradigm_config:
@@ -330,6 +333,10 @@ def generate_paradigm_config(
             m = dict(item)
             if "kind" not in m and str(m.get("value", "")).startswith("$"):
                 m["kind"] = "rule"
+            if is_segmented:
+                val = m.get("value", "")
+                if val.startswith("$") and not val.endswith("_segmented"):
+                    m["value"] = f"{val}_segmented"
             global_markers.append(m)
     else:
         # Map of stage -> rule value
@@ -342,21 +349,33 @@ def generate_paradigm_config(
             if meta.get("kind") == "morpheme_replace":
                 morpheme_tag = meta.get("morpheme_tag", "")
                 tag_slug = re.sub(r"[\[\]]", "", morpheme_tag).lower()
-                stage_to_rule[stg] = f"${tag_slug}_replace"
+                suffix = "_segmented" if is_segmented else ""
+                stage_to_rule[stg] = f"${tag_slug}_replace{suffix}"
             elif meta.get("rule"):
                 r = meta["rule"]
                 if not r.startswith("$"):
                     r = f"${r}"
+                if is_segmented and not r.endswith("_segmented"):
+                    r = f"{r}_segmented"
                 stage_to_rule[stg] = r
 
         # Default rules for well-known stages
-        standard_stage_rules = {
-            "final_dropping": "$drop_root_final",
-            "drop_stem_initial_vowel": "$drop_stem_initial_vowel",
-            "h_alternation": "$h_alternation",
-            "insert_dist": "$insert_di",
-            "insert_wi": "$insert_wi",
-        }
+        if is_segmented:
+            standard_stage_rules = {
+                "final_dropping": "$drop_root_final_segmented",
+                "drop_stem_initial_vowel": "$drop_stem_initial_vowel_segmented",
+                "h_alternation": "$h_alternation",
+                "insert_dist": "$insert_di",
+                "insert_wi": "$insert_wi",
+            }
+        else:
+            standard_stage_rules = {
+                "final_dropping": "$drop_root_final",
+                "drop_stem_initial_vowel": "$drop_stem_initial_vowel",
+                "h_alternation": "$h_alternation",
+                "insert_dist": "$insert_di",
+                "insert_wi": "$insert_wi",
+            }
         for stg, r in standard_stage_rules.items():
             if stg not in stage_to_rule:
                 stage_to_rule[stg] = r
@@ -376,11 +395,18 @@ def generate_paradigm_config(
                                     available_rules.add(r["name"])
                     except Exception:
                         pass
-            preferred_stage_rules = {
-                "final_dropping": "drop_root_final",
-                "drop_stem_initial_vowel": "drop_stem_initial_vowel",
-                "h_alternation": "h_alternation",
-            }
+            if is_segmented:
+                preferred_stage_rules = {
+                    "final_dropping": "drop_root_final_segmented",
+                    "drop_stem_initial_vowel": "drop_stem_initial_vowel_segmented",
+                    "h_alternation": "h_alternation",
+                }
+            else:
+                preferred_stage_rules = {
+                    "final_dropping": "drop_root_final",
+                    "drop_stem_initial_vowel": "drop_stem_initial_vowel",
+                    "h_alternation": "h_alternation",
+                }
             for stg, pref in preferred_stage_rules.items():
                 if pref in available_rules:
                     stage_to_rule[stg] = "$" + pref
@@ -433,7 +459,17 @@ def generate_paradigm_config(
 
     slots = verb_config.get("slots") or paradigm_config.get("slots")
     if slots:
-        paradigm_content["slots"] = slots
+        if is_segmented:
+            seg_slots = []
+            for s in slots:
+                s_copy = dict(s)
+                r_val = s_copy.get("rule", "")
+                if r_val.startswith("$") and not r_val.endswith("_segmented"):
+                    s_copy["rule"] = f"{r_val}_segmented"
+                seg_slots.append(s_copy)
+            paradigm_content["slots"] = seg_slots
+        else:
+            paradigm_content["slots"] = slots
 
     with open(paradigm_file, "w", encoding="utf-8") as f:
         f.write("# This is a Paradigm config file\n")
@@ -734,7 +770,7 @@ def generate_markers(config_path: str, output_dir: str) -> None:
     open_root_template = derive_open_root_template(verb_config)
     template = paradigm_config.get("template") or verb_config.get("template")
 
-    # Output paradigm file
+    # Output paradigm files (surface verb.yaml and segmented verb_segmented.yaml)
     generate_paradigm_config(
         pos_name=pos_name,
         verb_config=verb_config,
@@ -743,6 +779,17 @@ def generate_markers(config_path: str, output_dir: str) -> None:
         output_dir=output_dir,
         open_root_template=open_root_template,
         template=template,
+        is_segmented=False,
+    )
+    generate_paradigm_config(
+        pos_name=pos_name,
+        verb_config=verb_config,
+        stage_order=stage_order,
+        mapped_results=mapped_results,
+        output_dir=output_dir,
+        open_root_template=open_root_template,
+        template=template,
+        is_segmented=True,
     )
 
     # Update global FeatureDefinitions configuration

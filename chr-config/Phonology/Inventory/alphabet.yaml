@@ -22,6 +22,9 @@ data:
   - l
   - y
   - w
+- name: Boundary
+  ref: <Boundary>
+  phones:
   - '-'
 - name: Vowels
   ref: <V>

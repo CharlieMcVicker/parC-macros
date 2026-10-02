@@ -549,14 +549,15 @@ def generate_phonology_rules(
     data: dict[str, Any],
 ) -> None:
     """
-    Generates drop_root_final.yaml and drop_stem_initial_vowel.yaml,
+    Generates drop_root_final.yaml, drop_root_final_segmented.yaml,
+    mark_stem_initial_vowel.yaml, drop_stem_initial_vowel.yaml, and drop_stem_initial_vowel_segmented.yaml,
     and copies other rule YAML files (e.g. h_alternation.yaml).
     """
     config_dir = Path(config_dir)
     output_rules_dir = Path(output_rules_dir)
     output_rules_dir.mkdir(parents=True, exist_ok=True)
 
-    # 1. drop_root_final.yaml
+    # 1. drop_root_final.yaml (clean surface deletion)
     drop_final_rc = "|".join(data.get("mark_final_triggers", []))
     drop_final_two_rc = "|".join(data.get("mark_final_two_triggers", []))
 
@@ -566,24 +567,27 @@ def generate_phonology_rules(
             {
                 "name": "mark_final",
                 "description": "mark the final phone for deletion based on aspect triggers",
-                "input_pattern": None,
-                "output_pattern": "[drop]",
-                "left_context": "<Phone>",
+                "string_map": [["<Phone>", "[TEMP]"]],
                 "right_context": drop_final_rc,
             },
             {
                 "name": "mark_final_two",
                 "description": "mark the final two phones for deletion based on aspect triggers",
-                "input_pattern": None,
-                "output_pattern": "[drop]",
-                "left_context": "<Phone><Phone>?",
+                "string_map": [["<Phone><Phone>?", "[TEMP]"]],
                 "right_context": drop_final_two_rc,
+            },
+            {
+                "name": "delete_temp_marker",
+                "description": "delete the temporary marker [TEMP]",
+                "input_pattern": "[TEMP]",
+                "output_pattern": "",
             },
             {
                 "name": "drop_final",
                 "description": "drop final phone",
                 "rule_sequence": [
                     "$mark_final",
+                    "$delete_temp_marker",
                 ],
             },
             {
@@ -591,6 +595,7 @@ def generate_phonology_rules(
                 "description": "drop final two phones",
                 "rule_sequence": [
                     "$mark_final_two",
+                    "$delete_temp_marker",
                 ],
             },
             {
@@ -606,7 +611,54 @@ def generate_phonology_rules(
     with open(output_rules_dir / "drop_root_final.yaml", "w", encoding="utf-8") as f:
         yaml.dump(drop_root_final_yaml, f, sort_keys=False, default_flow_style=False)
 
-    # 2. mark_stem_initial_vowel.yaml and drop_stem_initial_vowel.yaml
+    # 1b. drop_root_final_segmented.yaml (semantic [drop] tagging)
+    drop_root_final_segmented_yaml = {
+        "kind": "Rules",
+        "rules": [
+            {
+                "name": "mark_final_segmented",
+                "description": "mark the final phone for deletion based on aspect triggers",
+                "input_pattern": None,
+                "output_pattern": "[drop]",
+                "left_context": "<Phone>",
+                "right_context": drop_final_rc,
+            },
+            {
+                "name": "mark_final_two_segmented",
+                "description": "mark the final two phones for deletion based on aspect triggers",
+                "input_pattern": None,
+                "output_pattern": "[drop]",
+                "left_context": "<Phone><Phone>?",
+                "right_context": drop_final_two_rc,
+            },
+            {
+                "name": "drop_final_segmented",
+                "description": "drop final phone (segmented)",
+                "rule_sequence": [
+                    "$mark_final_segmented",
+                ],
+            },
+            {
+                "name": "drop_final_two_segmented",
+                "description": "drop final two phones (segmented)",
+                "rule_sequence": [
+                    "$mark_final_two_segmented",
+                ],
+            },
+            {
+                "name": "drop_root_final_segmented",
+                "description": "drop final root phone(s) conditioned on aspect class and aspect tags (segmented)",
+                "rule_sequence": [
+                    "$drop_final_two_segmented",
+                    "$drop_final_segmented",
+                ],
+            },
+        ],
+    }
+    with open(output_rules_dir / "drop_root_final_segmented.yaml", "w", encoding="utf-8") as f:
+        yaml.dump(drop_root_final_segmented_yaml, f, sort_keys=False, default_flow_style=False)
+
+    # 2. mark_stem_initial_vowel.yaml, drop_stem_initial_vowel.yaml, drop_stem_initial_vowel_segmented.yaml
     slot_tag_groups = data.get("slot_tag_groups", [])
     tag_groups = data.get("tag_groups", {})
 
@@ -629,7 +681,8 @@ def generate_phonology_rules(
 
     mark_sub_rules = []
     mark_seq_names = []
-    drop_string_maps = []
+    drop_clean_string_maps = []
+    drop_seg_string_maps = []
 
     for vowel, triggers in stem_initial_vowel_drops.items():
         if not triggers:
@@ -647,7 +700,8 @@ def generate_phonology_rules(
             "left_context": lc,
         })
         mark_seq_names.append(f"${rule_name}")
-        drop_string_maps.append([f"{vowel}[drop]", f"{vowel}[drop]"])
+        drop_clean_string_maps.append([f"{vowel}[drop]", ""])
+        drop_seg_string_maps.append([f"{vowel}[drop]", f"{vowel}[drop]"])
 
     mark_stem_initial_vowel_yaml = {
         "kind": "Rules",
@@ -667,17 +721,36 @@ def generate_phonology_rules(
         "rules": [
             {
                 "name": "drop_stem_initial_vowel",
-                "description": "retain stem initial vowel marked with [drop]",
-                "string_map": drop_string_maps,
+                "description": "drop stem initial vowel marked with [drop]",
+                "string_map": drop_clean_string_maps,
             }
         ],
     }
     with open(output_rules_dir / "drop_stem_initial_vowel.yaml", "w", encoding="utf-8") as f:
         yaml.dump(drop_stem_initial_vowel_yaml, f, sort_keys=False, default_flow_style=False)
 
+    drop_stem_initial_vowel_segmented_yaml = {
+        "kind": "Rules",
+        "rules": [
+            {
+                "name": "drop_stem_initial_vowel_segmented",
+                "description": "retain stem initial vowel marked with [drop] (segmented)",
+                "string_map": drop_seg_string_maps,
+            }
+        ],
+    }
+    with open(output_rules_dir / "drop_stem_initial_vowel_segmented.yaml", "w", encoding="utf-8") as f:
+        yaml.dump(drop_stem_initial_vowel_segmented_yaml, f, sort_keys=False, default_flow_style=False)
+
     # 3. Copy rule YAMLs from config_dir (e.g. h_alternation.yaml)
     src_rules = config_dir / "Phonology" / "Rules"
     if src_rules.exists():
         for rf in src_rules.glob("*.yaml"):
-            if rf.name not in ("drop_root_final.yaml", "drop_stem_initial_vowel.yaml", "mark_stem_initial_vowel.yaml"):
+            if rf.name not in (
+                "drop_root_final.yaml",
+                "drop_root_final_segmented.yaml",
+                "drop_stem_initial_vowel.yaml",
+                "drop_stem_initial_vowel_segmented.yaml",
+                "mark_stem_initial_vowel.yaml",
+            ):
                 shutil.copy2(rf, output_rules_dir / rf.name)

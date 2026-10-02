@@ -40,8 +40,10 @@ def test_get_class_tag_title():
 
 def test_inplace_2_tag_rules_generation_ac1():
     """
-    AC 1: Support generating in-place 2-tag string_map rules:
-    ([PrefixClass=...][Pro=...], [AspectClass=...][Aspect=...], [TenseClass=...][Tense=...])
+    AC 1: Support generating clean surface rules and segmented rules:
+    - pro_replace.yaml vs pro_replace_segmented.yaml
+    - aspect_replace.yaml vs aspect_replace_segmented.yaml
+    - tense_replace.yaml vs tense_replace_segmented.yaml
     """
     with tempfile.TemporaryDirectory() as tmp_dir:
         generate_morpheme_replace_rules("chr-config", tmp_dir)
@@ -49,62 +51,95 @@ def test_inplace_2_tag_rules_generation_ac1():
         rules_dir = Path(tmp_dir) / "Phonology/Rules"
         assert rules_dir.exists()
 
-        # 1. Check pro_replace.yaml
+        # 1. Check clean pro_replace.yaml
         pro_file = rules_dir / "pro_replace.yaml"
         assert pro_file.exists()
         with open(pro_file, "r", encoding="utf-8") as f:
             pro_rules = yaml.safe_load(f)
         assert validate_yaml_content(pro_rules) is True
-        # pro_rules has subrules per class + 1 sequence rule
         assert len(pro_rules["rules"]) > 1
         top_rule = pro_rules["rules"][-1]
         assert top_rule["name"] == "pro_replace"
         assert "rule_sequence" in top_rule
 
-        # Check subrules have right_context and correct string mappings
         sub_rules_by_name = {r["name"]: r for r in pro_rules["rules"][:-1]}
         assert "pro_replace_a_stem" in sub_rules_by_name
         a_stem_rule = sub_rules_by_name["pro_replace_a_stem"]
         assert a_stem_rule["right_context"] == "a"
         a_stem_map = dict(a_stem_rule["string_map"])
-        assert a_stem_map["[PrefixClass=a_stem][Pro=1sg.A]"] == "[Pro=1sg.A]k-"
+        assert a_stem_map["[PrefixClass=a_stem][Pro=1sg.A]"] == "k"
 
         cons_stem_rule = sub_rules_by_name["pro_replace_cons_stem"]
         cons_stem_map = dict(cons_stem_rule["string_map"])
-        assert cons_stem_map["[PrefixClass=cons_stem][Pro=1sg.A]"] == "[Pro=1sg.A]tsi-"
+        assert cons_stem_map["[PrefixClass=cons_stem][Pro=1sg.A]"] == "tsi"
 
         e_stem_rule = sub_rules_by_name["pro_replace_e_stem"]
         assert e_stem_rule["right_context"] == "e"
         e_stem_map = dict(e_stem_rule["string_map"])
-        assert e_stem_map["[PrefixClass=e_stem][Pro=3sg.A]"] == "[Pro=3sg.A]-"
+        assert e_stem_map["[PrefixClass=e_stem][Pro=3sg.A]"] == ""
 
-        # 2. Check aspect_replace.yaml
+        # 1b. Check segmented pro_replace_segmented.yaml
+        pro_seg_file = rules_dir / "pro_replace_segmented.yaml"
+        assert pro_seg_file.exists()
+        with open(pro_seg_file, "r", encoding="utf-8") as f:
+            pro_seg_rules = yaml.safe_load(f)
+        assert validate_yaml_content(pro_seg_rules) is True
+        seg_sub_rules = {r["name"]: r for r in pro_seg_rules["rules"][:-1]}
+        assert seg_sub_rules["pro_replace_segmented_a_stem"]["string_map"][0] == [
+            "[PrefixClass=a_stem][Pro=1sg.A]",
+            "[Pro=1sg.A]k-",
+        ]
+
+        # 2. Check clean aspect_replace.yaml
         aspect_file = rules_dir / "aspect_replace.yaml"
         assert aspect_file.exists()
         with open(aspect_file, "r", encoding="utf-8") as f:
             aspect_rules = yaml.safe_load(f)
         assert validate_yaml_content(aspect_rules) is True
         aspect_map = dict(aspect_rules["rules"][0]["string_map"])
-        assert aspect_map["[AspectClass=become][Aspect=completive]"] == "-[Aspect=completive]ts"
-        assert aspect_map["[AspectClass=a][Aspect=present]"] == "-[Aspect=present]a'"
-        assert aspect_map["[AspectClass=a][Aspect=completive]"] == "-[Aspect=completive]"
+        assert aspect_map["[AspectClass=become][Aspect=completive]"] == "ts"
+        assert aspect_map["[AspectClass=a][Aspect=present]"] == "a'"
+        assert aspect_map["[AspectClass=a][Aspect=completive]"] == ""
 
-        # 3. Check tense_replace.yaml
+        # 2b. Check segmented aspect_replace_segmented.yaml
+        aspect_seg_file = rules_dir / "aspect_replace_segmented.yaml"
+        assert aspect_seg_file.exists()
+        with open(aspect_seg_file, "r", encoding="utf-8") as f:
+            aspect_seg_rules = yaml.safe_load(f)
+        assert validate_yaml_content(aspect_seg_rules) is True
+        aspect_seg_map = dict(aspect_seg_rules["rules"][0]["string_map"])
+        assert aspect_seg_map["[AspectClass=become][Aspect=completive]"] == "-[Aspect=completive]ts"
+        assert aspect_seg_map["[AspectClass=a][Aspect=present]"] == "-[Aspect=present]a'"
+        assert aspect_seg_map["[AspectClass=a][Aspect=completive]"] == "-[Aspect=completive]"
+
+        # 3. Check clean tense_replace.yaml
         tense_file = rules_dir / "tense_replace.yaml"
         assert tense_file.exists()
         with open(tense_file, "r", encoding="utf-8") as f:
             tense_rules = yaml.safe_load(f)
         assert validate_yaml_content(tense_rules) is True
         tense_map = dict(tense_rules["rules"][0]["string_map"])
-        assert tense_map["[Tense=present_a]"] == "-[Tense=present_a]a"
-        assert tense_map["[Tense=immediate]"] == "-[Tense=immediate]"
-        assert tense_map["[Tense=present_i]"] == "-[Tense=present_i]i"
+        assert tense_map["[Tense=present_a]"] == "a"
+        assert tense_map["[Tense=immediate]"] == ""
+        assert tense_map["[Tense=present_i]"] == "i"
+
+        # 3b. Check segmented tense_replace_segmented.yaml
+        tense_seg_file = rules_dir / "tense_replace_segmented.yaml"
+        assert tense_seg_file.exists()
+        with open(tense_seg_file, "r", encoding="utf-8") as f:
+            tense_seg_rules = yaml.safe_load(f)
+        assert validate_yaml_content(tense_seg_rules) is True
+        tense_seg_map = dict(tense_seg_rules["rules"][0]["string_map"])
+        assert tense_seg_map["[Tense=present_a]"] == "-[Tense=present_a]a"
+        assert tense_seg_map["[Tense=immediate]"] == "-[Tense=immediate]"
+        assert tense_seg_map["[Tense=present_i]"] == "-[Tense=present_i]i"
 
 
 def test_inplace_paradigm_generation_ac2():
     """
     AC 2: Support generating Paradigm YAML with stage-ordered global_markers
     and without ContingentFeatureMarkers when in in-place mode.
+    Emits both clean surface verb.yaml and segmented verb_segmented.yaml.
     """
     with tempfile.TemporaryDirectory() as tmp_dir:
         out_dir = Path(tmp_dir) / "out"
@@ -114,7 +149,7 @@ def test_inplace_paradigm_generation_ac2():
         cfm_dir = out_dir / "Exponence/ContingentFeatureMarkers"
         assert len(list(cfm_dir.glob("*.yaml"))) == 0
 
-        # Paradigm file should exist and contain stage-ordered global_markers
+        # Surface paradigm file verb.yaml
         paradigm_file = out_dir / "Morphotactics/Paradigm/verb.yaml"
         assert paradigm_file.exists()
         with open(paradigm_file, "r", encoding="utf-8") as f:
@@ -144,13 +179,12 @@ def test_inplace_paradigm_generation_ac2():
 
         gm = paradigm_data["global_markers"]
         assert len(gm) == len(expected_stages)
-        # Stage order of global_markers must match stage_order
         for idx, stage in enumerate(expected_stages):
             assert gm[idx]["stage"] == stage
             assert gm[idx]["kind"] == "rule"
             assert gm[idx]["value"].startswith("$")
 
-        # Specific stage rule associations
+        # Specific stage rule associations (surface)
         gm_map = {m["stage"]: m["value"] for m in gm}
         assert gm_map["expand_nfs"] == "$expand_nfs"
         assert gm_map["final_dropping"] == "$drop_root_final"
@@ -162,6 +196,21 @@ def test_inplace_paradigm_generation_ac2():
         assert gm_map["pronominal"] == "$pro_replace"
         assert gm_map["h_metathesis"] == "$h_metathesis"
         assert gm_map["tense"] == "$tense_replace"
+
+        # Segmented paradigm file verb_segmented.yaml
+        seg_paradigm_file = out_dir / "Morphotactics/Paradigm/verb_segmented.yaml"
+        assert seg_paradigm_file.exists()
+        with open(seg_paradigm_file, "r", encoding="utf-8") as f:
+            seg_data = yaml.safe_load(f)
+
+        assert seg_data["kind"] == "Paradigm"
+        assert seg_data["part_of_speech"] == "$verb"
+        seg_gm_map = {m["stage"]: m["value"] for m in seg_data["global_markers"]}
+        assert seg_gm_map["final_dropping"] == "$drop_root_final_segmented"
+        assert seg_gm_map["aspect_suffix"] == "$aspect_replace_segmented"
+        assert seg_gm_map["drop_stem_initial_vowel"] == "$drop_stem_initial_vowel_segmented"
+        assert seg_gm_map["pronominal"] == "$pro_replace_segmented"
+        assert seg_gm_map["tense"] == "$tense_replace_segmented"
 
 
 def test_explicit_global_markers_in_verb_yaml_ac2():
@@ -236,22 +285,33 @@ def test_inplace_aspect_variants_generation_task_111_2():
         aspect_map = dict(aspect_data["rules"][0]["string_map"])
 
         # 1. Non-varying cell: 'become' present is 'k'
-        assert aspect_map["[AspectClass=become][Aspect=present]"] == "-[Aspect=present]k"
+        assert aspect_map["[AspectClass=become][Aspect=present]"] == "k"
         assert "[AspectClass=become][Variant=2][Aspect=present]" not in aspect_map
 
         # 2. Varying cell with multiple variants: 'become' infinitive is 'st;'ist;yhst;ist'
-        assert aspect_map["[AspectClass=become][Aspect=infinitive]"] == "-[Aspect=infinitive]hst"
-        assert aspect_map["[AspectClass=become][Variant=2][Aspect=infinitive]"] == "-[Aspect=infinitive]'ihst"
-        assert aspect_map["[AspectClass=become][Variant=3][Aspect=infinitive]"] == "-[Aspect=infinitive]yhst"
-        assert aspect_map["[AspectClass=become][Variant=4][Aspect=infinitive]"] == "-[Aspect=infinitive]ihst"
+        assert aspect_map["[AspectClass=become][Aspect=infinitive]"] == "hst"
+        assert aspect_map["[AspectClass=become][Variant=2][Aspect=infinitive]"] == "'ihst"
+        assert aspect_map["[AspectClass=become][Variant=3][Aspect=infinitive]"] == "yhst"
+        assert aspect_map["[AspectClass=become][Variant=4][Aspect=infinitive]"] == "ihst"
 
         # 3. Row with leading empty variant: 'sk-s-hst' immediate is ';hi'
-        assert aspect_map["[AspectClass=sk-s-hst][Aspect=immediate]"] == "-[Aspect=immediate]"
-        assert aspect_map["[AspectClass=sk-s-hst][Variant=2][Aspect=immediate]"] == "-[Aspect=immediate]hi"
+        assert aspect_map["[AspectClass=sk-s-hst][Aspect=immediate]"] == ""
+        assert aspect_map["[AspectClass=sk-s-hst][Variant=2][Aspect=immediate]"] == "hi"
 
         # 4. Row with trailing empty variant: 'go' present is 'ek;'
-        assert aspect_map["[AspectClass=go][Aspect=present]"] == "-[Aspect=present]ek"
-        assert aspect_map["[AspectClass=go][Variant=2][Aspect=present]"] == "-[Aspect=present]"
+        assert aspect_map["[AspectClass=go][Aspect=present]"] == "ek"
+        assert aspect_map["[AspectClass=go][Variant=2][Aspect=present]"] == ""
+
+        # 4b. Check segmented aspect_replace_segmented.yaml
+        aspect_seg_file = rules_dir / "aspect_replace_segmented.yaml"
+        assert aspect_seg_file.exists()
+        with open(aspect_seg_file, "r", encoding="utf-8") as f:
+            aspect_seg_data = yaml.safe_load(f)
+        assert validate_yaml_content(aspect_seg_data) is True
+        aspect_seg_map = dict(aspect_seg_data["rules"][0]["string_map"])
+        assert aspect_seg_map["[AspectClass=become][Aspect=present]"] == "-[Aspect=present]k"
+        assert aspect_seg_map["[AspectClass=become][Aspect=infinitive]"] == "-[Aspect=infinitive]hst"
+        assert aspect_seg_map["[AspectClass=become][Variant=2][Aspect=infinitive]"] == "-[Aspect=infinitive]'ihst"
 
         # 5. Verify non-varying classes (prefix_class, tense_present_class) emit clean 2-tag rules without [Variant=N]
         pro_file = rules_dir / "pro_replace.yaml"
@@ -538,22 +598,31 @@ def test_language_agnostic_phonology_effects_and_vowel_dropping():
         mark_file = out_rules_path / "mark_stem_initial_vowel.yaml"
         drop_file = out_rules_path / "drop_stem_initial_vowel.yaml"
 
+        mark_file = out_rules_path / "mark_stem_initial_vowel.yaml"
+        drop_file = out_rules_path / "drop_stem_initial_vowel.yaml"
+        drop_seg_file = out_rules_path / "drop_stem_initial_vowel_segmented.yaml"
+
         assert mark_file.exists()
         assert drop_file.exists()
+        assert drop_seg_file.exists()
         assert validate_yaml_file(mark_file) is True
         assert validate_yaml_file(drop_file) is True
+        assert validate_yaml_file(drop_seg_file) is True
 
         with open(mark_file, "r", encoding="utf-8") as f:
             mark_data = yaml.safe_load(f)
         with open(drop_file, "r", encoding="utf-8") as f:
             drop_data = yaml.safe_load(f)
+        with open(drop_seg_file, "r", encoding="utf-8") as f:
+            drop_seg_data = yaml.safe_load(f)
 
         assert mark_data["rules"][0]["name"] == "mark_stem_initial_u"
         assert mark_data["rules"][0]["string_map"] == [["u", "u[drop]"]]
         assert mark_data["rules"][0]["left_context"] == "[AgrClass=u_stem][Person=1sg]|[AgrClass=u_stem][Person=3sg]"
         assert mark_data["rules"][1]["rule_sequence"] == ["$mark_stem_initial_u"]
 
-        assert drop_data["rules"][0]["string_map"] == [["u[drop]", "u[drop]"]]
+        assert drop_data["rules"][0]["string_map"] == [["u[drop]", ""]]
+        assert drop_seg_data["rules"][0]["string_map"] == [["u[drop]", "u[drop]"]]
 
         # 2. Test with empty phonology_effects -> no hardcoded triggers
         empty_verb_config = {"slots": [], "phonology_effects": {}}
@@ -606,8 +675,9 @@ def test_generic_class_acceptor_loading():
 
 def test_drop_tagging_in_phonology_rules():
     """
-    TASK-175.2: Verify drop_root_final, mark_stem_initial_vowel, and drop_stem_initial_vowel
-    generate semantic [drop] tags instead of transient [TEMP].
+    TASK-175.2 & TASK-175.3: Verify drop_root_final / drop_root_final_segmented,
+    mark_stem_initial_vowel, and drop_stem_initial_vowel / drop_stem_initial_vowel_segmented
+    generate semantic [drop] tags for segmented and complete deletion for surface.
     """
     import parc_macros.generate_phonology as gp
     from parc_macros.yaml_validation import validate_yaml_file
@@ -659,29 +729,42 @@ def test_drop_tagging_in_phonology_rules():
         extracted = gp.extract_phonology_data(cfg_path, verb_config=verb_config)
         gp.generate_phonology_rules(cfg_path, out_rules, extracted)
 
-        # 1. Check drop_root_final.yaml
-        drf_file = out_rules / "drop_root_final.yaml"
+        # 1. Check clean surface drop_root_final.yaml
+        drf_clean_file = out_rules / "drop_root_final.yaml"
+        assert drf_clean_file.exists()
+        assert validate_yaml_file(drf_clean_file) is True
+        with open(drf_clean_file, "r", encoding="utf-8") as f:
+            drf_clean_data = yaml.safe_load(f)
+
+        clean_rules_by_name = {r["name"]: r for r in drf_clean_data["rules"]}
+        assert "mark_final" in clean_rules_by_name
+        assert clean_rules_by_name["mark_final"]["string_map"] == [["<Phone>", "[TEMP]"]]
+        assert clean_rules_by_name["delete_temp_marker"]["output_pattern"] == ""
+        assert clean_rules_by_name["drop_root_final"]["rule_sequence"] == ["$drop_final_two", "$drop_final"]
+
+        # 1b. Check segmented drop_root_final_segmented.yaml
+        drf_file = out_rules / "drop_root_final_segmented.yaml"
         assert drf_file.exists()
         assert validate_yaml_file(drf_file) is True
         with open(drf_file, "r", encoding="utf-8") as f:
             drf_data = yaml.safe_load(f)
 
         rules_by_name = {r["name"]: r for r in drf_data["rules"]}
-        assert "mark_final" in rules_by_name
-        assert rules_by_name["mark_final"]["input_pattern"] is None
-        assert rules_by_name["mark_final"]["output_pattern"] == "[drop]"
-        assert rules_by_name["mark_final"]["left_context"] == "<Phone>"
-        assert rules_by_name["mark_final"]["right_context"] == "[AspectClass=clsA][Aspect=perf]"
+        assert "mark_final_segmented" in rules_by_name
+        assert rules_by_name["mark_final_segmented"]["input_pattern"] is None
+        assert rules_by_name["mark_final_segmented"]["output_pattern"] == "[drop]"
+        assert rules_by_name["mark_final_segmented"]["left_context"] == "<Phone>"
+        assert rules_by_name["mark_final_segmented"]["right_context"] == "[AspectClass=clsA][Aspect=perf]"
 
-        assert "mark_final_two" in rules_by_name
-        assert rules_by_name["mark_final_two"]["input_pattern"] is None
-        assert rules_by_name["mark_final_two"]["output_pattern"] == "[drop]"
-        assert rules_by_name["mark_final_two"]["left_context"] == "<Phone><Phone>?"
-        assert rules_by_name["mark_final_two"]["right_context"] == "[AspectClass=clsB][Variant=2][Aspect=imp]"
+        assert "mark_final_two_segmented" in rules_by_name
+        assert rules_by_name["mark_final_two_segmented"]["input_pattern"] is None
+        assert rules_by_name["mark_final_two_segmented"]["output_pattern"] == "[drop]"
+        assert rules_by_name["mark_final_two_segmented"]["left_context"] == "<Phone><Phone>?"
+        assert rules_by_name["mark_final_two_segmented"]["right_context"] == "[AspectClass=clsB][Variant=2][Aspect=imp]"
 
-        assert rules_by_name["drop_final"]["rule_sequence"] == ["$mark_final"]
-        assert rules_by_name["drop_final_two"]["rule_sequence"] == ["$mark_final_two"]
-        assert rules_by_name["drop_root_final"]["rule_sequence"] == ["$drop_final_two", "$drop_final"]
+        assert rules_by_name["drop_final_segmented"]["rule_sequence"] == ["$mark_final_segmented"]
+        assert rules_by_name["drop_final_two_segmented"]["rule_sequence"] == ["$mark_final_two_segmented"]
+        assert rules_by_name["drop_root_final_segmented"]["rule_sequence"] == ["$drop_final_two_segmented", "$drop_final_segmented"]
 
         # 2. Check mark_stem_initial_vowel.yaml
         mark_file = out_rules / "mark_stem_initial_vowel.yaml"
@@ -694,13 +777,21 @@ def test_drop_tagging_in_phonology_rules():
         assert mark_data["rules"][0]["left_context"] == "[PrefixClass=a_stem][Pro=3sg.A]"
         assert mark_data["rules"][1]["rule_sequence"] == ["$mark_stem_initial_a"]
 
-        # 3. Check drop_stem_initial_vowel.yaml
-        drop_file = out_rules / "drop_stem_initial_vowel.yaml"
-        assert drop_file.exists()
-        assert validate_yaml_file(drop_file) is True
-        with open(drop_file, "r", encoding="utf-8") as f:
-            drop_data = yaml.safe_load(f)
-        assert drop_data["rules"][0]["string_map"] == [["a[drop]", "a[drop]"]]
+        # 3. Check clean surface drop_stem_initial_vowel.yaml
+        drop_clean_file = out_rules / "drop_stem_initial_vowel.yaml"
+        assert drop_clean_file.exists()
+        assert validate_yaml_file(drop_clean_file) is True
+        with open(drop_clean_file, "r", encoding="utf-8") as f:
+            drop_clean_data = yaml.safe_load(f)
+        assert drop_clean_data["rules"][0]["string_map"] == [["a[drop]", ""]]
+
+        # 3b. Check segmented drop_stem_initial_vowel_segmented.yaml
+        drop_seg_file = out_rules / "drop_stem_initial_vowel_segmented.yaml"
+        assert drop_seg_file.exists()
+        assert validate_yaml_file(drop_seg_file) is True
+        with open(drop_seg_file, "r", encoding="utf-8") as f:
+            drop_seg_data = yaml.safe_load(f)
+        assert drop_seg_data["rules"][0]["string_map"] == [["a[drop]", "a[drop]"]]
 
 
 
