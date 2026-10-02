@@ -22,6 +22,12 @@ FALLBACK_MANIFEST: dict[str, Any] = {
             "tags": ["VoiceInfix"],
         },
         {
+            "name": "nfs",
+            "role": "suffix",
+            "rule": "",
+            "tags": ["NFS"],
+        },
+        {
             "name": "pronominal",
             "role": "prefix",
             "rule": "pro_replace",
@@ -48,6 +54,7 @@ FALLBACK_MANIFEST: dict[str, Any] = {
         "<H_alt>",
         "<VoiceInfix>",
         "<Root>",
+        "<NFS>",
         "<AspectClass>",
         "<Variant>",
         "<Aspect>",
@@ -55,6 +62,7 @@ FALLBACK_MANIFEST: dict[str, Any] = {
     ],
     "tag_to_slot": {
         "VoiceInfix": "voice",
+        "NFS": "nfs",
         "PrefixClass": "pronominal",
         "Pro": "pronominal",
         "AspectClass": "aspect",
@@ -64,12 +72,13 @@ FALLBACK_MANIFEST: dict[str, Any] = {
     },
     "root_boundaries": {
         "left": "<VoiceInfix>",
-        "right": "<AspectClass>",
+        "right": "<NFS>",
     },
 }
 
 DEFAULT_SLOT_TAG_MAP: dict[str, str] = {
     "VoiceInfix": "voice_infix",
+    "NFS": "nfs",
     "PrefixClass": "prefix_class",
     "Pro": "pronominal",
     "H_metathesis": "h_metathesis_tag",
@@ -84,6 +93,7 @@ DEFAULT_SLOT_TAG_MAP: dict[str, str] = {
 
 SPECIAL_TAG_MAP: dict[str, str] = {
     "VoiceInfix": "voice_infix",
+    "NFS": "nfs",
     "Pro": "pronominal",
     "H_metathesis": "h_metathesis_tag",
     "H_METATHESIS": "h_metathesis_tag",

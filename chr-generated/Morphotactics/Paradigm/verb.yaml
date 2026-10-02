@@ -56,7 +56,7 @@ global_markers:
 - kind: rule
   stage: insert_wi
   value: $insert_WI
-open_root_template: <PrepronominalPrefixes><PrefixClass><Pro><H_metathesis><H_alt><VoiceInfix>?<Root><AspectClass><Variant>?<Aspect><Tense>
+open_root_template: <PrepronominalPrefixes><PrefixClass><Pro><H_metathesis><H_alt><VoiceInfix>?<Root><NFS>?<AspectClass><Variant>?<Aspect><Tense>
 template:
 - <PrepronominalPrefixes>
 - slot:pronominal
@@ -64,6 +64,7 @@ template:
 - <H_alt>
 - slot:voice
 - <Root>
+- slot:nfs
 - slot:aspect
 - slot:tense
 slots:
@@ -71,6 +72,11 @@ slots:
   role: prefix
   structure:
   - TagGroup: VoiceInfix
+    optional: true
+- name: nfs
+  role: suffix
+  structure:
+  - TagGroup: NFS
     optional: true
 - name: pronominal
   role: prefix

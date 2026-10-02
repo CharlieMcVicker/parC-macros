@@ -19,6 +19,7 @@ class ParseData:
     """
     root: str
     voice_infix: str = ""
+    nfs: str = ""
     prefix_class: str = ""
     pronominal: str = ""
     h_metathesis_tag: str = ""
@@ -68,6 +69,8 @@ class ParseData:
         }
         if self.voice_infix:
             d["voice_infix"] = self.voice_infix
+        if self.nfs:
+            d["nfs"] = self.nfs
         if self.variant and self.variant != 1:
             d["variant"] = str(self.variant)
         if self.has_translocutive:
@@ -100,6 +103,8 @@ class ParseData:
         if self.voice_infix:
             parts.append(f"[VoiceInfix={self.voice_infix}]" if not self.voice_infix.startswith("[") else self.voice_infix)
         parts.append(self.root)
+        if self.nfs:
+            parts.append(f"[NFS={self.nfs}]" if not self.nfs.startswith("[") else self.nfs)
         if self.aspect_class:
             parts.append(f"[AspectClass={self.aspect_class}]")
         if self.variant and self.variant > 1:
@@ -189,11 +194,12 @@ class VerbTemplate:
     Coarse-grained projection of a single ParseData.
     Masks over inflectional features (pro, tense, aspect).
     Preserves lexical features observed in this parse:
-    root, voice_infix, prefix_class, aspect_class, tense_present_class, variant,
+    root, voice_infix, nfs, prefix_class, aspect_class, tense_present_class, variant,
     lexical prepronominal prefixes (distributive, translocutive), h_alt_tag.
     """
     root: str
     voice_infix: str = ""
+    nfs: str = ""
     prefix_class: str = ""
     aspect_class: str = ""
     tense_present_class: str = ""
@@ -207,6 +213,7 @@ class VerbTemplate:
         return cls(
             root=parse.root,
             voice_infix=parse.voice_infix,
+            nfs=parse.nfs,
             prefix_class=parse.prefix_class,
             aspect_class=parse.aspect_class,
             variant=parse.variant,
@@ -222,6 +229,8 @@ class VerbTemplate:
         }
         if self.voice_infix:
             d["voice_infix"] = self.voice_infix
+        if self.nfs:
+            d["nfs"] = self.nfs
         if self.tense_present_class:
             d["tense_present_class"] = self.tense_present_class
         if self.variant != 1:
@@ -614,6 +623,7 @@ class LexicalVerb:
         *,
         h_root: Optional[str] = None,
         voice_infix: str = "",
+        nfs: str = "",
         prefix_class: str = "",
         aspect_class: str = "",
         tense_present_class: str = "",
@@ -635,6 +645,7 @@ class LexicalVerb:
             template = VerbTemplate(
                 root=h_root or "",
                 voice_infix=voice_infix,
+                nfs=nfs,
                 prefix_class=prefix_class,
                 aspect_class=aspect_class,
                 variant=var_int,
@@ -677,6 +688,10 @@ class LexicalVerb:
     @property
     def voice_infix(self) -> str:
         return self.template.voice_infix
+
+    @property
+    def nfs(self) -> str:
+        return self.template.nfs
 
     @property
     def prefix_class(self) -> str:
@@ -722,6 +737,7 @@ class LexicalVerb:
         return {
             "h_root": self.h_root,
             "voice_infix": self.voice_infix,
+            "nfs": self.nfs,
             "h_alt_tag": self.h_alt_tag or "[H_alt=none]",
             "prefix_class": self.prefix_class,
             "aspect_class": self.aspect_class,
@@ -744,6 +760,7 @@ class LexicalVerb:
         d["entry_type"] = entry_type or self.metadata.entry_type
         d["h_root"] = self.h_root
         d["voice_infix"] = self.voice_infix
+        d["nfs"] = self.nfs
         d["h_alt_tag"] = self.h_alt_tag or "[H_alt=none]"
         d["aspect_class"] = self.template.aspect_class
         d["prefix_class"] = self.template.prefix_class
@@ -778,6 +795,7 @@ class LexicalVerb:
             tense = form.tense if isinstance(form.tense, str) else form.tense[0]
 
         voice_infix = self.voice_infix or (self.template.voice_infix if hasattr(self.template, "voice_infix") else "")
+        nfs = self.nfs or (self.template.nfs if hasattr(self.template, "nfs") else "")
 
         results: set[str] = set()
         for pro in pros:
@@ -795,6 +813,7 @@ class LexicalVerb:
                     "h_metathesis_tag": h_meta,
                     "h_alt_tag": h_alt,
                     "voice_infix": voice_infix,
+                    "nfs": nfs,
                     "aspect_class": self.aspect_class,
                     "variant": str(var),
                     "aspect": form.aspect,

@@ -40,4 +40,5 @@ def test_nfs_derivation_entry_208():
     ]
     hyps = derive_hypotheses_for_forms(forms, entry_type=EVENTFUL)
     roots = {h.h_root for h in hyps}
-    assert "whahthvh[NFS=AMB]" in roots
+    assert "whahthvh" in roots
+    assert any(h.h_root == "whahthvh" and h.nfs == "AMB" for h in hyps)

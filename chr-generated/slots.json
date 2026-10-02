@@ -9,6 +9,14 @@
       ]
     },
     {
+      "name": "nfs",
+      "role": "suffix",
+      "rule": "",
+      "tags": [
+        "NFS"
+      ]
+    },
+    {
       "name": "pronominal",
       "role": "prefix",
       "rule": "pro_replace",
@@ -44,6 +52,7 @@
     "<H_alt>",
     "<VoiceInfix>",
     "<Root>",
+    "<NFS>",
     "<AspectClass>",
     "<Variant>",
     "<Aspect>",
@@ -51,6 +60,7 @@
   ],
   "tag_to_slot": {
     "VoiceInfix": "voice",
+    "NFS": "nfs",
     "PrefixClass": "pronominal",
     "Pro": "pronominal",
     "AspectClass": "aspect",
@@ -60,6 +70,6 @@
   },
   "root_boundaries": {
     "left": "<VoiceInfix>",
-    "right": "<AspectClass>"
+    "right": "<NFS>"
   }
 }

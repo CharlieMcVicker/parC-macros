@@ -19,10 +19,11 @@ def test_get_slot_manifest_default():
     manifest = get_slot_manifest()
     assert isinstance(manifest, dict)
     assert "slots" in manifest
-    assert len(manifest["slots"]) >= 4
+    assert len(manifest["slots"]) >= 5
 
     slot_names = [s["name"] for s in manifest["slots"]]
     assert "voice" in slot_names
+    assert "nfs" in slot_names
     assert "pronominal" in slot_names
     assert "aspect" in slot_names
     assert "tense" in slot_names
@@ -30,14 +31,16 @@ def test_get_slot_manifest_default():
     assert "template" in manifest
     assert "<H_alt>" in manifest["template"]
     assert "<VoiceInfix>" in manifest["template"]
+    assert "<NFS>" in manifest["template"]
     assert "<AspectClass>" in manifest["template"]
 
     assert "root_boundaries" in manifest
     assert manifest["root_boundaries"]["left"] == "<VoiceInfix>"
-    assert manifest["root_boundaries"]["right"] == "<AspectClass>"
+    assert manifest["root_boundaries"]["right"] == "<NFS>"
 
     assert "tag_to_slot" in manifest
     assert manifest["tag_to_slot"]["VoiceInfix"] == "voice"
+    assert manifest["tag_to_slot"]["NFS"] == "nfs"
     assert manifest["tag_to_slot"]["PrefixClass"] == "pronominal"
     assert manifest["tag_to_slot"]["AspectClass"] == "aspect"
 
@@ -49,14 +52,14 @@ def test_get_slot_manifest_fallback():
     assert "template" in fallback
     assert "root_boundaries" in fallback
     assert fallback["root_boundaries"]["left"] == "<VoiceInfix>"
-    assert fallback["root_boundaries"]["right"] == "<AspectClass>"
+    assert fallback["root_boundaries"]["right"] == "<NFS>"
 
 
 def test_get_root_boundary_tag_prefixes():
     # Default manifest
     left, right = get_root_boundary_tag_prefixes()
     assert left == "[VoiceInfix="
-    assert right == "[AspectClass="
+    assert right == "[NFS="
 
     # Custom manifest
     custom = {
@@ -72,6 +75,8 @@ def test_get_root_boundary_tag_prefixes():
 
 def test_get_slot_tag_map():
     tag_map = get_slot_tag_map()
+    assert tag_map["VoiceInfix"] == "voice_infix"
+    assert tag_map["NFS"] == "nfs"
     assert tag_map["PrefixClass"] == "prefix_class"
     assert tag_map["Pro"] == "pronominal"
     assert tag_map["AspectClass"] == "aspect_class"
@@ -81,6 +86,8 @@ def test_get_slot_tag_map():
     assert tag_map["H_alt"] == "h_alt_tag"
 
     name_to_tag = get_slot_name_to_tag_map()
+    assert name_to_tag["voice_infix"] == "VoiceInfix"
+    assert name_to_tag["nfs"] == "NFS"
     assert name_to_tag["prefix_class"] == "PrefixClass"
     assert name_to_tag["pronominal"] == "Pro"
     assert name_to_tag["aspect_class"] == "AspectClass"

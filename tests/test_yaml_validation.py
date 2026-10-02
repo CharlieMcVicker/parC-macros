@@ -77,12 +77,13 @@ def test_chr_config_yamls():
         "<H_alt>",
         "slot:voice",
         "<Root>",
+        "slot:nfs",
         "slot:aspect",
         "slot:tense",
     ]
     assert (
         derive_open_root_template(verb_data)
-        == "<PrepronominalPrefixes><PrefixClass><Pro><H_metathesis><H_alt><VoiceInfix>?<Root><AspectClass><Variant>?<Aspect><Tense>"
+        == "<PrepronominalPrefixes><PrefixClass><Pro><H_metathesis><H_alt><VoiceInfix>?<Root><NFS>?<AspectClass><Variant>?<Aspect><Tense>"
     )
 
     # Validate all Phonology YAML files with schema validator

@@ -164,6 +164,7 @@ def read_parse(s: str) -> ParseData:
     prefix_class = ""
     pronominal = ""
     voice_infix = ""
+    nfs = ""
     aspect_class = ""
     variant = 1
     aspect = ""
@@ -185,6 +186,8 @@ def read_parse(s: str) -> ParseData:
                 pronominal = v
             elif k in ("VoiceInfix", "VOICE_INFIX"):
                 voice_infix = v
+            elif k == "NFS":
+                nfs = v
             elif k == "AspectClass":
                 aspect_class = v
             elif k == "Variant":
@@ -208,6 +211,7 @@ def read_parse(s: str) -> ParseData:
     res = ParseData(
         root="".join(root_parts),
         voice_infix=voice_infix,
+        nfs=nfs,
         prefix_class=prefix_class,
         pronominal=pronominal,
         h_metathesis_tag=h_metathesis_tag,
@@ -369,8 +373,12 @@ def build_root_filter_fsa(allowed_roots: Iterable[str]) -> pynini.Fst | None:
         return None
     pre_root_fsa = pynini.union(*[pynini.accep(t, token_type=syms) for t in pre_root_tags if syms.member(t)]).optimize()
 
-    # Post-root boundary tags: all tags starting with right_prefix (e.g. [AspectClass=)
-    post_root_tags = [s for s in all_syms if s.startswith(right_prefix)]
+    # Post-root boundary tags: tags starting with right_prefix (e.g. [NFS=) plus [AspectClass= tags
+    # since NFS is an optional suffix slot following root
+    post_root_prefixes = [right_prefix]
+    if right_prefix != "[AspectClass=":
+        post_root_prefixes.append("[AspectClass=")
+    post_root_tags = [s for s in all_syms if any(s.startswith(pfx) for pfx in post_root_prefixes)]
     if not post_root_tags:
         return None
     post_root_fsa = pynini.union(*[pynini.accep(t, token_type=syms) for t in post_root_tags if syms.member(t)]).optimize()

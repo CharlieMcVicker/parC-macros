@@ -32,6 +32,7 @@ ROOTS_FIELDNAMES = [
     "entry_type",
     "h_root",
     "voice_infix",
+    "nfs",
     "h_alt_tag",
     "aspect_class",
     "prefix_class",
@@ -113,6 +114,7 @@ def main():
                         key=lambda x: (
                             x.h_root,
                             x.voice_infix,
+                            x.nfs,
                             x.h_alt_tag or "[H_alt=none]",
                             x.aspect_class,
                             x.prefix_class,

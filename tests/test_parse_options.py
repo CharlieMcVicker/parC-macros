@@ -94,10 +94,11 @@ def test_extract_parse_options_with_nfs(parse_graph):
     assert word_opts.surface == "awhahthvhitoha"
     assert word_opts.total_parses > 0
 
-    # Ensure NFS tagged roots are correctly extracted
-    nfs_roots = [r for r in word_opts.roots if "[NFS=" in r.root]
-    assert len(nfs_roots) > 0
-    assert any("whahthvh[NFS=AMB]" in r.root for r in nfs_roots)
+    # Ensure pure root is extracted and NFS is in suffix slot
+    whahthvh_opts = word_opts.get_root("whahthvh")
+    assert whahthvh_opts is not None
+    assert "nfs" in whahthvh_opts.slot_options or "NFS" in whahthvh_opts.slot_options
+    assert any(sb.get("nfs") == "AMB" or sb.get("NFS") == "AMB" for sb in whahthvh_opts.suffix_bundles)
 
 
 def test_extract_parse_options_with_specialized_graphs():

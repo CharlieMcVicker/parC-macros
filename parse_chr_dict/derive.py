@@ -324,10 +324,12 @@ def _derive_category(
                         if p_trans:
                             continue
 
-                # Root & voice_infix compatibility check: all forms must match hyp.h_root and hyp.voice_infix
+                # Root, voice_infix, and nfs compatibility check: all forms must match hyp.h_root, hyp.voice_infix, and hyp.nfs
                 if strip_h_alt_tags(p_data.root) != hyp.h_root:
                     continue
                 if p_data.voice_infix != hyp.voice_infix:
+                    continue
+                if p_data.nfs != hyp.nfs:
                     continue
 
                 if p_is_glottal:
@@ -380,6 +382,7 @@ def _derive_category(
                 new_template = VerbTemplate(
                     root=hyp.template.root,
                     voice_infix=hyp.template.voice_infix,
+                    nfs=hyp.template.nfs,
                     prefix_class=canon_pref,
                     aspect_class=hyp.template.aspect_class,
                     variant=hyp.template.variant,

@@ -72,6 +72,9 @@ def build_tag_str(root: str, feature_values: dict[str, str]) -> str:
         parts.append(f"[VoiceInfix={voice_infix}]" if not voice_infix.startswith("[") else voice_infix)
     clean_root = re.sub(r"\[(Pro|Aspect|Tense)\]", "", root)
     parts.append(clean_root)
+    nfs = feature_values.get("nfs", "")
+    if nfs:
+        parts.append(f"[NFS={nfs}]" if not nfs.startswith("[") else nfs)
     if asp_cls:
         parts.append(f"[AspectClass={asp_cls}]")
     if var > 1:
@@ -164,6 +167,8 @@ def reconstruct_row(
     for meta in VerbMetadata.all_combinations(entry_type=entry_type_name, is_h_metathesis=h_meta_opt):
         hypothesis = LexicalVerb(
             h_root=row.get("h_root", ""),
+            voice_infix=row.get("voice_infix", ""),
+            nfs=row.get("nfs", ""),
             h_alt_tag=row.get("h_alt_tag", ""),
             prefix_class=row.get("prefix_class", ""),
             aspect_class=row.get("aspect_class", ""),

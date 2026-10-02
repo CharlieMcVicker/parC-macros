@@ -20,6 +20,12 @@ slots:
       - TagGroup: VoiceInfix
         optional: true
 
+  - name: nfs
+    role: suffix
+    structure:
+      - TagGroup: NFS
+        optional: true
+
   - name: pronominal
     role: prefix
     rule: $pro_replace
@@ -72,5 +78,6 @@ paradigm:
     - "<H_alt>"
     - slot:voice
     - "<Root>"
+    - slot:nfs
     - slot:aspect
     - slot:tense
