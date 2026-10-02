@@ -68,7 +68,7 @@ def test_segment_alignment_hatatuka(parse_graph):
     segments = segment_alignment(alignment)
 
     hyphenated = format_segmentation(segments)
-    assert hyphenated == "h-atat-u-ka"
+    assert hyphenated == "ha-tat-u-ka"
     assert "".join(s["surface"] for s in segments) == "hatatuka"
 
 

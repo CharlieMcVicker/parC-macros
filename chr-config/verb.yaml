@@ -14,6 +14,12 @@ stages:
   - insert_wi
 
 slots:
+  - name: voice
+    role: prefix
+    structure:
+      - TagGroup: VoiceInfix
+        optional: true
+
   - name: pronominal
     role: prefix
     rule: $pro_replace
@@ -64,6 +70,7 @@ paradigm:
     - slot:pronominal
     - "<H_metathesis>"
     - "<H_alt>"
+    - slot:voice
     - "<Root>"
     - slot:aspect
     - slot:tense

@@ -343,11 +343,12 @@ def test_slots_json_manifest_generation():
             data = json.load(f)
 
         assert "slots" in data
-        assert len(data["slots"]) == 3
+        assert len(data["slots"]) == 4
         slot_names = [s["name"] for s in data["slots"]]
-        assert slot_names == ["pronominal", "aspect", "tense"]
+        assert slot_names == ["voice", "pronominal", "aspect", "tense"]
 
         # Check tag_to_slot
+        assert data["tag_to_slot"]["VoiceInfix"] == "voice"
         assert data["tag_to_slot"]["PrefixClass"] == "pronominal"
         assert data["tag_to_slot"]["Pro"] == "pronominal"
         assert data["tag_to_slot"]["AspectClass"] == "aspect"
@@ -362,6 +363,7 @@ def test_slots_json_manifest_generation():
             "<Pro>",
             "<H_metathesis>",
             "<H_alt>",
+            "<VoiceInfix>",
             "<Root>",
             "<AspectClass>",
             "<Variant>",
@@ -372,7 +374,7 @@ def test_slots_json_manifest_generation():
 
         # Check root boundaries
         assert data["root_boundaries"] == {
-            "left": "<H_alt>",
+            "left": "<VoiceInfix>",
             "right": "<AspectClass>",
         }
 
@@ -389,7 +391,7 @@ def test_paradigm_yaml_contains_slots_and_validates():
             paradigm_data = yaml.safe_load(f)
 
         assert "slots" in paradigm_data
-        assert len(paradigm_data["slots"]) == 3
+        assert len(paradigm_data["slots"]) == 4
         assert validate_yaml_content(paradigm_data) is True
 
 
@@ -449,7 +451,7 @@ def test_derive_open_root_template():
         },
     }
     derived = derive_open_root_template(cfg_dynamic)
-    expected = "<PrepronominalPrefixes><PrefixClass><Pro><H_alt><Root><AspectClass><Variant><Aspect><Tense>"
+    expected = "<PrepronominalPrefixes><PrefixClass><Pro><H_alt><Root><AspectClass><Variant>?<Aspect><Tense>"
     assert derived == expected
 
     # 3. Empty or missing template fallback

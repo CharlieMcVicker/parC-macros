@@ -402,7 +402,8 @@ def generate_alphabet(
     tag_groups: dict[str, list[str]] = data.get("tag_groups", {})
     slot_tag_groups: list[str] = data.get("slot_tag_groups", list(tag_groups.keys()))
 
-    filtered_refs = {f"<{tg}>" for tg in slot_tag_groups} | {"<LegacyTags>"}
+    # Only filter out refs from base inventory if they are populated with vals to replace them
+    filtered_refs = {f"<{tg}>" for tg in slot_tag_groups if tag_groups.get(tg)} | {"<LegacyTags>"}
 
     new_data: list[dict[str, Any]] = []
     for item in inv.get("data", []):

@@ -19,22 +19,25 @@ def test_get_slot_manifest_default():
     manifest = get_slot_manifest()
     assert isinstance(manifest, dict)
     assert "slots" in manifest
-    assert len(manifest["slots"]) >= 3
+    assert len(manifest["slots"]) >= 4
 
     slot_names = [s["name"] for s in manifest["slots"]]
+    assert "voice" in slot_names
     assert "pronominal" in slot_names
     assert "aspect" in slot_names
     assert "tense" in slot_names
 
     assert "template" in manifest
     assert "<H_alt>" in manifest["template"]
+    assert "<VoiceInfix>" in manifest["template"]
     assert "<AspectClass>" in manifest["template"]
 
     assert "root_boundaries" in manifest
-    assert manifest["root_boundaries"]["left"] == "<H_alt>"
+    assert manifest["root_boundaries"]["left"] == "<VoiceInfix>"
     assert manifest["root_boundaries"]["right"] == "<AspectClass>"
 
     assert "tag_to_slot" in manifest
+    assert manifest["tag_to_slot"]["VoiceInfix"] == "voice"
     assert manifest["tag_to_slot"]["PrefixClass"] == "pronominal"
     assert manifest["tag_to_slot"]["AspectClass"] == "aspect"
 
@@ -45,14 +48,14 @@ def test_get_slot_manifest_fallback():
     assert "slots" in fallback
     assert "template" in fallback
     assert "root_boundaries" in fallback
-    assert fallback["root_boundaries"]["left"] == "<H_alt>"
+    assert fallback["root_boundaries"]["left"] == "<VoiceInfix>"
     assert fallback["root_boundaries"]["right"] == "<AspectClass>"
 
 
 def test_get_root_boundary_tag_prefixes():
     # Default manifest
     left, right = get_root_boundary_tag_prefixes()
-    assert left == "[H_alt="
+    assert left == "[VoiceInfix="
     assert right == "[AspectClass="
 
     # Custom manifest
@@ -107,6 +110,7 @@ def test_build_root_filter_fsa_accepts_valid_and_filters_invalid():
         "[PrefixClass=a_stem]",
         "[Pro=3sg.A]",
         "[H_alt=none]",
+        "[VoiceInfix=ad]",
         *"tateka",
         "[AspectClass=a]",
         "[Aspect=completive]",
@@ -119,6 +123,7 @@ def test_build_root_filter_fsa_accepts_valid_and_filters_invalid():
         "[PrefixClass=a_stem]",
         "[Pro=3sg.A]",
         "[H_alt=none]",
+        "[VoiceInfix=ad]",
         *"woniha",
         "[AspectClass=a]",
         "[Aspect=completive]",
@@ -127,9 +132,9 @@ def test_build_root_filter_fsa_accepts_valid_and_filters_invalid():
     assert not filter_accepts(invalid_tokens)
 
     # Test via parse_surface
-    results_valid = parse_surface("atateka", allowed_roots=["atateka"])
+    results_valid = parse_surface("atateka", allowed_roots=["ateka"])
     assert len(results_valid) > 0
-    assert all("atateka" in r for r in results_valid)
+    assert all("ateka" in r for r in results_valid)
 
     results_invalid = parse_surface("atateka", allowed_roots=["woniha"])
     assert len(results_invalid) == 0

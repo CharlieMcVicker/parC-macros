@@ -204,7 +204,7 @@ def test_lexical_verb_product_and_serialization():
     expected_keys = [
         "corpus_id", "entry_no", "definition", "present", "present_1sg",
         "imperfective", "perfective", "imperative", "infinitive",
-        "entry_type", "h_root", "h_alt_tag", "aspect_class", "prefix_class",
+        "entry_type", "h_root", "voice_infix", "h_alt_tag", "aspect_class", "prefix_class",
         "tense_present_class", "set_a", "plural", "animate_objects",
         "variant_present", "variant_incompletive", "variant_completive",
         "variant_immediate", "variant_infinitive",

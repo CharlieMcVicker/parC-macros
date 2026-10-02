@@ -511,8 +511,8 @@ def parse_token_sequence(
                 # First non-tag character begins the root
                 in_prefix = False
                 root_chars.append(tok)
-            elif h_alt_tag or (left_boundary and tag_key == left_boundary):
-                # We reached/passed the left root boundary; non-prefix tag is an initial root tag (e.g. VoiceInfix)
+            elif tag_key and tag_key not in prefix_slots:
+                # Unrecognized non-prefix tag after prefix boundary
                 in_prefix = False
                 root_chars.append(tok)
             else:

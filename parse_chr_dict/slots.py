@@ -16,6 +16,12 @@ import yaml
 FALLBACK_MANIFEST: dict[str, Any] = {
     "slots": [
         {
+            "name": "voice",
+            "role": "prefix",
+            "rule": "",
+            "tags": ["VoiceInfix"],
+        },
+        {
             "name": "pronominal",
             "role": "prefix",
             "rule": "pro_replace",
@@ -40,6 +46,7 @@ FALLBACK_MANIFEST: dict[str, Any] = {
         "<Pro>",
         "<H_metathesis>",
         "<H_alt>",
+        "<VoiceInfix>",
         "<Root>",
         "<AspectClass>",
         "<Variant>",
@@ -47,6 +54,7 @@ FALLBACK_MANIFEST: dict[str, Any] = {
         "<Tense>",
     ],
     "tag_to_slot": {
+        "VoiceInfix": "voice",
         "PrefixClass": "pronominal",
         "Pro": "pronominal",
         "AspectClass": "aspect",
@@ -55,12 +63,13 @@ FALLBACK_MANIFEST: dict[str, Any] = {
         "Tense": "tense",
     },
     "root_boundaries": {
-        "left": "<H_alt>",
+        "left": "<VoiceInfix>",
         "right": "<AspectClass>",
     },
 }
 
 DEFAULT_SLOT_TAG_MAP: dict[str, str] = {
+    "VoiceInfix": "voice_infix",
     "PrefixClass": "prefix_class",
     "Pro": "pronominal",
     "H_metathesis": "h_metathesis_tag",
@@ -74,6 +83,7 @@ DEFAULT_SLOT_TAG_MAP: dict[str, str] = {
 }
 
 SPECIAL_TAG_MAP: dict[str, str] = {
+    "VoiceInfix": "voice_infix",
     "Pro": "pronominal",
     "H_metathesis": "h_metathesis_tag",
     "H_METATHESIS": "h_metathesis_tag",

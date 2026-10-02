@@ -51,7 +51,8 @@ def derive_open_root_template(verb_config: dict[str, Any]) -> str:
 
         if slot_name and slot_name in slots_by_name:
             for comp in slots_by_name[slot_name].get("structure", []):
-                expanded.append(f"<{comp['TagGroup']}>")
+                opt = "?" if comp.get("optional") else ""
+                expanded.append(f"<{comp['TagGroup']}>{opt}")
         else:
             expanded.append(el)
 

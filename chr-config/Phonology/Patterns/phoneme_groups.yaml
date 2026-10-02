@@ -24,7 +24,7 @@ patterns:
 - name: Root
   ref: <Root>
   # pattern: <VerbRoot>(<DerivationalSuffixes><AspectClass><Variant>?<Aspect=completive>)*<DerivationalSuffixes>?
-  pattern: <VoiceInfix>?<VerbRoot><NFS>?
+  pattern: <VerbRoot><NFS>?
 - name: SonH
   pattern: nh|lh|yh|wh|mh
   ref: <SonH>

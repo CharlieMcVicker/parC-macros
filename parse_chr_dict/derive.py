@@ -180,7 +180,7 @@ def _derive_category(
 
         h_alt_val = p_data.h_alt_tag or "[H_alt=none]"
         # H-metathesis candidate values
-        if is_h_metathesis_trigger(pro_tag, p_data.root) and h_alt_val == "[H_alt=none]":
+        if is_h_metathesis_trigger(pro_tag, p_data.voice_infix or p_data.root) and h_alt_val == "[H_alt=none]":
             h_meta_options = [p_data.h_metathesis_tag == "[H_metathesis=active]"]
         else:
             h_meta_options = [False, True]
@@ -324,8 +324,10 @@ def _derive_category(
                         if p_trans:
                             continue
 
-                # Root compatibility check: all forms must match hyp.h_root
+                # Root & voice_infix compatibility check: all forms must match hyp.h_root and hyp.voice_infix
                 if strip_h_alt_tags(p_data.root) != hyp.h_root:
+                    continue
+                if p_data.voice_infix != hyp.voice_infix:
                     continue
 
                 if p_is_glottal:
@@ -343,7 +345,7 @@ def _derive_category(
                 else:
                     new_h_alt_tag = hyp.h_alt_tag or "[H_alt=none]"
 
-                if is_h_metathesis_trigger(pro_tag, hyp.template.root):
+                if is_h_metathesis_trigger(pro_tag, hyp.template.voice_infix or hyp.template.root):
                     expected_meta = (
                         "[H_metathesis=active]"
                         if (hyp.metadata.is_h_metathesis and (p_data.h_alt_tag in ("", "[H_alt=none]")))
@@ -377,6 +379,7 @@ def _derive_category(
                 )
                 new_template = VerbTemplate(
                     root=hyp.template.root,
+                    voice_infix=hyp.template.voice_infix,
                     prefix_class=canon_pref,
                     aspect_class=hyp.template.aspect_class,
                     variant=hyp.template.variant,

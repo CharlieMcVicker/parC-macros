@@ -31,6 +31,7 @@ ROOTS_FIELDNAMES = [
     "infinitive",
     "entry_type",
     "h_root",
+    "voice_infix",
     "h_alt_tag",
     "aspect_class",
     "prefix_class",
@@ -111,6 +112,7 @@ def main():
                         valid_hypotheses,
                         key=lambda x: (
                             x.h_root,
+                            x.voice_infix,
                             x.h_alt_tag or "[H_alt=none]",
                             x.aspect_class,
                             x.prefix_class,

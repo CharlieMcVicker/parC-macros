@@ -1,6 +1,14 @@
 {
   "slots": [
     {
+      "name": "voice",
+      "role": "prefix",
+      "rule": "",
+      "tags": [
+        "VoiceInfix"
+      ]
+    },
+    {
       "name": "pronominal",
       "role": "prefix",
       "rule": "pro_replace",
@@ -34,6 +42,7 @@
     "<Pro>",
     "<H_metathesis>",
     "<H_alt>",
+    "<VoiceInfix>",
     "<Root>",
     "<AspectClass>",
     "<Variant>",
@@ -41,6 +50,7 @@
     "<Tense>"
   ],
   "tag_to_slot": {
+    "VoiceInfix": "voice",
     "PrefixClass": "pronominal",
     "Pro": "pronominal",
     "AspectClass": "aspect",
@@ -49,7 +59,7 @@
     "Tense": "tense"
   },
   "root_boundaries": {
-    "left": "<H_alt>",
+    "left": "<VoiceInfix>",
     "right": "<AspectClass>"
   }
 }

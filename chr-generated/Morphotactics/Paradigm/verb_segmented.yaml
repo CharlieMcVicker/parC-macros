@@ -56,16 +56,22 @@ global_markers:
 - kind: rule
   stage: insert_wi
   value: $insert_WI
-open_root_template: <PrepronominalPrefixes><PrefixClass><Pro><H_metathesis><H_alt><Root><AspectClass><Variant><Aspect><Tense>
+open_root_template: <PrepronominalPrefixes><PrefixClass><Pro><H_metathesis><H_alt><VoiceInfix>?<Root><AspectClass><Variant>?<Aspect><Tense>
 template:
 - <PrepronominalPrefixes>
 - slot:pronominal
 - <H_metathesis>
 - <H_alt>
+- slot:voice
 - <Root>
 - slot:aspect
 - slot:tense
 slots:
+- name: voice
+  role: prefix
+  structure:
+  - TagGroup: VoiceInfix
+    optional: true
 - name: pronominal
   role: prefix
   rule: $pro_replace_segmented

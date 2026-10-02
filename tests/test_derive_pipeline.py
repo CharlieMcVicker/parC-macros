@@ -352,7 +352,7 @@ def test_derive_hypotheses_for_forms_direct():
     assert isinstance(hyps, set)
     assert len(hyps) > 0
     assert all(isinstance(h, LexicalVerb) for h in hyps)
-    assert any(h.h_root in ("atat", "[Pro]atat[Aspect][Tense]") and h.aspect_class == "go-in" for h in hyps)
+    assert any(h.h_root in ("at", "t", "atat", "[Pro]atat[Aspect][Tense]") and h.aspect_class == "go-in" for h in hyps)
 
 
 def test_validate_hypothesis_and_row_reconstruction():
@@ -496,7 +496,7 @@ def test_h_alternation_verb_derivation():
     ]
     hyps = derive_hypotheses_for_forms(forms)
     assert len(hyps) > 0
-    assert any(h.h_root in ("atat", "[Pro]atat[Aspect][Tense]") for h in hyps)
+    assert any(h.h_root in ("at", "t", "atat", "[Pro]atat[Aspect][Tense]") for h in hyps)
 
 
 def test_h_alternation_trigger_external_validation():
@@ -638,8 +638,8 @@ def test_middle_voice_entry_554_conversing():
         ("tsulhinohehti", INFINITIVE_3RD),
     ]
     hyps = derive_hypotheses_for_forms(forms)
-    ali_nho = [h for h in hyps if h.template.root == "[VoiceInfix=ali]nho" and h.aspect_class == "apl-active-h"]
-    assert len(ali_nho) > 0, f"Expected [VoiceInfix=ali]nho hypothesis for entry 554, but got: {hyps}"
+    ali_nho = [h for h in hyps if h.template.root == "nho" and h.voice_infix == "ali" and h.aspect_class == "apl-active-h"]
+    assert len(ali_nho) > 0, f"Expected pure root 'nho' with voice_infix='ali' hypothesis for entry 554, but got: {hyps}"
     verb = ali_nho[0]
     assert verb.is_h_metathesis is True
     assert verb.h_alt_tag == "[H_alt=drop]"

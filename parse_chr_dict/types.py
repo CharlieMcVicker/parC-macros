@@ -18,6 +18,7 @@ class ParseData:
     Isomorphic to the linear morpheme tag sequence.
     """
     root: str
+    voice_infix: str = ""
     prefix_class: str = ""
     pronominal: str = ""
     h_metathesis_tag: str = ""
@@ -65,6 +66,8 @@ class ParseData:
             "tense": self.tense,
             "rules": self.rules,
         }
+        if self.voice_infix:
+            d["voice_infix"] = self.voice_infix
         if self.variant and self.variant != 1:
             d["variant"] = str(self.variant)
         if self.has_translocutive:
@@ -94,6 +97,8 @@ class ParseData:
             parts.append(self.h_alt_tag)
         elif not any(self.root.startswith(t) for t in ("[H_", "[TEMP")):
             parts.append("[H_alt=none]")
+        if self.voice_infix:
+            parts.append(f"[VoiceInfix={self.voice_infix}]" if not self.voice_infix.startswith("[") else self.voice_infix)
         parts.append(self.root)
         if self.aspect_class:
             parts.append(f"[AspectClass={self.aspect_class}]")
@@ -184,10 +189,11 @@ class VerbTemplate:
     Coarse-grained projection of a single ParseData.
     Masks over inflectional features (pro, tense, aspect).
     Preserves lexical features observed in this parse:
-    root, prefix_class, aspect_class, tense_present_class, variant,
+    root, voice_infix, prefix_class, aspect_class, tense_present_class, variant,
     lexical prepronominal prefixes (distributive, translocutive), h_alt_tag.
     """
     root: str
+    voice_infix: str = ""
     prefix_class: str = ""
     aspect_class: str = ""
     tense_present_class: str = ""
@@ -200,6 +206,7 @@ class VerbTemplate:
     def from_parse(cls, parse: ParseData) -> VerbTemplate:
         return cls(
             root=parse.root,
+            voice_infix=parse.voice_infix,
             prefix_class=parse.prefix_class,
             aspect_class=parse.aspect_class,
             variant=parse.variant,
@@ -213,6 +220,8 @@ class VerbTemplate:
             "aspect_class": self.aspect_class,
             "prefix_class": self.prefix_class,
         }
+        if self.voice_infix:
+            d["voice_infix"] = self.voice_infix
         if self.tense_present_class:
             d["tense_present_class"] = self.tense_present_class
         if self.variant != 1:
@@ -604,6 +613,7 @@ class LexicalVerb:
         h_alt_tag: str = "",
         *,
         h_root: Optional[str] = None,
+        voice_infix: str = "",
         prefix_class: str = "",
         aspect_class: str = "",
         tense_present_class: str = "",
@@ -624,6 +634,7 @@ class LexicalVerb:
             var_int = int(present_variant) if str(present_variant).isdigit() else 1
             template = VerbTemplate(
                 root=h_root or "",
+                voice_infix=voice_infix,
                 prefix_class=prefix_class,
                 aspect_class=aspect_class,
                 variant=var_int,
@@ -662,6 +673,10 @@ class LexicalVerb:
     def h_root(self) -> str:
         """The base/non-alternating root grade."""
         return strip_h_alt_tags(self.template.root)
+
+    @property
+    def voice_infix(self) -> str:
+        return self.template.voice_infix
 
     @property
     def prefix_class(self) -> str:
@@ -706,6 +721,7 @@ class LexicalVerb:
     def to_dict(self) -> dict[str, str | bool | int]:
         return {
             "h_root": self.h_root,
+            "voice_infix": self.voice_infix,
             "h_alt_tag": self.h_alt_tag or "[H_alt=none]",
             "prefix_class": self.prefix_class,
             "aspect_class": self.aspect_class,
@@ -727,6 +743,7 @@ class LexicalVerb:
         ]}
         d["entry_type"] = entry_type or self.metadata.entry_type
         d["h_root"] = self.h_root
+        d["voice_infix"] = self.voice_infix
         d["h_alt_tag"] = self.h_alt_tag or "[H_alt=none]"
         d["aspect_class"] = self.template.aspect_class
         d["prefix_class"] = self.template.prefix_class
@@ -760,10 +777,12 @@ class LexicalVerb:
         else:
             tense = form.tense if isinstance(form.tense, str) else form.tense[0]
 
+        voice_infix = self.voice_infix or (self.template.voice_infix if hasattr(self.template, "voice_infix") else "")
+
         results: set[str] = set()
         for pro in pros:
             h_alt = self.h_alt_tag or "[H_alt=none]" if is_h_alternation_trigger(pro) else "[H_alt=none]"
-            h_meta_triggered = is_h_metathesis_trigger(pro, self.template.root) and (h_alt == "[H_alt=none]")
+            h_meta_triggered = is_h_metathesis_trigger(pro, voice_infix or self.template.root) and (h_alt == "[H_alt=none]")
             h_meta = (
                 "[H_metathesis=active]"
                 if (self.metadata.is_h_metathesis and h_meta_triggered)
@@ -775,6 +794,7 @@ class LexicalVerb:
                     "pronominal": pro,
                     "h_metathesis_tag": h_meta,
                     "h_alt_tag": h_alt,
+                    "voice_infix": voice_infix,
                     "aspect_class": self.aspect_class,
                     "variant": str(var),
                     "aspect": form.aspect,

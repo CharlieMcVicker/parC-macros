@@ -477,31 +477,30 @@ def _generate_rules_from_slots(
                             clean_mappings[pattern] = clean_v
                             clean_class_mappings[class_name][pattern] = clean_v
                             seg_mappings[pattern] = seg_v
-                            seg_class_mappings[class_name][pattern] = seg_v
+        if clean_mappings or clean_class_mappings:
+            clean_out_path = os.path.join(rules_out_dir, f"{rule_name}.yaml")
+            _write_replace_rule_file(
+                clean_out_path,
+                rule_name,
+                feature_tag_title,
+                class_tag_title,
+                class_acceptors,
+                clean_class_mappings,
+                clean_mappings,
+                is_segmented=False,
+            )
 
-        clean_out_path = os.path.join(rules_out_dir, f"{rule_name}.yaml")
-        _write_replace_rule_file(
-            clean_out_path,
-            rule_name,
-            feature_tag_title,
-            class_tag_title,
-            class_acceptors,
-            clean_class_mappings,
-            clean_mappings,
-            is_segmented=False,
-        )
-
-        seg_out_path = os.path.join(rules_out_dir, f"{rule_name}_segmented.yaml")
-        _write_replace_rule_file(
-            seg_out_path,
-            f"{rule_name}_segmented",
-            feature_tag_title,
-            class_tag_title,
-            class_acceptors,
-            seg_class_mappings,
-            seg_mappings,
-            is_segmented=True,
-        )
+            seg_out_path = os.path.join(rules_out_dir, f"{rule_name}_segmented.yaml")
+            _write_replace_rule_file(
+                seg_out_path,
+                f"{rule_name}_segmented",
+                feature_tag_title,
+                class_tag_title,
+                class_acceptors,
+                seg_class_mappings,
+                seg_mappings,
+                is_segmented=True,
+            )
 
 
 def generate_morpheme_replace_rules(

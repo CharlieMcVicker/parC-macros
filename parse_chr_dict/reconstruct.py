@@ -67,6 +67,9 @@ def build_tag_str(root: str, feature_values: dict[str, str]) -> str:
         parts.append(h_alt)
     elif not any(root.startswith(t) for t in ("[H_", "[TEMP")):
         parts.append("[H_alt=none]")
+    voice_infix = feature_values.get("voice_infix", "")
+    if voice_infix:
+        parts.append(f"[VoiceInfix={voice_infix}]" if not voice_infix.startswith("[") else voice_infix)
     clean_root = re.sub(r"\[(Pro|Aspect|Tense)\]", "", root)
     parts.append(clean_root)
     if asp_cls:

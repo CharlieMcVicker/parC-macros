@@ -163,6 +163,7 @@ def read_parse(s: str) -> ParseData:
 
     prefix_class = ""
     pronominal = ""
+    voice_infix = ""
     aspect_class = ""
     variant = 1
     aspect = ""
@@ -182,6 +183,8 @@ def read_parse(s: str) -> ParseData:
                 prefix_class = v
             elif k == "Pro":
                 pronominal = v
+            elif k in ("VoiceInfix", "VOICE_INFIX"):
+                voice_infix = v
             elif k == "AspectClass":
                 aspect_class = v
             elif k == "Variant":
@@ -204,6 +207,7 @@ def read_parse(s: str) -> ParseData:
 
     res = ParseData(
         root="".join(root_parts),
+        voice_infix=voice_infix,
         prefix_class=prefix_class,
         pronominal=pronominal,
         h_metathesis_tag=h_metathesis_tag,
@@ -355,8 +359,12 @@ def build_root_filter_fsa(allowed_roots: Iterable[str]) -> pynini.Fst | None:
 
     left_prefix, right_prefix = get_root_boundary_tag_prefixes()
 
-    # Pre-root boundary tags: all tags starting with left_prefix (e.g. [H_alt=)
-    pre_root_tags = [s for s in all_syms if s.startswith(left_prefix)]
+    # Pre-root boundary tags: tags starting with left_prefix (e.g. [VoiceInfix=) plus [H_alt= tags
+    # since voice infix is an optional prefix slot preceding root
+    pre_root_prefixes = [left_prefix]
+    if left_prefix != "[H_alt=":
+        pre_root_prefixes.append("[H_alt=")
+    pre_root_tags = [s for s in all_syms if any(s.startswith(pfx) for pfx in pre_root_prefixes)]
     if not pre_root_tags:
         return None
     pre_root_fsa = pynini.union(*[pynini.accep(t, token_type=syms) for t in pre_root_tags if syms.member(t)]).optimize()
