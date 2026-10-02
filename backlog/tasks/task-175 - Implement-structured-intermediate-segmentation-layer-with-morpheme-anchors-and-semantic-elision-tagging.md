@@ -3,11 +3,11 @@ id: TASK-175
 title: >-
   Implement structured intermediate segmentation layer with morpheme anchors and
   semantic elision tagging
-status: In Progress
+status: Done
 assignee:
   - '@supervisor'
 created_date: '2026-10-02 13:17'
-updated_date: '2026-10-02 13:29'
+updated_date: '2026-10-02 14:50'
 labels:
   - fst
   - parc-macros
@@ -25,9 +25,19 @@ A downstream morpheme acquisition game requires structured prebuilt decks where 
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Morpheme replacement rules emit boundary hyphens `-` and preserve morpheme feature identity tags
-- [ ] #2 Phonological drop rules replace transient `[TEMP]` with semantic `[drop]` tags attached to dropped phones
-- [ ] #3 Dual paradigms `verb.yaml` (surface with cleanup) and `verb_segmented.yaml` (intermediate without cleanup) are generated in `chr-generated/Morphotactics/Paradigm/`
-- [ ] #4 All existing tests pass with 100% parity for surface `verb` paradigm
-- [ ] #5 Segmented paradigm output can be parsed to extract canonical roots, surface slices, and dropped phones
+- [x] #1 Morpheme replacement rules emit boundary hyphens `-` and preserve morpheme feature identity tags
+- [x] #2 Phonological drop rules replace transient `[TEMP]` with semantic `[drop]` tags attached to dropped phones
+- [x] #3 Dual paradigms `verb.yaml` (surface with cleanup) and `verb_segmented.yaml` (intermediate without cleanup) are generated in `chr-generated/Morphotactics/Paradigm/`
+- [x] #4 All existing tests pass with 100% parity for surface `verb` paradigm
+- [x] #5 Segmented paradigm output can be parsed to extract canonical roots, surface slices, and dropped phones
 <!-- AC:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Implemented structured intermediate segmentation layer with dual surface and segmented paradigms across parc_macros:
+- Clean Surface Codegen: Emits clean surface replacement and phonology rules for verb.yaml, ensuring 100% test parity and fast FST inversion with zero state space explosion.
+- Segmented Intermediate Codegen: Emits annotated replacement rules (with boundary hyphens and retained tags like [Pro=1sg.A]tsi-) and semantic phonology rules with [drop] tags for verb_segmented.yaml.
+- Dual Paradigm Generation: parc_macros/generate_markers.py emits both chr-generated/Morphotactics/Paradigm/verb.yaml and verb_segmented.yaml.
+- Extraction and Transduction Verification: Verified in tests/test_segmented_paradigm.py that canonical dictionary roots, surface slices, and direct surface-to-segmented transduction (T_segment = PARSE(verb) o INFLECT(verb_segmented)) work cleanly across 171/171 passing tests.
+<!-- SECTION:FINAL_SUMMARY:END -->
