@@ -36,6 +36,7 @@ data:
   ref: <TempTags>
   tags:
   - '[TEMP]'
+  - '[drop]'
   - '[TEMP_VOWEL]'
   - '[TEMP_VOWEL_A]'
   - '[TEMP_VOWEL_E]'

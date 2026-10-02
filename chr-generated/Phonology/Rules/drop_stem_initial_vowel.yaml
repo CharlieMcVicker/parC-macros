@@ -1,9 +1,9 @@
 kind: Rules
 rules:
 - name: drop_stem_initial_vowel
-  description: drop stem initial vowel marked with [TEMP]
+  description: retain stem initial vowel marked with [drop]
   string_map:
-  - - a[TEMP]
-    - ''
-  - - v[TEMP]
-    - ''
+  - - a[drop]
+    - a[drop]
+  - - v[drop]
+    - v[drop]

@@ -549,11 +549,11 @@ def test_language_agnostic_phonology_effects_and_vowel_dropping():
             drop_data = yaml.safe_load(f)
 
         assert mark_data["rules"][0]["name"] == "mark_stem_initial_u"
-        assert mark_data["rules"][0]["string_map"] == [["u", "u[TEMP]"]]
+        assert mark_data["rules"][0]["string_map"] == [["u", "u[drop]"]]
         assert mark_data["rules"][0]["left_context"] == "[AgrClass=u_stem][Person=1sg]|[AgrClass=u_stem][Person=3sg]"
         assert mark_data["rules"][1]["rule_sequence"] == ["$mark_stem_initial_u"]
 
-        assert drop_data["rules"][0]["string_map"] == [["u[TEMP]", ""]]
+        assert drop_data["rules"][0]["string_map"] == [["u[drop]", "u[drop]"]]
 
         # 2. Test with empty phonology_effects -> no hardcoded triggers
         empty_verb_config = {"slots": [], "phonology_effects": {}}
@@ -602,6 +602,106 @@ def test_generic_class_acceptor_loading():
             "first_declension": "[a-z]+",
             "second_declension": "[A-Z]+",
         }
+
+
+def test_drop_tagging_in_phonology_rules():
+    """
+    TASK-175.2: Verify drop_root_final, mark_stem_initial_vowel, and drop_stem_initial_vowel
+    generate semantic [drop] tags instead of transient [TEMP].
+    """
+    import parc_macros.generate_phonology as gp
+    from parc_macros.yaml_validation import validate_yaml_file
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_path = Path(tmp_dir)
+        cfg_path = tmp_path / "config"
+        cfg_path.mkdir(parents=True, exist_ok=True)
+        out_rules = tmp_path / "Rules"
+        out_rules.mkdir(parents=True, exist_ok=True)
+
+        effects_csv = cfg_path / "aspect_effects.csv"
+        with open(effects_csv, "w", encoding="utf-8") as f:
+            f.write("aspect_class,aspect,variant,effect\n")
+            f.write("clsA,perf,,drop_final\n")
+            f.write("clsB,imp,2,drop_final_two\n")
+
+        drop_a_csv = cfg_path / "drop_a.csv"
+        with open(drop_a_csv, "w", encoding="utf-8") as f:
+            f.write("Class,3sg.A\n")
+            f.write("a_stem,Y\n")
+
+        verb_config = {
+            "slots": [
+                {
+                    "name": "pronominal",
+                    "sources": ["verb-pronominal.csv"],
+                    "structure": [
+                        {"TagGroup": "PrefixClass"},
+                        {"TagGroup": "Pro"},
+                    ],
+                },
+                {
+                    "name": "aspect",
+                    "sources": ["verb-aspect.csv"],
+                    "structure": [
+                        {"TagGroup": "AspectClass"},
+                        {"TagGroup": "Variant"},
+                        {"TagGroup": "Aspect"},
+                    ],
+                },
+            ],
+            "phonology_effects": {
+                "aspect_effects": "aspect_effects.csv",
+                "drop_stem_initial_a": "drop_a.csv",
+            },
+        }
+
+        extracted = gp.extract_phonology_data(cfg_path, verb_config=verb_config)
+        gp.generate_phonology_rules(cfg_path, out_rules, extracted)
+
+        # 1. Check drop_root_final.yaml
+        drf_file = out_rules / "drop_root_final.yaml"
+        assert drf_file.exists()
+        assert validate_yaml_file(drf_file) is True
+        with open(drf_file, "r", encoding="utf-8") as f:
+            drf_data = yaml.safe_load(f)
+
+        rules_by_name = {r["name"]: r for r in drf_data["rules"]}
+        assert "mark_final" in rules_by_name
+        assert rules_by_name["mark_final"]["input_pattern"] is None
+        assert rules_by_name["mark_final"]["output_pattern"] == "[drop]"
+        assert rules_by_name["mark_final"]["left_context"] == "<Phone>"
+        assert rules_by_name["mark_final"]["right_context"] == "[AspectClass=clsA][Aspect=perf]"
+
+        assert "mark_final_two" in rules_by_name
+        assert rules_by_name["mark_final_two"]["input_pattern"] is None
+        assert rules_by_name["mark_final_two"]["output_pattern"] == "[drop]"
+        assert rules_by_name["mark_final_two"]["left_context"] == "<Phone><Phone>?"
+        assert rules_by_name["mark_final_two"]["right_context"] == "[AspectClass=clsB][Variant=2][Aspect=imp]"
+
+        assert rules_by_name["drop_final"]["rule_sequence"] == ["$mark_final"]
+        assert rules_by_name["drop_final_two"]["rule_sequence"] == ["$mark_final_two"]
+        assert rules_by_name["drop_root_final"]["rule_sequence"] == ["$drop_final_two", "$drop_final"]
+
+        # 2. Check mark_stem_initial_vowel.yaml
+        mark_file = out_rules / "mark_stem_initial_vowel.yaml"
+        assert mark_file.exists()
+        assert validate_yaml_file(mark_file) is True
+        with open(mark_file, "r", encoding="utf-8") as f:
+            mark_data = yaml.safe_load(f)
+        assert mark_data["rules"][0]["name"] == "mark_stem_initial_a"
+        assert mark_data["rules"][0]["string_map"] == [["a", "a[drop]"]]
+        assert mark_data["rules"][0]["left_context"] == "[PrefixClass=a_stem][Pro=3sg.A]"
+        assert mark_data["rules"][1]["rule_sequence"] == ["$mark_stem_initial_a"]
+
+        # 3. Check drop_stem_initial_vowel.yaml
+        drop_file = out_rules / "drop_stem_initial_vowel.yaml"
+        assert drop_file.exists()
+        assert validate_yaml_file(drop_file) is True
+        with open(drop_file, "r", encoding="utf-8") as f:
+            drop_data = yaml.safe_load(f)
+        assert drop_data["rules"][0]["string_map"] == [["a[drop]", "a[drop]"]]
+
 
 
 

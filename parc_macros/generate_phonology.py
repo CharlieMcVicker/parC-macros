@@ -566,27 +566,24 @@ def generate_phonology_rules(
             {
                 "name": "mark_final",
                 "description": "mark the final phone for deletion based on aspect triggers",
-                "string_map": [["<Phone>", "[TEMP]"]],
+                "input_pattern": None,
+                "output_pattern": "[drop]",
+                "left_context": "<Phone>",
                 "right_context": drop_final_rc,
             },
             {
                 "name": "mark_final_two",
                 "description": "mark the final two phones for deletion based on aspect triggers",
-                "string_map": [["<Phone><Phone>?", "[TEMP]"]],
+                "input_pattern": None,
+                "output_pattern": "[drop]",
+                "left_context": "<Phone><Phone>?",
                 "right_context": drop_final_two_rc,
-            },
-            {
-                "name": "delete_temp_marker",
-                "description": "delete the temporary marker [TEMP]",
-                "input_pattern": "[TEMP]",
-                "output_pattern": "",
             },
             {
                 "name": "drop_final",
                 "description": "drop final phone",
                 "rule_sequence": [
                     "$mark_final",
-                    "$delete_temp_marker",
                 ],
             },
             {
@@ -594,7 +591,6 @@ def generate_phonology_rules(
                 "description": "drop final two phones",
                 "rule_sequence": [
                     "$mark_final_two",
-                    "$delete_temp_marker",
                 ],
             },
             {
@@ -646,19 +642,19 @@ def generate_phonology_rules(
         rule_name = f"mark_stem_initial_{vowel}"
         mark_sub_rules.append({
             "name": rule_name,
-            "description": f"mark the first {vowel} with [TEMP] at start of stem",
-            "string_map": [[vowel, f"{vowel}[TEMP]"]],
+            "description": f"mark the first {vowel} with [drop] at start of stem",
+            "string_map": [[vowel, f"{vowel}[drop]"]],
             "left_context": lc,
         })
         mark_seq_names.append(f"${rule_name}")
-        drop_string_maps.append([f"{vowel}[TEMP]", ""])
+        drop_string_maps.append([f"{vowel}[drop]", f"{vowel}[drop]"])
 
     mark_stem_initial_vowel_yaml = {
         "kind": "Rules",
         "rules": mark_sub_rules + [
             {
                 "name": "mark_stem_initial_vowel",
-                "description": "mark stem initial vowel with [TEMP] based on pronominal triggers",
+                "description": "mark stem initial vowel with [drop] based on pronominal triggers",
                 "rule_sequence": mark_seq_names,
             }
         ],
@@ -671,7 +667,7 @@ def generate_phonology_rules(
         "rules": [
             {
                 "name": "drop_stem_initial_vowel",
-                "description": "drop stem initial vowel marked with [TEMP]",
+                "description": "retain stem initial vowel marked with [drop]",
                 "string_map": drop_string_maps,
             }
         ],
